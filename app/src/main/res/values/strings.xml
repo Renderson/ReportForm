@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Report Form</string>
+    <string name="alert_dialog_permission">É preciso a permissão para salvar/acessar arquivos no seu dispositivo.</string>
+    <string name="txt_to_allow">Permitir</string>
+    <string name="txt_deny">Negar</string>
+    <string name="txt_permission">Permission</string>
+    <string name="txt_report_removed">Relatório removido com sucesso!</string>
+    <string name="title_report_list">Lista Relatórios</string>
+    <string name="title_report">Relatório</string>
+    <string name="txt_empty_report">Relátorio vazio!</string>
+    <string name="txt_choice_item">Para salvar seu relatório, deve ter no mínimo 2 listas marcadas.</string>
+    <string name="txt_back">Voltar</string>
+    <string name="txt_report_save">Relatório salvo!</string>
+    <string name="txt_error_save">Error ao salvar!</string>
+    <string name="alert_leave_the_report">Sair do relatório?</string>
+    <string name="txt_leave_the_report">Desaja realmente sair do relatório? Você perderá todo seu progresso!</string>
+    <string name="txt_continue">Continuar</string>
+    <string name="txt_cancel">Cancelar</string>
+    <string name="alert_remove_report">Remover relatório!</string>
+    <string name="txt_remove_report">Deseja realmente remover o relatório?</string>
+    <string name="txt_share_report">Compartilhar relatório</string>
+    <string name="txt_canceled">Cancelado!</string>
+    <string name="txt_start">Começar</string>
+    <string name="date">d/M/yyyy</string>
+    <string name="txt_new_report">Novo relatório iniciado!</string>
+    <string name="txt_email">ex: renderson.cs@gmail.com</string>
+    <string name="space_date">/</string>
+    <string name="txt_to_clean">Limpar</string>
+    <string name="txt_leave">Sair</string>
+    <string name="txt_save">Salvar</string>
+</resources>

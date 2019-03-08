@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_1">Área extrerna</string>
+    <string name="subTitle_1">É livre de focos de insalubridade, de objetos em desuso, de animais (inclusive insetos e roedores) e de água estagnada e outros focos de contaminação dos alimentos?\nO estabelecimento possui acesso de entrada e saída de insumos e lixo direto e não comum a outros usos?</string>
+
+    <string name="title_2">Escadas</string>
+    <string name="subTitle_2">Encontram-se em bom estado de conservação e revestidas de material de fácil limpeza e fita  antiderrapante?\nApresentam-se sem sujidades ? possui corrimão ou guarda corpo ?</string>
+
+    <string name="title_3">Elevadores e/ou de carga</string>
+    <string name="subTitle_3">São adequados para o uso e encontram-se em bom estado de conservação?\nApresentam-se sem sujidades?</string>
+
+    <string name="title_4">Porta, maçanetas e divisórias</string>
+    <string name="subTitle_4">Encontram-se em bom estado de conservação (livre de rachaduras, bolor, infiltrações e falhas)?\nSão de material de fácil limpeza, cor clara, impermeável?\nApresentam protetor de rodapés e fechamento automático (molas)? Apresentam-se sem sujidades?</string>
+
+    <string name="title_5">Casa de máquina</string>
+    <string name="subTitle_5">Encontra-se protegida, isolada e com ventilação adequada? </string>
+
+    <string name="title_6">Porta, maçanetas e divisória</string>
+    <string name="subTitle_6">Encontram-se em bom estado de conservação (livre de rachaduras, bolor, infiltrações e falhas)?\nSão de material de fácil limpeza, cor clara, impermeável?\nApresentam protetor de rodapés e fechamento automático (molas)?\nApresentam-se sem sujidades?</string>
+
+    <string name="title_7">Teto e paredes</string>
+    <string name="subTitle_7">Encontram-se adequado para o setor (material liso, cor clara, impermeável e de fácil limpeza)?\nEncontram-se em bom estado de conservação (livre de rachaduras, bolor, infiltrações e falhas)?\nApresentam-se sem sujidades?</string>
+
+    <string name="title_8">Janelas</string>
+    <string name="subTitle_8">Apresentam telas milimetradas para proteção contra insetos, de material de fácil limpeza e em bom estado de conservação?\nApresentam-se sem sujidades?</string>
+
+    <string name="title_9">Prateleiras</string>
+    <string name="subTitle_9">São em número suficiente, de material adequado e encontram-se em bom estado de conservação?\nApresentam-se sem sujidades?</string>
+
+    <string name="title_10">Piso</string>
+    <string name="subTitle_10">Encontra-se adequado para o setor (material liso, cor clara, impermeável, resistente, antiderrapante e de fácil limpeza)?\nEncontra-se em bom estado de conservação (sem rachaduras ou buracos) ? Cantos apresentam-se sem sujidades?</string>
+
+    <string name="title_11">Ralos e grelhas</string>
+    <string name="subTitle_11">Apresentam sistema sifonado, tampas com dispositivo de fechamento e/ou tela milimétrica adaptada? Encontra-se em bom estado de conservação (sem ferrugem ou rachaduras)?\nApresentam-se sem sujidades?</string>
+
+    <string name="title_12">Caixas de gordura</string>
+    <string name="subTitle_12">Apresentam-se instaladas fora da área de produção e encontram-se em bom estado de conservação?</string>
+
+    <string name="title_13">Estrados e Pallets</string>
+    <string name="subTitle_13">São de material adequado, de fácil limpeza e encontram-se em bom estado de conservação?\nApresentam-se sem sujidades?</string>
+
+    <string name="title_14">Setores</string>
+    <string name="subTitle_14">Todos os setores possuem área de pré-preparo separada ou que pelo menos tenha barreira física?</string>
+
+    <string name="title_15">Pias</string>
+    <string name="subTitle_15">Exclusivas de higienização das mãos dentro da área de manipulação de alimentos de todos os setores?\nPia para higienização de alimentos/utensílios/mãos apresentam-se em bom estado de conservação?\nApresentam-se sem sujidades?\nEstá Abastecido com sabão e papel?</string>
+
+    <string name="title_16">Mesas e bancadas de apoio </string>
+    <string name="subTitle_16">Na produção são em número suficiente, de material adequado e encontram-se em bom estado de conservação, e sem sujidades?</string>
+
+    <string name="title_17">Iluminação</string>
+    <string name="subTitle_17">Encontra-se adequada para a atividade desenvolvida?\nLuminárias possuem proteção contra quedas e explosão e encontra-se em bom estado de conservação (sem lâmpadas queimadas)?</string>
+
+    <string name="title_18">Instalações elétricas</string>
+    <string name="subTitle_18">Encontram-se em bom estado de conservação, sem fios aparentes ou descascados?</string>
+
+    <string name="title_19">Sistema de exaustão e Ar filtrado</string>
+    <string name="subTitle_19">Ventilação e circulação de ar é capaz de garantir conforto térmico da equipe de produção (temperatura não superior a 26,7°)?</string>
+
+    <string name="title_20">Extintores</string>
+    <string name="subTitle_20">Encontram-se dentro do prazo de validade?</string>
+
+    <string name="title_21">Acesso vestiário/sanitários</string>
+    <string name="subTitle_21">É isolado das áreas de produção?</string>
+
+    <string name="title_22">Sanitário</string>
+    <string name="subTitle_22">O estabelecimento disponibiliza pelo menos de um sanitário acessível com equipamentos e acessórios para o uso de portadores de deficiência ou mobilidade reduzida?</string>
+
+    <string name="title_23">Instrumentos de medição</string>
+    <string name="subTitle_23">Há registro de calibração dos instrumentos de medição dos equipamentos térmicos (termômetros)?</string>
+
+    <string name="title_24">Armários</string>
+    <string name="subTitle_24">O estabelecimento disponibiliza armários fechados, organizados e em bom estado de conservação, para todos os funcionários?</string>
+
+    <string name="title_25">Água/Gelo</string>
+    <string name="subTitle_25">A água e o gelo utilizados em bebidas são providos de água filtrada?</string>
+
+    <string name="title_26">Rodos/Vassouras</string>
+    <string name="subTitle_26">Presença de suporte para rodos e vassouras instalados fora da área de produção?</string>
+
+    <string name="title_27">Óleo destinado a reciclagem</string>
+    <string name="subTitle_27">Possui galão de recolhimento do óleo destinado a reciclagem devidamente identificado com os dados da empresa coletora?\nO mesmo encontra-se fora da área de manipulação de alimentos?</string>
+
+    <string name="title_28">Lixo </string>
+    <string name="subTitle_28">Existe local específico ou área exclusiva para o armazenamento do lixo (fechado, com ponto de água e ralo)?\nLocal / lixeira, é de material (ou revestido) de fácil limpeza?\nPossui POP de limpeza específico para o setor?\nÉ evidenciado a aplicação do POP?</string>
+
+    <string name="title_29">Lixeiras</string>
+    <string name="subTitle_29">As Lixeiras na área de manipulação de alimentos, são de material resistente, lavável e com tampa acionada por pedal e encontram-se limpas?</string>
+
+
+</resources>

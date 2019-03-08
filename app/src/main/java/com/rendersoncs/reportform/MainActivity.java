@@ -1,0 +1,185 @@
+package com.rendersoncs.reportform;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.rendersoncs.reportform.adapter.ReportListAdapter;
+import com.rendersoncs.reportform.business.ReportBusiness;
+import com.rendersoncs.reportform.fragment.ReportFormDialog;
+import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.listener.OnReportListenerInteractionListener;
+import com.rendersoncs.reportform.observer.RVEmptyObserver;
+
+import java.util.List;
+
+import butterknife.ButterKnife;
+//import me.drakeet.materialdialog.MaterialDialog;
+
+public class MainActivity extends AppCompatActivity {
+
+    private ViewHolder viewHolder = new ViewHolder();
+    private ReportBusiness reportBusiness;
+    private OnReportListenerInteractionListener mOnReportListenerInteractionListener;
+
+    private static final int REQUEST_PERMISSIONS_CODE = 128;
+    //private MaterialDialog mMaterialDialog;
+
+    public Context context;
+    View emptyLayout;
+    Button emptyButton;
+    View floatingActionButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setTitle(R.string.title_report_list);
+
+        emptyLayout = findViewById(R.id.layout_empty);
+
+        emptyButton = findViewById(R.id.action_add_report);
+
+        checkPermission();
+
+        //Obter a recycler
+        this.viewHolder.recyclerView = findViewById(R.id.recycler_view);
+
+        // Camada Business
+        this.reportBusiness = new ReportBusiness(this);
+
+        this.mOnReportListenerInteractionListener = new OnReportListenerInteractionListener() {
+            @Override
+            public void onListClick(int id) {
+                // Open new Activity
+                /*Bundle bundle = new Bundle();
+                bundle.putInt(SurveyConstants.BundleConstants.SURVEY_ID, id);
+
+                Intent intent = new Intent(MainActivityExp.this, SurveyActivity.class);
+                intent.putExtras(bundle);
+
+                startActivity(intent);*/
+            }
+
+            @Override
+            public void onDeleteClick(int id) {
+                // Remove relatórios do banco de dados
+                reportBusiness.remove(id);
+                Toast.makeText(MainActivity.this, R.string.txt_report_removed, Toast.LENGTH_LONG).show();
+
+                // Lista novamente os relatórios
+                loadReport();
+            }
+        };
+
+        // Define um layout
+        this.viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
+
+        floatingActionButton = findViewById(R.id.floatButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(MainActivityExp.this, ReportActivity.class);
+                //startActivity(intent);
+
+                ReportFormDialog reportFormDialog = new ReportFormDialog();
+                reportFormDialog.show(getSupportFragmentManager(), "report_dialog");
+            }
+        });
+
+        emptyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReportFormDialog reportFormDialog = new ReportFormDialog();
+                reportFormDialog.show(getSupportFragmentManager(), "report_dialog");
+            }
+        });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.loadReport();
+    }
+
+    private void loadReport() {
+        List<Repo> repoEntityList = this.reportBusiness.getInvited();
+
+        // Definir um adapter
+        ReportListAdapter reportListAdapter = new ReportListAdapter(repoEntityList, mOnReportListenerInteractionListener);
+        this.viewHolder.recyclerView.setAdapter(reportListAdapter);
+
+        // Notifica o Adapter mudança na lista
+        reportListAdapter.notifyDataSetChanged();
+
+        // Mostra imagen quando não á itens
+        reportListAdapter.registerAdapterDataObserver(new RVEmptyObserver(this.viewHolder.recyclerView, emptyLayout, floatingActionButton));
+
+    }
+
+    private static class ViewHolder {
+        RecyclerView recyclerView;
+    }
+
+    // Permission
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResult) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResult);
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_CODE:
+                for (int i = 0; i < permissions.length; i++) {
+                    if (grantResult[i] == PackageManager.PERMISSION_GRANTED) {
+                        loadReport();
+                    }
+                }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResult);
+    }
+
+    private void checkPermission() {
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                dialogPermission(getString(R.string.alert_dialog_permission), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
+            } else {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_CODE);
+            }
+        }
+    }
+
+    private void dialogPermission(String message, final String[] permission) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.txt_permission)
+                .setMessage(message)
+                .setPositiveButton(R.string.txt_to_allow, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(MainActivity.this, permission, REQUEST_PERMISSIONS_CODE);
+                    }
+                })
+                .setNegativeButton(R.string.txt_deny, null)
+                .show();
+
+    }
+    // Final code permission
+}
+

@@ -1,0 +1,237 @@
+package com.rendersoncs.reportform.adapter;
+
+import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.rendersoncs.reportform.itens.Repo;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import com.rendersoncs.reportform.R;
+
+public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRecyclerAdapter.ViewHolder> {
+        private List<Repo> repos;
+        private SparseBooleanArray expandState = new SparseBooleanArray();
+        public ArrayList<String> listRadio = new ArrayList<>();
+        public ArrayList<String> listRadioClear = new ArrayList<>();
+        public Context context;
+
+        private static final int TYPE_HEADER = 0;
+        private static final int TYPE_ITEM = 1;
+
+        public ExpandableRecyclerAdapter(List<Repo> repos) {
+            this.repos = repos;
+            for (int i = 0; i < repos.size(); i++) {
+                expandState.append(i, false);
+            }
+        }
+
+        @NonNull
+        @Override
+        public ExpandableRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            this.context = viewGroup.getContext();
+            if (i == TYPE_HEADER) {
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.header_layout, viewGroup, false);
+                return new HeaderVh(view);
+            } else if (i == TYPE_ITEM) {
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_report_list, viewGroup, false);
+                return new ItemVh(view);
+            }
+            throw new RuntimeException("No macth for" + i + ".");
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+            //Header
+            final Repo repo = repos.get(i);
+
+            if (viewHolder instanceof HeaderVh) {
+                ((HeaderVh) viewHolder).headerTitle.setText(repo.getContents());
+            } else if (viewHolder instanceof ItemVh) {
+                ((ItemVh) viewHolder).tvTitleList.setText(repo.getContents());
+
+                viewHolder.setIsRecyclable(false);
+                viewHolder.tvTitleList.setText(repos.get(i).getTitle());
+                viewHolder.tvTextList.setText(repos.get(i).getText());
+
+                final boolean isExpanded = expandState.get(i);
+                viewHolder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+                viewHolder.buttonLayoutArrow.setRotation(expandState.get(i) ? 180f : 0f);
+                viewHolder.buttonLayoutArrow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        onClickButton(viewHolder.expandableLayout, viewHolder.buttonLayoutArrow, i);
+                        Log.i("log", "Item: " + i + " Expand");
+
+                        //Test onClick RadioButton
+                        viewHolder.mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                                int selectedRadioButtonID = viewHolder.mRadioGroup.getCheckedRadioButtonId();
+
+                                //Test Salve in a ArrayList RadioButton Selected
+                                RadioButton radioButton = group.findViewById(selectedRadioButtonID);
+                                String selectedRadioButtonText = viewHolder.tvTitleList.getText() + "\n " + radioButton.getId() + "\n " + radioButton.getText().toString() + "\n " + i;
+                                listRadio.add(selectedRadioButtonText);
+
+                                //Duplicate list
+                                HashSet<String> hashSet = new HashSet<String>(listRadio);
+                                hashSet.addAll(listRadio);
+                                listRadio.clear();
+                                listRadio.addAll(hashSet);
+                                repo.setCheckList(listRadio);
+
+                                Log.i("log", "Item: " + listRadio + " list ");
+
+                                if (checkedId == R.id.radio_conform) {
+                                    viewHolder.mRadioButtonConform.setChecked(true);
+                                    group.setTag(checkedId);
+                                    Log.i("log", "Item: " + listRadio + " checked " + i + " position");
+
+                                } else if (checkedId == R.id.radio_not_applicable) {
+                                    viewHolder.mRadioButtonNotApplicable.setChecked(true);
+                                    group.setTag(checkedId);
+                                    Log.i("log", "Item: " + listRadio + " checked " + i + " position");
+
+                                } else if (checkedId == R.id.radio_not_conform) {
+                                    viewHolder.mRadioButtonNotConform.setChecked(true);
+                                    group.setTag(checkedId);
+                                    Log.i("log", "Item: " + listRadio + " checked " + i + " position");
+
+                                } else {
+                                    group.clearCheck();
+                                }
+                            }
+                        });
+                        // End Test RadioButton
+                    }
+                });
+            }
+        }
+
+        public int getItemViewType(int i) {
+            if (isPositionHeader(i))
+                return TYPE_HEADER;
+            return TYPE_ITEM;
+        }
+
+        private boolean isPositionHeader(int i) {
+            return i == 0 || i == 29;
+        }
+
+        @Override
+        public int getItemCount() {
+            return repos.size();
+        }
+
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            TextView tvTitleList, tvTextList;
+            ImageView mImageView;
+
+            public RadioGroup mRadioGroup;
+            public RadioButton mRadioButtonConform;
+            public RadioButton mRadioButtonNotApplicable;
+            public RadioButton mRadioButtonNotConform;
+
+            RelativeLayout buttonLayoutArrow;
+            public LinearLayout expandableLayout;
+
+            public ViewHolder(View view) {
+                super(view);
+
+                tvTitleList = view.findViewById(R.id.textView_title);
+                tvTextList = view.findViewById(R.id.textView_subTitle);
+                mImageView = view.findViewById(R.id.photo);
+                mRadioGroup = view.findViewById(R.id.radio_group);
+                mRadioButtonConform = view.findViewById(R.id.radio_conform);
+                mRadioButtonNotApplicable = view.findViewById(R.id.radio_not_applicable);
+                mRadioButtonNotConform = view.findViewById(R.id.radio_not_conform);
+
+                buttonLayoutArrow = view.findViewById(R.id.btnArrow);
+                expandableLayout = view.findViewById(R.id.expandableLayout);
+            }
+        }
+
+        //Header
+        public class HeaderVh extends ExpandableRecyclerAdapter.ViewHolder {
+
+            @BindView(R.id.header_id)
+            public TextView headerTitle;
+
+            public HeaderVh(@NonNull View view) {
+                super(view);
+                ButterKnife.bind(this, view);
+            }
+        }
+
+        public class ItemVh extends ExpandableRecyclerAdapter.ViewHolder {
+
+            @BindView(R.id.textView_title)
+            public TextView itemContent;
+
+
+            public ItemVh(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
+            }
+        }
+
+        private void onClickButton(final LinearLayout expandableLayout, final RelativeLayout buttonLayout, final int i) {
+
+            //Expand CardView
+            if (expandableLayout.getVisibility() == View.VISIBLE) {
+                createRotateAnimator(buttonLayout, 180f, 0f).start();
+                expandableLayout.setVisibility(View.GONE);
+                expandState.put(i, false);
+            } else {
+                createRotateAnimator(buttonLayout, 0f, 180f).start();
+                expandableLayout.setVisibility(View.VISIBLE);
+                expandState.put(i, true);
+            }
+
+        }
+
+        //Animation Expand
+        private ObjectAnimator createRotateAnimator(final View target, final float from, final float to) {
+            ObjectAnimator animator = ObjectAnimator.ofFloat(target, "rotation", from, to);
+            animator.setDuration(300);
+            animator.setInterpolator(new LinearInterpolator());
+            return animator;
+
+        }
+
+        public void clearList(){
+            for ( int i = 0; i < repos.size(); i++ ){
+                for ( int j = i + 1; j < listRadio.size(); j++ ){
+                    if (repos.get( i ).getId() == repos.get( j ).getId() && !((Object) listRadio.get(i)).equals(listRadio.get(j))){
+                        i++;
+                        break;
+                    }
+                }
+            }
+            repos.removeAll(listRadio);
+
+        }
+}
