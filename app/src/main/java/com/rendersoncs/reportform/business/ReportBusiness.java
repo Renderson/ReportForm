@@ -20,8 +20,12 @@ public class ReportBusiness {
         return this.mReportRepository.insert(repo);
     }
 
-    public Boolean remove(int id){
-        return this.mReportRepository.remove(id);
+    public Boolean remove(int reportId){
+        return this.mReportRepository.remove(reportId);
+    }
+
+    public Repo load(int reportId){
+        return this.mReportRepository.load(reportId);
     }
 
     public List<Repo> getInvited(){

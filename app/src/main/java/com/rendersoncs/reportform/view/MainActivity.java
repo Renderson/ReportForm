@@ -1,12 +1,10 @@
-package com.rendersoncs.reportform;
+package com.rendersoncs.reportform.view;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -15,12 +13,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
+import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.itens.Repo;
 import com.rendersoncs.reportform.listener.OnReportListenerInteractionListener;
@@ -69,15 +70,16 @@ public class MainActivity extends AppCompatActivity {
 
         this.mOnReportListenerInteractionListener = new OnReportListenerInteractionListener() {
             @Override
-            public void onListClick(int id) {
+            public void onListClick(int reportId) {
                 // Open new Activity
-                /*Bundle bundle = new Bundle();
-                bundle.putInt(SurveyConstants.BundleConstants.SURVEY_ID, id);
+                Bundle bundle = new Bundle();
+                bundle.putInt(ReportConstants.BundleConstants.REPORT_ID, reportId);
+                Log.i("log", reportId + " reportId ");
 
-                Intent intent = new Intent(MainActivityExp.this, SurveyActivity.class);
+                Intent intent = new Intent(MainActivity.this, ReportDetail.class);
                 intent.putExtras(bundle);
 
-                startActivity(intent);*/
+                startActivity(intent);
             }
 
             @Override

@@ -3,7 +3,7 @@ package com.rendersoncs.reportform.constants;
 public class ReportConstants {
 
     public static class BundleConstants{
-        public static final String SURVEY_ID = "reportId";
+        public static final String REPORT_ID = "reportId";
     }
 
     public static class CONFIRMATION {

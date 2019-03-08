@@ -55,7 +55,7 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_edit:
-                                listener.onListClick(repoEntity.getId());
+                                //listener.onListClick(repoEntity.getId());
                                 return true;
 
                             case R.id.action_remove:

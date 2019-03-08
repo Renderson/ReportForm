@@ -17,22 +17,22 @@ public class ReportRepository {
     private static ReportRepository INSTANCE;
     private ReportDataBaseHelper mReportDataBaseHelper;
 
-    private ReportRepository(Context context){
-        if (context == null){
+    private ReportRepository(Context context) {
+        if (context == null) {
             throw new NullPointerException();
         }
         this.mReportDataBaseHelper = new ReportDataBaseHelper(context);
     }
 
-    public static ReportRepository getInstance(Context context){
-        if (INSTANCE == null){
+    public static ReportRepository getInstance(Context context) {
+        if (INSTANCE == null) {
             INSTANCE = new ReportRepository(context);
         }
         return INSTANCE;
     }
 
-    public Boolean insert(Repo repo){
-        try{
+    public Boolean insert(Repo repo) {
+        try {
 
             SQLiteDatabase sqLiteDatabase = this.mReportDataBaseHelper.getWritableDatabase();
             Log.i("log", "Item: " + sqLiteDatabase + " save DB");
@@ -50,12 +50,12 @@ public class ReportRepository {
 
             return true;
 
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public Boolean remove(int id){
+    public Boolean remove(int id) {
         try {
 
             SQLiteDatabase sqLiteDatabase = this.mReportDataBaseHelper.getWritableDatabase();
@@ -67,13 +67,51 @@ public class ReportRepository {
 
             return true;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
+    public Repo load(int id) {
+        Repo repoEntity = new Repo();
 
-    public List<Repo> getReportByQuery(String query){
+        try {
+
+            SQLiteDatabase sqLiteDatabase = this.mReportDataBaseHelper.getReadableDatabase();
+
+            String[] projection = {
+                    DataBaseConstants.REPORT.COLUMNS.ID,
+                    DataBaseConstants.REPORT.COLUMNS.COMPANY
+                    //DataBaseConstants.REPORT.COLUMNS.EMAIL,
+                    //DataBaseConstants.REPORT.COLUMNS.DATE
+
+            };
+
+            String selection = DataBaseConstants.REPORT.COLUMNS.ID + " = ?";
+            String[] selectionArgs = {String.valueOf(id)};
+
+            Cursor cursor = sqLiteDatabase.query(DataBaseConstants.REPORT.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+            if (cursor != null && cursor.getCount() > 0){
+                cursor.moveToFirst();
+                repoEntity.setId(cursor.getInt(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.ID)));
+                repoEntity.setCompany(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.COMPANY)));
+                //repoEntity.setEmail(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.EMAIL)));
+                //repoEntity.setDate(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.DATE)));
+            }
+
+            if (cursor != null){
+                cursor.close();
+            }
+
+            return repoEntity;
+
+        } catch (Exception e) {
+            return repoEntity;
+        }
+    }
+
+
+    public List<Repo> getReportByQuery(String query) {
         List<Repo> list = new ArrayList<>();
 
         try {
@@ -81,8 +119,8 @@ public class ReportRepository {
             SQLiteDatabase sqLiteDatabase = this.mReportDataBaseHelper.getReadableDatabase();
             Cursor cursor = sqLiteDatabase.rawQuery(query, null);
 
-            if (cursor != null && cursor.getCount() > 0){
-                while (cursor.moveToNext()){
+            if (cursor != null && cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
                     Repo repoEntity = new Repo();
                     repoEntity.setId(cursor.getInt(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.ID)));
                     repoEntity.setCompany(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.COMPANY)));
@@ -96,11 +134,11 @@ public class ReportRepository {
                 }
             }
 
-            if (cursor != null){
+            if (cursor != null) {
                 cursor.close();
             }
 
-        } catch (Exception e){
+        } catch (Exception e) {
             return list;
         }
 
