@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putInt(ReportConstants.BundleConstants.REPORT_ID, reportId);
                 Log.i("log", reportId + " reportId ");
 
-                Intent intent = new Intent(MainActivity.this, ReportDetail.class);
+                Intent intent = new Intent(MainActivity.this, ReportResume.class);
                 intent.putExtras(bundle);
 
                 startActivity(intent);

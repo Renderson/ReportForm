@@ -12,7 +12,7 @@ import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.Repo;
 
 
-public class ReportDetail extends AppCompatActivity {
+public class ReportResume extends AppCompatActivity {
 
     private ReportBusiness mReportBusiness;
 
@@ -22,11 +22,11 @@ public class ReportDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_report_detail);
+        setContentView(R.layout.activity_report_resume);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Detalhes Relatório");
+        //setTitle("Detalhes Relatório" + companyDetail);
 
         companyDetail = findViewById(R.id.company_detail);
 
@@ -34,6 +34,7 @@ public class ReportDetail extends AppCompatActivity {
         this.mReportBusiness = new ReportBusiness(this);
 
         loadDataFromActivity();
+
 
     }
 
@@ -44,6 +45,7 @@ public class ReportDetail extends AppCompatActivity {
 
             Repo repoEntity = this.mReportBusiness.load(this.mReportId);
             this.companyDetail.setText(repoEntity.getCompany());
+            setTitle("Resumo Relatório " + repoEntity.getCompany());
 
         }else {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();

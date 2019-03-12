@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.ReportDetail"></activity>
+        <activity android:name=".view.ReportResume"></activity>
         <activity android:name=".ReportActivity"></activity>
         <activity android:name=".view.MainActivity">
             <intent-filter>
