@@ -11,13 +11,10 @@ import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.Repo;
 
-
 public class ReportResume extends AppCompatActivity {
 
     private ReportBusiness mReportBusiness;
-
-    TextView companyDetail;
-    private int mReportId = 0;
+    TextView companyResume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,30 +23,26 @@ public class ReportResume extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //setTitle("Detalhes Relatório" + companyDetail);
 
-        companyDetail = findViewById(R.id.company_detail);
+        companyResume = findViewById(R.id.company_resume);
 
         // Camada Business
         this.mReportBusiness = new ReportBusiness(this);
 
-        loadDataFromActivity();
-
-
+        loadReportResume();
     }
 
-    private void loadDataFromActivity() {
+    private void loadReportResume() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
-            this.mReportId = bundle.getInt(ReportConstants.BundleConstants.REPORT_ID);
+            int mReportId = bundle.getInt(ReportConstants.BundleConstants.REPORT_ID);
 
-            Repo repoEntity = this.mReportBusiness.load(this.mReportId);
-            this.companyDetail.setText(repoEntity.getCompany());
+            Repo repoEntity = this.mReportBusiness.load(mReportId);
+            this.companyResume.setText(repoEntity.getCompany());
             setTitle("Resumo Relatório " + repoEntity.getCompany());
 
         }else {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-            return;
         }
     }
 }
