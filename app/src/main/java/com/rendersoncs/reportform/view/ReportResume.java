@@ -15,6 +15,8 @@ public class ReportResume extends AppCompatActivity {
 
     private ReportBusiness mReportBusiness;
     TextView companyResume;
+    TextView emailResume;
+    TextView dateResume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,8 @@ public class ReportResume extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         companyResume = findViewById(R.id.company_resume);
+        emailResume = findViewById(R.id.email_resume);
+        dateResume = findViewById(R.id.date_resume);
 
         // Camada Business
         this.mReportBusiness = new ReportBusiness(this);
@@ -39,6 +43,8 @@ public class ReportResume extends AppCompatActivity {
 
             Repo repoEntity = this.mReportBusiness.load(mReportId);
             this.companyResume.setText(repoEntity.getCompany());
+            this.emailResume.setText(repoEntity.getEmail());
+            this.dateResume.setText(repoEntity.getDate());
             setTitle("Resumo Relatório " + repoEntity.getCompany());
 
         }else {

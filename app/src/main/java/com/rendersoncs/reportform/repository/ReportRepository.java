@@ -81,9 +81,9 @@ public class ReportRepository {
 
             String[] projection = {
                     DataBaseConstants.REPORT.COLUMNS.ID,
-                    DataBaseConstants.REPORT.COLUMNS.COMPANY
-                    //DataBaseConstants.REPORT.COLUMNS.EMAIL,
-                    //DataBaseConstants.REPORT.COLUMNS.DATE
+                    DataBaseConstants.REPORT.COLUMNS.COMPANY,
+                    DataBaseConstants.REPORT.COLUMNS.EMAIL,
+                    DataBaseConstants.REPORT.COLUMNS.DATE
 
             };
 
@@ -95,8 +95,8 @@ public class ReportRepository {
                 cursor.moveToFirst();
                 repoEntity.setId(cursor.getInt(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.ID)));
                 repoEntity.setCompany(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.COMPANY)));
-                //repoEntity.setEmail(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.EMAIL)));
-                //repoEntity.setDate(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.DATE)));
+                repoEntity.setEmail(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.EMAIL)));
+                repoEntity.setDate(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.DATE)));
             }
 
             if (cursor != null){
