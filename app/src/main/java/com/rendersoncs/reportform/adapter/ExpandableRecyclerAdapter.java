@@ -20,10 +20,8 @@ import android.widget.TextView;
 import com.rendersoncs.reportform.itens.Repo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,10 +29,14 @@ import com.rendersoncs.reportform.R;
 
 public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRecyclerAdapter.ViewHolder> {
         private List<Repo> repos;
-        private SparseBooleanArray expandState = new SparseBooleanArray();
-        public ArrayList<String> listRadio = new ArrayList<>();
-        public ArrayList<String> listRadioClear = new ArrayList<>();
+        public SparseBooleanArray expandState = new SparseBooleanArray();
+        public ArrayList<String> listTxtRadio = new ArrayList<>();
+        public ArrayList<String> listText = new ArrayList<>();
+        public ArrayList<Integer> listIDRadio = new ArrayList<Integer>();
+        public ArrayList<Integer> listId = new ArrayList<Integer>();
         public Context context;
+
+        public RadioButton radioButton;
 
         private static final int TYPE_HEADER = 0;
         private static final int TYPE_ITEM = 1;
@@ -92,40 +94,52 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                                 int selectedRadioButtonID = viewHolder.mRadioGroup.getCheckedRadioButtonId();
 
                                 //Test Salve in a ArrayList RadioButton Selected
-                                RadioButton radioButton = group.findViewById(selectedRadioButtonID);
-                                String selectedRadioButtonText = viewHolder.tvTitleList.getText() + "\n " + radioButton.getId() + "\n " + radioButton.getText().toString() + "\n " + i;
-                                listRadio.add(selectedRadioButtonText);
+                                radioButton = group.findViewById(selectedRadioButtonID);
 
-                                //Duplicate list
-                                HashSet<String> hashSet = new HashSet<String>(listRadio);
-                                hashSet.addAll(listRadio);
-                                listRadio.clear();
-                                listRadio.addAll(hashSet);
-                                repo.setCheckList(listRadio);
+                                String selectedText = (String) viewHolder.tvTitleList.getText();
+                                String selectedRadioButtonText = radioButton.getText().toString();
+                                int selectedRadioId = radioButton.getId();
+                                int selectedList = i;
 
-                                Log.i("log", "Item: " + listRadio + " list ");
+                                listIDRadio.add(selectedRadioId);
+                                listId.add(selectedList);
+                                listText.add(selectedText);
+                                listTxtRadio.add(selectedRadioButtonText);
+
+                                Log.i("log", "Item: " + listTxtRadio + " listRadio ");
+                                Log.i("log", "Item: " + listId + " selectedIDList ");
+                                Log.i("log", "Item: " + listIDRadio + " selectedIDRadio ");
+                                Log.i("log", "Item: " + listText + " listText ");
+
+                                //Del duplicate list
+                                /*HashSet<String> hashSet = new HashSet<String>(listText);
+                                hashSet.addAll(listText);
+                                listText.clear();
+                                listText.addAll(hashSet);
+                                repo.setCheckList(listText);
+                                Log.i("log", "Item: " + repo.getCheckList() + " getCheckList ");*/
 
                                 if (checkedId == R.id.radio_conform) {
                                     viewHolder.mRadioButtonConform.setChecked(true);
                                     group.setTag(checkedId);
-                                    Log.i("log", "Item: " + listRadio + " checked " + i + " position");
+                                    //Log.i("log", "Item: " + listTxtRadio + " checked " + i + " position");
 
                                 } else if (checkedId == R.id.radio_not_applicable) {
                                     viewHolder.mRadioButtonNotApplicable.setChecked(true);
                                     group.setTag(checkedId);
-                                    Log.i("log", "Item: " + listRadio + " checked " + i + " position");
+                                    //Log.i("log", "Item: " + listTxtRadio + " checked " + i + " position");
 
                                 } else if (checkedId == R.id.radio_not_conform) {
                                     viewHolder.mRadioButtonNotConform.setChecked(true);
                                     group.setTag(checkedId);
-                                    Log.i("log", "Item: " + listRadio + " checked " + i + " position");
+                                    //Log.i("log", "Item: " + listTxtRadio + " checked " + i + " position");
 
                                 } else {
                                     group.clearCheck();
                                 }
                             }
                         });
-                        // End Test RadioButton
+                        // End RadioButton
                     }
                 });
             }
@@ -219,19 +233,6 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
             animator.setDuration(300);
             animator.setInterpolator(new LinearInterpolator());
             return animator;
-
-        }
-
-        public void clearList(){
-            for ( int i = 0; i < repos.size(); i++ ){
-                for ( int j = i + 1; j < listRadio.size(); j++ ){
-                    if (repos.get( i ).getId() == repos.get( j ).getId() && !((Object) listRadio.get(i)).equals(listRadio.get(j))){
-                        i++;
-                        break;
-                    }
-                }
-            }
-            repos.removeAll(listRadio);
 
         }
 }

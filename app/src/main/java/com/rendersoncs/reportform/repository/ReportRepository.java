@@ -83,6 +83,7 @@ public class ReportRepository {
                     DataBaseConstants.REPORT.COLUMNS.ID,
                     DataBaseConstants.REPORT.COLUMNS.COMPANY,
                     DataBaseConstants.REPORT.COLUMNS.EMAIL,
+                    DataBaseConstants.REPORT.COLUMNS.LIST,
                     DataBaseConstants.REPORT.COLUMNS.DATE
 
             };
@@ -97,6 +98,7 @@ public class ReportRepository {
                 repoEntity.setCompany(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.COMPANY)));
                 repoEntity.setEmail(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.EMAIL)));
                 repoEntity.setDate(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.DATE)));
+                repoEntity.setListJson(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.LIST)));
             }
 
             if (cursor != null){

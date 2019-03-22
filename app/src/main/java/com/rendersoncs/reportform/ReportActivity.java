@@ -16,9 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.rendersoncs.reportform.adapter.ExpandableRecyclerAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.itens.Repo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +46,8 @@ public class ReportActivity extends AppCompatActivity {
     private TextView resultCompany;
     private TextView resultEmail;
     private TextView resultDate;
-    private String arrayList;
+
+    JsonArray jsArray = new JsonArray();
 
     private Toolbar toolbar;
 
@@ -205,12 +212,8 @@ public class ReportActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.delete:
-                this.alertDialogClose();
-                break;
-
             case R.id.save:
-                if (mAdapter.listRadio.isEmpty()) {
+                if (mAdapter.listIDRadio.isEmpty()) {
                     new AlertDialog.Builder(this)
                             .setTitle(R.string.txt_empty_report)
                             .setMessage(R.string.txt_choice_item)
@@ -221,31 +224,64 @@ public class ReportActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
-                }else {
+                } else {
                     this.handleSave();
-                    break;
                 }
+                break;
+
+            case R.id.close:
+                this.alertDialogClose();
+                break;
 
             case R.id.clear:
-                this.clearRadioButton();
+                if (mAdapter.listIDRadio.isEmpty()) {
+                    Toast.makeText(this, "Lista vazia!", Toast.LENGTH_SHORT).show();
+                } else {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Limpar lista?")
+                            .setMessage("Deseja realmente limpar a seção? Esse processo vai apagar todo seu progresso!")
+                            .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    clearRadioButton();
+                                }
+                            })
+                            .setNegativeButton("Não", null)
+                            .show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    // Save Company, Email, Data, List
     private void handleSave() {
-
-        // Save Company, Email, Data, List
         final Repo repo = new Repo();
-
         repo.setCompany(resultCompany.getText().toString());
         repo.setEmail(resultEmail.getText().toString());
         repo.setDate(resultDate.getText().toString());
 
+        // Convert ArrayList in Json Object
+        for (int i = 0; (i < mAdapter.listTxtRadio.size()) && (i < mAdapter.listText.size()) && (i < mAdapter.listIDRadio.size()) && (i < mAdapter.listId.size()); i++) {
+            JsonObject jsObject = new JsonObject();
+            try {
+                jsObject.addProperty("TITULO", mAdapter.listText.get(i));
+                jsObject.addProperty("RADIO_TX", mAdapter.listTxtRadio.get(i));
+                jsObject.addProperty("RADIO_ID", mAdapter.listIDRadio.get(i));
+                jsObject.addProperty("ID_LIST", mAdapter.listId.get(i));
+                jsArray.add(jsObject);
+                Log.i("log", "Item: " + jsObject + " jsObject");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         Gson gson = new Gson();
-        arrayList = gson.toJson(mAdapter.listRadio);
+        String arrayList = gson.toJson(jsArray);
         repo.setListJson(arrayList);
         Log.i("log", "Item: " + arrayList + " arrayList");
+        Log.i("log", "Item: " + jsArray + " jsArray");
+        // Finish JsonObject
 
         //Save
         if (this.mReportBusiness.insert(repo)) {
@@ -257,11 +293,23 @@ public class ReportActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        this.alertDialogClose();
+    // Clear all every Lists and reload Adapter
+    private void clearRadioButton() {
+        mAdapter.listText.clear();
+        mAdapter.listId.clear();
+        mAdapter.listIDRadio.clear();
+        mAdapter.listTxtRadio.clear();
+
+        if (mAdapter.radioButton.isChecked()) {
+            mAdapter.radioButton.clearFocus();
+        }
+        mAdapter.notifyDataSetChanged();
+        mAdapter.expandState.clear();
+
+        Toast.makeText(this, "Lista vazia!", Toast.LENGTH_SHORT).show();
     }
 
+    // Alert dialog close
     private void alertDialogClose() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.alert_leave_the_report)
@@ -270,30 +318,16 @@ public class ReportActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
+                        Toast.makeText(ReportActivity.this, "Relatório fechado!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton(R.string.txt_cancel, null)
                 .show();
-
-
     }
 
-    public void clearRadioButton() {
-        mAdapter.listRadio.clear();
-
-        //mAdapter.clearRadio(viewHolder);
-
-        //viewHolder.mRadioGroup.clearCheck();
-        /*if (viewHolder.mRadioButtonConform.isChecked()){
-            viewHolder.mRadioButtonConform.setSelected(false);
-        }
-        if (viewHolder.mRadioButtonNotApplicable.isChecked()){
-            viewHolder.mRadioButtonNotApplicable.setChecked(false);
-        }
-        if (viewHolder.mRadioButtonNotConform.isChecked()){
-            viewHolder.mRadioButtonNotConform.setChecked(false);
-        }*/
-        //mAdapter.notifyDataSetChanged();
+    @Override
+    public void onBackPressed() {
+        this.alertDialogClose();
     }
 }
 

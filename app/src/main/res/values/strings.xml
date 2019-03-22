@@ -8,7 +8,7 @@
     <string name="title_report_list">Lista Relatórios</string>
     <string name="title_report">Relatório</string>
     <string name="txt_empty_report">Relátorio vazio!</string>
-    <string name="txt_choice_item">Para salvar seu relatório, deve ter no mínimo 2 listas marcadas.</string>
+    <string name="txt_choice_item">Para salvar seu relatório, deve ter no mínimo 1 lista marcada.</string>
     <string name="txt_back">Voltar</string>
     <string name="txt_report_save">Relatório salvo!</string>
     <string name="txt_error_save">Error ao salvar!</string>
