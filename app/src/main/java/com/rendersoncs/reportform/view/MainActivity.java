@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         this.mOnReportListenerInteractionListener = new OnReportListenerInteractionListener() {
             @Override
             public void onListClick(int reportId) {
-                // Open new Activity
+                // Open ReportResume pass bundle for ID
                 Bundle bundle = new Bundle();
                 bundle.putInt(ReportConstants.BundleConstants.REPORT_ID, reportId);
                 Log.i("log", reportId + " reportId ");
@@ -100,21 +100,21 @@ public class MainActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(MainActivityExp.this, ReportActivity.class);
-                //startActivity(intent);
-
-                ReportFormDialog reportFormDialog = new ReportFormDialog();
-                reportFormDialog.show(getSupportFragmentManager(), "report_dialog");
+                startReportFormDialog();
             }
         });
 
         emptyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReportFormDialog reportFormDialog = new ReportFormDialog();
-                reportFormDialog.show(getSupportFragmentManager(), "report_dialog");
+                startReportFormDialog();
             }
         });
+    }
+
+    private void startReportFormDialog() {
+        ReportFormDialog reportFormDialog = new ReportFormDialog();
+        reportFormDialog.show(getSupportFragmentManager(), "report_dialog");
     }
 
 

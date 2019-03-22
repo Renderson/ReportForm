@@ -39,7 +39,7 @@ public class ReportFormDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View view = inflater.inflate(R.layout.fragment_dialog, null);
+        final View view = inflater.inflate(R.layout.fragment_dialog,null);
 
         companyTv = view.findViewById(R.id.company_id);
         emailTv = view.findViewById(R.id.email_id);

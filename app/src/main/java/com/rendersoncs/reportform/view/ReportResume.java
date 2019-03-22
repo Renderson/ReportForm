@@ -43,7 +43,7 @@ public class ReportResume extends AppCompatActivity {
         // Camada Business
         this.mReportBusiness = new ReportBusiness(this);
 
-        loadReportResume();
+        this.loadReportResume();
     }
 
     private void loadReportResume() {
