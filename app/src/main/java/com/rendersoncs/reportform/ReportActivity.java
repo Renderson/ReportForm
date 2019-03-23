@@ -269,17 +269,14 @@ public class ReportActivity extends AppCompatActivity {
                 jsObject.addProperty("RADIO_TX", mAdapter.listTxtRadio.get(i));
                 jsObject.addProperty("RADIO_ID", mAdapter.listIDRadio.get(i));
                 jsObject.addProperty("ID_LIST", mAdapter.listId.get(i));
-                jsArray.add(jsObject);
                 Log.i("log", "Item: " + jsObject + " jsObject");
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            jsArray.add(jsObject);
         }
-        Gson gson = new Gson();
-        String arrayList = gson.toJson(jsArray);
-        repo.setListJson(arrayList);
-        Log.i("log", "Item: " + arrayList + " arrayList");
+        repo.setListJson(jsArray.toString());
         Log.i("log", "Item: " + jsArray + " jsArray");
         // Finish JsonObject
 

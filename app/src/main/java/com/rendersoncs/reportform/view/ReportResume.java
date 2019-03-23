@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
@@ -26,6 +27,8 @@ public class ReportResume extends AppCompatActivity {
     TextView emailResume;
     TextView dateResume;
     TextView listReportResume;
+
+    String titulo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +58,24 @@ public class ReportResume extends AppCompatActivity {
             this.companyResume.setText(repoEntity.getCompany());
             this.emailResume.setText(repoEntity.getEmail());
             this.dateResume.setText(repoEntity.getDate());
-            this.listReportResume.setText(repoEntity.getListJson());
+            //this.listReportResume.setText(repoEntity.getListJson());
 
             if (repoEntity.getListJson() != null) {
                 try {
-                    String s = repoEntity.getListJson();
-                    JSONObject jsonObject = new JSONObject(s);
-                    Log.i("log", "Item: " + jsonObject + " jsonObject ");
-                    Log.i("log", "Item: " + s + " stringResult ");
+                    JSONArray array = new JSONArray(repoEntity.getListJson());
+                    Log.i("log", "Item: " + array + " stringResult ");
+
+                    for (int i = 0; i < array.length(); i++){
+                        JSONObject jsonObject = new JSONObject(array.getString(i));
+
+                        titulo = (String) jsonObject.getString("TITULO");
+                        Log.i("log", "Item: " + titulo + " tituloList ");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+            this.listReportResume.setText(titulo);
 
             setTitle("Resumo Relatório " + repoEntity.getCompany());
 
