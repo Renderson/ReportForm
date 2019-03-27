@@ -8,7 +8,7 @@ public class Repo {
 
     private String company, email, date, photo, listJson, contents, buttonLayout;
     private String title, text;
-    private String radioConformed, radioNotApplicable, radioNotConformed;
+    private String title_list;
     private ArrayList<String> CheckList;
 
     public Repo(String title, String text) {
@@ -101,30 +101,6 @@ public class Repo {
         this.buttonLayout = buttonLayout;
     }
 
-    public String getRadioConformed() {
-        return radioConformed;
-    }
-
-    public void setRadioConformed(String radioConformed) {
-        this.radioConformed = radioConformed;
-    }
-
-    public String getRadioNotApplicable() {
-        return radioNotApplicable;
-    }
-
-    public void setRadioNotApplicable(String radioNotApplicable) {
-        this.radioNotApplicable = radioNotApplicable;
-    }
-
-    public String getRadioNotConformed() {
-        return radioNotConformed;
-    }
-
-    public void setRadioNotConformed(String radioNotConformed) {
-        this.radioNotConformed = radioNotConformed;
-    }
-
     public ArrayList<String> getCheckList() {
         return CheckList;
     }
@@ -139,5 +115,13 @@ public class Repo {
 
     public void setListJson(String listJson) {
         this.listJson = listJson;
+    }
+
+    public String getTitle_list() {
+        return title_list;
+    }
+
+    public void setTitle_list(String title_list) {
+        this.title_list = title_list;
     }
 }

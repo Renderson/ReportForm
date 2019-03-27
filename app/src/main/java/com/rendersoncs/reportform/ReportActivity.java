@@ -11,16 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.rendersoncs.reportform.adapter.ExpandableRecyclerAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.itens.Repo;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,9 +44,7 @@ public class ReportActivity extends AppCompatActivity {
     private TextView resultEmail;
     private TextView resultDate;
 
-    JsonArray jsArray = new JsonArray();
-
-    private Toolbar toolbar;
+    JSONArray jsArray = new JSONArray();
 
 
     @Override
@@ -64,7 +59,7 @@ public class ReportActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
-        toolbar = findViewById(R.id.toolbarForm);
+        Toolbar toolbar = findViewById(R.id.toolbarForm);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_report);
 
@@ -262,20 +257,23 @@ public class ReportActivity extends AppCompatActivity {
         repo.setDate(resultDate.getText().toString());
 
         // Convert ArrayList in Json Object
+        JSONObject job = new JSONObject();
         for (int i = 0; (i < mAdapter.listTxtRadio.size()) && (i < mAdapter.listText.size()) && (i < mAdapter.listIDRadio.size()) && (i < mAdapter.listId.size()); i++) {
-            JsonObject jsObject = new JsonObject();
+            JSONObject jsObject = new JSONObject();
             try {
-                jsObject.addProperty("TITULO", mAdapter.listText.get(i));
-                jsObject.addProperty("RADIO_TX", mAdapter.listTxtRadio.get(i));
-                jsObject.addProperty("RADIO_ID", mAdapter.listIDRadio.get(i));
-                jsObject.addProperty("ID_LIST", mAdapter.listId.get(i));
+                //jsObject.put("List", job);
+                jsObject.put("title_list", mAdapter.listText.get(i));
+                jsObject.put("radio_tx", mAdapter.listTxtRadio.get(i));
+                jsObject.put("radio_id", mAdapter.listIDRadio.get(i));
+                jsObject.put("id_list", mAdapter.listId.get(i));
                 Log.i("log", "Item: " + jsObject + " jsObject");
 
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-            jsArray.add(jsObject);
+            jsArray.put(jsObject);
         }
+
         repo.setListJson(jsArray.toString());
         Log.i("log", "Item: " + jsArray + " jsArray");
         // Finish JsonObject

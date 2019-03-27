@@ -2,23 +2,27 @@ package com.rendersoncs.reportform.view;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.adapter.ReportResumeAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportResumeItems;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReportResume extends AppCompatActivity {
 
@@ -27,6 +31,11 @@ public class ReportResume extends AppCompatActivity {
     TextView emailResume;
     TextView dateResume;
     TextView listReportResume;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private List<ReportResumeItems> repoResumeList;
+
 
     String titulo;
 
@@ -37,6 +46,12 @@ public class ReportResume extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        recyclerView = findViewById(R.id.resume_list);
+        //recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        repoResumeList = new ArrayList<>();
 
         companyResume = findViewById(R.id.company_resume);
         emailResume = findViewById(R.id.email_resume);
@@ -60,22 +75,29 @@ public class ReportResume extends AppCompatActivity {
             this.dateResume.setText(repoEntity.getDate());
             //this.listReportResume.setText(repoEntity.getListJson());
 
-            if (repoEntity.getListJson() != null) {
-                try {
-                    JSONArray array = new JSONArray(repoEntity.getListJson());
-                    Log.i("log", "Item: " + array + " stringResult ");
+            try {
+                JSONArray array = new JSONArray(repoEntity.getListJson());
+                Log.i("log", "Item: " + array + " array ");
 
-                    for (int i = 0; i < array.length(); i++){
-                        JSONObject jsonObject = new JSONObject(array.getString(i));
+                for (int i = 0; i < array.length(); i++) {
+                    Log.i("log", "Item: " + i + " listI ");
+                    JSONObject jo = array.getJSONObject(i);
+                    Log.i("log", "Item: " + jo + " stringResult ");
 
-                        titulo = (String) jsonObject.getString("TITULO");
-                        Log.i("log", "Item: " + titulo + " tituloList ");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    ReportResumeItems repoJson = new ReportResumeItems(jo.getString("title_list"));
+                    repoResumeList.add(repoJson);
+
+                    //titulo = (String) jsonObject.getString("title_list");
+                    //Log.i("log", "Item: " + titulo + " title_list ");
                 }
+                adapter = new ReportResumeAdapter(repoResumeList, this);
+                recyclerView.setAdapter(adapter);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            this.listReportResume.setText(titulo);
+
+            //this.listReportResume.setText(titulo);
 
             setTitle("Resumo Relatório " + repoEntity.getCompany());
 
