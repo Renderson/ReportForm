@@ -44,4 +44,7 @@ dependencies {
 
     //Box Dialog Permission
     implementation 'me.drakeet.materialdialog:library:1.2.2'
+
+    //NavHeader Circle
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 }

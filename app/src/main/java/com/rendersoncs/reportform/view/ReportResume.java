@@ -22,7 +22,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReportResume extends AppCompatActivity {
 
@@ -31,18 +33,21 @@ public class ReportResume extends AppCompatActivity {
     TextView emailResume;
     TextView dateResume;
     TextView listReportResume;
+    TextView totalList;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<ReportResumeItems> repoResumeList;
 
+    private ArrayList<String> listSelected = new ArrayList<>();
+    private HashMap<String, Integer> contListSelected = new HashMap<>();
 
-    String titulo;
+    String allList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_report_resume);
+        setContentView(R.layout.test);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,10 +58,11 @@ public class ReportResume extends AppCompatActivity {
 
         repoResumeList = new ArrayList<>();
 
-        companyResume = findViewById(R.id.company_resume);
-        emailResume = findViewById(R.id.email_resume);
+        //companyResume = findViewById(R.id.company_resume);
+        //emailResume = findViewById(R.id.email_resume);
         dateResume = findViewById(R.id.date_resume);
-        listReportResume = findViewById(R.id.list_report_resume);
+        //listReportResume = findViewById(R.id.list_report_resume);
+        totalList = findViewById(R.id.all_list);
 
         // Camada Business
         this.mReportBusiness = new ReportBusiness(this);
@@ -70,11 +76,12 @@ public class ReportResume extends AppCompatActivity {
             int mReportId = bundle.getInt(ReportConstants.BundleConstants.REPORT_ID);
 
             Repo repoEntity = this.mReportBusiness.load(mReportId);
-            this.companyResume.setText(repoEntity.getCompany());
-            this.emailResume.setText(repoEntity.getEmail());
-            this.dateResume.setText(repoEntity.getDate());
+            //this.companyResume.setText(repoEntity.getCompany());
+            //this.emailResume.setText(repoEntity.getEmail());
+            this.dateResume.setText("Data: " + repoEntity.getDate());
             //this.listReportResume.setText(repoEntity.getListJson());
 
+            // popular RecyclerView
             try {
                 JSONArray array = new JSONArray(repoEntity.getListJson());
                 Log.i("log", "Item: " + array + " array ");
@@ -97,9 +104,39 @@ public class ReportResume extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            //this.listReportResume.setText(titulo);
+            try {
+                JSONArray arrayL = new JSONArray(repoEntity.getListJson());
+                for (int i = 0; i < arrayL.length(); i ++){
+                    JSONObject obj = arrayL.getJSONObject(i);
+                    String selected = obj.getString("radio_tx");
+                    listSelected.add(selected);
+                    Log.i("log", "Item: " + selected + " selected ");
+                }
+                for (int i = 0; i < listSelected.size(); i ++){
+                    String item = listSelected.get(i);
+                    if (contListSelected.containsKey(item))
+                        contListSelected.put(item, contListSelected.get(item) + 1);
+                    else
+                        contListSelected.put(item, 1);
+                    Log.i("log", "Item: " + contListSelected + " contListSelected ");
+                }
+                StringBuilder sb = new StringBuilder();
 
-            setTitle("Resumo Relatório " + repoEntity.getCompany());
+                for (Map.Entry < String, Integer > e: contListSelected.entrySet()){
+                    sb.append("\n").append(e.getKey()).append(" : ").append(e.getValue());
+                }
+
+                //this.listReportResume.setText(sb.toString());
+
+                int maxList = arrayL.length();
+                this.totalList.setText(String.valueOf(maxList) + " Items selecionados.");
+                Log.i("log", "Item: " + maxList + " valor ");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            setTitle("Empresa: " + repoEntity.getCompany());
 
         } else {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
