@@ -6,9 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.rendersoncs.reportform.itens.Repo;
-import com.rendersoncs.reportform.listener.OnReportListenerInteractionListener;
+import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.viewHolder.ReportListViewHolder;
 
 import java.util.List;
@@ -18,12 +20,12 @@ import com.rendersoncs.reportform.R;
 public class ReportListAdapter extends RecyclerView.Adapter<ReportListViewHolder> {
 
     private List<Repo> mRepoEntityList;
-    private OnReportListenerInteractionListener mOnReportListenerInteractionListener;
+    private OnInteractionListener mOnInteractionListener;
+    Context context;
 
-
-    public ReportListAdapter(List<Repo> repoEntityList, OnReportListenerInteractionListener listener) {
+    public ReportListAdapter(List<Repo> repoEntityList, OnInteractionListener listener) {
         this.mRepoEntityList = repoEntityList;
-        this.mOnReportListenerInteractionListener = listener;
+        this.mOnInteractionListener = listener;
     }
 
     @NonNull
@@ -41,8 +43,7 @@ public class ReportListAdapter extends RecyclerView.Adapter<ReportListViewHolder
     @Override
     public void onBindViewHolder(@NonNull final ReportListViewHolder holder, int position) {
         Repo repoEntity = this.mRepoEntityList.get(position);
-        holder.bindData(repoEntity, mOnReportListenerInteractionListener);
-
+        holder.bindData(repoEntity, mOnInteractionListener);
     }
 
     @Override
@@ -51,4 +52,3 @@ public class ReportListAdapter extends RecyclerView.Adapter<ReportListViewHolder
     }
 
 }
-

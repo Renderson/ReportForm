@@ -1,9 +1,14 @@
 package com.rendersoncs.reportform.listener;
 
-public interface OnReportListenerInteractionListener {
+import java.io.File;
+
+public interface OnInteractionListener {
 
     /* Click for List Report*/
     void onListClick(int reportId);
+
+    /* Click open PDF*/
+    void onOpenPdf(int reportId);
 
     /* Click for Delete Report*/
     void onDeleteClick(int id);

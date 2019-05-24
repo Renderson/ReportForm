@@ -4,8 +4,8 @@
     package="com.rendersoncs.reportform">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="true" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:required="true"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -19,8 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.ReportResume"></activity>
-        <activity android:name=".ReportActivity"></activity>
+        <activity android:name=".ReportActivity"/>
         <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +27,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.ReportResume"
+            android:parentActivityName=".view.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity"/>
+        </activity>
+        <activity android:name=".view.ViewReportAsyncTask"/>
+        <provider
+            android:authorities="com.rendersoncs.reportform.FileProvider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

@@ -12,8 +12,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.itens.Repo;
-import com.rendersoncs.reportform.listener.OnReportListenerInteractionListener;
+import com.rendersoncs.reportform.listener.OnInteractionListener;
 
 import com.rendersoncs.reportform.R;
 
@@ -33,16 +34,23 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
         this.mContext = context;
     }
 
-    public void bindData(final Repo repoEntity, final OnReportListenerInteractionListener listener) {
+    public void bindData(final Repo repoEntity, final OnInteractionListener listener) {
         this.CompanyView.setText(repoEntity.getCompany());
         this.DateView.setText(repoEntity.getDate());
 
-        this.CompanyView.setOnClickListener(new View.OnClickListener() {
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onOpenPdf(repoEntity.getId());
+            }
+        });
+
+        /*this.CompanyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onListClick(repoEntity.getId());
             }
-        });
+        });*/
 
         this.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +63,7 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_edit:
-                                //listener.onListClick(repoEntity.getId());
+                                listener.onListClick(repoEntity.getId());
                                 return true;
 
                             case R.id.action_remove:

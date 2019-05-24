@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -13,7 +14,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -24,22 +24,20 @@ import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.itens.Repo;
-import com.rendersoncs.reportform.listener.OnReportListenerInteractionListener;
+import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.observer.RVEmptyObserver;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
-//import me.drakeet.materialdialog.MaterialDialog;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewHolder viewHolder = new ViewHolder();
     private ReportBusiness reportBusiness;
-    private OnReportListenerInteractionListener mOnReportListenerInteractionListener;
+    private OnInteractionListener listener;
 
     private static final int REQUEST_PERMISSIONS_CODE = 128;
-    //private MaterialDialog mMaterialDialog;
 
     public Context context;
     View emptyLayout;
@@ -60,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
         emptyButton = findViewById(R.id.action_add_report);
 
-        checkPermission();
+        //Check permissions Android 6.0+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            checkPermission();
+        }
 
         //Obter a recycler
         this.viewHolder.recyclerView = findViewById(R.id.recycler_view);
@@ -68,13 +69,14 @@ public class MainActivity extends AppCompatActivity {
         // Camada Business
         this.reportBusiness = new ReportBusiness(this);
 
-        this.mOnReportListenerInteractionListener = new OnReportListenerInteractionListener() {
+        this.listener = new OnInteractionListener() {
+
+            // Click list
             @Override
             public void onListClick(int reportId) {
                 // Open ReportResume pass bundle for ID
                 Bundle bundle = new Bundle();
                 bundle.putInt(ReportConstants.BundleConstants.REPORT_ID, reportId);
-                Log.i("log", reportId + " reportId ");
 
                 Intent intent = new Intent(MainActivity.this, ReportResume.class);
                 intent.putExtras(bundle);
@@ -82,6 +84,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
 
+            // Create PDF
+            @Override
+            public void onOpenPdf(int reportId) {
+                // Open ReportResume pass bundle for ID
+                Bundle bundle = new Bundle();
+                bundle.putInt(ReportConstants.BundleConstants.REPORT_ID, reportId);
+
+                Intent intent = new Intent(MainActivity.this, ViewReportAsyncTask.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+            // Delete Item list
             @Override
             public void onDeleteClick(int id) {
                 // Remove relatórios do banco de dados
@@ -128,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         List<Repo> repoEntityList = this.reportBusiness.getInvited();
 
         // Definir um adapter
-        ReportListAdapter reportListAdapter = new ReportListAdapter(repoEntityList, mOnReportListenerInteractionListener);
+        ReportListAdapter reportListAdapter = new ReportListAdapter(repoEntityList, listener);
         this.viewHolder.recyclerView.setAdapter(reportListAdapter);
 
         // Notifica o Adapter mudança na lista
@@ -149,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_PERMISSIONS_CODE:
                 for (int i = 0; i < permissions.length; i++) {
-                    if (grantResult[i] == PackageManager.PERMISSION_GRANTED) {
+                    if (permissions[i].equalsIgnoreCase(Manifest.permission.CAMERA)
+                            && grantResult[i] == PackageManager.PERMISSION_GRANTED) {
                         loadReport();
                     }
                 }
@@ -166,10 +182,17 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_CODE);
             }
         }
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                dialogPermission(getString(R.string.alert_dialog_permission), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
+            } else {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_CODE);
+            }
+        }
     }
 
     private void dialogPermission(String message, final String[] permission) {
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(MainActivity.this)
                 .setTitle(R.string.txt_permission)
                 .setMessage(message)
                 .setPositiveButton(R.string.txt_to_allow, new DialogInterface.OnClickListener() {
@@ -184,4 +207,3 @@ public class MainActivity extends AppCompatActivity {
     }
     // Final code permission
 }
-

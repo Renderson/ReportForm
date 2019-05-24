@@ -84,7 +84,6 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                     @Override
                     public void onClick(final View v) {
                         onClickButton(viewHolder.expandableLayout, viewHolder.buttonLayoutArrow, i);
-                        Log.i("log", "Item: " + i + " Expand");
 
                         //Test onClick RadioButton
                         viewHolder.mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -99,10 +98,9 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                                 String selectedText = (String) viewHolder.tvTitleList.getText();
                                 String selectedRadioButtonText = radioButton.getText().toString();
                                 int selectedRadioId = radioButton.getId();
-                                int selectedList = i;
 
                                 listIDRadio.add(selectedRadioId);
-                                listId.add(selectedList);
+                                listId.add(i);
                                 listText.add(selectedText);
                                 listTxtRadio.add(selectedRadioButtonText);
 
@@ -122,17 +120,17 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                                 if (checkedId == R.id.radio_conform) {
                                     viewHolder.mRadioButtonConform.setChecked(true);
                                     group.setTag(checkedId);
-                                    //Log.i("log", "Item: " + listTxtRadio + " checked " + i + " position");
+                                    //Log.i("log", "Item: " + listConformed + " listConformed ");
 
                                 } else if (checkedId == R.id.radio_not_applicable) {
                                     viewHolder.mRadioButtonNotApplicable.setChecked(true);
                                     group.setTag(checkedId);
-                                    //Log.i("log", "Item: " + listTxtRadio + " checked " + i + " position");
+                                    //Log.i("log", "Item: " + listNotConformed + " listNotConformed ");
 
                                 } else if (checkedId == R.id.radio_not_conform) {
                                     viewHolder.mRadioButtonNotConform.setChecked(true);
                                     group.setTag(checkedId);
-                                    //Log.i("log", "Item: " + listTxtRadio + " checked " + i + " position");
+                                    //Log.i("log", "Item: " + listNotApplicable + " listNotApplicable ");
 
                                 } else {
                                     group.clearCheck();
