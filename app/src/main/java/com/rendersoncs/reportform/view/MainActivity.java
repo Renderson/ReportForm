@@ -1,19 +1,24 @@
 package com.rendersoncs.reportform.view;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -27,6 +32,7 @@ import com.rendersoncs.reportform.itens.Repo;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.observer.RVEmptyObserver;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -34,7 +40,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     private ViewHolder viewHolder = new ViewHolder();
-    private ReportBusiness reportBusiness;
+    public ReportBusiness reportBusiness;
     private OnInteractionListener listener;
 
     private static final int REQUEST_PERMISSIONS_CODE = 128;
@@ -59,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         emptyButton = findViewById(R.id.action_add_report);
 
         //Check permissions Android 6.0+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkPermission();
         }
 
@@ -106,6 +112,31 @@ public class MainActivity extends AppCompatActivity {
                 // Lista novamente os relatórios
                 loadReport();
             }
+
+            @Override
+            public void onShareReport(int reportId) {
+
+                Repo repo = reportBusiness.load(reportId);
+
+                Uri uri;
+                String subject = String.format("Relatorio-%s", repo.getCompany(), repo.getDate());
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    uri = FileProvider.getUriForFile(MainActivity.this, "com.rendersoncs.reportform.FileProvider", file);
+                } else {
+                    uri = Uri.fromFile(file);
+                }
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                intent.setType("pdf/plain");
+                intent.putExtra(intent.EXTRA_SUBJECT, subject);
+                intent.putExtra(Intent.EXTRA_TEXT, "Relatório concluído da empresa " + repo.getCompany() + " realizado no dia " + repo.getDate());
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(intent, "Compartilhar"));
+            }
+
         };
 
         // Define um layout

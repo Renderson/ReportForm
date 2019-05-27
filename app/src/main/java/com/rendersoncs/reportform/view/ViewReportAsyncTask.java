@@ -59,7 +59,7 @@ public class ViewReportAsyncTask extends AppCompatActivity {
 
             progress = new ProgressDialog(ViewReportAsyncTask.this);
             progress.setTitle("Por favor aguarde!");
-            progress.setMessage("Criando PDF...");
+            progress.setMessage("Carregando PDF...");
             progress.setMax(100);
             progress.show();
 
@@ -75,9 +75,9 @@ public class ViewReportAsyncTask extends AppCompatActivity {
             }
             File pdfReport = null;
             try {
-                pdfReport = new PDFReport().write(ViewReportAsyncTask.this, report);
+                pdfReport = new CreatePDFViewer().write(ViewReportAsyncTask.this, report);
             } catch (Exception e) {
-                Log.i("Error", "Erro gerar PDF!!!!" + report + "pdfReport");
+                Log.i("Error", "Erro ao abrir PDF!!!!" + report + "pdfReport");
             }
             return pdfReport;
         }
@@ -91,6 +91,7 @@ public class ViewReportAsyncTask extends AppCompatActivity {
             super.onPostExecute(file);
             Log.d(TAG, "onPostExecute call");
             ViewReportAsyncTask.this.showPDFFile(file);
+            //ViewReportAsyncTask.this.shareReport(file);
             progress.dismiss();
         }
     }
@@ -122,6 +123,27 @@ public class ViewReportAsyncTask extends AppCompatActivity {
             }
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(uri, "application/pdf");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivityForResult(intent, REQUEST_CODE_SHOWPDF);
+
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(ViewReportAsyncTask.this, "Não encontrado aplicativo para LER PDF!", Toast.LENGTH_LONG).show();
+        }
+        Toast.makeText(ViewReportAsyncTask.this, "Abrindo PDF!", Toast.LENGTH_LONG).show();
+    }
+
+    public void shareReport(File file) {
+        try {
+            Uri uri;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                uri = FileProvider.getUriForFile(ViewReportAsyncTask.this, "com.rendersoncs.reportform.FileProvider", file);
+            } else {
+                uri = Uri.fromFile(file);
+            }
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            intent.putExtra(Intent.EXTRA_TEXT, "Test");
+            intent.putExtra(Intent.EXTRA_TITLE, "pdf");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivityForResult(intent, REQUEST_CODE_SHOWPDF);
 

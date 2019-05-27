@@ -82,7 +82,7 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
                                 return true;
 
                             case R.id.action_share:
-                                Toast.makeText(mContext, R.string.txt_share_report, Toast.LENGTH_SHORT).show();
+                                listener.onShareReport(repoEntity.getId());
                                 return true;
 
                             default:

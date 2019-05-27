@@ -12,4 +12,7 @@ public interface OnInteractionListener {
 
     /* Click for Delete Report*/
     void onDeleteClick(int id);
+
+    /* Click for Share Report*/
+    void onShareReport(int reportId);
 }

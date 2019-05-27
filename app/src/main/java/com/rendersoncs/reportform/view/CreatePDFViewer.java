@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 
-public class PDFReport {
+public class CreatePDFViewer {
 
     private static final Font baseFont = FontFactory.getFont("Helvetica", 12.0F);
     private static final Font baseFontBold = FontFactory.getFont("Helvetica-Bold", 12.0F);
@@ -49,10 +49,11 @@ public class PDFReport {
 
      File write(Context context, Repo paramRepo) throws Exception {
 
-            Object[] arrayOfObject = new Object[2];
+            Object[] arrayOfObject = new Object[1];
             arrayOfObject[0] = paramRepo.getCompany().replaceAll(" ", "_");
-            arrayOfObject[1] = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(System.currentTimeMillis());
-            String str = FilenameUtils.normalize(String.format("Relatorio-%s-%s.pdf", arrayOfObject));
+            //arrayOfObject[1] = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(System.currentTimeMillis());
+            //arrayOfObject[1] = new SimpleDateFormat("dd-MM-yyyy").format(paramRepo.getDate());
+            String str = FilenameUtils.normalize(String.format("Relatorio-%s.pdf", arrayOfObject));
             Log.i("PDF", "Gerar PDF!!!! " + str + " Nome Arquivo");
 
             File mFilePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report");
