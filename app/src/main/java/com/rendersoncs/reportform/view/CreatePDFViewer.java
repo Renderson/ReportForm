@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -47,76 +48,72 @@ public class CreatePDFViewer {
         UNDERLINE = new LineSeparator(1.0F, 100.0F, null, 1, -5.0F);
     }
 
-     File write(Context context, Repo paramRepo) throws Exception {
+    File write(Context context, Repo paramRepo) throws Exception {
 
-            Object[] arrayOfObject = new Object[1];
-            arrayOfObject[0] = paramRepo.getCompany().replaceAll(" ", "_");
-            //arrayOfObject[1] = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(System.currentTimeMillis());
-            //arrayOfObject[1] = new SimpleDateFormat("dd-MM-yyyy").format(paramRepo.getDate());
-            String str = FilenameUtils.normalize(String.format("Relatorio-%s.pdf", arrayOfObject));
-            Log.i("PDF", "Gerar PDF!!!! " + str + " Nome Arquivo");
+        String str = FilenameUtils.normalize(String.format("Relatorio-%s-%s.pdf", paramRepo.getCompany(), paramRepo.getDate()));
+        Log.i("PDF", "Gerar PDF!!!! " + str + " Nome Arquivo");
 
-            File mFilePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report");
-            if (!mFilePath.exists())
-                mFilePath.mkdirs();
-            File localFile2 = new File(mFilePath, str);
-            if (localFile2.exists())
-                localFile2.delete();
-            localFile2.createNewFile();
+        File mFilePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report");
+        if (!mFilePath.exists())
+            mFilePath.mkdirs();
+        File localFile2 = new File(mFilePath, str);
+        if (localFile2.exists())
+            localFile2.delete();
+        localFile2.createNewFile();
 
-            Document document = new Document(PageSize.A4);
-            PdfWriter.getInstance(document, new FileOutputStream(localFile2));
-            document.open();
-            document.addAuthor("Render");
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, new FileOutputStream(localFile2));
+        document.open();
+        document.addAuthor("Render");
 
-            Bitmap localBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_bg_white);
-            ByteArrayOutputStream localByteArrayOutputStream = new ByteArrayOutputStream();
-            localBitmap.compress(CompressFormat.JPEG, 100, localByteArrayOutputStream);
-            Image image = Image.getInstance(localByteArrayOutputStream.toByteArray());
+        Bitmap localBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_bg_white);
+        ByteArrayOutputStream localByteArrayOutputStream = new ByteArrayOutputStream();
+        localBitmap.compress(CompressFormat.JPEG, 100, localByteArrayOutputStream);
+        Image image = Image.getInstance(localByteArrayOutputStream.toByteArray());
 
-            PdfPTable table = new PdfPTable(2);
-            table.setWidthPercentage(100.0F);//altura e largura
-            table.setWidths(new int[]{1, 2});//setando a altura e largura
-            table.addCell(createImageCell(image));
+        PdfPTable table = new PdfPTable(2);
+        table.setWidthPercentage(100.0F);//altura e largura
+        table.setWidths(new int[]{1, 2});//setando a altura e largura
+        table.addCell(createImageCell(image));
 
-            Paragraph paragraph = new Paragraph(new Chunk("Relatório da Vistoria", baseFont));
-            paragraph.setSpacingAfter(lineSpace);
-            paragraph.setSpacingBefore(lineSpace);
-            paragraph.setAlignment(2);
-            PdfPCell localPdfPCell1 = new PdfPCell();
-            localPdfPCell1.addElement(paragraph);
-            localPdfPCell1.setVerticalAlignment(4);
-            localPdfPCell1.setBorder(0);
-            table.addCell(localPdfPCell1);
-            document.add(table);
-            document.add(UNDERLINE);
+        Paragraph paragraph = new Paragraph(new Chunk("Relatório da Vistoria", baseFont));
+        paragraph.setSpacingAfter(lineSpace);
+        paragraph.setSpacingBefore(lineSpace);
+        paragraph.setAlignment(2);
+        PdfPCell localPdfPCell1 = new PdfPCell();
+        localPdfPCell1.addElement(paragraph);
+        localPdfPCell1.setVerticalAlignment(4);
+        localPdfPCell1.setBorder(0);
+        table.addCell(localPdfPCell1);
+        document.add(table);
+        document.add(UNDERLINE);
 
-            //New paragraph Company
-            paragraph = new Paragraph(new Chunk("Nome da Empresa: ", baseFontBold));
-            paragraph.setSpacingAfter(lineSpaceSmall);
-            paragraph.setSpacingBefore(lineSpaceSmall);
-            paragraph.add(new Chunk(paramRepo.getCompany(), baseFont));
-            paragraph.setAlignment(0);
-            document.add(paragraph);
+        //New paragraph Company
+        paragraph = new Paragraph(new Chunk("Nome da Empresa: ", baseFontBold));
+        paragraph.setSpacingAfter(lineSpaceSmall);
+        paragraph.setSpacingBefore(lineSpaceSmall);
+        paragraph.add(new Chunk(paramRepo.getCompany(), baseFont));
+        paragraph.setAlignment(0);
+        document.add(paragraph);
 
-            //New paragraph E-mail
-            paragraph = new Paragraph(new Chunk("E-mail da empresa: ", baseFontBold));
-            paragraph.setSpacingAfter(lineSpaceSmall);
-            paragraph.setSpacingBefore(lineSpaceSmall);
-            paragraph.add(new Chunk(paramRepo.getEmail(), baseFont));
-            paragraph.setAlignment(0);
-            document.add(paragraph);
+        //New paragraph E-mail
+        paragraph = new Paragraph(new Chunk("E-mail da empresa: ", baseFontBold));
+        paragraph.setSpacingAfter(lineSpaceSmall);
+        paragraph.setSpacingBefore(lineSpaceSmall);
+        paragraph.add(new Chunk(paramRepo.getEmail(), baseFont));
+        paragraph.setAlignment(0);
+        document.add(paragraph);
 
-            //New paragraph Date
-            paragraph = new Paragraph(new Chunk("Data da Vistoria: ", baseFontBold));
-            paragraph.setSpacingAfter(lineSpaceSmall);
-            paragraph.setSpacingBefore(lineSpaceSmall);
-            paragraph.add(new Chunk(paramRepo.getDate(), baseFont));
-            paragraph.setAlignment(0);
-            document.add(paragraph);
+        //New paragraph Date
+        paragraph = new Paragraph(new Chunk("Data da Vistoria: ", baseFontBold));
+        paragraph.setSpacingAfter(lineSpaceSmall);
+        paragraph.setSpacingBefore(lineSpaceSmall);
+        paragraph.add(new Chunk(paramRepo.getDate(), baseFont));
+        paragraph.setAlignment(0);
+        document.add(paragraph);
 
-            document.close();
-            return localFile2;
+        document.close();
+        return localFile2;
     }
 
     private static PdfPCell createImageCell(Image paramImage)

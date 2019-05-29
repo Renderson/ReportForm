@@ -21,10 +21,10 @@
     <string name="txt_share_report">Compartilhar relatório</string>
     <string name="txt_canceled">Cancelado!</string>
     <string name="txt_start">Começar</string>
-    <string name="date">dd/MM/yyyy</string>
+    <string name="date">dd-MM-yyyy</string>
     <string name="txt_new_report">Novo relatório iniciado!</string>
     <string name="txt_email">Forneça um e-mail válido.</string>
-    <string name="space_date">/</string>
+    <string name="space_date">-</string>
     <string name="txt_to_clean">Limpar</string>
     <string name="txt_leave">Sair</string>
     <string name="txt_save">Salvar</string>

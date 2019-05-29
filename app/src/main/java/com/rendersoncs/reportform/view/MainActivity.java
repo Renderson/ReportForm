@@ -1,7 +1,6 @@
 package com.rendersoncs.reportform.view;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +17,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -40,10 +38,11 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     private ViewHolder viewHolder = new ViewHolder();
-    public ReportBusiness reportBusiness;
+    private ReportBusiness reportBusiness;
     private OnInteractionListener listener;
 
     private static final int REQUEST_PERMISSIONS_CODE = 128;
+    private static final String PACKAGE_FILE_PROVIDER = "com.rendersoncs.reportform.FileProvider";
 
     public Context context;
     View emptyLayout;
@@ -94,12 +93,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onOpenPdf(int reportId) {
                 // Open ReportResume pass bundle for ID
-                Bundle bundle = new Bundle();
+                /*Bundle bundle = new Bundle();
                 bundle.putInt(ReportConstants.BundleConstants.REPORT_ID, reportId);
 
                 Intent intent = new Intent(MainActivity.this, ViewReportAsyncTask.class);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                Repo repo = reportBusiness.load(reportId);
+                PDFAsyncTask asy = new PDFAsyncTask(MainActivity.this);
+                asy.execute(repo);
             }
 
             // Delete Item list
@@ -115,15 +118,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onShareReport(int reportId) {
-
+                // Share PDF the Report
                 Repo repo = reportBusiness.load(reportId);
 
                 Uri uri;
-                String subject = String.format("Relatorio-%s", repo.getCompany(), repo.getDate());
+                String subject = String.format("Relatorio-%s-%s", repo.getCompany(), repo.getDate());
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    uri = FileProvider.getUriForFile(MainActivity.this, "com.rendersoncs.reportform.FileProvider", file);
+                    uri = FileProvider.getUriForFile(MainActivity.this, PACKAGE_FILE_PROVIDER, file);
                 } else {
                     uri = Uri.fromFile(file);
                 }
@@ -136,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, "Compartilhar"));
             }
-
         };
 
         // Define um layout
