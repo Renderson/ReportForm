@@ -92,13 +92,6 @@ public class MainActivity extends AppCompatActivity {
             // Create PDF
             @Override
             public void onOpenPdf(int reportId) {
-                // Open ReportResume pass bundle for ID
-                /*Bundle bundle = new Bundle();
-                bundle.putInt(ReportConstants.BundleConstants.REPORT_ID, reportId);
-
-                Intent intent = new Intent(MainActivity.this, ViewReportAsyncTask.class);
-                intent.putExtras(bundle);
-                startActivity(intent);*/
 
                 Repo repo = reportBusiness.load(reportId);
                 PDFAsyncTask asy = new PDFAsyncTask(MainActivity.this);
@@ -135,7 +128,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
                 intent.setType("pdf/plain");
                 intent.putExtra(intent.EXTRA_SUBJECT, subject);
-                intent.putExtra(Intent.EXTRA_TEXT, "Relatório concluído da empresa " + repo.getCompany() + " realizado no dia " + repo.getDate());
+                intent.putExtra(Intent.EXTRA_EMAIL  , new String[] { repo.getEmail()});
+                intent.putExtra(Intent.EXTRA_TEXT, "Em anexo o relatório da empresa " + repo.getCompany() + " concluído!" + " Realizado no dia " + repo.getDate());
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, "Compartilhar"));
             }

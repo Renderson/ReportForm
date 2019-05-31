@@ -23,7 +23,7 @@ public class PDFAsyncTask extends AsyncTask<Repo, Void, File> {
 
     private static final String PACKAGE_FILE_PROVIDER = "com.rendersoncs.reportform.FileProvider";
 
-    PDFAsyncTask(Context context){
+    public PDFAsyncTask(Context context){
         this.context = context;
     }
 

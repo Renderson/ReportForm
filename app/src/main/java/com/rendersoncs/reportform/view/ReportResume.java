@@ -30,14 +30,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class ReportResume extends AppCompatActivity {
 
     private ReportBusiness mReportBusiness;
+    Repo repoEntity;
     //TextView companyResume;
     TextView emailResume;
     TextView dateResume;
@@ -85,7 +92,7 @@ public class ReportResume extends AppCompatActivity {
         this.createPieChart();
     }
 
-    private void createPieChart(){
+    private void createPieChart() {
 
         pieChart.setUsePercentValues(false);
         pieChart.getDescription().setEnabled(false);
@@ -130,7 +137,7 @@ public class ReportResume extends AppCompatActivity {
         if (bundle != null) {
             int mReportId = bundle.getInt(ReportConstants.BundleConstants.REPORT_ID);
 
-            Repo repoEntity = this.mReportBusiness.load(mReportId);
+            repoEntity = this.mReportBusiness.load(mReportId);
             //this.companyResume.setText(repoEntity.getCompany());
             this.emailResume.setText(repoEntity.getEmail());
             this.dateResume.setText(getString(R.string.resume_date) + repoEntity.getDate());
@@ -161,13 +168,13 @@ public class ReportResume extends AppCompatActivity {
 
             try {
                 JSONArray arrayL = new JSONArray(repoEntity.getListJson());
-                for (int i = 0; i < arrayL.length(); i ++){
+                for (int i = 0; i < arrayL.length(); i++) {
                     JSONObject obj = arrayL.getJSONObject(i);
                     selected = obj.getString("radio_tx");
                     listSelected.add(selected);
                     Log.i("log", "Item: " + listSelected + " selected ");
                 }
-                for (int i = 0; i < listSelected.size(); i ++){
+                for (int i = 0; i < listSelected.size(); i++) {
                     String item = listSelected.get(i);
                     if (contListSelected.containsKey(item))
                         contListSelected.put(item, contListSelected.get(item) + 1);
@@ -177,7 +184,7 @@ public class ReportResume extends AppCompatActivity {
                 }
                 StringBuilder sb = new StringBuilder();
 
-                for (Map.Entry < String, Integer > e: contListSelected.entrySet()){
+                for (Map.Entry<String, Integer> e : contListSelected.entrySet()) {
                     sb.append("\n").append(e.getKey()).append(" : ").append(e.getValue());
                     Log.i("log", "Item: " + sb + " sb ");
                 }

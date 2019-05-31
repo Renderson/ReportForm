@@ -1,5 +1,6 @@
 package com.rendersoncs.reportform;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import android.widget.Toast;
 import com.rendersoncs.reportform.adapter.ExpandableRecyclerAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.view.CreatePDFViewer;
+import com.rendersoncs.reportform.view.MainActivity;
+import com.rendersoncs.reportform.view.PDFAsyncTask;
 
 
 import org.json.JSONArray;
@@ -214,9 +218,7 @@ public class ReportActivity extends AppCompatActivity {
                             .setMessage(R.string.txt_choice_item)
                             .setPositiveButton(R.string.txt_back, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    return;
-                                }
+                                public void onClick(DialogInterface dialog, int which) {}
                             })
                             .show();
                 } else {

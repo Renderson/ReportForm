@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,6 +20,11 @@ import com.rendersoncs.reportform.itens.Repo;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 
 import com.rendersoncs.reportform.R;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class ReportListViewHolder extends RecyclerView.ViewHolder {
 
@@ -57,6 +65,7 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View v) {
 
                 PopupMenu popupMenu = new PopupMenu(mContext, overflow);
+                setForceShowIcon(popupMenu);
                 popupMenu.inflate(R.menu.menu_report);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -64,6 +73,10 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
                         switch (item.getItemId()) {
                             case R.id.action_edit:
                                 listener.onListClick(repoEntity.getId());
+                                return true;
+
+                            case R.id.action_share:
+                                listener.onShareReport(repoEntity.getId());
                                 return true;
 
                             case R.id.action_remove:
@@ -81,10 +94,6 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
                                         .show();
                                 return true;
 
-                            case R.id.action_share:
-                                listener.onShareReport(repoEntity.getId());
-                                return true;
-
                             default:
                                 return false;
                         }
@@ -94,6 +103,23 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+    }
+    private void setForceShowIcon(PopupMenu popupMenu) {
+        try {
+            Field[] mFields = popupMenu.getClass().getDeclaredFields();
+            for (Field field : mFields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popupMenu);
+                    Class<?> popupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method mMethods = popupHelper.getMethod("setForceShowIcon", boolean.class);
+                    mMethods.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 }
 

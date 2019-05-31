@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.itextpdf.text.Chunk;
@@ -13,6 +14,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.List;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -20,23 +22,29 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.adapter.ReportResumeAdapter;
 import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportResumeItems;
 
 import org.apache.commons.io.FilenameUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-
 
 public class CreatePDFViewer {
 
     private static final Font baseFont = FontFactory.getFont("Helvetica", 12.0F);
     private static final Font baseFontBold = FontFactory.getFont("Helvetica-Bold", 12.0F);
+    private static final Font baseFontBoldList = FontFactory.getFont("Helvetica-Bold", 18.0F);
     private static final LineSeparator UNDERLINE;
     private static final Float lineSpace;
     private static final Float lineSpaceSmall;
@@ -49,6 +57,14 @@ public class CreatePDFViewer {
     }
 
     File write(Context context, Repo paramRepo) throws Exception {
+        List listTitle = new List();
+        /*String date = paramRepo.getDate();
+
+        Object[] arrayOfObject = new Object[2];
+        arrayOfObject[0] = paramRepo.getCompany().replaceAll(" ", "_");
+        //arrayOfObject[1] = new SimpleDateFormat("dd-MM-yyyy").format(paramRepo.getDate());
+        arrayOfObject[1] = date;
+        String str = FilenameUtils.normalize(String.format("Relatorio-%s-%s.pdf", arrayOfObject));*/
 
         String str = FilenameUtils.normalize(String.format("Relatorio-%s-%s.pdf", paramRepo.getCompany(), paramRepo.getDate()));
         Log.i("PDF", "Gerar PDF!!!! " + str + " Nome Arquivo");
@@ -76,7 +92,7 @@ public class CreatePDFViewer {
         table.setWidths(new int[]{1, 2});//setando a altura e largura
         table.addCell(createImageCell(image));
 
-        Paragraph paragraph = new Paragraph(new Chunk("Relatório da Vistoria", baseFont));
+        Paragraph paragraph = new Paragraph(new Chunk("Auditoria Técnica - Segurança Alimentar", baseFont));
         paragraph.setSpacingAfter(lineSpace);
         paragraph.setSpacingBefore(lineSpace);
         paragraph.setAlignment(2);
@@ -111,6 +127,48 @@ public class CreatePDFViewer {
         paragraph.add(new Chunk(paramRepo.getDate(), baseFont));
         paragraph.setAlignment(0);
         document.add(paragraph);
+
+        // Create Table Check-List
+        paragraph = new Paragraph("Check List", baseFontBoldList);
+        paragraph.setAlignment(1);
+        document.add(paragraph);
+        paragraph = new Paragraph("   ");
+        document.add(paragraph);
+
+        PdfPTable tablel = new PdfPTable(2);
+        tablel.setWidthPercentage(100.0F);//altura e largura
+
+        PdfPCell cel1 = new PdfPCell(new Paragraph("INSTALAÇÕES FÍSICAS ", baseFontBold));
+        PdfPCell cel2 = new PdfPCell(new Paragraph("Avaliação ", baseFontBold));
+        //PdfPCell cel3 = new PdfPCell(new Paragraph("Setor", baseFontBold));
+
+        tablel.addCell(cel1);
+        tablel.addCell(cel2);
+        //tablel.addCell(cel3);
+
+        try {
+            JSONArray arrayL = new JSONArray(paramRepo.getListJson());
+            for (int i = 0; i < arrayL.length(); i++) {
+                JSONObject obj = arrayL.getJSONObject(i);
+                String selected = obj.getString("title_list");
+
+                JSONObject obj2 = arrayL.getJSONObject(i);
+                String selected2 = obj2.getString("radio_tx");
+
+                listTitle.add(selected);
+                cel1 = new PdfPCell(new Paragraph(selected));
+                cel2 = new PdfPCell(new Paragraph(selected2));
+                //cel3 = new PdfPCell(new Paragraph(selected));
+
+                tablel.addCell(cel1);
+                tablel.addCell(cel2);
+                //tablel.addCell(cel3);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        document.add(tablel);
+        //document.add(listTitle);
 
         document.close();
         return localFile2;
