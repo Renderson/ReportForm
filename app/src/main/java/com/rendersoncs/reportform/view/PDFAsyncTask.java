@@ -21,8 +21,6 @@ public class PDFAsyncTask extends AsyncTask<Repo, Void, File> {
     private Context context;
     private ProgressDialog progress;
 
-    private static final String PACKAGE_FILE_PROVIDER = "com.rendersoncs.reportform.FileProvider";
-
     public PDFAsyncTask(Context context){
         this.context = context;
     }
@@ -31,10 +29,10 @@ public class PDFAsyncTask extends AsyncTask<Repo, Void, File> {
         super.onPreExecute();
         Log.d(TAG, "onPreExecute call");
 
-        progress = new ProgressDialog(context);
+        /*progress = new ProgressDialog(context);
         progress.setTitle("Por favor aguarde!");
         progress.setMessage("Carregando PDF...");
-        progress.show();
+        progress.show();*/
 
     }
 
@@ -50,7 +48,6 @@ public class PDFAsyncTask extends AsyncTask<Repo, Void, File> {
         try {
             pdfReport = new CreatePDFViewer().write(context, report);
         } catch (Exception e) {
-            Log.i("Error", "Erro ao abrir PDF!!!!" + report + "pdfReport");
         }
         return pdfReport;
     }
@@ -58,27 +55,7 @@ public class PDFAsyncTask extends AsyncTask<Repo, Void, File> {
     protected void onPostExecute(File file) {
         super.onPostExecute(file);
         Log.d(TAG, "onPostExecute call");
-        this.onOpenPDFViewer(file);
-        progress.dismiss();
+        //this.onOpenPDFViewer(file);
+        //progress.dismiss();
     }
-
-    private void onOpenPDFViewer(File file) {
-        try {
-            Uri uri;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                uri = FileProvider.getUriForFile(context, PACKAGE_FILE_PROVIDER, file);
-            } else {
-                uri = Uri.fromFile(file);
-            }
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, "application/pdf");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            context.startActivity(intent);
-
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(context, "Não encontrado aplicativo para LER PDF!", Toast.LENGTH_LONG).show();
-        }
-        Toast.makeText(context, "Abrindo PDF!", Toast.LENGTH_LONG).show();
-    }
-
 }

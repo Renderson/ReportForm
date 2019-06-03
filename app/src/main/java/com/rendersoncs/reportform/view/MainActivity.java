@@ -93,22 +93,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onOpenPdf(int reportId) {
 
-                Repo repo = reportBusiness.load(reportId);
+                /*Repo repo = reportBusiness.load(reportId);
                 PDFAsyncTask asy = new PDFAsyncTask(MainActivity.this);
-                asy.execute(repo);
+                asy.execute(repo);*/
+
+                Repo repo = reportBusiness.load(reportId);
+
+                Uri uri;
+                String subject = String.format("Relatorio-%s-%s", repo.getCompany(), repo.getDate());
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    uri = FileProvider.getUriForFile(MainActivity.this, PACKAGE_FILE_PROVIDER, file);
+                } else {
+                    uri = Uri.fromFile(file);
+                }
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(uri, "application/pdf");
+                intent.putExtra(intent.EXTRA_SUBJECT, subject);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(intent);
+
             }
 
-            // Delete Item list
-            @Override
-            public void onDeleteClick(int id) {
-                // Remove relatórios do banco de dados
-                reportBusiness.remove(id);
-                Toast.makeText(MainActivity.this, R.string.txt_report_removed, Toast.LENGTH_LONG).show();
-
-                // Lista novamente os relatórios
-                loadReport();
-            }
-
+            // Share PDF
             @Override
             public void onShareReport(int reportId) {
                 // Share PDF the Report
@@ -132,6 +141,17 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(Intent.EXTRA_TEXT, "Em anexo o relatório da empresa " + repo.getCompany() + " concluído!" + " Realizado no dia " + repo.getDate());
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, "Compartilhar"));
+            }
+
+            // Delete Item list
+            @Override
+            public void onDeleteClick(int id) {
+                // Remove relatórios do banco de dados
+                reportBusiness.remove(id);
+                Toast.makeText(MainActivity.this, R.string.txt_report_removed, Toast.LENGTH_LONG).show();
+
+                // Lista novamente os relatórios
+                loadReport();
             }
         };
 

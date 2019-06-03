@@ -282,12 +282,15 @@ public class ReportActivity extends AppCompatActivity {
 
         //Save
         if (this.mReportBusiness.insert(repo)) {
+            // Execute Async create PDF
+            PDFAsyncTask asy = new PDFAsyncTask(this);
+            asy.execute(repo);
             Toast.makeText(this, R.string.txt_report_save, Toast.LENGTH_SHORT).show();
+            finish();
         } else {
             Toast.makeText(this, R.string.txt_error_save, Toast.LENGTH_SHORT).show();
+            finish();
         }
-        //Close Activity
-        finish();
     }
 
     // Clear all every Lists and reload Adapter

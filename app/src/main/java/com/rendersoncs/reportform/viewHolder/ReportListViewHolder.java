@@ -4,18 +4,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.itens.Repo;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 
@@ -23,8 +18,6 @@ import com.rendersoncs.reportform.R;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 public class ReportListViewHolder extends RecyclerView.ViewHolder {
 
@@ -52,13 +45,6 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
                 listener.onOpenPdf(repoEntity.getId());
             }
         });
-
-        /*this.CompanyView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onListClick(repoEntity.getId());
-            }
-        });*/
 
         this.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
