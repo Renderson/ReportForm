@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.rendersoncs.reportform">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="true" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:required="true"/>
@@ -35,7 +37,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity"/>
         </activity>
-        <activity android:name=".view.ViewReportAsyncTask"/>
         <provider
             android:authorities="com.rendersoncs.reportform.FileProvider"
             android:name="android.support.v4.content.FileProvider"

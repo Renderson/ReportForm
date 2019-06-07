@@ -56,7 +56,7 @@ public class CreatePDFViewer {
         UNDERLINE = new LineSeparator(1.0F, 100.0F, null, 1, -5.0F);
     }
 
-    File write(Context context, Repo paramRepo) throws Exception {
+    public File write(Context context, Repo paramRepo) throws Exception {
         List listTitle = new List();
         /*String date = paramRepo.getDate();
 

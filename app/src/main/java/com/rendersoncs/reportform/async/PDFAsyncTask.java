@@ -1,4 +1,4 @@
-package com.rendersoncs.reportform.view;
+package com.rendersoncs.reportform.async;
 
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.view.CreatePDFViewer;
 
 import java.io.File;
 

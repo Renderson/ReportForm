@@ -3,7 +3,11 @@ package com.rendersoncs.reportform;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,15 +16,21 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.rendersoncs.reportform.adapter.ExpandableRecyclerAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
+import com.rendersoncs.reportform.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.itens.Repo;
-import com.rendersoncs.reportform.view.CreatePDFViewer;
-import com.rendersoncs.reportform.view.MainActivity;
-import com.rendersoncs.reportform.view.PDFAsyncTask;
+import com.rendersoncs.reportform.async.PDFAsyncTask;
+import com.rendersoncs.reportform.async.DownloadJsonFireBaseAsyncTask;
 
 
 import org.json.JSONArray;
@@ -41,14 +51,18 @@ public class ReportActivity extends AppCompatActivity {
     public ExpandableRecyclerAdapter.ViewHolder viewHolder;
     private ReportBusiness mReportBusiness;
 
-    private List<Repo> data = new ArrayList<>();
-    public List<Repo> list = new ArrayList<>();
+    private List<Repo> repository = new ArrayList<>();
+    private ArrayList<String> mKeys = new ArrayList<>();
     private ExpandableRecyclerAdapter mAdapter;
     private TextView resultCompany;
     private TextView resultEmail;
     private TextView resultDate;
 
     JSONArray jsArray = new JSONArray();
+
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    View floatingActionButton;
 
 
     @Override
@@ -57,10 +71,16 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_form);
         ButterKnife.bind(this);
 
-        mAdapter = new ExpandableRecyclerAdapter(data);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Data");
+
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        //preparedListFire();
+
+        mAdapter = new ExpandableRecyclerAdapter(repository);
         recyclerView.setAdapter(mAdapter);
 
         Toolbar toolbar = findViewById(R.id.toolbarForm);
@@ -84,121 +104,187 @@ public class ReportActivity extends AppCompatActivity {
 
         this.mReportBusiness = new ReportBusiness(this);
 
-        preparedList();
-
-        this.setListener();
-
-        /*recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerView, new RecyclerTouchListener.ClickListener() {
+        floatingActionButton = findViewById(R.id.floatButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                Toast.makeText(MainActivityExp.this, "Teste Recycler", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                startNewItemListFireBase();
             }
+        });
+        isConnected();
 
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));*/
+        //preparedList();
     }
 
-    private void setListener() {
-        //this.viewHolder.
+    private void startNewItemListFireBase(){
+        NewItemListFireBase newItemListFirebase = new NewItemListFireBase();
+        newItemListFirebase.show(getSupportFragmentManager(), "dialog_list");
+    }
+
+    public void isConnected(){
+        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()){
+            //floatingActionButton.setVisibility(View.VISIBLE);
+            preparedListFire();
+            DownloadJsonFireBaseAsyncTask async = new DownloadJsonFireBaseAsyncTask(ReportActivity.this);
+            async.execute();
+            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+
+        }else{
+            preparedList();
+            Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void preparedList() {
         Repo repo = new Repo("INSTALAÇÕES FÍSICAS");
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_1), getString(R.string.subTitle_1));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_2), getString(R.string.subTitle_2));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_3), getString(R.string.subTitle_3));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_4), getString(R.string.subTitle_4));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_5), getString(R.string.subTitle_5));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_7), getString(R.string.subTitle_7));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_8), getString(R.string.subTitle_8));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_9), getString(R.string.subTitle_9));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_10), getString(R.string.subTitle_10));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_11), getString(R.string.subTitle_11));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_12), getString(R.string.subTitle_12));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_13), getString(R.string.subTitle_13));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_14), getString(R.string.subTitle_14));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_15), getString(R.string.subTitle_15));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_16), getString(R.string.subTitle_16));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_17), getString(R.string.subTitle_17));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_18), getString(R.string.subTitle_18));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_19), getString(R.string.subTitle_19));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_20), getString(R.string.subTitle_20));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_21), getString(R.string.subTitle_21));
-        data.add(repo);
-
-        repo = new Repo(getString(R.string.title_22), getString(R.string.subTitle_22));
-        data.add(repo);
-
-        repo = new Repo(getString(R.string.title_23), getString(R.string.subTitle_23));
-        data.add(repo);
-
-        repo = new Repo(getString(R.string.title_24), getString(R.string.subTitle_24));
-        data.add(repo);
-
-        repo = new Repo(getString(R.string.title_25), getString(R.string.subTitle_25));
-        data.add(repo);
-
-        repo = new Repo(getString(R.string.title_26), getString(R.string.subTitle_26));
-        data.add(repo);
-
-        repo = new Repo(getString(R.string.title_27), getString(R.string.subTitle_27));
-        data.add(repo);
-
-        repo = new Repo(getString(R.string.title_28), getString(R.string.subTitle_28));
-        data.add(repo);
-
-        repo = new Repo(getString(R.string.title_29), getString(R.string.subTitle_29));
-        data.add(repo);
+        repository.add(repo);
 
         repo = new Repo("ÁREA DO SALÃO / CONSUMAÇÃO  / BAR ");
-        data.add(repo);
+        repository.add(repo);
+
+        repo = new Repo(getString(R.string.title_22), getString(R.string.subTitle_22));
+        repository.add(repo);
+
+        repo = new Repo(getString(R.string.title_23), getString(R.string.subTitle_23));
+        repository.add(repo);
+
+        repo = new Repo(getString(R.string.title_24), getString(R.string.subTitle_24));
+        repository.add(repo);
+
+        repo = new Repo(getString(R.string.title_25), getString(R.string.subTitle_25));
+        repository.add(repo);
+
+        repo = new Repo(getString(R.string.title_26), getString(R.string.subTitle_26));
+        repository.add(repo);
+
+        repo = new Repo(getString(R.string.title_27), getString(R.string.subTitle_27));
+        repository.add(repo);
+
+        repo = new Repo(getString(R.string.title_28), getString(R.string.subTitle_28));
+        repository.add(repo);
 
         repo = new Repo(getString(R.string.title_29), getString(R.string.subTitle_29));
-        data.add(repo);
+        repository.add(repo);
 
+        repo = new Repo("ÁREA DO SALÃO / CONSUMAÇÃO  / BAR ");
+        repository.add(repo);
+
+        repo = new Repo(getString(R.string.title_29), getString(R.string.subTitle_29));
+        repository.add(repo);
+
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+    public void preparedListFire(){
+
+        databaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                //Repo repo = dataSnapshot.getValue(Repo.class);
+                //repository.add(repo);
+                repository.add(dataSnapshot.getValue(Repo.class));
+                //recyclerView.setAdapter(mAdapter);
+                String key = dataSnapshot.getKey();
+                mKeys.add(key);
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Repo repo = dataSnapshot.getValue(Repo.class);
+                String key = dataSnapshot.getKey();
+
+                int index = mKeys.indexOf(key);
+                repository.set(index, repo);
+                mAdapter.notifyItemChanged(index);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Repo repo = dataSnapshot.getValue(Repo.class);
+                String key = dataSnapshot.getKey();
+
+                int index = mKeys.indexOf(key);
+                repository.remove(index);
+                mAdapter.notifyItemRemoved(index);
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         mAdapter.notifyDataSetChanged();
 
     }

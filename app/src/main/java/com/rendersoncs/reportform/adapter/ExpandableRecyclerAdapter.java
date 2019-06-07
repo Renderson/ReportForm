@@ -150,7 +150,7 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
         }
 
         private boolean isPositionHeader(int i) {
-            return i == 0 || i == 29;
+            return i == 0 || i == 21 || i == 30;
         }
 
         @Override

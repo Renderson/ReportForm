@@ -7,7 +7,7 @@ public class Repo {
 
     private int id, conformed;
 
-    private String company, email, date, photo, listJson, contents, buttonLayout;
+    private String company, email, date, photo, listJson, contents;
     private String title, text;
     private String title_list;
     private ArrayList<String> CheckList;
@@ -15,7 +15,6 @@ public class Repo {
     public Repo(String title, String text) {
         this.title = title;
         this.text = text;
-        this.buttonLayout = buttonLayout;
     }
 
     public Repo() {
@@ -92,14 +91,6 @@ public class Repo {
 
     public Repo(String contents) {
         this.contents = contents;
-    }
-
-    public String getButtonLayout() {
-        return buttonLayout;
-    }
-
-    public void setButtonLayout(String buttonLayout) {
-        this.buttonLayout = buttonLayout;
     }
 
     public ArrayList<String> getCheckList() {
