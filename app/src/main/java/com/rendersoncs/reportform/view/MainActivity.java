@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
@@ -36,6 +37,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private ViewHolder viewHolder = new ViewHolder();
     private ReportBusiness reportBusiness;
@@ -54,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -81,10 +86,16 @@ public class MainActivity extends AppCompatActivity {
             public void onListClick(int reportId) {
                 // Open ReportResume pass bundle for ID
                 Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "list_id");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 bundle.putInt(ReportConstants.BundleConstants.REPORT_ID, reportId);
 
                 Intent intent = new Intent(MainActivity.this, ReportResume.class);
                 intent.putExtras(bundle);
+
+                bundle = new Bundle();
+                bundle.putString("select_list", "list");
+                mFirebaseAnalytics.logEvent("select_list_event", bundle);
 
                 startActivity(intent);
             }

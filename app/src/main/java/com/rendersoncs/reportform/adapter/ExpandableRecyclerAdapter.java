@@ -27,6 +27,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.rendersoncs.reportform.R;
 
+import static com.android.volley.VolleyLog.TAG;
+
 public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRecyclerAdapter.ViewHolder> {
         private List<Repo> repos;
         public SparseBooleanArray expandState = new SparseBooleanArray();
@@ -63,9 +65,9 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+        public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
             //Header
-            final Repo repo = repos.get(i);
+            final Repo repo = repos.get(position);
 
             if (viewHolder instanceof HeaderVh) {
                 ((HeaderVh) viewHolder).headerTitle.setText(repo.getContents());
@@ -73,17 +75,17 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                 ((ItemVh) viewHolder).tvTitleList.setText(repo.getContents());
 
                 viewHolder.setIsRecyclable(false);
-                viewHolder.tvTitleList.setText(repos.get(i).getTitle());
-                viewHolder.tvTextList.setText(repos.get(i).getText());
+                viewHolder.tvTitleList.setText(repos.get(position).getTitle());
+                viewHolder.tvTextList.setText(repos.get(position).getText());
 
-                final boolean isExpanded = expandState.get(i);
+                final boolean isExpanded = expandState.get(position);
                 viewHolder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
-                viewHolder.buttonLayoutArrow.setRotation(expandState.get(i) ? 180f : 0f);
+                viewHolder.buttonLayoutArrow.setRotation(expandState.get(position) ? 180f : 0f);
                 viewHolder.buttonLayoutArrow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-                        onClickButton(viewHolder.expandableLayout, viewHolder.buttonLayoutArrow, i);
+                        onClickButton(viewHolder.expandableLayout, viewHolder.buttonLayoutArrow, position);
 
                         //Test onClick RadioButton
                         viewHolder.mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -100,7 +102,7 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                                 int selectedRadioId = radioButton.getId();
 
                                 listIDRadio.add(selectedRadioId);
-                                listId.add(i);
+                                listId.add(position);
                                 listText.add(selectedText);
                                 listTxtRadio.add(selectedRadioButtonText);
 
@@ -115,22 +117,22 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                                 listText.clear();
                                 listText.addAll(hashSet);
                                 repo.setCheckList(listText);
-                                Log.i("log", "Item: " + repo.getCheckList() + " getCheckList ");*/
+                                Log.position("log", "Item: " + repo.getCheckList() + " getCheckList ");*/
 
                                 if (checkedId == R.id.radio_conform) {
                                     viewHolder.mRadioButtonConform.setChecked(true);
                                     group.setTag(checkedId);
-                                    //Log.i("log", "Item: " + listConformed + " listConformed ");
+                                    //Log.position("log", "Item: " + listConformed + " listConformed ");
 
                                 } else if (checkedId == R.id.radio_not_applicable) {
                                     viewHolder.mRadioButtonNotApplicable.setChecked(true);
                                     group.setTag(checkedId);
-                                    //Log.i("log", "Item: " + listNotConformed + " listNotConformed ");
+                                    //Log.position("log", "Item: " + listNotConformed + " listNotConformed ");
 
                                 } else if (checkedId == R.id.radio_not_conform) {
                                     viewHolder.mRadioButtonNotConform.setChecked(true);
                                     group.setTag(checkedId);
-                                    //Log.i("log", "Item: " + listNotApplicable + " listNotApplicable ");
+                                    //Log.position("log", "Item: " + listNotApplicable + " listNotApplicable ");
 
                                 } else {
                                     group.clearCheck();
@@ -141,6 +143,7 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                     }
                 });
             }
+            Log.i(TAG, "onBindViewHolder invoked" + position);
         }
 
         public int getItemViewType(int i) {

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -20,11 +22,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.rendersoncs.reportform.adapter.ExpandableRecyclerAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.fragment.NewItemListFireBase;
@@ -47,11 +53,17 @@ public class ReportActivity extends AppCompatActivity {
 
     @BindView(R.id.recycler_view_form)
     RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
+
+    private Parcelable savedRecyclerLayoutState;
+    private static final String LIST_STATE_KEY = "recycler_layout";
+    private static String LIST_STATE = "list_state";
+    private static Bundle mBundleRecyclerView;
 
     public ExpandableRecyclerAdapter.ViewHolder viewHolder;
     private ReportBusiness mReportBusiness;
 
-    private List<Repo> repository = new ArrayList<>();
+    private ArrayList<Repo> repository = new ArrayList<>();
     private ArrayList<String> mKeys = new ArrayList<>();
     private ExpandableRecyclerAdapter mAdapter;
     private TextView resultCompany;
@@ -62,6 +74,9 @@ public class ReportActivity extends AppCompatActivity {
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference listRef = db.collection("Data");
+
     View floatingActionButton;
 
 
@@ -71,14 +86,22 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_form);
         ButterKnife.bind(this);
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Data");
+        if (savedInstanceState != null){
+            //repository = savedInstanceState.getParcelableArrayList(LIST_STATE);
+            //savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+            //Parcelable parcelable = savedInstanceState.getParcelable(LIST_STATE_KEY);
+            //recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
+            //recyclerView.setAdapter(mAdapter);
+           //mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+           //recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+        }
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Data");
+        //databaseReference.keepSynced(true);
 
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
-        //preparedListFire();
 
         mAdapter = new ExpandableRecyclerAdapter(repository);
         recyclerView.setAdapter(mAdapter);
@@ -111,28 +134,26 @@ public class ReportActivity extends AppCompatActivity {
                 startNewItemListFireBase();
             }
         });
-        isConnected();
-
-        //preparedList();
+        this.isConnected();
     }
 
-    private void startNewItemListFireBase(){
+    private void startNewItemListFireBase() {
         NewItemListFireBase newItemListFirebase = new NewItemListFireBase();
         newItemListFirebase.show(getSupportFragmentManager(), "dialog_list");
     }
 
-    public void isConnected(){
-        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+    public void isConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting()){
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             //floatingActionButton.setVisibility(View.VISIBLE);
             preparedListFire();
             DownloadJsonFireBaseAsyncTask async = new DownloadJsonFireBaseAsyncTask(ReportActivity.this);
             async.execute();
             Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
 
-        }else{
+        } else {
             preparedList();
             Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show();
         }
@@ -234,24 +255,23 @@ public class ReportActivity extends AppCompatActivity {
 
         repo = new Repo(getString(R.string.title_29), getString(R.string.subTitle_29));
         repository.add(repo);
-
-        mAdapter.notifyDataSetChanged();
-
     }
 
-    public void preparedListFire(){
+    public void preparedListFire() {
 
         databaseReference.addChildEventListener(new ChildEventListener() {
+            int index;
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 //Repo repo = dataSnapshot.getValue(Repo.class);
                 //repository.add(repo);
                 repository.add(dataSnapshot.getValue(Repo.class));
-                //recyclerView.setAdapter(mAdapter);
                 String key = dataSnapshot.getKey();
                 mKeys.add(key);
-
+                recyclerView.setAdapter(mAdapter);
+                //mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemChanged(index);
             }
 
             @Override
@@ -259,9 +279,10 @@ public class ReportActivity extends AppCompatActivity {
                 Repo repo = dataSnapshot.getValue(Repo.class);
                 String key = dataSnapshot.getKey();
 
-                int index = mKeys.indexOf(key);
+                index = mKeys.indexOf(key);
                 repository.set(index, repo);
                 mAdapter.notifyItemChanged(index);
+                //mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -272,6 +293,7 @@ public class ReportActivity extends AppCompatActivity {
                 int index = mKeys.indexOf(key);
                 repository.remove(index);
                 mAdapter.notifyItemRemoved(index);
+                //mAdapter.notifyDataSetChanged();
 
             }
 
@@ -285,8 +307,6 @@ public class ReportActivity extends AppCompatActivity {
 
             }
         });
-        mAdapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -304,7 +324,8 @@ public class ReportActivity extends AppCompatActivity {
                             .setMessage(R.string.txt_choice_item)
                             .setPositiveButton(R.string.txt_back, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {}
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
                             })
                             .show();
                 } else {
@@ -410,6 +431,54 @@ public class ReportActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.txt_cancel, null)
                 .show();
     }
+
+    public void onSaveInstanceState(Bundle state){
+        super.onSaveInstanceState(state);
+        Log.i("Instante state", "onSaveInstanceState");
+        //state.putParcelableArrayList(LIST_STATE, repository);
+        state.putParcelable(LIST_STATE_KEY, recyclerView.getLayoutManager().onSaveInstanceState());
+        //mListState = layoutManager.onSaveInstanceState();
+        //state.putParcelable(LIST_STATE_KEY, recyclerView.getLayoutManager().onSaveInstanceState());
+        //state.putSerializable(LIST_STATE_KEY, mAdapter.getClass());
+    }
+
+    protected void onRestoreInstanceState(Bundle state){
+        super.onRestoreInstanceState(state);
+        Log.i("Instante state", "onRestoreInstanceState");
+        //repository = state.getParcelableArrayList(LIST_STATE);
+        savedRecyclerLayoutState = state.getParcelable(LIST_STATE_KEY);
+        /*if (state != null){
+            mListState = state.getParcelable(LIST_STATE_KEY);
+        }*/
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    /*protected void onPause(){
+        super.onPause();
+
+        mBundleRecyclerView = new Bundle();
+
+
+
+
+
+        mBundleRecyclerView.putParcelable(LIST_STATE_KEY, listState);
+    }
+
+    /*protected void onResume(){
+        super.onResume();
+        /*if (mListState != null){
+            layoutManager.onRestoreInstanceState(mListState);
+        }*/
+        /*if (mBundleRecyclerView != null){
+            Parcelable listState = mBundleRecyclerView.getParcelable(LIST_STATE_KEY);
+            recyclerView.getLayoutManager().onRestoreInstanceState(listState);
+        }
+    }*/
 
     @Override
     public void onBackPressed() {

@@ -37,6 +37,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity"/>
         </activity>
+        <service android:name=".service.MyFirebaseInstanceMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_new_item_list"
+            />
         <provider
             android:authorities="com.rendersoncs.reportform.FileProvider"
             android:name="android.support.v4.content.FileProvider"
