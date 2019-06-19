@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.rendersoncs.reportform.itens.Repo;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,7 +42,8 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
         private static final int TYPE_HEADER = 0;
         private static final int TYPE_ITEM = 1;
 
-        public ExpandableRecyclerAdapter(List<Repo> repos) {
+        public ExpandableRecyclerAdapter(List<Repo> repos, Context context) {
+            this.context = context;
             this.repos = repos;
             for (int i = 0; i < repos.size(); i++) {
                 expandState.append(i, false);
@@ -52,7 +52,7 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
 
         @NonNull
         @Override
-        public ExpandableRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
             this.context = viewGroup.getContext();
             if (i == TYPE_HEADER) {
                 View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.header_layout, viewGroup, false);
@@ -70,9 +70,9 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
             final Repo repo = repos.get(position);
 
             if (viewHolder instanceof HeaderVh) {
-                ((HeaderVh) viewHolder).headerTitle.setText(repo.getContents());
+                ((HeaderVh) viewHolder).headerTitle.setText(repo.getTitle());
             } else if (viewHolder instanceof ItemVh) {
-                ((ItemVh) viewHolder).tvTitleList.setText(repo.getContents());
+                ((ItemVh) viewHolder).tvTitleList.setText(repo.getTitle());
 
                 viewHolder.setIsRecyclable(false);
                 viewHolder.tvTitleList.setText(repos.get(position).getTitle());

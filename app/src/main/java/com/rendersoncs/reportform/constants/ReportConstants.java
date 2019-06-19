@@ -2,6 +2,10 @@ package com.rendersoncs.reportform.constants;
 
 public class ReportConstants {
 
+    public static class JsonFireBase{
+        public static final String JSON_FIRE = "reportJson";
+    }
+
     public static class BundleConstants{
         public static final String REPORT_ID = "reportId";
     }

@@ -36,7 +36,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginStart="50dp"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="4dp"
                 android:layout_marginTop="8dp"
                 android:padding="4dp"
                 android:text="Title"
@@ -74,6 +74,7 @@
                 android:id="@+id/textView_subTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:padding="8dp"
                 android:text="Sub Title"
                 android:textSize="16sp" />

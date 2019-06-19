@@ -15,7 +15,7 @@ import com.rendersoncs.reportform.R;
 
 import java.util.Random;
 
-public class MyFirebaseInstanceMessagingService extends FirebaseMessagingService {
+public class MyFireBaseInstanceMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -44,7 +44,7 @@ public class MyFirebaseInstanceMessagingService extends FirebaseMessagingService
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_new_item_list)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentInfo("Info");
 

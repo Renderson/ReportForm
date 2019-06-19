@@ -8,24 +8,18 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.itens.Repo;
 
 import java.util.HashMap;
-
-import static com.android.volley.VolleyLog.TAG;
+import java.util.Map;
+import java.util.Random;
 
 public class NewItemListFireBase extends DialogFragment {
     private EditText mTitleList;
@@ -60,21 +54,21 @@ public class NewItemListFireBase extends DialogFragment {
                         String mTitle = mTitleList.getText().toString();
                         String mText = mTextList.getText().toString();
 
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Data");
+                        /*DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Data/list");
 
                         HashMap<String, String> dataMap = new HashMap<String, String>();
                         dataMap.put("title", mTitle);
                         dataMap.put("text", mText);
-                        databaseReference.push().setValue(dataMap);
-
-                        /*FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        db.collection("Data").add(dataMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                            }
-                        });*/
-                        //Toast.makeText(getActivity(), "Novo item na lista inserido", Toast.LENGTH_SHORT).show();
+                        databaseReference.push().setValue(dataMap);*/
+                        final String key = FirebaseDatabase.getInstance().getReference().child("Data").push().getKey();
+                        //Random random = new Random();
+                        //int n = random.nextInt(1000);
+                        HashMap<String, String> dataMap = new HashMap<String, String>();
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        dataMap.put("title", mTitle);
+                        dataMap.put("text", mText);
+                        childUpdates.put("/Data/list/" + key, dataMap);
+                        FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
                     }
                 });
 

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.crash.component.FirebaseCrashRegistrar;
+import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.Repo;
 
 import java.io.BufferedInputStream;
@@ -77,7 +78,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
         super.onPostExecute(result);
         Log.d(TAG, "onPostExecute call");
 
-        String subject = String.format("FireBaseList");
+        String subject = String.format(ReportConstants.JsonFireBase.JSON_FIRE);
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".json");
 
         FileWriter fos = null;

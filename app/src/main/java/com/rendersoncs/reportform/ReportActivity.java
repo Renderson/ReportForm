@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -19,20 +19,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.rendersoncs.reportform.adapter.ExpandableRecyclerAdapter;
+import com.rendersoncs.reportform.adapter.ReportResumeAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
+import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.itens.Repo;
 import com.rendersoncs.reportform.async.PDFAsyncTask;
@@ -43,8 +43,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,12 +60,9 @@ public class ReportActivity extends AppCompatActivity {
 
     @BindView(R.id.recycler_view_form)
     RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
 
     private Parcelable savedRecyclerLayoutState;
     private static final String LIST_STATE_KEY = "recycler_layout";
-    private static String LIST_STATE = "list_state";
-    private static Bundle mBundleRecyclerView;
 
     public ExpandableRecyclerAdapter.ViewHolder viewHolder;
     private ReportBusiness mReportBusiness;
@@ -70,15 +74,12 @@ public class ReportActivity extends AppCompatActivity {
     private TextView resultEmail;
     private TextView resultDate;
 
-    JSONArray jsArray = new JSONArray();
-
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference listRef = db.collection("Data");
-
     View floatingActionButton;
 
+    JSONArray jsArray = new JSONArray();
+
+    private DatabaseReference databaseReference;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,29 +87,19 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_form);
         ButterKnife.bind(this);
 
-        if (savedInstanceState != null){
-            //repository = savedInstanceState.getParcelableArrayList(LIST_STATE);
-            //savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY);
-            //Parcelable parcelable = savedInstanceState.getParcelable(LIST_STATE_KEY);
-            //recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
-            //recyclerView.setAdapter(mAdapter);
-           //mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
-           //recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
-        }
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("Data");
-        //databaseReference.keepSynced(true);
-
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        mAdapter = new ExpandableRecyclerAdapter(repository);
-        recyclerView.setAdapter(mAdapter);
-
         Toolbar toolbar = findViewById(R.id.toolbarForm);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_report);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Data").child("list");
+        databaseReference.keepSynced(true);
+
+        mAdapter = new ExpandableRecyclerAdapter(repository, ReportActivity.this);
+        RecyclerView.LayoutManager llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(llm);
+        recyclerView.setAdapter(mAdapter);
+
+        this.isConnected();
 
         // Recebendo texto digitado na DialogFragment
         Intent intent = getIntent();
@@ -127,19 +118,19 @@ public class ReportActivity extends AppCompatActivity {
 
         this.mReportBusiness = new ReportBusiness(this);
 
-        floatingActionButton = findViewById(R.id.floatButton);
+        floatingActionButton = findViewById(R.id.fab_new_item);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startNewItemListFireBase();
             }
         });
-        this.isConnected();
+        //mAdapter.notifyDataSetChanged();
     }
 
     private void startNewItemListFireBase() {
         NewItemListFireBase newItemListFirebase = new NewItemListFireBase();
-        newItemListFirebase.show(getSupportFragmentManager(), "dialog_list");
+        newItemListFirebase.show(getSupportFragmentManager(), "new_item");
     }
 
     public void isConnected() {
@@ -147,131 +138,95 @@ public class ReportActivity extends AppCompatActivity {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            //floatingActionButton.setVisibility(View.VISIBLE);
-            preparedListFire();
+            this.preparedListFire();
+
+            // Download list FireBase
             DownloadJsonFireBaseAsyncTask async = new DownloadJsonFireBaseAsyncTask(ReportActivity.this);
             async.execute();
-            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Lista onLine", Toast.LENGTH_SHORT).show();
 
         } else {
-            preparedList();
-            Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show();
+            //floatingActionButton.setVisibility(View.GONE);
+            //preparedList();
+            this.addItemsFromJsonList();
+            //mAdapter.registerAdapterDataObserver(new RVEmptyObserver(recyclerView, null, floatingActionButton));
+            Toast.makeText(this, "Lista offLine", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void preparedList() {
-        Repo repo = new Repo("INSTALAÇÕES FÍSICAS");
-        repository.add(repo);
+    private void addItemsFromJsonList() {
+        findViewById(R.id.progressBar).setVisibility(View.GONE);
+        try {
+            JSONObject js = new JSONObject(readJsonDataFromFile()).getJSONObject("list");
+            Log.i("File", "jsTest" + js);
 
-        repo = new Repo(getString(R.string.title_1), getString(R.string.subTitle_1));
-        repository.add(repo);
+            Iterator<String> iterator = js.keys();
+            while (iterator.hasNext()) {
+                String dynamicKey = iterator.next();
+                JSONObject jsKeys = js.getJSONObject(dynamicKey);
+                Log.i("File", "jsKeys" + jsKeys);
 
-        repo = new Repo(getString(R.string.title_2), getString(R.string.subTitle_2));
-        repository.add(repo);
+                String itemTitle = jsKeys.getString("title");
+                Log.i("File", "itemTitle " + itemTitle);
 
-        repo = new Repo(getString(R.string.title_3), getString(R.string.subTitle_3));
-        repository.add(repo);
+                String itemText = jsKeys.getString("text");
+                Log.i("File", "itemTitle " + itemText);
 
-        repo = new Repo(getString(R.string.title_4), getString(R.string.subTitle_4));
-        repository.add(repo);
+                Repo repo = new Repo();
+                repo.setTitle(itemTitle);
+                repo.setText(itemText);
+                repository.add(repo);
 
-        repo = new Repo(getString(R.string.title_5), getString(R.string.subTitle_5));
-        repository.add(repo);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
 
-        repo = new Repo(getString(R.string.title_7), getString(R.string.subTitle_7));
-        repository.add(repo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        repo = new Repo(getString(R.string.title_8), getString(R.string.subTitle_8));
-        repository.add(repo);
+    private String readJsonDataFromFile() throws IOException {
 
-        repo = new Repo(getString(R.string.title_9), getString(R.string.subTitle_9));
-        repository.add(repo);
+        String subject = ReportConstants.JsonFireBase.JSON_FIRE;
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + "Report" + "/" + subject + ".json";
+        Log.i("File", "path" + path);
 
-        repo = new Repo(getString(R.string.title_10), getString(R.string.subTitle_10));
-        repository.add(repo);
+        InputStream inputStream = null;
+        StringBuilder builder = new StringBuilder();
 
-        repo = new Repo(getString(R.string.title_11), getString(R.string.subTitle_11));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_12), getString(R.string.subTitle_12));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_13), getString(R.string.subTitle_13));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_14), getString(R.string.subTitle_14));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_15), getString(R.string.subTitle_15));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_16), getString(R.string.subTitle_16));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_17), getString(R.string.subTitle_17));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_18), getString(R.string.subTitle_18));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_19), getString(R.string.subTitle_19));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_20), getString(R.string.subTitle_20));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_21), getString(R.string.subTitle_21));
-        repository.add(repo);
-
-        repo = new Repo("ÁREA DO SALÃO / CONSUMAÇÃO  / BAR ");
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_22), getString(R.string.subTitle_22));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_23), getString(R.string.subTitle_23));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_24), getString(R.string.subTitle_24));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_25), getString(R.string.subTitle_25));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_26), getString(R.string.subTitle_26));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_27), getString(R.string.subTitle_27));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_28), getString(R.string.subTitle_28));
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_29), getString(R.string.subTitle_29));
-        repository.add(repo);
-
-        repo = new Repo("ÁREA DO SALÃO / CONSUMAÇÃO  / BAR ");
-        repository.add(repo);
-
-        repo = new Repo(getString(R.string.title_29), getString(R.string.subTitle_29));
-        repository.add(repo);
+        try {
+            String jsonDataString = null;
+            inputStream = new FileInputStream(path);
+            Log.i("File", "inputStream" + inputStream);
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(inputStream, "UTF-8"));
+            while ((jsonDataString = bufferedReader.readLine()) != null) {
+                builder.append(jsonDataString);
+                Log.i("File", "jsonDataString" + jsonDataString);
+            }
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+        return new String(builder);
     }
 
     public void preparedListFire() {
 
         databaseReference.addChildEventListener(new ChildEventListener() {
-            int index;
+
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                //Repo repo = dataSnapshot.getValue(Repo.class);
-                //repository.add(repo);
+                findViewById(R.id.progressBar).setVisibility(View.GONE);
                 repository.add(dataSnapshot.getValue(Repo.class));
                 String key = dataSnapshot.getKey();
                 mKeys.add(key);
-                recyclerView.setAdapter(mAdapter);
-                //mAdapter.notifyDataSetChanged();
+
+                int index = mKeys.indexOf(key);
                 mAdapter.notifyItemChanged(index);
+                Log.i("item", "onChildAdded : " + dataSnapshot.getValue());
             }
 
             @Override
@@ -279,22 +234,20 @@ public class ReportActivity extends AppCompatActivity {
                 Repo repo = dataSnapshot.getValue(Repo.class);
                 String key = dataSnapshot.getKey();
 
-                index = mKeys.indexOf(key);
+                int index = mKeys.indexOf(key);
                 repository.set(index, repo);
                 mAdapter.notifyItemChanged(index);
-                //mAdapter.notifyDataSetChanged();
+                Log.i("item", "onChildChanged : " + dataSnapshot.getValue());
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Repo repo = dataSnapshot.getValue(Repo.class);
                 String key = dataSnapshot.getKey();
 
                 int index = mKeys.indexOf(key);
                 repository.remove(index);
                 mAdapter.notifyItemRemoved(index);
-                //mAdapter.notifyDataSetChanged();
-
+                Log.i("item", "onChildRemoved : " + dataSnapshot.getValue());
             }
 
             @Override
@@ -307,6 +260,7 @@ public class ReportActivity extends AppCompatActivity {
 
             }
         });
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -432,7 +386,7 @@ public class ReportActivity extends AppCompatActivity {
                 .show();
     }
 
-    public void onSaveInstanceState(Bundle state){
+    public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         Log.i("Instante state", "onSaveInstanceState");
         //state.putParcelableArrayList(LIST_STATE, repository);
@@ -442,7 +396,7 @@ public class ReportActivity extends AppCompatActivity {
         //state.putSerializable(LIST_STATE_KEY, mAdapter.getClass());
     }
 
-    protected void onRestoreInstanceState(Bundle state){
+    protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         Log.i("Instante state", "onRestoreInstanceState");
         //repository = state.getParcelableArrayList(LIST_STATE);
@@ -451,34 +405,6 @@ public class ReportActivity extends AppCompatActivity {
             mListState = state.getParcelable(LIST_STATE_KEY);
         }*/
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    /*protected void onPause(){
-        super.onPause();
-
-        mBundleRecyclerView = new Bundle();
-
-
-
-
-
-        mBundleRecyclerView.putParcelable(LIST_STATE_KEY, listState);
-    }
-
-    /*protected void onResume(){
-        super.onResume();
-        /*if (mListState != null){
-            layoutManager.onRestoreInstanceState(mListState);
-        }*/
-        /*if (mBundleRecyclerView != null){
-            Parcelable listState = mBundleRecyclerView.getParcelable(LIST_STATE_KEY);
-            recyclerView.getLayoutManager().onRestoreInstanceState(listState);
-        }
-    }*/
 
     @Override
     public void onBackPressed() {

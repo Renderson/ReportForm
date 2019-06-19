@@ -1,18 +1,16 @@
 package com.rendersoncs.reportform.itens;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class Repo {
 
     private int id, conformed;
 
-    private String company, email, date, photo, listJson, contents;
-    private String title, text;
-    private String title_list;
-    private ArrayList<String> CheckList;
+    private String company, email, date, photo, listJson;
+    private String title, text, header;
 
-    public Repo(String title, String text) {
+    public Repo(String title, String text, String header) {
+        this.header = header;
         this.title = title;
         this.text = text;
     }
@@ -85,20 +83,12 @@ public class Repo {
         this.text = text;
     }
 
-    public String getContents() {
-        return contents;
+    public String getHeader() {
+        return header;
     }
 
-    public Repo(String contents) {
-        this.contents = contents;
-    }
-
-    public ArrayList<String> getCheckList() {
-        return CheckList;
-    }
-
-    public void setCheckList(ArrayList<String> checkList) {
-        CheckList = checkList;
+    public Repo(String header) {
+        this.header = header;
     }
 
     public String getListJson() {
@@ -109,11 +99,4 @@ public class Repo {
         this.listJson = listJson;
     }
 
-    public String getTitle_list() {
-        return title_list;
-    }
-
-    public void setTitle_list(String title_list) {
-        this.title_list = title_list;
-    }
 }
