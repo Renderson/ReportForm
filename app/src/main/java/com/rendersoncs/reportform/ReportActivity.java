@@ -138,7 +138,7 @@ public class ReportActivity extends AppCompatActivity {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            this.preparedListFire();
+            this.addItemsFromFireBase();
 
             // Download list FireBase
             DownloadJsonFireBaseAsyncTask async = new DownloadJsonFireBaseAsyncTask(ReportActivity.this);
@@ -147,7 +147,6 @@ public class ReportActivity extends AppCompatActivity {
 
         } else {
             //floatingActionButton.setVisibility(View.GONE);
-            //preparedList();
             this.addItemsFromJsonList();
             //mAdapter.registerAdapterDataObserver(new RVEmptyObserver(recyclerView, null, floatingActionButton));
             Toast.makeText(this, "Lista offLine", Toast.LENGTH_SHORT).show();
@@ -186,9 +185,10 @@ public class ReportActivity extends AppCompatActivity {
         }
     }
 
+    // Read Json and populate recyclerView
     private String readJsonDataFromFile() throws IOException {
 
-        String subject = ReportConstants.JsonFireBase.JSON_FIRE;
+        String subject = ReportConstants.ConstantsFireBase.JSON_FIRE;
         String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + "Report" + "/" + subject + ".json";
         Log.i("File", "path" + path);
 
@@ -213,7 +213,8 @@ public class ReportActivity extends AppCompatActivity {
         return new String(builder);
     }
 
-    public void preparedListFire() {
+    // Sync RecyclerView with FireBase
+    public void addItemsFromFireBase() {
 
         databaseReference.addChildEventListener(new ChildEventListener() {
 

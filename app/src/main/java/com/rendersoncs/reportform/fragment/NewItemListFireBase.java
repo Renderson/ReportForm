@@ -54,15 +54,7 @@ public class NewItemListFireBase extends DialogFragment {
                         String mTitle = mTitleList.getText().toString();
                         String mText = mTextList.getText().toString();
 
-                        /*DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Data/list");
-
-                        HashMap<String, String> dataMap = new HashMap<String, String>();
-                        dataMap.put("title", mTitle);
-                        dataMap.put("text", mText);
-                        databaseReference.push().setValue(dataMap);*/
                         final String key = FirebaseDatabase.getInstance().getReference().child("Data").push().getKey();
-                        //Random random = new Random();
-                        //int n = random.nextInt(1000);
                         HashMap<String, String> dataMap = new HashMap<String, String>();
                         Map<String, Object> childUpdates = new HashMap<>();
                         dataMap.put("title", mTitle);

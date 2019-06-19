@@ -47,7 +47,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
     protected String doInBackground(Void... voids) {
         Log.d(TAG, "doInBackground AWS call ");
         try {
-            String json_url = "https://reportform-20b2a.firebaseio.com/Data.json";
+            String json_url = ReportConstants.ConstantsFireBase.URL;
             URL url = new URL(json_url);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
@@ -78,7 +78,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
         super.onPostExecute(result);
         Log.d(TAG, "onPostExecute call");
 
-        String subject = String.format(ReportConstants.JsonFireBase.JSON_FIRE);
+        String subject = String.format(ReportConstants.ConstantsFireBase.JSON_FIRE);
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".json");
 
         FileWriter fos = null;
