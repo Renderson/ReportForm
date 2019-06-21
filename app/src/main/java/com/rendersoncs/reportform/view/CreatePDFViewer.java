@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.itextpdf.text.Chunk;
@@ -22,9 +21,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.adapter.ReportResumeAdapter;
 import com.rendersoncs.reportform.itens.Repo;
-import com.rendersoncs.reportform.itens.ReportResumeItems;
 
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
@@ -35,10 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class CreatePDFViewer {
 
@@ -140,11 +133,9 @@ public class CreatePDFViewer {
 
         PdfPCell cel1 = new PdfPCell(new Paragraph("INSTALAÇÕES FÍSICAS ", baseFontBold));
         PdfPCell cel2 = new PdfPCell(new Paragraph("Avaliação ", baseFontBold));
-        //PdfPCell cel3 = new PdfPCell(new Paragraph("Setor", baseFontBold));
 
         tablel.addCell(cel1);
         tablel.addCell(cel2);
-        //tablel.addCell(cel3);
 
         try {
             JSONArray arrayL = new JSONArray(paramRepo.getListJson());
@@ -158,17 +149,14 @@ public class CreatePDFViewer {
                 listTitle.add(selected);
                 cel1 = new PdfPCell(new Paragraph(selected));
                 cel2 = new PdfPCell(new Paragraph(selected2));
-                //cel3 = new PdfPCell(new Paragraph(selected));
 
                 tablel.addCell(cel1);
                 tablel.addCell(cel2);
-                //tablel.addCell(cel3);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         document.add(tablel);
-        //document.add(listTitle);
 
         document.close();
         return localFile2;

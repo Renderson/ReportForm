@@ -1,15 +1,8 @@
 package com.rendersoncs.reportform.async;
 
-import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.rendersoncs.reportform.itens.Repo;
 import com.rendersoncs.reportform.view.CreatePDFViewer;
@@ -20,7 +13,6 @@ import static android.content.ContentValues.TAG;
 
 public class PDFAsyncTask extends AsyncTask<Repo, Void, File> {
     private Context context;
-    private ProgressDialog progress;
 
     public PDFAsyncTask(Context context){
         this.context = context;
@@ -29,12 +21,6 @@ public class PDFAsyncTask extends AsyncTask<Repo, Void, File> {
     protected void onPreExecute() {
         super.onPreExecute();
         Log.d(TAG, "onPreExecute call");
-
-        /*progress = new ProgressDialog(context);
-        progress.setTitle("Por favor aguarde!");
-        progress.setMessage("Carregando PDF...");
-        progress.show();*/
-
     }
 
     @Override
@@ -56,7 +42,5 @@ public class PDFAsyncTask extends AsyncTask<Repo, Void, File> {
     protected void onPostExecute(File file) {
         super.onPostExecute(file);
         Log.d(TAG, "onPostExecute call");
-        //this.onOpenPDFViewer(file);
-        //progress.dismiss();
     }
 }

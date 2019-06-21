@@ -1,26 +1,34 @@
 package com.rendersoncs.reportform.view;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
@@ -30,6 +38,7 @@ import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.itens.Repo;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.observer.RVEmptyObserver;
+import com.rendersoncs.reportform.service.NetworkConnectedService;
 
 import java.io.File;
 import java.util.List;
@@ -38,7 +47,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseAnalytics mFireBaseAnalytics;
+    NetworkConnectedService netService = new NetworkConnectedService(this);
 
     private ViewHolder viewHolder = new ViewHolder();
     private ReportBusiness reportBusiness;
@@ -58,7 +68,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        // Check NetWorking
+        this.netService.isConnected(MainActivity.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 // Open ReportResume pass bundle for ID
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "list_id");
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                mFireBaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 bundle.putInt(ReportConstants.BundleConstants.REPORT_ID, reportId);
 
                 Intent intent = new Intent(MainActivity.this, ReportResume.class);
@@ -95,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
                 bundle = new Bundle();
                 bundle.putString("select_list", "list");
-                mFirebaseAnalytics.logEvent("select_list_event", bundle);
+                mFireBaseAnalytics.logEvent("select_list_event", bundle);
 
                 startActivity(intent);
             }
@@ -103,10 +116,6 @@ public class MainActivity extends AppCompatActivity {
             // Create PDF
             @Override
             public void onOpenPdf(int reportId) {
-
-                /*Repo repo = reportBusiness.load(reportId);
-                PDFAsyncTask asy = new PDFAsyncTask(MainActivity.this);
-                asy.execute(repo);*/
 
                 Repo repo = reportBusiness.load(reportId);
 

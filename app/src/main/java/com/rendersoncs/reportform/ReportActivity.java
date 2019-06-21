@@ -8,18 +8,17 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.rendersoncs.reportform.adapter.ExpandableRecyclerAdapter;
-import com.rendersoncs.reportform.adapter.ReportResumeAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.NewItemListFireBase;
@@ -49,9 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -139,10 +135,6 @@ public class ReportActivity extends AppCompatActivity {
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             this.addItemsFromFireBase();
-
-            // Download list FireBase
-            DownloadJsonFireBaseAsyncTask async = new DownloadJsonFireBaseAsyncTask(ReportActivity.this);
-            async.execute();
             Toast.makeText(this, "Lista onLine", Toast.LENGTH_SHORT).show();
 
         } else {

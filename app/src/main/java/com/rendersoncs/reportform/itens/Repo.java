@@ -1,7 +1,5 @@
 package com.rendersoncs.reportform.itens;
 
-import java.util.ArrayList;
-
 public class Repo {
 
     private int id, conformed;

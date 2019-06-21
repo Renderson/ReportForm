@@ -1,26 +1,14 @@
 package com.rendersoncs.reportform.async;
 
-import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.crash.component.FirebaseCrashRegistrar;
 import com.rendersoncs.reportform.constants.ReportConstants;
-import com.rendersoncs.reportform.itens.Repo;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
