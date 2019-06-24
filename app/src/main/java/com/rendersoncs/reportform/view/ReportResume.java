@@ -22,8 +22,8 @@ import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.Repo;
 import com.rendersoncs.reportform.itens.ReportResumeItems;
-import com.rendersoncs.reportform.observer.IntegerFormatter;
-import com.rendersoncs.reportform.observer.MyDividerItemDecoration;
+import com.rendersoncs.reportform.util.IntegerFormatter;
+import com.rendersoncs.reportform.util.MyDividerItemDecoration;
 
 
 import org.json.JSONArray;

@@ -10,6 +10,7 @@ import android.provider.Settings;
 import com.google.android.material.snackbar.Snackbar;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.async.DownloadJsonFireBaseAsyncTask;
+import com.rendersoncs.reportform.util.SnackBarHelper;
 
 public class NetworkConnectedService {
     private Context context;
@@ -34,8 +35,8 @@ public class NetworkConnectedService {
                             Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                             activity.startActivity(intent);
                         });
+            SnackBarHelper.configSnackBar(activity, snackbar);
             snackbar.show();
-
         }
     }
 }

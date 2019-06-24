@@ -1,4 +1,4 @@
-package com.rendersoncs.reportform.observer;
+package com.rendersoncs.reportform.util;
 
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;

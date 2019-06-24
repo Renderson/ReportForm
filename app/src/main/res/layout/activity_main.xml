@@ -34,7 +34,7 @@
         android:layout_margin="16dp"
         app:layout_anchor="@id/recycler_view"
         app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior ="com.rendersoncs.reportform.observer.ScrollAwareFABBehavior"
+        app:layout_behavior ="com.rendersoncs.reportform.util.ScrollAwareFABBehavior"
         android:src="@drawable/ic_action_add"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,18 +1,14 @@
 package com.rendersoncs.reportform.view;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -23,12 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
-import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
@@ -37,7 +31,7 @@ import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.itens.Repo;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
-import com.rendersoncs.reportform.observer.RVEmptyObserver;
+import com.rendersoncs.reportform.util.RVEmptyObserver;
 import com.rendersoncs.reportform.service.NetworkConnectedService;
 
 import java.io.File;

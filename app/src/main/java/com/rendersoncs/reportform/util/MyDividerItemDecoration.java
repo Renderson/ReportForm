@@ -1,4 +1,4 @@
-package com.rendersoncs.reportform.observer;
+package com.rendersoncs.reportform.util;
 
 import android.content.Context;
 import android.content.res.Resources;

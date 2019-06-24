@@ -113,7 +113,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_new_item_list_white"
         app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior="com.rendersoncs.reportform.observer.ScrollAwareFABBehavior" />
+        app:layout_behavior="com.rendersoncs.reportform.util.ScrollAwareFABBehavior" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
