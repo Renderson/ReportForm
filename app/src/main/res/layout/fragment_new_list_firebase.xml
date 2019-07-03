@@ -35,7 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"/>
+            android:layout_marginLeft="16dp"
+            android:imeOptions="actionNext"/>
 
         <EditText
             android:id="@+id/txt_text_list"
@@ -46,7 +47,8 @@
             android:gravity="center|left|top"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"/>
+            android:layout_marginLeft="16dp"
+            android:imeOptions="actionDone"/>
 
     </LinearLayout>
 

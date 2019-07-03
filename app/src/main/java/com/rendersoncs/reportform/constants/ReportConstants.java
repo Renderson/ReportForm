@@ -2,9 +2,13 @@ package com.rendersoncs.reportform.constants;
 
 public class ReportConstants {
 
+    public static class ConstantsProvider{
+        public static final String PACKAGE_FILE_PROVIDER = "com.rendersoncs.reportform.FileProvider";
+    }
+
     public static class ConstantsFireBase{
         public static final String URL = "https://reportform-20b2a.firebaseio.com/Data.json";
-        public static final String JSON_FIRE = "reportJson";
+        public static final String JSON_FIRE = "reportApp";
     }
 
     public static class BundleConstants{

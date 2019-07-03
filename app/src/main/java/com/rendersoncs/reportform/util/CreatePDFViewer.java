@@ -1,4 +1,4 @@
-package com.rendersoncs.reportform.view;
+package com.rendersoncs.reportform.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;

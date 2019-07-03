@@ -50,6 +50,8 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
 
+                //listener.onBottomSheet(repoEntity.getId());
+
                 PopupMenu popupMenu = new PopupMenu(mContext, overflow);
                 setForceShowIcon(popupMenu);
                 popupMenu.inflate(R.menu.menu_report);

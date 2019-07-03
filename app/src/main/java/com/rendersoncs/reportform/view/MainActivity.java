@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -23,11 +24,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
+import com.rendersoncs.reportform.fragment.BottomSheetFragment;
 import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.itens.Repo;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
@@ -39,6 +42,8 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
+import static com.rendersoncs.reportform.R.drawable.ic_action_arrow;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFireBaseAnalytics;
@@ -49,12 +54,11 @@ public class MainActivity extends AppCompatActivity {
     private OnInteractionListener listener;
 
     private static final int REQUEST_PERMISSIONS_CODE = 128;
-    private static final String PACKAGE_FILE_PROVIDER = "com.rendersoncs.reportform.FileProvider";
 
     public Context context;
     View emptyLayout;
     Button emptyButton;
-    View floatingActionButton;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    uri = FileProvider.getUriForFile(MainActivity.this, PACKAGE_FILE_PROVIDER, file);
+                    uri = FileProvider.getUriForFile(MainActivity.this, ReportConstants.ConstantsProvider.PACKAGE_FILE_PROVIDER, file);
                 } else {
                     uri = Uri.fromFile(file);
                 }
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    uri = FileProvider.getUriForFile(MainActivity.this, PACKAGE_FILE_PROVIDER, file);
+                    uri = FileProvider.getUriForFile(MainActivity.this, ReportConstants.ConstantsProvider.PACKAGE_FILE_PROVIDER, file);
                 } else {
                     uri = Uri.fromFile(file);
                 }
@@ -157,11 +161,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(intent, "Compartilhar"));
             }
 
+            @Override
+            public void onBottomSheet(int reportId) {
+                startBottomSheetFragment();
+            }
+
             // Delete Item list
             @Override
             public void onDeleteClick(int id) {
                 // Remove relatórios do banco de dados
                 reportBusiness.remove(id);
+                fab.show();
                 Toast.makeText(MainActivity.this, R.string.txt_report_removed, Toast.LENGTH_LONG).show();
 
                 // Lista novamente os relatórios
@@ -172,25 +182,36 @@ public class MainActivity extends AppCompatActivity {
         // Define um layout
         this.viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
 
-        floatingActionButton = findViewById(R.id.floatButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        // Animated FloatingBottom
+        this.viewHolder.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                if (dy < 0 && !fab.isShown())
+                    fab.show();
+                else if (dy > 0 && fab.isShown())
+                    fab.hide();
+            }
+
             @Override
-            public void onClick(View v) {
-                startReportFormDialog();
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
         });
 
-        emptyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startReportFormDialog();
-            }
-        });
+        fab = findViewById(R.id.floatButton);
+        fab.setOnClickListener(v -> startReportFormDialog());
+
+        emptyButton.setOnClickListener(v -> startReportFormDialog());
     }
 
     private void startReportFormDialog() {
         ReportFormDialog reportFormDialog = new ReportFormDialog();
         reportFormDialog.show(getSupportFragmentManager(), "report_dialog");
+    }
+
+    private void startBottomSheetFragment (){
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
+        bottomSheetFragment.show(getSupportFragmentManager(), "report_sheet");
     }
 
 
@@ -211,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
         reportListAdapter.notifyDataSetChanged();
 
         // Mostra imagen quando não á itens
-        reportListAdapter.registerAdapterDataObserver(new RVEmptyObserver(this.viewHolder.recyclerView, emptyLayout, floatingActionButton));
+        reportListAdapter.registerAdapterDataObserver(new RVEmptyObserver(this.viewHolder.recyclerView, emptyLayout, fab));
 
     }
 

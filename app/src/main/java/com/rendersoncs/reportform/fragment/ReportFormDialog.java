@@ -18,7 +18,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rendersoncs.reportform.ReportActivity;
+import com.rendersoncs.reportform.view.ReportActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

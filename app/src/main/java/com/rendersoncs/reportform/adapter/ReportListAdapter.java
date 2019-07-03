@@ -32,7 +32,7 @@ public class ReportListAdapter extends RecyclerView.Adapter<ReportListViewHolder
         Context context = parent.getContext();
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.activity_report_list_entry, parent, false);
+        View view = layoutInflater.inflate(R.layout.activity_main_list, parent, false);
 
         return new ReportListViewHolder(view, context);
 

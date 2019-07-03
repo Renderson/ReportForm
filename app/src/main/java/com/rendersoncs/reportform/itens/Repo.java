@@ -2,9 +2,13 @@ package com.rendersoncs.reportform.itens;
 
 public class Repo {
 
+    public static final Object YES = 1;
+    public static final Object NOTAPLICABLE = 2;
+    public static final Object NOTCONFORM = 3;
+    private int resposta;
     private int id, conformed;
 
-    private String company, email, date, photo, listJson;
+    private String company, email, date, photo, listJson, selectedAns;
     private String title, text, header;
 
     public Repo(String title, String text, String header) {
@@ -97,4 +101,19 @@ public class Repo {
         this.listJson = listJson;
     }
 
+    public String getSelectedAns() {
+        return selectedAns;
+    }
+
+    public void setSelectedAns(String selectedAns) {
+        this.selectedAns = selectedAns;
+    }
+
+    public int getResposta() {
+        return resposta;
+    }
+
+    public void setResposta(int resposta) {
+        this.resposta = resposta;
+    }
 }

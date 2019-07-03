@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.rendersoncs.reportform.itens.Repo;
-import com.rendersoncs.reportform.view.CreatePDFViewer;
+import com.rendersoncs.reportform.util.CreatePDFViewer;
 
 import java.io.File;
 

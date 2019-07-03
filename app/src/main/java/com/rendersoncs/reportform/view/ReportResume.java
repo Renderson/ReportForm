@@ -39,11 +39,10 @@ public class ReportResume extends AppCompatActivity {
 
     private ReportBusiness mReportBusiness;
     Repo repoEntity;
-    //TextView companyResume;
     TextView emailResume;
     TextView dateResume;
-    //TextView listReportResume;
-    TextView totalList;
+    TextView companyResume;
+    TextView itemsResume;
     PieChart pieChart;
     String selected;
 
@@ -65,7 +64,6 @@ public class ReportResume extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = findViewById(R.id.resume_list);
-        //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
 
@@ -73,11 +71,10 @@ public class ReportResume extends AppCompatActivity {
 
         repoResumeList = new ArrayList<>();
 
-        //companyResume = findViewById(R.id.company_resume);
+        companyResume = findViewById(R.id.company_resume);
         emailResume = findViewById(R.id.email_resume);
         dateResume = findViewById(R.id.date_resume);
-        //listReportResume = findViewById(R.id.list_report_resume);
-        totalList = findViewById(R.id.all_list);
+        itemsResume = findViewById(R.id.items_resume);
 
         // Camada Business
         this.mReportBusiness = new ReportBusiness(this);
@@ -132,12 +129,12 @@ public class ReportResume extends AppCompatActivity {
             int mReportId = bundle.getInt(ReportConstants.BundleConstants.REPORT_ID);
 
             repoEntity = this.mReportBusiness.load(mReportId);
-            //this.companyResume.setText(repoEntity.getCompany());
             this.emailResume.setText(repoEntity.getEmail());
-            this.dateResume.setText(getString(R.string.resume_date) + repoEntity.getDate());
+            this.dateResume.setText(getString(R.string.resume_date, repoEntity.getDate()));
+            this.companyResume.setText(repoEntity.getCompany());
             //this.listReportResume.setText(repoEntity.getListJson());
 
-            // popular RecyclerView
+            // populate RecyclerView
             try {
                 JSONArray array = new JSONArray(repoEntity.getListJson());
                 Log.i("log", "Item: " + array + " array ");
@@ -186,7 +183,7 @@ public class ReportResume extends AppCompatActivity {
                 //this.listReportResume.setText(sb.toString());
 
                 maxList = arrayL.length();
-                this.totalList.setText(String.valueOf(maxList) + " Items selecionados.");
+                this.itemsResume.setText(String.valueOf(maxList) + " Items selecionados.");
                 Log.i("log", "Item: " + maxList + " valor ");
 
             } catch (JSONException e) {

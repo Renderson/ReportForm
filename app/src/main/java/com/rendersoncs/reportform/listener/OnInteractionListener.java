@@ -15,4 +15,6 @@ public interface OnInteractionListener {
 
     /* Click for Share Report*/
     void onShareReport(int reportId);
+
+    void onBottomSheet(int reportId);
 }
