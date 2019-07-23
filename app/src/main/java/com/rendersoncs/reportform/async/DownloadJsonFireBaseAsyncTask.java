@@ -41,18 +41,18 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-            StringBuffer stringBuffer = new StringBuffer();
+            StringBuilder stringBuilder = new StringBuilder();
 
             String json_GetString;
             while ((json_GetString = bufferedReader.readLine()) != null){
-                stringBuffer.append(json_GetString + "\n");
+                stringBuilder.append(json_GetString).append("\n");
             }
 
             bufferedReader.close();
             inputStream.close();
             httpURLConnection.disconnect();
 
-            return stringBuffer.toString().trim();
+            return stringBuilder.toString().trim();
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -66,7 +66,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
         super.onPostExecute(result);
         Log.d(TAG, "onPostExecute call");
 
-        String subject = String.format(ReportConstants.ConstantsFireBase.JSON_FIRE);
+        String subject = ReportConstants.ConstantsFireBase.JSON_FIRE;
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".json");
 
         FileWriter fos = null;

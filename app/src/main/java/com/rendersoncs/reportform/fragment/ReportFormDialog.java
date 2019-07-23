@@ -27,13 +27,13 @@ import com.rendersoncs.reportform.R;
 
 public class ReportFormDialog extends DialogFragment {
 
-    Calendar mCalendar;
-    DatePickerDialog mDatePickerDialog;
-    TextView dateTv;
-    TextInputEditText companyTv;
-    TextInputEditText emailTv;
+    private Calendar mCalendar;
+    private DatePickerDialog mDatePickerDialog;
+    private TextView dateTv;
+    private TextInputEditText companyTv;
+    private TextInputEditText emailTv;
 
-    int mDay, mMonth, mYear;
+    private int mDay, mMonth, mYear;
 
     @NonNull
     @Override

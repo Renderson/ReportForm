@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.rendersoncs.reportform.constants.DataBaseConstants;
-import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ReportRepository {
         return INSTANCE;
     }
 
-    public Boolean insert(Repo repo) {
+    public Boolean insert(ReportItems repo) {
         try {
 
             SQLiteDatabase sqLiteDatabase = this.mReportDataBaseHelper.getWritableDatabase();
@@ -72,8 +72,8 @@ public class ReportRepository {
         }
     }
 
-    public Repo load(int id) {
-        Repo repoEntity = new Repo();
+    public ReportItems load(int id) {
+        ReportItems repoEntity = new ReportItems();
 
         try {
 
@@ -113,8 +113,8 @@ public class ReportRepository {
     }
 
 
-    public List<Repo> getReportByQuery(String query) {
-        List<Repo> list = new ArrayList<>();
+    public List<ReportItems> getReportByQuery(String query) {
+        List<ReportItems> list = new ArrayList<>();
 
         try {
 
@@ -123,7 +123,7 @@ public class ReportRepository {
 
             if (cursor != null && cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
-                    Repo repoEntity = new Repo();
+                    ReportItems repoEntity = new ReportItems();
                     repoEntity.setId(cursor.getInt(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.ID)));
                     repoEntity.setCompany(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.COMPANY)));
                     repoEntity.setEmail(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.EMAIL)));

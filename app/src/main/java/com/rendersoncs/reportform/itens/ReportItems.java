@@ -1,23 +1,26 @@
 package com.rendersoncs.reportform.itens;
 
-public class Repo {
+import java.util.ArrayList;
 
-    public static final Object YES = 1;
-    public static final Object NOTAPLICABLE = 2;
-    public static final Object NOTCONFORM = 3;
-    private int resposta;
+public class ReportItems {
+
     private int id, conformed;
 
-    private String company, email, date, photo, listJson, selectedAns;
+    private String company, email, date, photo, listJson;
     private String title, text, header;
+    private ArrayList checkList;
 
-    public Repo(String title, String text, String header) {
+    private boolean opt1, opt2;
+    private int selectedAnswerPosition = -1;
+    private boolean shine;
+
+    public ReportItems(String title, String text, String header) {
         this.header = header;
         this.title = title;
         this.text = text;
     }
 
-    public Repo() {
+    public ReportItems() {
 
     }
 
@@ -89,7 +92,7 @@ public class Repo {
         return header;
     }
 
-    public Repo(String header) {
+    public ReportItems(String header) {
         this.header = header;
     }
 
@@ -101,19 +104,49 @@ public class Repo {
         this.listJson = listJson;
     }
 
-    public String getSelectedAns() {
-        return selectedAns;
+    public boolean isOpt1() {
+        return opt1;
     }
 
-    public void setSelectedAns(String selectedAns) {
-        this.selectedAns = selectedAns;
+    public void setOpt1(boolean opt1) {
+        this.opt1 = opt1;
+        if (opt1){
+            setOpt2(false);
+        }
     }
 
-    public int getResposta() {
-        return resposta;
+    public boolean isOpt2() {
+        return opt2;
     }
 
-    public void setResposta(int resposta) {
-        this.resposta = resposta;
+    public void setOpt2(boolean opt2) {
+        this.opt2 = opt2;
+        if (opt2){
+            setOpt1(false);
+        }
+    }
+
+    public int getSelectedAnswerPosition() {
+        return selectedAnswerPosition;
+    }
+
+    public void setSelectedAnswerPosition(int selectedAnswerPosition) {
+        this.selectedAnswerPosition = selectedAnswerPosition;
+    }
+
+    public boolean isShine() {
+        return shine;
+    }
+
+    public void setShine(boolean shine) {
+        this.shine = shine;
+    }
+
+    public ArrayList getCheckList() {
+        return checkList;
+    }
+
+    public void setCheckList(ArrayList checkList) {
+        this.checkList = checkList;
     }
 }

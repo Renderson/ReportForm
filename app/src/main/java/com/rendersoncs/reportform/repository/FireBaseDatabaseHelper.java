@@ -8,7 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +16,10 @@ import java.util.List;
 public class FireBaseDatabaseHelper {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
-    private List<Repo> repository = new ArrayList<>();
+    private List<ReportItems> repository = new ArrayList<>();
 
     public interface DataStatus{
-        void DataIsLoaded(List<Repo> repository, List<String> keys);
+        void DataIsLoaded(List<ReportItems> repository, List<String> keys);
         void DataIsInsert();
         void DataIsUpdate();
         void DataIsDelete();
@@ -38,7 +38,7 @@ public class FireBaseDatabaseHelper {
                 List<String> keys = new ArrayList<>();
                 for (DataSnapshot keyNode : dataSnapshot.getChildren()){
                     keys.add(keyNode.getKey());
-                    Repo repo = keyNode.getValue(Repo.class);
+                    ReportItems repo = keyNode.getValue(ReportItems.class);
                     repository.add(repo);
                 }
                 dataStatus.DataIsLoaded(repository, keys);

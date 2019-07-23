@@ -3,7 +3,7 @@ package com.rendersoncs.reportform.business;
 import android.content.Context;
 
 import com.rendersoncs.reportform.constants.DataBaseConstants;
-import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.repository.ReportRepository;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class ReportBusiness {
         this.mReportRepository = ReportRepository.getInstance(context);
     }
 
-    public Boolean insert(Repo repo){
+    public Boolean insert(ReportItems repo){
         return this.mReportRepository.insert(repo);
     }
 
@@ -24,11 +24,11 @@ public class ReportBusiness {
         return this.mReportRepository.remove(reportId);
     }
 
-    public Repo load(int reportId){
+    public ReportItems load(int reportId){
         return this.mReportRepository.load(reportId);
     }
 
-    public List<Repo> getInvited(){
+    public List<ReportItems> getInvited(){
         return this.mReportRepository.getReportByQuery("select * from " + DataBaseConstants.REPORT.TABLE_NAME);
     }
 

@@ -20,7 +20,7 @@ import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportResumeAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
-import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.itens.ReportResumeItems;
 import com.rendersoncs.reportform.util.IntegerFormatter;
 import com.rendersoncs.reportform.util.MyDividerItemDecoration;
@@ -38,7 +38,7 @@ import java.util.Map;
 public class ReportResume extends AppCompatActivity {
 
     private ReportBusiness mReportBusiness;
-    Repo repoEntity;
+    ReportItems repoEntity;
     TextView emailResume;
     TextView dateResume;
     TextView companyResume;
@@ -126,7 +126,7 @@ public class ReportResume extends AppCompatActivity {
     private void loadReportResume() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            int mReportId = bundle.getInt(ReportConstants.BundleConstants.REPORT_ID);
+            int mReportId = bundle.getInt(ReportConstants.ConstantsBundle.REPORT_ID);
 
             repoEntity = this.mReportBusiness.load(mReportId);
             this.emailResume.setText(repoEntity.getEmail());

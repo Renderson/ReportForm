@@ -18,20 +18,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rendersoncs.reportform.itens.Repo;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.listener.OnInteractionCameraListener;
+import com.rendersoncs.reportform.itens.ReportItems;
 
 import static com.android.volley.VolleyLog.TAG;
 
 public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRecyclerAdapter.ViewHolder> {
-        private List<Repo> repos;
+        private List<ReportItems> reportItems;
         public SparseBooleanArray expandState = new SparseBooleanArray();
         public ArrayList<String> listTxtRadio = new ArrayList<>();
         public ArrayList<String> listText = new ArrayList<>();
@@ -44,10 +43,20 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
         private static final int TYPE_HEADER = 0;
         private static final int TYPE_ITEM = 1;
 
-        public ExpandableRecyclerAdapter(List<Repo> repos, Context context) {
+        private OnRadioItemClicked onRadioItemClicked;
+
+        public void setOnRadioItemClicked(OnRadioItemClicked onRadioItemClicked){
+            this.onRadioItemClicked = onRadioItemClicked;
+        }
+
+        public interface OnRadioItemClicked {
+            void radioItemChecked(int itemPosition, int optNum);
+        }
+
+        public ExpandableRecyclerAdapter(List<ReportItems> reportItems, Context context) {
             this.context = context;
-            this.repos = repos;
-            for (int i = 0; i < repos.size(); i++) {
+            this.reportItems = reportItems;
+            for (int i = 0; i < reportItems.size(); i++) {
                 expandState.append(i, false);
             }
         }
@@ -67,18 +76,19 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
+        public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
             //Header
-            final Repo repo = repos.get(position);
+            final ReportItems repo = reportItems.get(position);
 
             if (viewHolder instanceof HeaderVh) {
                 ((HeaderVh) viewHolder).headerTitle.setText(repo.getTitle());
+
             } else if (viewHolder instanceof ItemVh) {
                 ((ItemVh) viewHolder).tvTitleList.setText(repo.getTitle());
 
                 viewHolder.setIsRecyclable(false);
-                viewHolder.tvTitleList.setText(repos.get(position).getTitle());
-                viewHolder.tvTextList.setText(repos.get(position).getText());
+                viewHolder.tvTitleList.setText(reportItems.get(position).getTitle());
+                viewHolder.tvTextList.setText(reportItems.get(position).getText());
 
                 final boolean isExpanded = expandState.get(position);
                 viewHolder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
@@ -88,36 +98,20 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                     @Override
                     public void onClick(final View v) {
                         onClickButton(viewHolder.expandableLayout, viewHolder.buttonLayoutArrow, position);
-
-                        /*viewHolder.mRadioButtonConform.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                updateList(viewHolder.getLayoutPosition(), (Integer) Repo.YES);
-                            }
-                        });
-
-                        viewHolder.mRadioButtonNotApplicable.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                updateList(viewHolder.getLayoutPosition(), (Integer) Repo.NOTAPLICABLE);
-                            }
-                        });
-
-                        viewHolder.mRadioButtonNotConform.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                updateList(viewHolder.getLayoutPosition(), (Integer) Repo.NOTCONFORM);
-                            }
-                        });*/
                     }
                 });
 
+                viewHolder.mRadioButtonConform.setChecked(repo.isOpt1());
+                Log.i("log", "Item: " + repo.isOpt1() + " repo.isOpt1()");
+                viewHolder.mRadioButtonNotConform.setChecked(repo.isOpt2());
+                Log.i("log", "Item: " + repo.isOpt2() + " repo.isOpt2()");
+
                 //Test onClick RadioButton
-                viewHolder.mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                ((ItemVh) viewHolder).mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                        int selectedRadioButtonID = viewHolder.mRadioGroup.getCheckedRadioButtonId();
+                        int selectedRadioButtonID = ((ItemVh) viewHolder).mRadioGroup.getCheckedRadioButtonId();
 
                         //Test Salve in a ArrayList RadioButton Selected
                         radioButton = group.findViewById(selectedRadioButtonID);
@@ -132,8 +126,8 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                         listTxtRadio.add(selectedRadioButtonText);
 
                         Log.i("log", "Item: " + listTxtRadio + " listRadio ");
-                        Log.i("log", "Item: " + listId + " selectedIDList ");
-                        Log.i("log", "Item: " + listIDRadio + " selectedIDRadio ");
+                        //Log.i("log", "Item: " + listId + " selectedIDList ");
+                        //Log.i("log", "Item: " + listIDRadio + " selectedIDRadio ");
                         Log.i("log", "Item: " + listText + " listText ");
 
                         //Del duplicate list
@@ -142,7 +136,7 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                                 listText.clear();
                                 listText.addAll(hashSet);
                                 repo.setCheckList(listText);
-                                Log.position("log", "Item: " + repo.getCheckList() + " getCheckList ");*/
+                                Log.i("log", "Item: " + repo.getCheckList() + " getCheckList ");*/
 
                         /*if (checkedId == R.id.radio_conform) {
                             viewHolder.mRadioButtonConform.setChecked(true);
@@ -169,11 +163,6 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
             Log.i(TAG, "onBindViewHolder invoked" + position);
         }
 
-        public void updateList(int position, int resposta){
-            repos.get(position).setResposta(resposta);
-            Log.i(TAG, "resposta Radios" + resposta);
-        }
-
         public int getItemViewType(int i) {
             if (isPositionHeader(i))
                 return TYPE_HEADER;
@@ -186,20 +175,17 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
 
         @Override
         public int getItemCount() {
-            return repos.size();
+            return reportItems.size();
         }
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvTitleList, tvTextList;
             ImageView mImageView;
 
-            public RadioGroup mRadioGroup;
-            public RadioButton mRadioButtonConform;
-            public RadioButton mRadioButtonNotApplicable;
-            public RadioButton mRadioButtonNotConform;
-
+            //public RadioGroup mRadioGroup;
+            public RadioButton mRadioButtonConform, mRadioButtonNotApplicable, mRadioButtonNotConform;
             RelativeLayout buttonLayoutArrow;
-            public LinearLayout expandableLayout;
+            private LinearLayout expandableLayout;
 
             public ViewHolder(View view) {
                 super(view);
@@ -207,33 +193,13 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                 tvTitleList = view.findViewById(R.id.textView_title);
                 tvTextList = view.findViewById(R.id.textView_subTitle);
                 mImageView = view.findViewById(R.id.photo);
-                mRadioGroup = view.findViewById(R.id.radio_group);
-                mRadioButtonConform = view.findViewById(R.id.radio_conform);
-                mRadioButtonNotApplicable = view.findViewById(R.id.radio_not_applicable);
-                mRadioButtonNotConform = view.findViewById(R.id.radio_not_conform);
+                //mRadioGroup = view.findViewById(R.id.radio_group);
+                //mRadioButtonConform = view.findViewById(R.id.radio_conform);
+                //mRadioButtonNotApplicable = view.findViewById(R.id.radio_not_applicable);
+                //mRadioButtonNotConform = view.findViewById(R.id.radio_not_conform);
 
                 buttonLayoutArrow = view.findViewById(R.id.btnArrow);
                 expandableLayout = view.findViewById(R.id.expandableLayout);
-
-                /*mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        if (checkedId == R.id.radio_conform){
-                            mRadioButtonConform.setChecked(true);
-                            group.setTag(checkedId);
-
-                        } else if (checkedId == R.id.radio_not_applicable){
-                            mRadioButtonNotApplicable.setChecked(true);
-                            group.setTag(checkedId);
-
-                        } else if (checkedId == R.id.radio_not_conform) {
-                            mRadioButtonNotConform.setChecked(true);
-                            group.setTag(checkedId);
-                        } else {
-                            group.clearCheck();
-                        }
-                    }
-                });*/
             }
         }
 
@@ -243,21 +209,45 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
             @BindView(R.id.header_id)
             public TextView headerTitle;
 
-            public HeaderVh(@NonNull View view) {
+            private HeaderVh(@NonNull View view) {
                 super(view);
                 ButterKnife.bind(this, view);
             }
         }
 
-        public class ItemVh extends ExpandableRecyclerAdapter.ViewHolder {
+        public class ItemVh extends ExpandableRecyclerAdapter.ViewHolder implements View.OnClickListener {
 
             @BindView(R.id.textView_title)
             public TextView itemContent;
-
+            public RadioGroup mRadioGroup;
 
             public ItemVh(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
+
+                mRadioGroup = itemView.findViewById(R.id.radio_group);
+                mRadioButtonConform = itemView.findViewById(R.id.radio_conform);
+                //mRadioButtonNotApplicable = view.findViewById(R.id.radio_not_applicable);
+                mRadioButtonNotConform = itemView.findViewById(R.id.radio_not_conform);
+
+                mRadioButtonConform.setOnClickListener(this);
+                mRadioButtonNotConform.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+
+                switch (v.getId()){
+                    case R.id.radio_conform:
+                        if (onRadioItemClicked != null)
+                            onRadioItemClicked.radioItemChecked(getAdapterPosition(), 1);
+                        break;
+
+                    case R.id.radio_not_conform:
+                        if (onRadioItemClicked != null)
+                            onRadioItemClicked.radioItemChecked(getAdapterPosition(), 2);
+                        break;
+                }
             }
         }
 

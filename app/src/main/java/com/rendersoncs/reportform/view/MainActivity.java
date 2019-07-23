@@ -32,7 +32,7 @@ import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.BottomSheetFragment;
 import com.rendersoncs.reportform.fragment.ReportFormDialog;
-import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.util.RVEmptyObserver;
 import com.rendersoncs.reportform.service.NetworkConnectedService;
@@ -41,8 +41,6 @@ import java.io.File;
 import java.util.List;
 
 import butterknife.ButterKnife;
-
-import static com.rendersoncs.reportform.R.drawable.ic_action_arrow;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "list_id");
                 mFireBaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                bundle.putInt(ReportConstants.BundleConstants.REPORT_ID, reportId);
+                bundle.putInt(ReportConstants.ConstantsBundle.REPORT_ID, reportId);
 
                 Intent intent = new Intent(MainActivity.this, ReportResume.class);
                 intent.putExtras(bundle);
@@ -115,10 +113,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onOpenPdf(int reportId) {
 
-                Repo repo = reportBusiness.load(reportId);
+                ReportItems reportItems = reportBusiness.load(reportId);
 
                 Uri uri;
-                String subject = String.format("Relatorio-%s-%s", repo.getCompany(), repo.getDate());
+                String subject = String.format("Relatorio-%s-%s", reportItems.getCompany(), reportItems.getDate());
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -139,10 +137,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onShareReport(int reportId) {
                 // Share PDF the Report
-                Repo repo = reportBusiness.load(reportId);
+                ReportItems reportItems = reportBusiness.load(reportId);
 
                 Uri uri;
-                String subject = String.format("Relatorio-%s-%s", repo.getCompany(), repo.getDate());
+                String subject = String.format("Relatorio-%s-%s", reportItems.getCompany(), reportItems.getDate());
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -155,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
                 intent.setType("pdf/plain");
                 intent.putExtra(intent.EXTRA_SUBJECT, subject);
-                intent.putExtra(Intent.EXTRA_EMAIL  , new String[] { repo.getEmail()});
-                intent.putExtra(Intent.EXTRA_TEXT, "Em anexo o relatório da empresa " + repo.getCompany() + " concluído!" + " Realizado no dia " + repo.getDate());
+                intent.putExtra(Intent.EXTRA_EMAIL  , new String[] { reportItems.getEmail()});
+                intent.putExtra(Intent.EXTRA_TEXT, "Em anexo o relatório da empresa " + reportItems.getCompany() + " concluído!" + " Realizado no dia " + reportItems.getDate());
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, "Compartilhar"));
             }
@@ -222,10 +220,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadReport() {
-        List<Repo> repoEntityList = this.reportBusiness.getInvited();
+        List<ReportItems> reportItems = this.reportBusiness.getInvited();
 
         // Definir um adapter
-        ReportListAdapter reportListAdapter = new ReportListAdapter(repoEntityList, listener);
+        ReportListAdapter reportListAdapter = new ReportListAdapter(reportItems, listener);
         this.viewHolder.recyclerView.setAdapter(reportListAdapter);
 
         // Notifica o Adapter mudança na lista

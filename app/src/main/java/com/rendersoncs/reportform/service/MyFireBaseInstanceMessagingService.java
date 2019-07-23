@@ -27,7 +27,7 @@ public class MyFireBaseInstanceMessagingService extends FirebaseMessagingService
 
     private void showNotification(String title, String body) {
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        String NOTIFICATION_CHANNEL_ID = "com.rendersoncs.reportform.test";
+        String NOTIFICATION_CHANNEL_ID = "com.rendersoncs.reportform.InjectJsonListModeOff";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Notification", NotificationManager.IMPORTANCE_DEFAULT);

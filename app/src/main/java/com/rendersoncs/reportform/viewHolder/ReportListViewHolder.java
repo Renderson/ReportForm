@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.constants.ReportConstants;
+import com.rendersoncs.reportform.itens.ReportItems;
+import com.rendersoncs.reportform.extension.StringExtension;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 
 import com.rendersoncs.reportform.R;
@@ -35,9 +37,11 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
         this.mContext = context;
     }
 
-    public void bindData(final Repo repoEntity, final OnInteractionListener listener) {
-        this.CompanyView.setText(repoEntity.getCompany());
+    public void bindData(final ReportItems repoEntity, final OnInteractionListener listener) {
+        //this.CompanyView.setText(repoEntity.getCompany());
+        this.CompanyView.setText(StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.ConstantsCharacters.LIMITS_TEXT));
         this.DateView.setText(repoEntity.getDate());
+        //this.DateView.setText((CharSequence) StringExtension.formataParaBrasileiro(repoEntity.getDate()));
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

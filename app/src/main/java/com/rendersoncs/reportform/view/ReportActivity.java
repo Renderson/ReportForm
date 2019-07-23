@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Environment;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,43 +32,35 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ExpandableRecyclerAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
-import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.NewItemListFireBase;
-import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.async.PDFAsyncTask;
-import com.rendersoncs.reportform.listener.OnInteractionCameraListener;
+import com.rendersoncs.reportform.util.InjectJsonListModeOff;
 
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReportActivity extends AppCompatActivity {
+public class ReportActivity extends AppCompatActivity implements ExpandableRecyclerAdapter.OnRadioItemClicked {
 
     @BindView(R.id.recycler_view_form)
     RecyclerView recyclerView;
 
     private ReportBusiness mReportBusiness;
+    InjectJsonListModeOff jsonListModeOff = new InjectJsonListModeOff();
 
-    private ArrayList<Repo> repository = new ArrayList<>();
+    private ArrayList<ReportItems> reportItems = new ArrayList<>();
     private ArrayList<String> mKeys = new ArrayList<>();
     private JSONObject test = new JSONObject();
     private ExpandableRecyclerAdapter mAdapter;
-    public ExpandableRecyclerAdapter.ViewHolder viewHolder;
+    public ExpandableRecyclerAdapter.ItemVh viewHolder;
     private TextView resultCompany, resultEmail, resultDate;
-
     FloatingActionButton fab;
 
     JSONArray jsArray = new JSONArray();
@@ -77,7 +70,7 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_report);
+        setContentView(R.layout.activity_report);
         ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -87,7 +80,8 @@ public class ReportActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference("Data").child("list");
         databaseReference.keepSynced(true);
 
-        mAdapter = new ExpandableRecyclerAdapter(repository, this);
+        mAdapter = new ExpandableRecyclerAdapter(reportItems, this);
+        mAdapter.setOnRadioItemClicked(this);
         RecyclerView.LayoutManager llm = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(mAdapter);
@@ -119,7 +113,7 @@ public class ReportActivity extends AppCompatActivity {
         // Animated FloatingBottom
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy < 0 && !fab.isShown())
                     fab.show();
                 else if (dy > 0 && fab.isShown())
@@ -148,63 +142,10 @@ public class ReportActivity extends AppCompatActivity {
             Toast.makeText(this, "Lista onLine", Toast.LENGTH_SHORT).show();
 
         } else {
-            //fab.setVisibility(View.GONE);
-            this.addItemsFromJsonList();
-            //mAdapter.registerAdapterDataObserver(new RVEmptyObserver(recyclerView, null, fab));
+            findViewById(R.id.progressBar).setVisibility(View.GONE);
+            jsonListModeOff.addItemsFromJsonList(reportItems);
             Toast.makeText(this, "Lista offLine", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void addItemsFromJsonList() {
-        findViewById(R.id.progressBar).setVisibility(View.GONE);
-        try {
-            JSONObject js = new JSONObject(readJsonDataFromFile()).getJSONObject("list");
-
-            Iterator<String> iterator = js.keys();
-            while (iterator.hasNext()) {
-                String dynamicKey = iterator.next();
-                JSONObject jsKeys = js.getJSONObject(dynamicKey);
-
-                String itemTitle = jsKeys.getString("title");
-                String itemText = jsKeys.getString("text");
-
-                Repo repo = new Repo();
-                repo.setTitle(itemTitle);
-                repo.setText(itemText);
-                repository.add(repo);
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Read Json and populate recyclerView
-    private String readJsonDataFromFile() throws IOException {
-
-        String subject = ReportConstants.ConstantsFireBase.JSON_FIRE;
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + "Report" + "/" + subject + ".json";
-
-        InputStream inputStream = null;
-        StringBuilder builder = new StringBuilder();
-
-        try {
-            String jsonDataString;
-            inputStream = new FileInputStream(path);
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            while ((jsonDataString = bufferedReader.readLine()) != null) {
-                builder.append(jsonDataString);
-            }
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
-        return new String(builder);
     }
 
     // Sync RecyclerView with FireBase
@@ -215,7 +156,7 @@ public class ReportActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 findViewById(R.id.progressBar).setVisibility(View.GONE);
-                repository.add(dataSnapshot.getValue(Repo.class));
+                reportItems.add(dataSnapshot.getValue(ReportItems.class));
                 String key = dataSnapshot.getKey();
                 mKeys.add(key);
 
@@ -225,11 +166,11 @@ public class ReportActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Repo repo = dataSnapshot.getValue(Repo.class);
+                ReportItems reportItems = dataSnapshot.getValue(ReportItems.class);
                 String key = dataSnapshot.getKey();
 
                 int index = mKeys.indexOf(key);
-                repository.set(index, repo);
+                ReportActivity.this.reportItems.set(index, reportItems);
                 mAdapter.notifyItemChanged(index);
             }
 
@@ -238,7 +179,7 @@ public class ReportActivity extends AppCompatActivity {
                 String key = dataSnapshot.getKey();
 
                 int index = mKeys.indexOf(key);
-                repository.remove(index);
+                reportItems.remove(index);
                 mAdapter.notifyItemRemoved(index);
             }
 
@@ -300,10 +241,12 @@ public class ReportActivity extends AppCompatActivity {
     private void handleSave() {
         //testRadio();
 
-        final Repo repo = new Repo();
-        repo.setCompany(resultCompany.getText().toString());
-        repo.setEmail(resultEmail.getText().toString());
-        repo.setDate(resultDate.getText().toString());
+        final ReportItems reportItems = new ReportItems();
+        reportItems.setCompany(resultCompany.getText().toString());
+        reportItems.setEmail(resultEmail.getText().toString());
+        reportItems.setDate(resultDate.getText().toString());
+//        ArrayList<String> listText = new ArrayList<>();
+//        reportItems.setCheckList(listText);
 
         // Convert ArrayList in Json Object
         for (int i = 0; (i < mAdapter.listTxtRadio.size()) && (i < mAdapter.listText.size()) && (i < mAdapter.listIDRadio.size()) && (i < mAdapter.listId.size()); i++) {
@@ -322,15 +265,15 @@ public class ReportActivity extends AppCompatActivity {
             jsArray.put(jsObject);
         }
 
-        repo.setListJson(jsArray.toString());
+        reportItems.setListJson(jsArray.toString());
         Log.i("log", "Item: " + jsArray + " jsArray");
         // Finish JsonObject
 
         //Save
-        if (this.mReportBusiness.insert(repo)) {
+        if (this.mReportBusiness.insert(reportItems)) {
             // Execute Async create PDF
             PDFAsyncTask asy = new PDFAsyncTask(this);
-            asy.execute(repo);
+            asy.execute(reportItems);
             Toast.makeText(this, R.string.txt_report_save, Toast.LENGTH_SHORT).show();
             finish();
         } else {
@@ -339,35 +282,27 @@ public class ReportActivity extends AppCompatActivity {
         }
     }
 
-    private void testRadio(){
-        /*String test1 = mAdapter.radioButton.getText().toString();
-        Log.i("log", "Item: " + test1 + " listConformed1 ");
-        for (int i = 0; i < test1.length(); i++) {
-            ArrayList<String> test2 = new ArrayList<>();
-            test2.add(test1);
-            Log.i("log", "Item: " + test2 + " listConformed2 ");
-
-
-            for (int y = 0; y < test2.size(); y++) {
-                JSONObject test3 = new JSONObject();
-                try {
-                    test3.put("Radio", test2.get(y));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.i("log", "Item: " + test3 + " listConformed ");
-            }
-        }*/
+    private void testRadio() {
+        //Test onClick RadioButton
         viewHolder.mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int selectRadioButtonId = viewHolder.mRadioGroup.getCheckedRadioButtonId();
 
-                mAdapter.radioButton = group.findViewById(selectRadioButtonId);
-                Log.i("log", "Item: " + selectRadioButtonId + " mAdapter.radioButton ");
+                int selectedRadioButtonID = viewHolder.mRadioGroup.getCheckedRadioButtonId();
+
+                //Test Salve in a ArrayList RadioButton Selected
+                mAdapter.radioButton = group.findViewById(selectedRadioButtonID);
+                Log.i("log", "Item: " + selectedRadioButtonID + " selectedRadioButtonId ");
+
+                String text = mAdapter.radioButton.getText().toString();
+                Log.i("log", "Item: " + text + " selectedRadioButtonText ");
+
+                ArrayList<String> listTest = new ArrayList<>();
+                listTest.add(text);
+                Log.i("log", "Item: " + listTest + " listTest ");
+
             }
         });
-
     }
 
     // Clear all every Lists and reload Adapter
@@ -397,6 +332,24 @@ public class ReportActivity extends AppCompatActivity {
                 })
                 .setNegativeButton(R.string.txt_cancel, null)
                 .show();
+    }
+
+    @Override
+    public void radioItemChecked(int itemPosition, int optNum) {
+        reportItems.get(itemPosition).setSelectedAnswerPosition(optNum);
+        reportItems.get(itemPosition).setShine(false);
+        switch (optNum) {
+            case 1:
+                reportItems.get(itemPosition).setOpt1(true);
+                Log.i("log", "Item: " + itemPosition + " optNum");
+                break;
+
+            case 2:
+                reportItems.get(itemPosition).setOpt2(true);
+                Log.i("log", "Item: " + itemPosition + " optNum");
+                break;
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

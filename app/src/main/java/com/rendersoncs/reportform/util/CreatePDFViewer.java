@@ -21,7 +21,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportItems;
 
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class CreatePDFViewer {
 
@@ -49,14 +50,15 @@ public class CreatePDFViewer {
         UNDERLINE = new LineSeparator(1.0F, 100.0F, null, 1, -5.0F);
     }
 
-    public File write(Context context, Repo paramRepo) throws Exception {
+    public File write(Context context, ReportItems paramRepo) throws Exception {
         List listTitle = new List();
-        /*String date = paramRepo.getDate();
+        String date = paramRepo.getDate();
 
-        Object[] arrayOfObject = new Object[2];
+        /*Object[] arrayOfObject = new Object[2];
         arrayOfObject[0] = paramRepo.getCompany().replaceAll(" ", "_");
-        //arrayOfObject[1] = new SimpleDateFormat("dd-MM-yyyy").format(paramRepo.getDate());
-        arrayOfObject[1] = date;
+        arrayOfObject[1] = new SimpleDateFormat("dd-MM-yyyy").format(paramRepo.getDate()).trim();
+        Log.i("PDF", "Gerar PDF!!!! " + arrayOfObject + " Nome arrayOfObject");
+        //arrayOfObject[1] = date;
         String str = FilenameUtils.normalize(String.format("Relatorio-%s-%s.pdf", arrayOfObject));*/
 
         String str = FilenameUtils.normalize(String.format("Relatorio-%s-%s.pdf", paramRepo.getCompany(), paramRepo.getDate()));

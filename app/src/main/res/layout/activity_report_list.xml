@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cv"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
@@ -90,31 +90,32 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="0.5dp">
+                    android:padding="0.5dp"
+                    tools:ignore="UselessParent">
 
-                    <RadioButton
+                    <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/radio_conform"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@android:color/holo_green_dark"
                         android:checked="false"
-                        android:text="Conforme" />
+                        android:text="Sim"/>
 
-                    <RadioButton
+                    <!--androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/radio_not_applicable"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@android:color/holo_blue_light"
                         android:checked="false"
-                        android:text="Não aplicável" />
+                        android:text="Não aplicável" /-->
 
-                    <RadioButton
+                    <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/radio_not_conform"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@android:color/holo_red_dark"
                         android:checked="false"
-                        android:text="Não Conforme" />
+                        android:text="Não"/>
 
                 </RadioGroup>
 

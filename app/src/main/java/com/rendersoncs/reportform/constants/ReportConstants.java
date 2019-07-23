@@ -9,10 +9,16 @@ public class ReportConstants {
     public static class ConstantsFireBase{
         public static final String URL = "https://reportform-20b2a.firebaseio.com/Data.json";
         public static final String JSON_FIRE = "reportApp";
+        public static final String FIRE_TEXT = "text";
+        public static final String FIRE_TITLE = "title";
     }
 
-    public static class BundleConstants{
+    public static class ConstantsBundle {
         public static final String REPORT_ID = "reportId";
+    }
+
+    public static class ConstantsCharacters{
+        public static final int LIMITS_TEXT = 14;
     }
 
     public static class CONFIRMATION {

@@ -13,13 +13,13 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.business.ReportBusiness;
-import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     TextView resume, share, delete;
 
-    Repo repoEntity;
+    ReportItems repoEntity;
     private OnInteractionListener listener;
     private ReportBusiness mReportBusiness;
     private static final String PACKAGE_FILE_PROVIDER = "com.rendersoncs.reportform.FileProvider";

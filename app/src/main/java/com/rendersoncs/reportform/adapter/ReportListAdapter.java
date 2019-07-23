@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.rendersoncs.reportform.itens.Repo;
+import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.viewHolder.ReportListViewHolder;
 
@@ -17,11 +17,11 @@ import com.rendersoncs.reportform.R;
 
 public class ReportListAdapter extends RecyclerView.Adapter<ReportListViewHolder> {
 
-    private List<Repo> mRepoEntityList;
+    private List<ReportItems> mRepoEntityList;
     private OnInteractionListener mOnInteractionListener;
     Context context;
 
-    public ReportListAdapter(List<Repo> repoEntityList, OnInteractionListener listener) {
+    public ReportListAdapter(List<ReportItems> repoEntityList, OnInteractionListener listener) {
         this.mRepoEntityList = repoEntityList;
         this.mOnInteractionListener = listener;
     }
@@ -40,7 +40,7 @@ public class ReportListAdapter extends RecyclerView.Adapter<ReportListViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final ReportListViewHolder holder, int position) {
-        Repo repoEntity = this.mRepoEntityList.get(position);
+        ReportItems repoEntity = this.mRepoEntityList.get(position);
         holder.bindData(repoEntity, mOnInteractionListener);
     }
 

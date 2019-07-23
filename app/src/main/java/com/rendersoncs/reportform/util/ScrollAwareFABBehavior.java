@@ -1,4 +1,4 @@
-package com.rendersoncs.reportform.util;
+/*package com.rendersoncs.reportform.util;
 
 import android.content.Context;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -32,4 +32,4 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View directTargetChild, View target, int nestedScrollAxes) {
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL;
     }
-}
+}*/
