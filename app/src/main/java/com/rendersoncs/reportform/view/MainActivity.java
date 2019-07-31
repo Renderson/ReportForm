@@ -28,6 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
+import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.BottomSheetFragment;
@@ -45,7 +46,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFireBaseAnalytics;
-    NetworkConnectedService netService = new NetworkConnectedService(this);
+    private NetworkConnectedService netService = new NetworkConnectedService(this);
+    private AnimatedFloatingButton animated = new AnimatedFloatingButton();
 
     private ViewHolder viewHolder = new ViewHolder();
     private ReportBusiness reportBusiness;
@@ -88,6 +90,40 @@ public class MainActivity extends AppCompatActivity {
         // Camada Business
         this.reportBusiness = new ReportBusiness(this);
 
+        // Listener
+        this.clickListenerItems();
+
+        // Define um layout
+        this.viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
+
+        // Animated FAB
+        animatedFloatingButtom();
+        //animated.animatedFab(viewHolder.recyclerView, fab);
+
+        fab = findViewById(R.id.floatButton);
+        fab.setOnClickListener(v -> startReportFormDialog());
+
+        emptyButton.setOnClickListener(v -> startReportFormDialog());
+    }
+
+    private void animatedFloatingButtom() {
+        this.viewHolder.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy){
+                if (dy < 0 && !fab.isShown())
+                    fab.show();
+                else if (dy > 0 && fab.isShown())
+                    fab.hide();
+            }
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+    }
+
+    private void clickListenerItems() {
         this.listener = new OnInteractionListener() {
 
             // Click list
@@ -176,30 +212,6 @@ public class MainActivity extends AppCompatActivity {
                 loadReport();
             }
         };
-
-        // Define um layout
-        this.viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
-
-        // Animated FloatingBottom
-        this.viewHolder.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-                if (dy < 0 && !fab.isShown())
-                    fab.show();
-                else if (dy > 0 && fab.isShown())
-                    fab.hide();
-            }
-
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-
-        fab = findViewById(R.id.floatButton);
-        fab.setOnClickListener(v -> startReportFormDialog());
-
-        emptyButton.setOnClickListener(v -> startReportFormDialog());
     }
 
     private void startReportFormDialog() {

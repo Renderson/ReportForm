@@ -18,8 +18,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,10 +29,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ExpandableRecyclerAdapter;
+import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.async.PDFAsyncTask;
+import com.rendersoncs.reportform.listener.OnRadioItemClicked;
 import com.rendersoncs.reportform.util.InjectJsonListModeOff;
 
 
@@ -47,13 +47,13 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReportActivity extends AppCompatActivity implements ExpandableRecyclerAdapter.OnRadioItemClicked {
+public class ReportActivity extends AppCompatActivity implements OnRadioItemClicked {
 
     @BindView(R.id.recycler_view_form)
     RecyclerView recyclerView;
 
     private ReportBusiness mReportBusiness;
-    InjectJsonListModeOff jsonListModeOff = new InjectJsonListModeOff();
+    private InjectJsonListModeOff jsonListModeOff = new InjectJsonListModeOff();
 
     private ArrayList<ReportItems> reportItems = new ArrayList<>();
     private ArrayList<String> mKeys = new ArrayList<>();
@@ -62,8 +62,11 @@ public class ReportActivity extends AppCompatActivity implements ExpandableRecyc
     public ExpandableRecyclerAdapter.ItemVh viewHolder;
     private TextView resultCompany, resultEmail, resultDate;
     FloatingActionButton fab;
+    AnimatedFloatingButton animated = new AnimatedFloatingButton();
 
     JSONArray jsArray = new JSONArray();
+    ArrayList<String> listTitle = new ArrayList<>();
+    ArrayList<String> listRadio = new ArrayList<>();
 
     private DatabaseReference databaseReference;
 
@@ -106,14 +109,20 @@ public class ReportActivity extends AppCompatActivity implements ExpandableRecyc
 
         this.mReportBusiness = new ReportBusiness(this);
 
+        // Animated FloatingBottom
+        //animated.animatedFab(recyclerView, fab);
+        animatedFloatingButton();
+
         fab = findViewById(R.id.fab_new_item);
         fab.setOnClickListener(v -> startNewItemListFireBase());
         //mAdapter.notifyDataSetChanged();
 
-        // Animated FloatingBottom
+    }
+
+    private void animatedFloatingButton() {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy){
                 if (dy < 0 && !fab.isShown())
                     fab.show();
                 else if (dy > 0 && fab.isShown())
@@ -172,6 +181,7 @@ public class ReportActivity extends AppCompatActivity implements ExpandableRecyc
                 int index = mKeys.indexOf(key);
                 ReportActivity.this.reportItems.set(index, reportItems);
                 mAdapter.notifyItemChanged(index);
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -181,6 +191,7 @@ public class ReportActivity extends AppCompatActivity implements ExpandableRecyc
                 int index = mKeys.indexOf(key);
                 reportItems.remove(index);
                 mAdapter.notifyItemRemoved(index);
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -193,7 +204,7 @@ public class ReportActivity extends AppCompatActivity implements ExpandableRecyc
 
             }
         });
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -239,25 +250,20 @@ public class ReportActivity extends AppCompatActivity implements ExpandableRecyc
 
     // Save Company, Email, Data, List
     private void handleSave() {
-        //testRadio();
+
+        this.checkAnswers();
 
         final ReportItems reportItems = new ReportItems();
         reportItems.setCompany(resultCompany.getText().toString());
         reportItems.setEmail(resultEmail.getText().toString());
         reportItems.setDate(resultDate.getText().toString());
-//        ArrayList<String> listText = new ArrayList<>();
-//        reportItems.setCheckList(listText);
 
         // Convert ArrayList in Json Object
-        for (int i = 0; (i < mAdapter.listTxtRadio.size()) && (i < mAdapter.listText.size()) && (i < mAdapter.listIDRadio.size()) && (i < mAdapter.listId.size()); i++) {
+        for (int i = 0; (i < listRadio.size()) && (i < listTitle.size()); i++) {
             JSONObject jsObject = new JSONObject();
             try {
-                //jsObject.put("List", job);
-                jsObject.put("title_list", mAdapter.listText.get(i));
-                jsObject.put("radio_tx", mAdapter.listTxtRadio.get(i));
-                jsObject.put("radio_id", mAdapter.listIDRadio.get(i));
-                jsObject.put("id_list", mAdapter.listId.get(i));
-                Log.i("log", "Item: " + jsObject + " jsObject");
+                jsObject.put("title_list", listTitle.get(i));
+                jsObject.put("radio_tx", listRadio.get(i));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -282,45 +288,6 @@ public class ReportActivity extends AppCompatActivity implements ExpandableRecyc
         }
     }
 
-    private void testRadio() {
-        //Test onClick RadioButton
-        viewHolder.mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                int selectedRadioButtonID = viewHolder.mRadioGroup.getCheckedRadioButtonId();
-
-                //Test Salve in a ArrayList RadioButton Selected
-                mAdapter.radioButton = group.findViewById(selectedRadioButtonID);
-                Log.i("log", "Item: " + selectedRadioButtonID + " selectedRadioButtonId ");
-
-                String text = mAdapter.radioButton.getText().toString();
-                Log.i("log", "Item: " + text + " selectedRadioButtonText ");
-
-                ArrayList<String> listTest = new ArrayList<>();
-                listTest.add(text);
-                Log.i("log", "Item: " + listTest + " listTest ");
-
-            }
-        });
-    }
-
-    // Clear all every Lists and reload Adapter
-    private void clearRadioButton() {
-        mAdapter.listText.clear();
-        mAdapter.listId.clear();
-        mAdapter.listIDRadio.clear();
-        mAdapter.listTxtRadio.clear();
-
-        if (mAdapter.radioButton.isChecked()) {
-            mAdapter.radioButton.clearFocus();
-        }
-        mAdapter.notifyDataSetChanged();
-        mAdapter.expandState.clear();
-
-        Toast.makeText(this, "Lista vazia!", Toast.LENGTH_SHORT).show();
-    }
-
     // Alert dialog close
     private void alertDialogClose() {
         new AlertDialog.Builder(this)
@@ -334,6 +301,28 @@ public class ReportActivity extends AppCompatActivity implements ExpandableRecyc
                 .show();
     }
 
+    // Clear all every Lists and reload Adapter
+    private void clearRadioButton() {
+        for (int i = 0; i < reportItems.size(); i++){
+            if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2()){
+                reportItems.get(i).setOpt1(false);
+                reportItems.get(i).setOpt2(false);
+            }
+        }
+        listTitle.clear();
+        listRadio.clear();
+        mAdapter.listIDRadio.clear();
+
+        if (mAdapter.radioButton.isChecked()) {
+            mAdapter.radioButton.clearFocus();
+        }
+        mAdapter.notifyDataSetChanged();
+        mAdapter.expandState.clear();
+
+        Toast.makeText(this, "Lista vazia!", Toast.LENGTH_SHORT).show();
+    }
+
+
     @Override
     public void radioItemChecked(int itemPosition, int optNum) {
         reportItems.get(itemPosition).setSelectedAnswerPosition(optNum);
@@ -341,15 +330,32 @@ public class ReportActivity extends AppCompatActivity implements ExpandableRecyc
         switch (optNum) {
             case 1:
                 reportItems.get(itemPosition).setOpt1(true);
-                Log.i("log", "Item: " + itemPosition + " optNum");
                 break;
 
             case 2:
                 reportItems.get(itemPosition).setOpt2(true);
-                Log.i("log", "Item: " + itemPosition + " optNum");
                 break;
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void checkAnswers(){
+
+        for (int i = 0; i < reportItems.size(); i++){
+            if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2()){
+                if (reportItems.get(i).getSelectedAnswerPosition() == 1){
+                    String yes = "sim";
+                    listRadio.add(yes);
+                } else {
+                    String not = "não";
+                    listRadio.add(not);
+                }
+
+                String title = reportItems.get(i).getTitle();
+                listTitle.add(title);
+
+            }
+        }
     }
 
     @Override

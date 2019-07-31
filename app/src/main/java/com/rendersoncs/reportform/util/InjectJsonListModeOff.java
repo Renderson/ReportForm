@@ -28,11 +28,11 @@ public class InjectJsonListModeOff {
                 JSONObject jsKeys = js.getJSONObject(dynamicKey);
 
                 String itemTitle = jsKeys.getString(ReportConstants.ConstantsFireBase.FIRE_TITLE);
-                String itemText = jsKeys.getString(ReportConstants.ConstantsFireBase.FIRE_TEXT);
+                String itemDescription = jsKeys.getString(ReportConstants.ConstantsFireBase.FIRE_DESCRIPTION);
 
                 ReportItems reportItems = new ReportItems();
                 reportItems.setTitle(itemTitle);
-                reportItems.setText(itemText);
+                reportItems.setDescription(itemDescription);
                 reportItemsList.add(reportItems);
 
             }

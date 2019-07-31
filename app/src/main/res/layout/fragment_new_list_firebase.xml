@@ -39,8 +39,8 @@
             android:imeOptions="actionNext"/>
 
         <EditText
-            android:id="@+id/txt_text_list"
-            android:hint="Texto..."
+            android:id="@+id/txt_description_list"
+            android:hint="Descrição..."
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

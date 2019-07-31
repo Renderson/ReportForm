@@ -8,5 +8,8 @@
     <color name="colorTitle">#222222</color>
     <color name="colorResume">#FF3F58E4</color>
 
+    <color name="colorRadioYes">#ff99cc00</color>
+    <color name="colorRadioNot">#ffcc0000</color>
+
 
 </resources>

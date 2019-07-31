@@ -38,10 +38,10 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(final ReportItems repoEntity, final OnInteractionListener listener) {
-        //this.CompanyView.setText(repoEntity.getCompany());
+        //this.CompanyView.setDescription(repoEntity.getCompany());
         this.CompanyView.setText(StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.ConstantsCharacters.LIMITS_TEXT));
         this.DateView.setText(repoEntity.getDate());
-        //this.DateView.setText((CharSequence) StringExtension.formataParaBrasileiro(repoEntity.getDate()));
+        //this.DateView.setDescription((CharSequence) StringExtension.formataParaBrasileiro(repoEntity.getDate()));
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

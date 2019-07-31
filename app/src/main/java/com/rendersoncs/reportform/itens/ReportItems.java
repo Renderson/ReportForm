@@ -1,23 +1,20 @@
 package com.rendersoncs.reportform.itens;
 
-import java.util.ArrayList;
-
 public class ReportItems {
 
     private int id, conformed;
 
     private String company, email, date, photo, listJson;
-    private String title, text, header;
-    private ArrayList checkList;
+    private String title, description, header;
 
     private boolean opt1, opt2;
     private int selectedAnswerPosition = -1;
     private boolean shine;
 
-    public ReportItems(String title, String text, String header) {
+    public ReportItems(String title, String description, String header) {
         this.header = header;
         this.title = title;
-        this.text = text;
+        this.description = description;
     }
 
     public ReportItems() {
@@ -80,12 +77,12 @@ public class ReportItems {
         this.title = title;
     }
 
-    public String getText() {
-        return text;
+    public String getDescription() {
+        return description;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getHeader() {
@@ -140,13 +137,5 @@ public class ReportItems {
 
     public void setShine(boolean shine) {
         this.shine = shine;
-    }
-
-    public ArrayList getCheckList() {
-        return checkList;
-    }
-
-    public void setCheckList(ArrayList checkList) {
-        this.checkList = checkList;
     }
 }
