@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +33,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.android.volley.VolleyLog.TAG;
 
 public class ReportResume extends AppCompatActivity {
 
@@ -158,9 +161,8 @@ public class ReportResume extends AppCompatActivity {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject jo = array.getJSONObject(i);
 
-                ReportResumeItems repoJson = new ReportResumeItems(jo.getString("title_list"));
+                ReportResumeItems repoJson = new ReportResumeItems(jo.getString("title_list"), jo.getString("radio_tx"));
                 repoResumeList.add(repoJson);
-
             }
             RecyclerView.Adapter adapter = new ReportResumeAdapter(repoResumeList, this);
             recyclerView.setAdapter(adapter);
@@ -181,11 +183,11 @@ public class ReportResume extends AppCompatActivity {
 
             for (int i = 0; i < listSelected.size(); i++) {
                 String item = listSelected.get(i);
-                if (listSelected.get(i).equals("sim")) {
-                    listYes.add("sim");
+                if (listSelected.get(i).equals("Sim")) {
+                    listYes.add("Sim");
                 }
-                if (listSelected.get(i).equals("não")) {
-                    listNot.add("não");
+                if (listSelected.get(i).equals("Não")) {
+                    listNot.add("Não");
                 }
             }
 

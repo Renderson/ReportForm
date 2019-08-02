@@ -2,6 +2,7 @@ package com.rendersoncs.reportform.adapter;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ public class ReportResumeAdapter extends RecyclerView.Adapter<ReportResumeAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final ReportResumeItems repoResumeList = this.repoResumeList.get(position);
         holder.title_list.setText(repoResumeList.getTitle_list());
-
+        holder.radio_tx.setText(repoResumeList.getRadio_tx());
     }
 
     @Override
@@ -45,12 +46,13 @@ public class ReportResumeAdapter extends RecyclerView.Adapter<ReportResumeAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder  {
 
-        public TextView title_list;
+        private TextView title_list, radio_tx;
 
-        public ViewHolder(@NonNull View itemView) {
+        private ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             title_list = itemView.findViewById(R.id.jo_title);
+            radio_tx = itemView.findViewById(R.id.jo_subTitle);
         }
     }
 }

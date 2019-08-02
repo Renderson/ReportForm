@@ -35,8 +35,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
     protected String doInBackground(Void... voids) {
         Log.d(TAG, "doInBackground AWS call ");
         try {
-            String json_url = ReportConstants.ConstantsFireBase.URL;
-            URL url = new URL(json_url);
+            URL url = new URL(ReportConstants.ConstantsFireBase.URL);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));

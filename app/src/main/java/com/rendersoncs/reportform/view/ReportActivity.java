@@ -344,10 +344,10 @@ public class ReportActivity extends AppCompatActivity implements OnRadioItemClic
         for (int i = 0; i < reportItems.size(); i++){
             if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2()){
                 if (reportItems.get(i).getSelectedAnswerPosition() == 1){
-                    String yes = "sim";
+                    String yes = "Sim";
                     listRadio.add(yes);
                 } else {
-                    String not = "não";
+                    String not = "Não";
                     listRadio.add(not);
                 }
 

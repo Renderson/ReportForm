@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:text="@string/label_screen_login_hello"
+        style="@style/TextTitleFormField"
+        android:textColor="@color/colorTextBlack"
+        android:layout_marginStart="0dp"
+        app:layout_constraintStart_toStartOf="@+id/txt1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:text="@string/label_screen_login_lets_go"
+        style="@style/TextDescriptionFormField"
+        android:textColor="@color/colorTextBlack"
+        android:textStyle="normal"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+
+    <EditText
+        android:id="@+id/txt1"
+        style="@style/FormField"
+        android:hint="@string/mail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <EditText
+        android:id="@+id/txt2"
+        android:hint="@string/password"
+        style="@style/FormField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt1" />
+
+    <Button
+        android:id="@+id/button"
+        style="@style/ButtonFormField"
+        android:text="@string/login"
+        app:layout_constraintStart_toStartOf="@+id/txt2"
+        app:layout_constraintTop_toBottomOf="@+id/txt2" />
+
+    <ImageView
+        android:id="@+id/img_facebook"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/icon_facebook"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
+
+    <ImageView
+        android:id="@+id/img_google"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/icon_google"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/img_facebook"
+        app:layout_constraintTop_toTopOf="@+id/img_facebook" />
+
+    <TextView
+        android:id="@+id/txt3"
+        style="@style/TextBottomFormField"
+        android:text="@string/label_screen_login_forgot_password"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/TextBottomClickFormField"
+        android:text="@string/label_to_recover"
+        app:layout_constraintBottom_toBottomOf="@+id/txt3"
+        app:layout_constraintStart_toEndOf="@+id/txt3"
+        app:layout_constraintTop_toTopOf="@+id/txt3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

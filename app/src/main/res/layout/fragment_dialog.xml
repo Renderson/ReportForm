@@ -28,7 +28,7 @@
             android:layout_weight="3"
             android:layout_margin="18dp"
             android:text="Novo Relatório"
-            android:textColor="@color/colorTitle"
+            android:textColor="@color/colorTextBlack"
             android:textSize="18sp" />
 
         <ImageView
