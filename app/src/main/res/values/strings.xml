@@ -55,4 +55,8 @@
     <string name="label_screen_to_recovery">Recuperar!</string>
     <string name="label_screen_recovery_worry">Não se preocupe, vamos recuper sua senha!</string>
     <string name="go_to_home">Retornar para tela inicial</string>
+
+    <!--Facebbok-->
+    <string name="facebook_app_id">2284363461680926</string>
+
 </resources>

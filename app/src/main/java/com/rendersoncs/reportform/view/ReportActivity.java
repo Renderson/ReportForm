@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +37,10 @@ import com.rendersoncs.reportform.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.async.PDFAsyncTask;
 import com.rendersoncs.reportform.listener.OnRadioItemClicked;
+import com.rendersoncs.reportform.login.LoginActivity;
+import com.rendersoncs.reportform.login.SignUpActivity;
+import com.rendersoncs.reportform.login.util.LibraryClass;
+import com.rendersoncs.reportform.login.util.User;
 import com.rendersoncs.reportform.util.InjectJsonListModeOff;
 
 
@@ -51,6 +57,7 @@ public class ReportActivity extends AppCompatActivity implements OnRadioItemClic
 
     @BindView(R.id.recycler_view_form)
     RecyclerView recyclerView;
+    private User user;
 
     private ReportBusiness mReportBusiness;
     private InjectJsonListModeOff jsonListModeOff = new InjectJsonListModeOff();
@@ -68,6 +75,9 @@ public class ReportActivity extends AppCompatActivity implements OnRadioItemClic
     ArrayList<String> listTitle = new ArrayList<>();
     ArrayList<String> listRadio = new ArrayList<>();
 
+    FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
     private DatabaseReference databaseReference;
 
     @Override
@@ -80,7 +90,14 @@ public class ReportActivity extends AppCompatActivity implements OnRadioItemClic
         setSupportActionBar(toolbar);
         setTitle(R.string.title_report);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Data").child("list");
+        mAuth = FirebaseAuth.getInstance();
+        user = new User();
+        user.setId( mAuth.getCurrentUser().getUid() );
+        Log.i("LOG", "mAuth: " + user.getId());
+
+        //databaseReference = FirebaseDatabase.getInstance().getReference("Data").child("list");
+        //databaseReference = FirebaseDatabase.getInstance().getReference("users").child(fire).child("list");
+        databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
         databaseReference.keepSynced(true);
 
         mAdapter = new ExpandableRecyclerAdapter(reportItems, this);

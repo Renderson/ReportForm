@@ -3,15 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/screeen_sign_up2">
+    android:background="@color/colorWhite">
+
+    <ProgressBar
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:id="@+id/sign_up_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textView4"
         android:text="@string/label_screen_register"
         style="@style/TextTitleFormField"
-        android:layout_marginStart="0dp"
         android:textColor="@color/colorTextBlack"
-        app:layout_constraintStart_toStartOf="@+id/txt"
+        app:layout_constraintStart_toStartOf="@+id/name"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -24,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
-        android:id="@+id/txt"
+        android:id="@+id/name"
         style="@style/FormField"
         android:hint="@string/name"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,27 +41,30 @@
 
 
     <EditText
-        android:id="@+id/txt1"
+        android:id="@+id/email"
         android:hint="@string/mail"
         style="@style/FormField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt" />
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <EditText
-        android:id="@+id/txt2"
+        android:id="@+id/password"
         android:hint="@string/password"
         style="@style/FormField"
+        android:inputType="textPassword"
+        android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt1" />
+        app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_signUp"
         android:text="@string/create"
         style="@style/ButtonFormField"
-        app:layout_constraintStart_toStartOf="@+id/txt2"
-        app:layout_constraintTop_toBottomOf="@+id/txt2" />
+        android:onClick="sendSignUpData"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <TextView
         android:id="@+id/txt7"
@@ -63,9 +74,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/btn_login"
         android:text="@string/login"
         style="@style/TextBottomClickFormField"
+        android:onClick="callLogin"
         app:layout_constraintBottom_toBottomOf="@+id/txt7"
         app:layout_constraintStart_toEndOf="@+id/txt7"
         app:layout_constraintTop_toTopOf="@+id/txt7" />

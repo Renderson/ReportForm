@@ -33,9 +33,9 @@
     <style name="TextTitleFormField">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginStart">8dp</item>
         <item name="android:layout_marginTop">150dp</item>
-        <item name="android:textColor">@color/colorTextWhite</item>
+        <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">36sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -44,7 +44,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">8dp</item>
-        <item name="android:textColor">@color/colorTextWhite</item>
+        <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -52,9 +52,9 @@
     <style name="ButtonFormField">
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginTop">16dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/colorTextWhite</item>
+        <item name="android:textColor">@color/colorWhite</item>
         <item name="android:background">@drawable/button_shape_rectangular</item>
     </style>
 
@@ -77,5 +77,12 @@
         <item name="android:textStyle">normal</item>
     </style>
     <!-- End Styles Activity Home, Login, Form -->
+
+    <style name="FacebookLoginButton">
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
 
 </resources>

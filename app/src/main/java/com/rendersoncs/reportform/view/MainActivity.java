@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -15,17 +17,25 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Base64;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
@@ -35,10 +45,14 @@ import com.rendersoncs.reportform.fragment.BottomSheetFragment;
 import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
+import com.rendersoncs.reportform.login.LoginActivity;
+import com.rendersoncs.reportform.login.util.User;
 import com.rendersoncs.reportform.util.RVEmptyObserver;
 import com.rendersoncs.reportform.service.NetworkConnectedService;
 
 import java.io.File;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -109,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     private void animatedFloatingButtom() {
         this.viewHolder.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy){
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 if (dy < 0 && !fab.isShown())
                     fab.show();
                 else if (dy > 0 && fab.isShown())
@@ -189,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
                 intent.setType("pdf/plain");
                 intent.putExtra(intent.EXTRA_SUBJECT, subject);
-                intent.putExtra(Intent.EXTRA_EMAIL  , new String[] { reportItems.getEmail()});
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{reportItems.getEmail()});
                 intent.putExtra(Intent.EXTRA_TEXT, "Em anexo o relatório da empresa " + reportItems.getCompany() + " concluído!" + " Realizado no dia " + reportItems.getDate());
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, "Compartilhar"));
@@ -219,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         reportFormDialog.show(getSupportFragmentManager(), "report_dialog");
     }
 
-    private void startBottomSheetFragment (){
+    private void startBottomSheetFragment() {
         BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
         bottomSheetFragment.show(getSupportFragmentManager(), "report_sheet");
     }
@@ -295,7 +309,33 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setNegativeButton(R.string.txt_deny, null)
                 .show();
-
     }
     // Final code permission
+
+    // Implemetation Firebase
+    // Menu
+    public boolean onCreateOptionsMenu(Menu menu) {
+        User user = new User();
+
+        if (user.isSocialNetworkLogged(this)) {
+            getMenuInflater().inflate(R.menu.menu_social_network_logged, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu, menu);
+        }
+
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+//        if (id == R.id.action.update) {
+//            startActivity(new Intent(this, UpdateActivity.class));
+//        } else if (id == R.id.action_logout) {
+        if (id == R.id.action_logout)
+            FirebaseAuth.getInstance().signOut();
+            finish();
+        //}
+        return super.onOptionsItemSelected(item);
+    }
 }
