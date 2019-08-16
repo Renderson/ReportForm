@@ -7,7 +7,7 @@ public class ReportConstants {
     }
 
     public static class ConstantsFireBase{
-        public static final String URL = "https://reportform-20b2a.firebaseio.com/Data.json";
+        public static final String URL = "https://reportform-20b2a.firebaseio.com/users";
         public static final String JSON_FIRE = "reportApp";
         public static final String FIRE_DESCRIPTION = "description";
         public static final String FIRE_TITLE = "title";

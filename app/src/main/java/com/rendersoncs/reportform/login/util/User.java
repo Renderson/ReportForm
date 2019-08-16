@@ -20,6 +20,7 @@ public class User {
     private String email;
     private String password;
     private String newPassword;
+    private String profileUrl;
 
     public User(){}
 
@@ -103,7 +104,7 @@ public class User {
     }
 
     public void saveDB(DatabaseReference.CompletionListener... completionListener){
-        DatabaseReference firebase = LibraryClass.getFirebase().child("users").child(getId());
+        DatabaseReference firebase = LibraryClass.getFirebase().child("users").child(getId()).child("credential");
         Log.i("LOG", "Tokens: " + firebase);
 
         if( completionListener.length == 0 ){
@@ -142,5 +143,13 @@ public class User {
     public void contextDataDB( Context context ){
         DatabaseReference firebase = LibraryClass.getFirebase().child("users").child( getId() );
         firebase.addListenerForSingleValueEvent( (ValueEventListener) context );
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 }

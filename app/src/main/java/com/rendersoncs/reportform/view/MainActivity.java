@@ -4,38 +4,43 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
-import android.util.Base64;
+import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.login.LoginManager;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.facebook.Profile;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
@@ -46,20 +51,26 @@ import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.login.LoginActivity;
+import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.login.util.User;
-import com.rendersoncs.reportform.util.RVEmptyObserver;
 import com.rendersoncs.reportform.service.NetworkConnectedService;
+import com.rendersoncs.reportform.util.RVEmptyObserver;
 
 import java.io.File;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+    private static final int REQUEST_PERMISSIONS_CODE = 128;
 
     private FirebaseAnalytics mFireBaseAnalytics;
+    private FirebaseAuth.AuthStateListener authStateListener;
+    private FirebaseAuth mAuth;
+    private DatabaseReference databaseReference;
+    private User users;
+
     private NetworkConnectedService netService = new NetworkConnectedService(this);
     private AnimatedFloatingButton animated = new AnimatedFloatingButton();
 
@@ -67,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private ReportBusiness reportBusiness;
     private OnInteractionListener listener;
 
-    private static final int REQUEST_PERMISSIONS_CODE = 128;
+    private DrawerLayout drawerLayout;
 
     public Context context;
     View emptyLayout;
@@ -80,25 +91,43 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setTitle(R.string.title_report_list);
+
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if( firebaseAuth.getCurrentUser() == null  ){
+                    Intent intent = new Intent( MainActivity.this, LoginActivity.class );
+                    startActivity( intent );
+                    finish();
+                }
+            }
+        };
+
         mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        databaseReference = LibraryClass.getFirebase();
+
 
         // Check NetWorking
         this.netService.isConnected(MainActivity.this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        setTitle(R.string.title_report_list);
+        // Create Drawerlayout
+        this.createDrawerLayout(user, toolbar);
 
         emptyLayout = findViewById(R.id.layout_empty);
 
         emptyButton = findViewById(R.id.action_add_report);
 
-        //Check permissions Android 6.0+
+        // Check permissions Android 6.0+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkPermission();
         }
 
-        //Obter a recycler
+        // Obter a recycler
         this.viewHolder.recyclerView = findViewById(R.id.recycler_view);
 
         // Camada Business
@@ -118,6 +147,26 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(v -> startReportFormDialog());
 
         emptyButton.setOnClickListener(v -> startReportFormDialog());
+    }
+
+    private void createDrawerLayout(FirebaseUser user, Toolbar toolbar) {
+        drawerLayout = findViewById(R.id.drawerLayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
+
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView mNavigationView = findViewById(R.id.navView);
+        View headerLayout = mNavigationView.getHeaderView(0);
+        mNavigationView.setNavigationItemSelectedListener(this);
+
+        TextView profileName = headerLayout.findViewById(R.id.txt_profile_name);
+        TextView profileEmail = headerLayout.findViewById(R.id.txt_profile_mail);
+        ImageView profileView = headerLayout.findViewById(R.id.img_profile);
+
+        profileName.setText(user.getDisplayName());
+        profileEmail.setText(user.getEmail());
+        Glide.with(this).load(user.getPhotoUrl()).into(profileView);
     }
 
     private void animatedFloatingButtom() {
@@ -314,28 +363,74 @@ public class MainActivity extends AppCompatActivity {
 
     // Implemetation Firebase
     // Menu
-    public boolean onCreateOptionsMenu(Menu menu) {
-        User user = new User();
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        User user = new User();
+//
+//        if (user.isSocialNetworkLogged(this)) {
+//            getMenuInflater().inflate(R.menu.menu_social_network_logged, menu);
+//        } else {
+//            getMenuInflater().inflate(R.menu.menu, menu);
+//        }
+//
+//        return true;
+//    }
+//
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.id.action_logout)
+//            FirebaseAuth.getInstance().signOut();
+//            finish();
+//        return super.onOptionsItemSelected(item);
+//    }
 
-        if (user.isSocialNetworkLogged(this)) {
-            getMenuInflater().inflate(R.menu.menu_social_network_logged, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.menu, menu);
+    // DrawerLayout Menu
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.menu_home:{
+                break;
+            }
+
+            case R.id.menu_new_report: {
+                startReportFormDialog();
+                break;
+            }
+
+            case R.id.menu_config: {
+                Toast.makeText(this, "Configuração de conta.", Toast.LENGTH_SHORT).show();
+                break;
+            }
+
+            case R.id.menu_about_us: {
+                Toast.makeText(this, "Sobre nós.", Toast.LENGTH_SHORT).show();
+                break;
+            }
+
+            case R.id.menu_logout: {
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                break;
+            }
         }
-
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
-//        if (id == R.id.action.update) {
-//            startActivity(new Intent(this, UpdateActivity.class));
-//        } else if (id == R.id.action_logout) {
-        if (id == R.id.action_logout)
-            FirebaseAuth.getInstance().signOut();
-            finish();
-        //}
-        return super.onOptionsItemSelected(item);
+        if( authStateListener != null ){
+            mAuth.removeAuthStateListener( authStateListener );
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

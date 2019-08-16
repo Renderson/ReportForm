@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
 import com.rendersoncs.reportform.R;
 
-public class ResetActivity extends AppCompatActivity {
+public class RecoveryLoginActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private EditText email;
@@ -57,13 +57,13 @@ public class ResetActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 email.setText("");
                                 Toast.makeText(
-                                        ResetActivity.this,
+                                        RecoveryLoginActivity.this,
                                         "Recuperação de acesso iniciada. Email enviado.",
                                         Toast.LENGTH_SHORT
                                 ).show();
                             } else {
                                 Toast.makeText(
-                                        ResetActivity.this,
+                                        RecoveryLoginActivity.this,
                                         "Falhou! Tente novamente",
                                         Toast.LENGTH_SHORT
                                 ).show();

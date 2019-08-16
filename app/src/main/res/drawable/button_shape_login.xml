@@ -1,10 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="20dp"/>
-    <solid android:color="@color/card_shadow"/>
-    <padding
-        android:top="10dp"
-        android:right="10dp"
-        android:left="10dp"
-        android:bottom="10dp"/>
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <selector>
+            <item
+                android:state_enabled="false"
+                android:state_focused="true">
+                <shape android:shape="rectangle">
+                    <corners android:radius="20dp"/>
+                    <solid android:color="@color/com_facebook_button_background_color_focused_disabled"/>
+                </shape>
+            </item>
+            <item
+                android:state_enabled="false"
+                android:state_focused="false">
+                <shape android:shape="rectangle">
+                    <corners android:radius="20dp"/>
+                    <solid android:color="@color/com_facebook_button_background_color_disabled"/>
+                </shape>
+            </item>
+            <item android:state_focused="true">
+                <shape android:shape="rectangle">
+                    <corners android:radius="20dp"/>
+                    <solid android:color="@color/com_facebook_button_background_color_focused"/>
+                    <stroke
+                        android:width="1dp"
+                        android:color="@color/com_facebook_button_border_color_focused"
+                        >
+                    </stroke>
+                </shape>
+            </item>
+            <item android:state_pressed="true">
+                <shape android:shape="rectangle">
+                    <corners android:radius="20dp"/>
+                    <!--<solid android:color="@color/com_facebook_button_background_color_pressed"/>-->
+                    <solid android:color="@color/colorAccentAlternative"/>
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <!--<corners android:radius="@dimen/com_facebook_button_login_corner_radius"/>-->
+                    <corners android:radius="20dp"/>
+                    <solid android:color="@color/colorAccent"/>
+                </shape>
+            </item>
+        </selector>
+    </item>
+</layer-list>

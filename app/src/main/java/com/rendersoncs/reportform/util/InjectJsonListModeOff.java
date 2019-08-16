@@ -1,8 +1,10 @@
 package com.rendersoncs.reportform.util;
 
 import android.os.Environment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.ReportItems;
+import com.rendersoncs.reportform.login.util.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class InjectJsonListModeOff {
+    private FirebaseAuth mAuth;
+    private User user;
 
     public void addItemsFromJsonList(ArrayList<ReportItems> reportItemsList) {
         try {
@@ -47,8 +51,11 @@ public class InjectJsonListModeOff {
     // Read Json and populate recyclerView
     private String readJsonDataFromFile() throws IOException {
 
-        String subject = ReportConstants.ConstantsFireBase.JSON_FIRE;
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + "Report" + "/" + subject + ".json";
+        mAuth = FirebaseAuth.getInstance();
+        user = new User();
+        user.setId( mAuth.getCurrentUser().getUid() );
+
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + "Report" + "/" + user.getId() + ".json";
 
         InputStream inputStream = null;
         StringBuilder builder = new StringBuilder();

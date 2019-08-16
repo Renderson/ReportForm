@@ -54,9 +54,19 @@
     <string name="label_screen_already_register">Você já tem cadastrado?</string>
     <string name="label_screen_to_recovery">Recuperar!</string>
     <string name="label_screen_recovery_worry">Não se preocupe, vamos recuper sua senha!</string>
-    <string name="go_to_home">Retornar para tela inicial</string>
+    <string name="label_go_to_home">Retornar para tela inicial</string>
 
     <!--Facebbok-->
     <string name="facebook_app_id">2284363461680926</string>
+
+    <!--DrawerLayout-->
+    <string name="open_drawer">Abrir</string>
+    <string name="close_drawer">Fechar</string>
+    <string name="label_menu_home">Tela Principal</string>
+    <string name="label_menu_new_report">Novo relatório</string>
+    <string name="label_menu_config">Configuração conta</string>
+    <string name="label_menu_others">Outros</string>
+    <string name="label_menu_about">Sobre</string>
+    <string name="label_menu_logout">Sair</string>
 
 </resources>

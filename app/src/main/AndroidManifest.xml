@@ -56,7 +56,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
         </activity>
-        <activity android:name=".login.ResetActivity" />
+        <activity android:name=".login.RecoveryLoginActivity" />
 
         <service
             android:name=".service.MyFireBaseInstanceMessagingService"

@@ -5,7 +5,11 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.constants.ReportConstants;
+import com.rendersoncs.reportform.login.util.LibraryClass;
+import com.rendersoncs.reportform.login.util.User;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,6 +25,8 @@ import static android.content.ContentValues.TAG;
 
 public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String> {
     private Context context;
+    private FirebaseAuth mAuth;
+    private User user;
 
     public DownloadJsonFireBaseAsyncTask(Context context){
         this.context = context;
@@ -35,7 +41,12 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
     protected String doInBackground(Void... voids) {
         Log.d(TAG, "doInBackground AWS call ");
         try {
-            URL url = new URL(ReportConstants.ConstantsFireBase.URL);
+
+            mAuth = FirebaseAuth.getInstance();
+            user = new User();
+            user.setId( mAuth.getCurrentUser().getUid() );
+
+            URL url = new URL(ReportConstants.ConstantsFireBase.URL + "/" +user.getId() +".json");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -65,8 +76,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
         super.onPostExecute(result);
         Log.d(TAG, "onPostExecute call");
 
-        String subject = ReportConstants.ConstantsFireBase.JSON_FIRE;
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".json");
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + user.getId() + ".json");
 
         FileWriter fos = null;
         try {

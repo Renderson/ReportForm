@@ -13,8 +13,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.login.util.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +24,8 @@ import java.util.Map;
 public class NewItemListFireBase extends DialogFragment {
     private EditText mTitleList;
     private EditText mDescriptioList;
+    FirebaseAuth mAuth;
+    private User user;
 
     @NonNull
     @Override
@@ -50,12 +54,16 @@ public class NewItemListFireBase extends DialogFragment {
                     String mTitle = mTitleList.getText().toString();
                     String mDescription = mDescriptioList.getText().toString();
 
-                    final String key = FirebaseDatabase.getInstance().getReference().child("Data").push().getKey();
+                    mAuth = FirebaseAuth.getInstance();
+                    user = new User();
+                    user.setId( mAuth.getCurrentUser().getUid() );
+
+                    final String key = FirebaseDatabase.getInstance().getReference().child("users").child(user.getId()).child("list").push().getKey();
                     HashMap<String, String> dataMap = new HashMap<>();
                     Map<String, Object> childUpdates = new HashMap<>();
                     dataMap.put("title", mTitle);
                     dataMap.put("description", mDescription);
-                    childUpdates.put("/Data/list/" + key, dataMap);
+                    childUpdates.put("/users/"+user.getId()+"/list/" + key, dataMap);
                     FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
                 });
 

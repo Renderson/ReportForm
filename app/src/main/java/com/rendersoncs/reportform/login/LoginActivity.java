@@ -15,6 +15,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
@@ -31,7 +32,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GithubAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
 import com.google.firebase.crash.FirebaseCrash;
@@ -44,6 +44,7 @@ import java.util.Arrays;
 public class LoginActivity extends CommonActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final int RC_SIGN_IN_GOOGLE = 7859;
+    public static final String PROFILE_USER_NAME = "NAME";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -59,7 +60,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
         setContentView(R.layout.activity_login);
 
         // FACEBOOK SIGN IN
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        //FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -68,12 +69,12 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
             }
 
             @Override
-            public void onCancel() {
-            }
+            public void onCancel() {}
 
             @Override
             public void onError(FacebookException error) {
                 FirebaseCrash.report(error);
+                closeProgressBar();
                 showSnackBar("Facebook login falhou, tente novamente!");
             }
         });
@@ -140,7 +141,6 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
                 "facebook",
                 (accessToken != null ? accessToken.getToken() : null)
         );
-
     }
 
     // ACCESS GOOGLE
@@ -246,7 +246,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
     }
 
     public void callReset(View view) {
-        Intent intent = new Intent(this, ResetActivity.class);
+        Intent intent = new Intent(this, RecoveryLoginActivity.class);
         startActivity(intent);
     }
 
@@ -325,6 +325,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if (!task.isSuccessful()) {
+                            closeProgressBar();
                             showSnackBar("Login falhou");
                             return;
                         }

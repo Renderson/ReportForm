@@ -64,9 +64,8 @@ public class ReportActivity extends AppCompatActivity implements OnRadioItemClic
 
     private ArrayList<ReportItems> reportItems = new ArrayList<>();
     private ArrayList<String> mKeys = new ArrayList<>();
-    private JSONObject test = new JSONObject();
     private ExpandableRecyclerAdapter mAdapter;
-    public ExpandableRecyclerAdapter.ItemVh viewHolder;
+
     private TextView resultCompany, resultEmail, resultDate;
     FloatingActionButton fab;
     AnimatedFloatingButton animated = new AnimatedFloatingButton();
@@ -93,10 +92,7 @@ public class ReportActivity extends AppCompatActivity implements OnRadioItemClic
         mAuth = FirebaseAuth.getInstance();
         user = new User();
         user.setId( mAuth.getCurrentUser().getUid() );
-        Log.i("LOG", "mAuth: " + user.getId());
 
-        //databaseReference = FirebaseDatabase.getInstance().getReference("Data").child("list");
-        //databaseReference = FirebaseDatabase.getInstance().getReference("users").child(fire).child("list");
         databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
         databaseReference.keepSynced(true);
 
