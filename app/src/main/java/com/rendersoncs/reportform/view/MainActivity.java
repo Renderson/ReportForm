@@ -8,10 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,21 +22,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.facebook.Profile;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
-import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
@@ -51,12 +43,10 @@ import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.login.LoginActivity;
-import com.rendersoncs.reportform.login.util.LibraryClass;
-import com.rendersoncs.reportform.login.util.User;
+import com.rendersoncs.reportform.service.AccessDocument;
 import com.rendersoncs.reportform.service.NetworkConnectedService;
 import com.rendersoncs.reportform.util.RVEmptyObserver;
 
-import java.io.File;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -68,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAnalytics mFireBaseAnalytics;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseReference;
-    private User users;
 
     private NetworkConnectedService netService = new NetworkConnectedService(this);
     private AnimatedFloatingButton animated = new AnimatedFloatingButton();
@@ -95,22 +83,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         setTitle(R.string.title_report_list);
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if( firebaseAuth.getCurrentUser() == null  ){
-                    Intent intent = new Intent( MainActivity.this, LoginActivity.class );
-                    startActivity( intent );
-                    finish();
-                }
+        authStateListener = firebaseAuth -> {
+            if( firebaseAuth.getCurrentUser() == null  ){
+                Intent intent = new Intent( MainActivity.this, LoginActivity.class );
+                startActivity( intent );
+                finish();
             }
         };
 
         mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        databaseReference = LibraryClass.getFirebase();
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         // Check NetWorking
         this.netService.isConnected(MainActivity.this);
@@ -119,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.createDrawerLayout(user, toolbar);
 
         emptyLayout = findViewById(R.id.layout_empty);
-
         emptyButton = findViewById(R.id.action_add_report);
 
         // Check permissions Android 6.0+
@@ -139,16 +121,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Define um layout
         this.viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
 
-        // Animated FAB
-        animatedFloatingButtom();
-        //animated.animatedFab(viewHolder.recyclerView, fab);
-
         fab = findViewById(R.id.floatButton);
         fab.setOnClickListener(v -> startReportFormDialog());
 
         emptyButton.setOnClickListener(v -> startReportFormDialog());
+
+        // Animated FAB
+        animated.animatedFab(viewHolder.recyclerView, fab);
     }
 
+    // Create Drawer Layout
     private void createDrawerLayout(FirebaseUser user, Toolbar toolbar) {
         drawerLayout = findViewById(R.id.drawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
@@ -167,23 +149,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         profileName.setText(user.getDisplayName());
         profileEmail.setText(user.getEmail());
         Glide.with(this).load(user.getPhotoUrl()).into(profileView);
-    }
-
-    private void animatedFloatingButtom() {
-        this.viewHolder.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy < 0 && !fab.isShown())
-                    fab.show();
-                else if (dy > 0 && fab.isShown())
-                    fab.hide();
-            }
-
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
     }
 
     private void clickListenerItems() {
@@ -211,18 +176,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Create PDF
             @Override
             public void onOpenPdf(int reportId) {
-
-                ReportItems reportItems = reportBusiness.load(reportId);
-
-                Uri uri;
-                String subject = String.format("Relatorio-%s-%s", reportItems.getCompany(), reportItems.getDate());
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    uri = FileProvider.getUriForFile(MainActivity.this, ReportConstants.ConstantsProvider.PACKAGE_FILE_PROVIDER, file);
-                } else {
-                    uri = Uri.fromFile(file);
-                }
+                // Open PDF
+                AccessDocument accessDocument = new AccessDocument(reportId, reportBusiness).invoke();
+                Uri uri = accessDocument.getUri();
+                String subject = accessDocument.getSubject();
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(uri, "application/pdf");
@@ -236,17 +193,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onShareReport(int reportId) {
                 // Share PDF the Report
-                ReportItems reportItems = reportBusiness.load(reportId);
-
-                Uri uri;
-                String subject = String.format("Relatorio-%s-%s", reportItems.getCompany(), reportItems.getDate());
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    uri = FileProvider.getUriForFile(MainActivity.this, ReportConstants.ConstantsProvider.PACKAGE_FILE_PROVIDER, file);
-                } else {
-                    uri = Uri.fromFile(file);
-                }
+                AccessDocument accessDocument = new AccessDocument(reportId, reportBusiness).invoke();
+                ReportItems reportItems = accessDocument.getReportItems();
+                Uri uri = accessDocument.getUri();
+                String subject = accessDocument.getSubject();
 
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -287,13 +237,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bottomSheetFragment.show(getSupportFragmentManager(), "report_sheet");
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        this.loadReport();
-    }
-
     private void loadReport() {
         List<ReportItems> reportItems = this.reportBusiness.getInvited();
 
@@ -306,7 +249,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Mostra imagen quando não á itens
         reportListAdapter.registerAdapterDataObserver(new RVEmptyObserver(this.viewHolder.recyclerView, emptyLayout, fab));
-
     }
 
     private static class ViewHolder {
@@ -361,28 +303,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     // Final code permission
 
-    // Implemetation Firebase
-    // Menu
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        User user = new User();
-//
-//        if (user.isSocialNetworkLogged(this)) {
-//            getMenuInflater().inflate(R.menu.menu_social_network_logged, menu);
-//        } else {
-//            getMenuInflater().inflate(R.menu.menu, menu);
-//        }
-//
-//        return true;
-//    }
-//
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.action_logout)
-//            FirebaseAuth.getInstance().signOut();
-//            finish();
-//        return super.onOptionsItemSelected(item);
-//    }
-
     // DrawerLayout Menu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -414,6 +334,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.loadReport();
     }
 
     @Override

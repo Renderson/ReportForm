@@ -122,31 +122,12 @@ public class ReportActivity extends AppCompatActivity implements OnRadioItemClic
 
         this.mReportBusiness = new ReportBusiness(this);
 
-        // Animated FloatingBottom
-        //animated.animatedFab(recyclerView, fab);
-        animatedFloatingButton();
-
         fab = findViewById(R.id.fab_new_item);
         fab.setOnClickListener(v -> startNewItemListFireBase());
         //mAdapter.notifyDataSetChanged();
 
-    }
-
-    private void animatedFloatingButton() {
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy){
-                if (dy < 0 && !fab.isShown())
-                    fab.show();
-                else if (dy > 0 && fab.isShown())
-                    fab.hide();
-            }
-
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
+        // Animated FloatingButton
+        animated.animatedFab(recyclerView, fab);
     }
 
     private void startNewItemListFireBase() {
