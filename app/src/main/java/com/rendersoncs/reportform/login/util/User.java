@@ -10,8 +10,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.rendersoncs.reportform.login.util.LibraryClass;
-
 public class User {
     public static String PROVIDER = "com.rendersoncs.reportform.login.util.User.PROVIDER";
 
@@ -147,9 +145,5 @@ public class User {
 
     public String getProfileUrl() {
         return profileUrl;
-    }
-
-    public void setProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
     }
 }

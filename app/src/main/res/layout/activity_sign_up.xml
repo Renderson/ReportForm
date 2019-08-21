@@ -1,135 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorWhite">
+    android:fillViewport="true"
+    tools:context=".login.SignUpActivity">
 
-    <ProgressBar
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        android:id="@+id/sign_up_progress"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        android:background="@color/colorWhite">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:text="@string/label_screen_register"
-        style="@style/TextTitleFormField"
-        android:textColor="@color/colorTextBlack"
-        app:layout_constraintStart_toStartOf="@+id/textInputName"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ProgressBar
+            android:id="@+id/sign_up_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/txt7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_signUp" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:text="@string/label_screen_register_create"
-        style="@style/TextDescriptionFormField"
-        android:textColor="@color/colorTextBlack"
-        android:textStyle="normal"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/TextTitleFormField"
+            android:text="@string/label_screen_register"
+            android:textColor="@color/colorTextBlack"
+            app:layout_constraintStart_toStartOf="@+id/textInputName"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!--<Button-->
-        <!--android:id="@+id/btn_select_photo"-->
-        <!--android:layout_width="76dp"-->
-        <!--android:layout_height="76dp"-->
-        <!--android:layout_marginTop="16dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:onClick="selectPhoto"-->
-        <!--android:text="Photo"-->
-        <!--android:textSize="14sp"-->
-        <!--android:background="@drawable/bg_button_img_round"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/textView5" />-->
+        <TextView
+            android:id="@+id/textView5"
+            style="@style/TextDescriptionFormField"
+            android:text="@string/label_screen_register_create"
+            android:textColor="@color/colorTextBlack"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-    <!--<de.hdodenhof.circleimageview.CircleImageView-->
-        <!--android:id="@+id/img_photo"-->
-        <!--android:layout_width="76dp"-->
-        <!--android:layout_height="76dp"-->
-        <!--app:layout_constraintBottom_toBottomOf="@+id/btn_select_photo"-->
-        <!--app:layout_constraintEnd_toEndOf="@+id/btn_select_photo"-->
-        <!--app:layout_constraintStart_toStartOf="@+id/btn_select_photo"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/btn_select_photo" />-->
+        <Button
+            android:id="@+id/btn_select_photo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_button_img_round"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputName"
-        style="@style/TextInputEmailForm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_photo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/profile_hint"
+            app:civ_border_color="@color/colorAccent"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_select_photo"
+            app:layout_constraintEnd_toEndOf="@+id/btn_select_photo"
+            app:layout_constraintStart_toStartOf="@+id/btn_select_photo"
+            app:layout_constraintTop_toTopOf="@+id/btn_select_photo" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/name"
-            style="@style/FormField"
-            android:hint="@string/name"
-            android:imeOptions="actionNext"
-            android:inputType="textEmailAddress|textAutoComplete" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputName"
+            style="@style/TextInputEmailForm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_select_photo">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name"
+                style="@style/FormField"
+                android:hint="@string/name"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress|textAutoComplete|textCapSentences" />
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputEmail"
-        style="@style/TextInputEmailForm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputName">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email"
-            style="@style/FormField"
-            android:hint="@string/mail"
-            android:imeOptions="actionNext"
-            android:inputType="textEmailAddress|textAutoComplete" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputPassword"
-        style="@style/TextInputPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputEmail">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
-            style="@style/FormField"
-            android:hint="@string/password"
-            android:imeOptions="actionGo"
-            android:inputType="textPassword"
-            android:maxLines="1" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/btn_signUp"
-        android:text="@string/create"
-        style="@style/ButtonFormField"
-        android:onClick="sendSignUpData"
-        app:layout_constraintStart_toStartOf="@+id/textInputPassword"
-        app:layout_constraintTop_toBottomOf="@+id/textInputPassword" />
-
-    <TextView
-        android:id="@+id/txt7"
-        android:text="@string/label_screen_already_register"
-        style="@style/TextBottomFormField"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/btn_login"
-        style="@style/TextBottomClickFormField"
-        android:layout_height="15dp"
-        android:onClick="callLogin"
-        android:text="@string/login"
-        app:layout_constraintBottom_toBottomOf="@+id/txt7"
-        app:layout_constraintStart_toEndOf="@+id/txt7"
-        app:layout_constraintTop_toTopOf="@+id/txt7" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputEmail"
+            style="@style/TextInputEmailForm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                style="@style/FormField"
+                android:hint="@string/mail"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress|textAutoComplete|textCapSentences" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputPassword"
+            style="@style/TextInputPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputEmail">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                style="@style/FormField"
+                android:hint="@string/password"
+                android:imeOptions="actionGo"
+                android:inputType="textPassword|textCapSentences"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_signUp"
+            style="@style/ButtonFormField"
+            android:onClick="sendSignUpData"
+            android:text="@string/create"
+            app:layout_constraintStart_toStartOf="@+id/textInputPassword"
+            app:layout_constraintTop_toBottomOf="@+id/textInputPassword" />
+
+        <TextView
+            android:id="@+id/txt7"
+            style="@style/TextBottomFormField"
+            android:layout_marginStart="16dp"
+            android:text="@string/label_screen_already_register"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_signUp"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/btn_login"
+            style="@style/TextBottomClickFormField"
+            android:onClick="callLogin"
+            android:text="@string/login"
+            app:layout_constraintBottom_toBottomOf="@+id/txt7"
+            app:layout_constraintStart_toEndOf="@+id/txt7"
+            app:layout_constraintTop_toTopOf="@+id/txt7" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,24 +1,24 @@
 package com.rendersoncs.reportform.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.crash.FirebaseCrash;
 import com.rendersoncs.reportform.R;
 
 public class RecoveryLoginActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
     private EditText email;
     private FirebaseAuth firebaseAuth;
 
@@ -27,10 +27,16 @@ public class RecoveryLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recovery_login);
 
-        //toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        TextView returnLoginActivity = findViewById(R.id.sendHome);
+        returnLoginActivity.setOnClickListener(view -> callLoginActivity());
 
         firebaseAuth = FirebaseAuth.getInstance();
+    }
+
+    private void callLoginActivity() {
+        Intent i = (new Intent(this, LoginActivity.class));
+        startActivity(i);
+        finish();
     }
 
     @Override
@@ -40,7 +46,6 @@ public class RecoveryLoginActivity extends AppCompatActivity {
     }
 
     private void init(){
-        //toolbar.setTitle( getResources().getString(R.string.reset) );
         email = findViewById(R.id.email);
     }
 
@@ -73,7 +78,7 @@ public class RecoveryLoginActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            FirebaseCrash.report(e);
+                            Crashlytics.logException(e);
                         }
                     });
         }

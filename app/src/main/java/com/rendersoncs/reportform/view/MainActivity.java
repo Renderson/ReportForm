@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +34,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
@@ -43,6 +49,7 @@ import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.login.LoginActivity;
+import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.service.AccessDocument;
 import com.rendersoncs.reportform.service.NetworkConnectedService;
 import com.rendersoncs.reportform.util.RVEmptyObserver;
@@ -51,7 +58,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int REQUEST_PERMISSIONS_CODE = 128;
 
@@ -67,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private OnInteractionListener listener;
 
     private DrawerLayout drawerLayout;
+    private FirebaseUser user;
+    DatabaseReference databaseReference;
 
     public Context context;
     View emptyLayout;
@@ -84,16 +93,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setTitle(R.string.title_report_list);
 
         authStateListener = firebaseAuth -> {
-            if( firebaseAuth.getCurrentUser() == null  ){
-                Intent intent = new Intent( MainActivity.this, LoginActivity.class );
-                startActivity( intent );
+            if (firebaseAuth.getCurrentUser() == null) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
                 finish();
             }
         };
 
         mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user = mAuth.getCurrentUser();
+        databaseReference = LibraryClass.getFirebase().child("users").child(user.getUid());
+        databaseReference.keepSynced(true);
 
         // Check NetWorking
         this.netService.isConnected(MainActivity.this);
@@ -146,9 +157,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView profileEmail = headerLayout.findViewById(R.id.txt_profile_mail);
         ImageView profileView = headerLayout.findViewById(R.id.img_profile);
 
-        profileName.setText(user.getDisplayName());
-        profileEmail.setText(user.getEmail());
-        Glide.with(this).load(user.getPhotoUrl()).into(profileView);
+        this.getInfoUserFirebase(user, profileName, profileEmail, profileView);
+    }
+
+    private void getInfoUserFirebase(FirebaseUser user, TextView profileName, TextView profileEmail, ImageView profileView) {
+        if (user != null) {
+
+            for (UserInfo profile : user.getProviderData()) {
+                String name = profile.getDisplayName();
+                Uri photoUri = profile.getPhotoUrl();
+
+                if (name != null) {
+
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String nameCurrentUser = (String) dataSnapshot.child("credential").child("name").getValue();
+                            profileName.setText(nameCurrentUser);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+                if (photoUri == null){
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String currentPhoto = (String) dataSnapshot.child("photoUrl").getValue();
+
+                            Glide.with(getApplicationContext()).load(currentPhoto).into(profileView);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+                profileName.setText(name);
+            }
+            profileName.setText(user.getDisplayName());
+            profileEmail.setText(user.getEmail());
+            Glide.with(this).load(user.getPhotoUrl()).into(profileView);
+        }
     }
 
     private void clickListenerItems() {
@@ -306,8 +361,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // DrawerLayout Menu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
-            case R.id.menu_home:{
+        switch (menuItem.getItemId()) {
+            case R.id.menu_home: {
                 break;
             }
 
@@ -346,14 +401,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         super.onDestroy();
 
-        if( authStateListener != null ){
-            mAuth.removeAuthStateListener( authStateListener );
+        if (authStateListener != null) {
+            mAuth.removeAuthStateListener(authStateListener);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();

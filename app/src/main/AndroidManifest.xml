@@ -26,6 +26,12 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <!-- [START crash_disable_collection] -->
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+        <!-- [END crash_disable_collection] -->
+
         <!--Facebook-->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

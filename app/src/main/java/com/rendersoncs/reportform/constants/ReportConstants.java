@@ -1,5 +1,11 @@
 package com.rendersoncs.reportform.constants;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.rendersoncs.reportform.login.util.LibraryClass;
+import com.rendersoncs.reportform.login.util.User;
+
 public class ReportConstants {
 
     public static class ConstantsProvider{
@@ -26,6 +32,16 @@ public class ReportConstants {
         public static final int CONFORM = 1;
         public static final int NOT_APPLICABLE = 2;
         public static final int NOT_CONFORM = 3;
+
+    }
+
+    public  static  class TEST {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userId = user.getUid();
+        String test = ReportConstants.ConstantsFireBase.URL + "/" + userId;
+
+        public final String DB = test;
 
     }
 }

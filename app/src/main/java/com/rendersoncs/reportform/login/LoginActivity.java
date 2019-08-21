@@ -1,6 +1,5 @@
 package com.rendersoncs.reportform.login;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +9,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
@@ -34,7 +32,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
-import com.google.firebase.crash.FirebaseCrash;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.login.util.User;
 import com.rendersoncs.reportform.view.MainActivity;
@@ -44,7 +41,6 @@ import java.util.Arrays;
 public class LoginActivity extends CommonActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final int RC_SIGN_IN_GOOGLE = 7859;
-    public static final String PROFILE_USER_NAME = "NAME";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -73,7 +69,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
 
             @Override
             public void onError(FacebookException error) {
-                FirebaseCrash.report(error);
+                Crashlytics.logException(error);
                 closeProgressBar();
                 showSnackBar("Facebook login falhou, tente novamente!");
             }
@@ -184,7 +180,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            FirebaseCrash.report(e);
+                            Crashlytics.logException(e);
                         }
                     });
         } else {
@@ -263,7 +259,6 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
 
     // login Facebook
     public void sendLoginFacebookData(View view) {
-        FirebaseCrash.log("LoginActivity:clickListener:button:sendLoginFacebookData()");
         LoginManager
                 .getInstance()
                 .logInWithReadPermissions(
@@ -314,7 +309,6 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
     }
 
     private void verifyLogin() {
-        FirebaseCrash.log("LoginActivity:verifyLogin()");
         user.saveProviderSP(LoginActivity.this, "");
         mAuth.signInWithEmailAndPassword(
                 user.getEmail(),
@@ -333,7 +327,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                FirebaseCrash.report(e);
+                Crashlytics.logException(e);
             }
         });
     }
@@ -348,7 +342,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
     // Google
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        FirebaseCrash.report(new Exception(connectionResult.getErrorCode() + ": " + connectionResult.getErrorMessage()));
+        Crashlytics.logException(new Exception(connectionResult.getErrorCode() + ": " + connectionResult.getErrorMessage()));
         showSnackBar(connectionResult.getErrorMessage());
     }
 }
