@@ -1,8 +1,11 @@
 package com.rendersoncs.reportform.view;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.itens.ReportResumeItems;
+import com.rendersoncs.reportform.service.AccessDocument;
 import com.rendersoncs.reportform.util.MyDividerItemDecoration;
 
 import org.json.JSONArray;
@@ -40,12 +44,10 @@ public class ReportResume extends AppCompatActivity {
 
     private ReportBusiness mReportBusiness;
     ReportItems repoEntity;
-    TextView emailResume;
-    TextView dateResume;
-    TextView companyResume;
-    TextView itemsResume;
+    TextView emailResume, dateResume, companyResume, itemsResume, openPdf;
     PieChart pieChart;
     String selected;
+    int mReportId;
 
     private RecyclerView recyclerView;
     private List<ReportResumeItems> repoResumeList;
@@ -66,6 +68,17 @@ public class ReportResume extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        this.init();
+
+        // Camada Business
+        this.mReportBusiness = new ReportBusiness(this);
+
+        this.loadReportResume();
+        this.createPieChart();
+        this.getOpenPdf();
+    }
+
+    private void init() {
         recyclerView = findViewById(R.id.resume_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
@@ -78,12 +91,24 @@ public class ReportResume extends AppCompatActivity {
         emailResume = findViewById(R.id.email_resume);
         dateResume = findViewById(R.id.date_resume);
         itemsResume = findViewById(R.id.items_resume);
+        openPdf = findViewById(R.id.open_pdf);
+    }
 
-        // Camada Business
-        this.mReportBusiness = new ReportBusiness(this);
+    private void getOpenPdf() {
+        openPdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AccessDocument accessDocument = new AccessDocument(mReportId, mReportBusiness).invoke();
+                Uri uri = accessDocument.getUri();
+                String subject = accessDocument.getSubject();
 
-        this.loadReportResume();
-        this.createPieChart();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(uri, "application/pdf");
+                intent.putExtra(intent.EXTRA_SUBJECT, subject);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(intent);
+            }
+        });
     }
 
     private void createPieChart() {
@@ -137,7 +162,7 @@ public class ReportResume extends AppCompatActivity {
     private void loadReportResume() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            int mReportId = bundle.getInt(ReportConstants.ConstantsBundle.REPORT_ID);
+            mReportId = bundle.getInt(ReportConstants.ConstantsBundle.REPORT_ID);
 
             repoEntity = this.mReportBusiness.load(mReportId);
             this.emailResume.setText(repoEntity.getEmail());
