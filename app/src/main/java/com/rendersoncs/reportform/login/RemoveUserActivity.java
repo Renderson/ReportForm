@@ -1,4 +1,4 @@
-/*package com.rendersoncs.reportform.login;
+package com.rendersoncs.reportform.login;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,10 +6,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -17,13 +17,14 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.login.util.User;
+
+import io.fabric.sdk.android.Fabric;
 
 public class RemoveUserActivity extends AppCompatActivity
         implements ValueEventListener, DatabaseReference.CompletionListener {
@@ -36,7 +37,8 @@ public class RemoveUserActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_remove_user);
+        setContentView(R.layout.activity_remove_user);
+        Fabric.with(this, new Crashlytics());
 
         //toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,7 +60,7 @@ public class RemoveUserActivity extends AppCompatActivity
         user.contextDataDB( this );
     }
 
-    public void update( View view ){
+    public void removeUser( View view ){
         user.setPassword( password.getText().toString() );
 
         reauthenticate();
@@ -88,7 +90,7 @@ public class RemoveUserActivity extends AppCompatActivity
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                FirebaseCrash.report( e );
+                Crashlytics.logException( e );
                 Toast.makeText(
                         RemoveUserActivity.this,
                         e.getMessage(),
@@ -119,7 +121,7 @@ public class RemoveUserActivity extends AppCompatActivity
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        FirebaseCrash.report( e );
+                        Crashlytics.logException( e );
                         Toast.makeText(
                                 RemoveUserActivity.this,
                                 e.getMessage(),
@@ -130,27 +132,27 @@ public class RemoveUserActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         User u = dataSnapshot.getValue( User.class );
         user.setEmail( u.getEmail() );
     }
 
     @Override
-    public void onCancelled(DatabaseError firebaseError) {
-        FirebaseCrash.report( firebaseError.toException() );
+    public void onCancelled(@NonNull DatabaseError firebaseError) {
+        Crashlytics.logException( firebaseError.toException() );
     }
 
     @Override
-    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+    public void onComplete(DatabaseError databaseError,@NonNull DatabaseReference databaseReference) {
         if( databaseError != null ){
-            FirebaseCrash.report( databaseError.toException() );
+            Crashlytics.logException( databaseError.toException() );
         }
 
         Toast.makeText(
                 RemoveUserActivity.this,
-                "Conta removida com sucesso",
+                getResources().getString(R.string.label_account_removed),
                 Toast.LENGTH_SHORT
         ).show();
         finish();
     }
-}*/
+}

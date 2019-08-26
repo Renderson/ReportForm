@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -28,30 +27,28 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
-import com.rendersoncs.reportform.fragment.BottomSheetFragment;
 import com.rendersoncs.reportform.fragment.ReportFormDialog;
+import com.rendersoncs.reportform.fragment.AboutFragment;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.login.LoginActivity;
+import com.rendersoncs.reportform.login.RemoveUserActivity;
 import com.rendersoncs.reportform.login.util.LibraryClass;
+import com.rendersoncs.reportform.login.util.User;
 import com.rendersoncs.reportform.service.AccessDocument;
 import com.rendersoncs.reportform.service.NetworkConnectedService;
+import com.rendersoncs.reportform.util.GetInfoUserFirebase;
 import com.rendersoncs.reportform.util.RVEmptyObserver;
 
 import java.util.List;
@@ -74,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private OnInteractionListener listener;
 
     private DrawerLayout drawerLayout;
+    private GetInfoUserFirebase info = new GetInfoUserFirebase();
     private FirebaseUser user;
     DatabaseReference databaseReference;
 
@@ -81,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     View emptyLayout;
     Button emptyButton;
     FloatingActionButton fab;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,27 +87,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_report_list);
 
-        authStateListener = firebaseAuth -> {
-            if (firebaseAuth.getCurrentUser() == null) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        };
-
-        mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        databaseReference = LibraryClass.getFirebase().child("users").child(user.getUid());
-        databaseReference.keepSynced(true);
+        this.checkUserFirebase();
 
         // Check NetWorking
         this.netService.isConnected(MainActivity.this);
 
+        mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        databaseReference = LibraryClass.getFirebase();
+        databaseReference.keepSynced(true);
+
+    }
+
+    private void checkUserFirebase() {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+                if( firebaseAuth.getCurrentUser() == null  ){
+                    Intent intent = new Intent( MainActivity.this, LoginActivity.class );
+                    startActivity( intent );
+                    finish();
+                }
+            }
+        };
+    }
+
+    private void init() {
         // Create Drawerlayout
         this.createDrawerLayout(user, toolbar);
 
@@ -153,57 +163,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View headerLayout = mNavigationView.getHeaderView(0);
         mNavigationView.setNavigationItemSelectedListener(this);
 
+        this.inflateMenuNavigation(mNavigationView);
+
         TextView profileName = headerLayout.findViewById(R.id.txt_profile_name);
         TextView profileEmail = headerLayout.findViewById(R.id.txt_profile_mail);
         ImageView profileView = headerLayout.findViewById(R.id.img_profile);
 
-        this.getInfoUserFirebase(user, profileName, profileEmail, profileView);
-    }
-
-    private void getInfoUserFirebase(FirebaseUser user, TextView profileName, TextView profileEmail, ImageView profileView) {
-        if (user != null) {
-
-            for (UserInfo profile : user.getProviderData()) {
-                String name = profile.getDisplayName();
-                Uri photoUri = profile.getPhotoUrl();
-
-                if (name != null) {
-
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String nameCurrentUser = (String) dataSnapshot.child("credential").child("name").getValue();
-                            profileName.setText(nameCurrentUser);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-                if (photoUri == null){
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String currentPhoto = (String) dataSnapshot.child("photoUrl").getValue();
-
-                            Glide.with(getApplicationContext()).load(currentPhoto).into(profileView);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-
-                profileName.setText(name);
-            }
-            profileName.setText(user.getDisplayName());
-            profileEmail.setText(user.getEmail());
-            Glide.with(this).load(user.getPhotoUrl()).into(profileView);
-        }
+        info.getInfoUserFirebase(this, user, databaseReference, profileName, profileEmail, profileView);
     }
 
     private void clickListenerItems() {
@@ -288,8 +254,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void startBottomSheetFragment() {
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
-        bottomSheetFragment.show(getSupportFragmentManager(), "report_sheet");
+//        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
+//        bottomSheetFragment.show(getSupportFragmentManager(), "report_sheet");
     }
 
     private void loadReport() {
@@ -359,6 +325,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Final code permission
 
     // DrawerLayout Menu
+    private void inflateMenuNavigation(NavigationView mNavigationView) {
+        User user = new User();
+        if (user.isSocialNetworkLogged(getApplicationContext())){
+            mNavigationView.getMenu().clear();
+            mNavigationView.inflateMenu(R.menu.menu_social_network_logged);
+        }
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
@@ -372,12 +346,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             case R.id.menu_config: {
-                Toast.makeText(this, "Configuração de conta.", Toast.LENGTH_SHORT).show();
+                Intent i = (new Intent(this, RemoveUserActivity.class));
+                startActivity(i);
                 break;
             }
 
             case R.id.menu_about_us: {
-                Toast.makeText(this, "Sobre nós.", Toast.LENGTH_SHORT).show();
+                AboutFragment fragment = new AboutFragment();
+                fragment.show(getSupportFragmentManager(), "report_sheet_about");
                 break;
             }
 
@@ -394,6 +370,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
+        this.init();
         this.loadReport();
     }
 

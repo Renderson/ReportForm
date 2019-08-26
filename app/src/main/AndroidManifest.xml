@@ -53,6 +53,9 @@
 
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".login.SignUpActivity" />
+        <activity android:name=".login.RecoveryLoginActivity" />
+        <activity android:name=".login.UpdatePasswordActivity" />
+        <activity android:name=".login.RemoveUserActivity" />
         <activity android:name=".view.ReportActivity" />
         <activity android:name=".view.MainActivity"/>
         <activity
@@ -62,7 +65,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
         </activity>
-        <activity android:name=".login.RecoveryLoginActivity" />
+        <activity android:name=".view.ConfigAccountActivity"
+            android:parentActivityName=".view.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity" />
+        </activity>
+        <activity android:name=".view.AboutActivity" />
 
         <service
             android:name=".service.MyFireBaseInstanceMessagingService"

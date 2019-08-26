@@ -9,7 +9,7 @@
 //}
 
 apply plugin: 'com.android.application'
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 29
@@ -104,6 +104,9 @@ dependencies {
 
     // Google Auth API
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
+
+    // About api
+    implementation 'com.github.medyo:android-about-page:1.2.5'
 
     // Twitter Auth API
     /*Twitter

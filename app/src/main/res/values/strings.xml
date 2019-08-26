@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Report Form</string>
+    <string name="version_name">Versão 1.0</string>
     <string name="alert_dialog_permission">É preciso a permissão para salvar/acessar arquivos no seu dispositivo.</string>
     <string name="txt_to_allow">Permitir</string>
     <string name="txt_deny">Negar</string>
@@ -55,6 +56,18 @@
     <string name="label_screen_recovery_worry">Não se preocupe, vamos recuper sua senha!</string>
     <string name="label_go_to_home">Retornar para tela inicial</string>
 
+    <!--Activity Login-->
+    <string name="label_login_facebbok_falied">Facebook login falhou, tente novamente!</string>
+    <string name="label_google_falied">Google login falhou, tente novamente!</string>
+    <string name="label_login_social_falied">Login social falhou!</string>
+    <string name="label_please_entry_data">Por favor! Entre com seus dados.</string>
+    <string name="label_account_create">Conta criada com sucesso!</string>
+    <string name="label_insert_data_create_account">Por favor! Insira seus dados para criaçao da conta.</string>
+    <string name="label_account_removed">Conta removida com sucesso!</string>
+    <string name="label_recover_access_send">Recuperação de acesso iniciada. Email enviado.</string>
+    <string name="label_falied">Falhou! Tente novamente</string>
+    <string name="label_password_update">Senha atualizada com sucesso</string>
+
     <!--Facebbok-->
     <string name="facebook_app_id">2284363461680926</string>
 
@@ -67,5 +80,16 @@
     <string name="label_menu_others">Outros</string>
     <string name="label_menu_about">Sobre</string>
     <string name="label_menu_logout">Sair</string>
+
+    <!--About Activity-->
+    <string name="label_about_app">Sobre nosso app, esperamos que tenha mais agilidade e perca menos tempo criando seus relatórios diarios com qualidade, assim te ofereço um aplicativo robusto que faça isso para você!</string>
+    <string name="label_entry_contact">Entre em contato</string>
+    <string name="label_more_work">Mais sobre meu trabalho</string>
+    <string name="label_calling">Ligar</string>
+    <string name="label_calling_whatsapp">Lhe respondo agora</string>
+    <string name="label_fedd_back">Me envie seu Feed Back</string>
+    <string name="label_recmmendation">Minhas recomendações</string>
+    <string name="label_not_whatsapp">Não encontramos WhatsApp.</string>
+    <string name="label_insert_email">Por favor insira o email cadastrado!</string>
 
 </resources>

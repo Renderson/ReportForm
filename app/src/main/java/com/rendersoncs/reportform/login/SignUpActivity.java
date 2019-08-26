@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,8 @@ import com.rendersoncs.reportform.login.util.User;
 import java.io.IOException;
 import java.util.UUID;
 
+import io.fabric.sdk.android.Fabric;
+
 public class SignUpActivity extends CommonActivity implements DatabaseReference.CompletionListener {
 
     private FirebaseAuth mAuth;
@@ -44,6 +47,7 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        Fabric.with(this, new Crashlytics());
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -108,10 +112,10 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     private void saveUser() {
         if (name.getText().toString().isEmpty()
                 || email.getText().toString().isEmpty()
-                || password.getText().toString().isEmpty()) {
+                || password.getText().toString().isEmpty() || mSelectedUri == null) {
 
-            showToast("Por favor! Insira seus dados para criaçao da conta");
-            return;
+            showSnackBar(getResources().getString(R.string.label_insert_data_create_account));
+            closeProgressBar();
 
         } else {
 
@@ -119,13 +123,14 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
                     user.getEmail(),
                     user.getPassword()
             ).addOnCompleteListener(task -> {
-                if (!task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     closeProgressBar();
+                    savePhotoFirebase();
                 }
-                savePhotoFirebase();
             }).addOnFailureListener(this, new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    closeProgressBar();
                     Crashlytics.logException(e);
                     showSnackBar(e.getMessage());
                 }
@@ -136,17 +141,26 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     private void savePhotoFirebase() {
         String filename = UUID.randomUUID().toString();
         final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + filename);
-        ref.putFile(mSelectedUri)
-                .addOnSuccessListener(taskSnapshot ->
-                        ref.getDownloadUrl().addOnSuccessListener(uri -> {
-                            String photoUri = uri.toString();
-                            Log.i("log", "Item: " + photoUri + " profileUrl");
+        if (mSelectedUri == null) {
+            showSnackBar("Insira foto");
+            return;
+        } else {
+            ref.putFile(mSelectedUri)
+                    .addOnSuccessListener(taskSnapshot ->
+                            ref.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String photoUri = uri.toString();
+                                        Log.i("log", "Item: " + photoUri + " profileUrl");
 
-                            DatabaseReference ref1 = LibraryClass.getFirebase().child("users").child(user.getId()).child("photoUrl");
-                            ref1.setValue(photoUri).addOnSuccessListener(aVoid -> {
-                            });
-                        }))
-                .addOnFailureListener(Crashlytics::logException);
+                                        DatabaseReference ref1 = LibraryClass.getFirebase().child("users").child(user.getId()).child("photoUrl");
+                                        ref1.setValue(photoUri).addOnSuccessListener(aVoid -> {
+                                        });
+                                    })).addOnFailureListener(e -> {
+                Crashlytics.logException(e);
+                Toast.makeText(SignUpActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            })
+                    .addOnFailureListener(Crashlytics::logException);
+        }
     }
 
     private void selectPhoto() {
@@ -165,23 +179,23 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
                 Bitmap bitmap = null;
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-                    mImgPhoto.setImageDrawable(new BitmapDrawable(this.getResources(),bitmap));
+                    mImgPhoto.setImageDrawable(new BitmapDrawable(this.getResources(), bitmap));
                     mBtnSelectedPhoto.setAlpha(0);
 
                 } catch (IOException e) {
                     Crashlytics.logException(e);
+                    showSnackBar(e.getMessage());
                 }
             }
-        }
-        else {
+        } else {
             return;
         }
     }
 
     @Override
-    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+    public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
         mAuth.signOut();
-        showToast("Conta criada com sucesso!");
+        showToast(getResources().getString(R.string.label_account_create));
         closeProgressBar();
         finish();
     }

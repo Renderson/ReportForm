@@ -13,5 +13,9 @@
     <color name="colorRadioYes">#ff99cc00</color>
     <color name="colorRadioNot">#ffcc0000</color>
 
+    <color name="colorGrey">#888888</color>
+    <color name="colorWhatsAppLogo">#2BB201</color>
+    <color name="colorLinkedInLogo">#0077B5</color>
+
 
 </resources>

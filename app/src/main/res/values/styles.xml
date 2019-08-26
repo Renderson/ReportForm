@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
     </style>
 
     <style name="TextLabel" parent="TextAppearance.AppCompat">
@@ -56,9 +58,12 @@
     </style>
 
     <style name="TextDescriptionFormField">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:paddingStart">8dp</item>
         <item name="android:textColor">@color/colorTextBlack</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
@@ -100,6 +105,13 @@
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginBottom">10dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
 </resources>

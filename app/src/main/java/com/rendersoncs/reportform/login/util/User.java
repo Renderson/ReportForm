@@ -115,7 +115,7 @@ public class User {
 
     public void updateDB( DatabaseReference.CompletionListener... completionListener ){
 
-        DatabaseReference firebase = LibraryClass.getFirebase().child("users").child( getId() );
+        DatabaseReference firebase = LibraryClass.getFirebase().child("users").child( getId() ).child("credential");
 
         Map<String, Object> map = new HashMap<>();
         setNameInMap(map);
@@ -139,7 +139,7 @@ public class User {
     }
 
     public void contextDataDB( Context context ){
-        DatabaseReference firebase = LibraryClass.getFirebase().child("users").child( getId() );
+        DatabaseReference firebase = LibraryClass.getFirebase().child("users").child( getId() ).child("credential");
         firebase.addListenerForSingleValueEvent( (ValueEventListener) context );
     }
 

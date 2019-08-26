@@ -6,6 +6,8 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.rendersoncs.reportform.R;
@@ -24,12 +26,6 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        verifyLogged();
-//    }
-
     public void callLogin(View view){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
@@ -39,15 +35,4 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
-//
-//    private void verifyLogged(){
-//        if( mAuth.getCurrentUser() != null ){
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-//        }
-//        else{
-//            mAuth.addAuthStateListener( mAuthListener );
-//        }
-//    }
-
 }

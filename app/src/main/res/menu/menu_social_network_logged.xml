@@ -1,12 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.MainActivity">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:title="@string/label_menu_home"
+            android:id="@+id/menu_home"
+            android:icon="@drawable/ic_action_home"/>
+
+        <item
+            android:title="@string/label_menu_new_report"
+            android:id="@+id/menu_new_report"
+            android:icon="@drawable/ic_new_item_list_white"/>
+
+        <!--<item-->
+            <!--android:title="@string/label_menu_config"-->
+            <!--android:id="@+id/menu_config"-->
+            <!--android:icon="@drawable/ic_action_settings"/>-->
+
+    </group>
 
     <item
-        android:id="@+id/action_logout"
-        android:orderInCategory="100"
-        android:title="logout"
-        app:showAsAction="never" />
+        android:title="@string/label_menu_others"
+        android:id="@+id/submenu_others">
+
+        <menu>
+            <item
+                android:title="@string/label_menu_about"
+                android:id="@+id/menu_about_us"
+                android:icon="@drawable/ic_action_about_us"/>
+
+            <item
+                android:title="@string/label_menu_logout"
+                android:id="@+id/menu_logout"
+                android:icon="@drawable/ic_action_logout"/>
+        </menu>
+    </item>
+
 </menu>

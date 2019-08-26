@@ -11,9 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.rendersoncs.reportform.R;
 
@@ -51,28 +49,25 @@ public class RecoveryLoginActivity extends AppCompatActivity {
 
     public void reset( View view ){
         if (email.getText().toString().isEmpty()){
-            Toast.makeText(this, "Por favor insira o email cadastrado!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.label_insert_email), Toast.LENGTH_SHORT).show();
             return;
         }else {
             firebaseAuth
                     .sendPasswordResetEmail(email.getText().toString())
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                email.setText("");
-                                Toast.makeText(
-                                        RecoveryLoginActivity.this,
-                                        "Recuperação de acesso iniciada. Email enviado.",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                            } else {
-                                Toast.makeText(
-                                        RecoveryLoginActivity.this,
-                                        "Falhou! Tente novamente",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                            }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            email.setText("");
+                            Toast.makeText(
+                                    RecoveryLoginActivity.this,
+                                    getResources().getString(R.string.label_recover_access_send),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        } else {
+                            Toast.makeText(
+                                    RecoveryLoginActivity.this,
+                                    getResources().getString(R.string.label_falied),
+                                    Toast.LENGTH_SHORT
+                            ).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

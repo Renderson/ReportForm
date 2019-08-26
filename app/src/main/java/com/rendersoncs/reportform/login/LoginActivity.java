@@ -2,6 +2,7 @@ package com.rendersoncs.reportform.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -38,9 +39,14 @@ import com.rendersoncs.reportform.view.MainActivity;
 
 import java.util.Arrays;
 
+import io.fabric.sdk.android.Fabric;
+
 public class LoginActivity extends CommonActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final int RC_SIGN_IN_GOOGLE = 7859;
+    private static final String FACEBOOK = "facebook";
+    private static final String GOOGLE = "google";
+    private static final String GOOGLE_TOKEN = "940299608698-s73ntnnnlbauh7lm0pb8ouis82d279m7.apps.googleusercontent.com";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -54,6 +60,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Fabric.with(this, new Crashlytics());
 
         // FACEBOOK SIGN IN
         //FacebookSdk.sdkInitialize(getApplicationContext());
@@ -71,13 +78,13 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
             public void onError(FacebookException error) {
                 Crashlytics.logException(error);
                 closeProgressBar();
-                showSnackBar("Facebook login falhou, tente novamente!");
+                showSnackBar(getResources().getString(R.string.label_login_facebbok_falied));
             }
         });
 
         // GOOGLE SIGN IN
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("940299608698-s73ntnnnlbauh7lm0pb8ouis82d279m7.apps.googleusercontent.com")
+                .requestIdToken(GOOGLE_TOKEN)
                 .requestEmail()
                 .build();
 
@@ -105,7 +112,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
             GoogleSignInAccount account = googleSignInResult.getSignInAccount();
 
             if (account == null) {
-                showSnackBar("Google login falhou, tente novamente!");
+                showSnackBar(getResources().getString(R.string.label_google_falied));
                 return;
             }
 
@@ -134,7 +141,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
     // ACCESS FACEBOOK
     private void accessFacebookLoginData(AccessToken accessToken) {
         accessLoginData(
-                "facebook",
+                FACEBOOK,
                 (accessToken != null ? accessToken.getToken() : null)
         );
     }
@@ -142,7 +149,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
     // ACCESS GOOGLE
     private void accessGoogleLoginData(String accessToken) {
         accessLoginData(
-                "google",
+                GOOGLE,
                 accessToken
         );
     }
@@ -162,18 +169,17 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
                 && tokens[0] != null) {
 
             AuthCredential credential = FacebookAuthProvider.getCredential(tokens[0]);
-            credential = provider.equalsIgnoreCase("google") ? GoogleAuthProvider.getCredential(tokens[0], null) : credential;
+            credential = provider.equalsIgnoreCase(GOOGLE) ? GoogleAuthProvider.getCredential(tokens[0], null) : credential;
             credential = provider.equalsIgnoreCase("twitter") ? TwitterAuthProvider.getCredential(tokens[0], tokens[1]) : credential;
             //credential = provider.equalsIgnoreCase("github") ? GithubAuthProvider.getCredential( tokens[0] ) : credential;
 
-            Log.i("LOG", "Tokens: " + credential);
             user.saveProviderSP(LoginActivity.this, provider);
             mAuth.signInWithCredential(credential)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (!task.isSuccessful()) {
-                                showSnackBar("Login social falhou");
+                                showSnackBar(getResources().getString(R.string.label_login_social_falied));
                             }
                         }
                     })
@@ -248,7 +254,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
 
     public void sendLoginData(View view) {
         if (email.getText().toString().isEmpty() || password.getText().toString().isEmpty()){
-            Toast.makeText(this, "Por favor! Entre com seus dados.", Toast.LENGTH_SHORT).show();
+            showSnackBar(getResources().getString(R.string.label_please_entry_data));
             return;
         }else {
             openProgressBar();
@@ -320,14 +326,14 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
 
                         if (!task.isSuccessful()) {
                             closeProgressBar();
-                            showSnackBar("Login falhou");
-                            return;
+                            //showSnackBar("Login falhou");
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Crashlytics.logException(e);
+                showSnackBar(e.getMessage());
             }
         });
     }
