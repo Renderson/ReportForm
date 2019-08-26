@@ -130,14 +130,16 @@ public class CreatePDFViewer {
         paragraph = new Paragraph("   ");
         document.add(paragraph);
 
-        PdfPTable tablel = new PdfPTable(2);
+        PdfPTable tablel = new PdfPTable(3);
         tablel.setWidthPercentage(100.0F);//altura e largura
 
         PdfPCell cel1 = new PdfPCell(new Paragraph("INSTALAÇÕES FÍSICAS ", baseFontBold));
-        PdfPCell cel2 = new PdfPCell(new Paragraph("Avaliação ", baseFontBold));
+        PdfPCell cel2 = new PdfPCell(new Paragraph("DESCRIÇÂO ", baseFontBold));
+        PdfPCell cel3 = new PdfPCell(new Paragraph("AVALIAÇÂO ", baseFontBold));
 
         tablel.addCell(cel1);
         tablel.addCell(cel2);
+        tablel.addCell(cel3);
 
         try {
             JSONArray arrayL = new JSONArray(paramRepo.getListJson());
@@ -146,14 +148,19 @@ public class CreatePDFViewer {
                 String selected = obj.getString("title_list");
 
                 JSONObject obj2 = arrayL.getJSONObject(i);
-                String selected2 = obj2.getString("radio_tx");
+                String selected2 = obj2.getString("description_list");
+
+                JSONObject obj3 = arrayL.getJSONObject(i);
+                String selected3 = obj3.getString("radio_tx");
 
                 listTitle.add(selected);
                 cel1 = new PdfPCell(new Paragraph(selected));
                 cel2 = new PdfPCell(new Paragraph(selected2));
+                cel3 = new PdfPCell(new Paragraph(selected3));
 
                 tablel.addCell(cel1);
                 tablel.addCell(cel2);
+                tablel.addCell(cel3);
             }
         } catch (JSONException e) {
             e.printStackTrace();

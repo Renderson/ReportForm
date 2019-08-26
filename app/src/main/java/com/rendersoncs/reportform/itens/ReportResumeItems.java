@@ -2,11 +2,12 @@ package com.rendersoncs.reportform.itens;
 
 public class ReportResumeItems {
 
-    private String title_list, radio_tx;
+    private String title_list, description_list, radio_tx;
 
-    public ReportResumeItems(String title_list, String description_list){
+    public ReportResumeItems(String title_list, String description_list, String radio_tx){
         this.title_list = title_list;
-        this.radio_tx = description_list;
+        this.description_list = description_list;
+        this.radio_tx = radio_tx;
     }
 
     public String getTitle_list() {
@@ -23,5 +24,13 @@ public class ReportResumeItems {
 
     public void setRadio_tx(String radio_tx) {
         this.radio_tx = radio_tx;
+    }
+
+    public String getDescription_list() {
+        return description_list;
+    }
+
+    public void setDescription_list(String description_list) {
+        this.description_list = description_list;
     }
 }

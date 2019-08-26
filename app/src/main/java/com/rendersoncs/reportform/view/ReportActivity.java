@@ -72,6 +72,7 @@ public class ReportActivity extends AppCompatActivity implements OnRadioItemClic
 
     JSONArray jsArray = new JSONArray();
     ArrayList<String> listTitle = new ArrayList<>();
+    ArrayList<String> listDescription = new ArrayList<>();
     ArrayList<String> listRadio = new ArrayList<>();
 
     FirebaseAuth mAuth;
@@ -253,10 +254,11 @@ public class ReportActivity extends AppCompatActivity implements OnRadioItemClic
         reportItems.setDate(resultDate.getText().toString());
 
         // Convert ArrayList in Json Object
-        for (int i = 0; (i < listRadio.size()) && (i < listTitle.size()); i++) {
+        for (int i = 0; (i < listRadio.size()) && (i < listTitle.size()) && (i < listDescription.size()); i++) {
             JSONObject jsObject = new JSONObject();
             try {
                 jsObject.put("title_list", listTitle.get(i));
+                jsObject.put("description_list", listDescription.get(i));
                 jsObject.put("radio_tx", listRadio.get(i));
 
             } catch (JSONException e) {
@@ -347,6 +349,9 @@ public class ReportActivity extends AppCompatActivity implements OnRadioItemClic
 
                 String title = reportItems.get(i).getTitle();
                 listTitle.add(title);
+
+                String description = reportItems.get(i).getDescription();
+                listDescription.add(description);
 
             }
         }

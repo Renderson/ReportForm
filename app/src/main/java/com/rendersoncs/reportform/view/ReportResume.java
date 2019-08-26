@@ -161,7 +161,7 @@ public class ReportResume extends AppCompatActivity {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject jo = array.getJSONObject(i);
 
-                ReportResumeItems repoJson = new ReportResumeItems(jo.getString("title_list"), jo.getString("radio_tx"));
+                ReportResumeItems repoJson = new ReportResumeItems(jo.getString("title_list"), jo.getString("description_list"), jo.getString("radio_tx"));
                 repoResumeList.add(repoJson);
             }
             RecyclerView.Adapter adapter = new ReportResumeAdapter(repoResumeList, this);

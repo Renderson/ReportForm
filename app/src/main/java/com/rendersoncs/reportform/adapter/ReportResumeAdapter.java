@@ -36,6 +36,7 @@ public class ReportResumeAdapter extends RecyclerView.Adapter<ReportResumeAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final ReportResumeItems repoResumeList = this.repoResumeList.get(position);
         holder.title_list.setText(repoResumeList.getTitle_list());
+        holder.description_list.setText(repoResumeList.getDescription_list());
         holder.radio_tx.setText(repoResumeList.getRadio_tx());
     }
 
@@ -46,12 +47,13 @@ public class ReportResumeAdapter extends RecyclerView.Adapter<ReportResumeAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder  {
 
-        private TextView title_list, radio_tx;
+        private TextView title_list, description_list, radio_tx;
 
         private ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             title_list = itemView.findViewById(R.id.jo_title);
+            description_list = itemView.findViewById(R.id.jo_description);
             radio_tx = itemView.findViewById(R.id.jo_subTitle);
         }
     }

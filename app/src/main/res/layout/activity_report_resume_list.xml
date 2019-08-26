@@ -17,14 +17,23 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/jo_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="description"
+            app:layout_constraintStart_toStartOf="@+id/jo_title"
+            app:layout_constraintTop_toBottomOf="@+id/jo_title" />
+
+        <TextView
             android:id="@+id/jo_subTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            android:text="subTitle"
+            android:text="nota"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/jo_title"
-            app:layout_constraintTop_toBottomOf="@+id/jo_title" />
+            app:layout_constraintStart_toStartOf="@+id/jo_description"
+            app:layout_constraintTop_toBottomOf="@+id/jo_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
