@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 /**
- * Instrumented InjectJsonListModeOff, which will execute on an Android device.
+ * Instrumented ListJsonOff, which will execute on an Android device.
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under InjectJsonListModeOff.
+        // Context of the app under ListJsonOff.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.rendersoncs.reportform", appContext.getPackageName());

@@ -90,7 +90,7 @@ public class AboutFragment extends BottomSheetFragment {
     }
 
     private Element getItemLinkedIn() {
-        return (new Element()).setTitle(getString(R.string.label_recmmendation))
+        return (new Element()).setTitle(getString(R.string.label_recommendation))
                 .setIconTint(R.color.colorLinkedInLogo)
                 .setGravity(Gravity.START)
                 .setIconDrawable(R.drawable.ic_linkedin_box_black_24dp)

@@ -146,5 +146,17 @@ public class ReportRepository {
 
         return list;
     }
+
+    public void finalize() throws Throwable{
+        if (null != mReportDataBaseHelper)
+            mReportDataBaseHelper.close();
+        super.finalize();
+    }
+
+    public Boolean close(){
+        if (null != mReportDataBaseHelper)
+        mReportDataBaseHelper.close();
+        return null;
+    }
 }
 

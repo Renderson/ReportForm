@@ -1,12 +1,8 @@
 package com.rendersoncs.reportform.view;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,11 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,12 +31,13 @@ import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
-import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.fragment.AboutFragment;
+import com.rendersoncs.reportform.fragment.ReportFormDialog;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnInteractionListener;
 import com.rendersoncs.reportform.login.LoginActivity;
 import com.rendersoncs.reportform.login.RemoveUserActivity;
+import com.rendersoncs.reportform.login.UpdatePasswordActivity;
 import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.login.util.User;
 import com.rendersoncs.reportform.service.AccessDocument;
@@ -57,13 +51,11 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int REQUEST_PERMISSIONS_CODE = 128;
-
     private FirebaseAnalytics mFireBaseAnalytics;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseAuth mAuth;
 
-    private NetworkConnectedService netService = new NetworkConnectedService(this);
+    private NetworkConnectedService netService = new NetworkConnectedService();
     private AnimatedFloatingButton animated = new AnimatedFloatingButton();
 
     private ViewHolder viewHolder = new ViewHolder();
@@ -72,14 +64,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawerLayout;
     private GetInfoUserFirebase info = new GetInfoUserFirebase();
-    private FirebaseUser user;
     DatabaseReference databaseReference;
 
     public Context context;
     View emptyLayout;
     Button emptyButton;
     FloatingActionButton fab;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_report_list);
 
@@ -98,37 +88,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
         mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
         databaseReference = LibraryClass.getFirebase();
-        databaseReference.keepSynced(true);
+        //databaseReference.keepSynced(true);
+
+        // Create Drawerlayout
+        this.createDrawerLayout(user, toolbar);
 
     }
 
     private void checkUserFirebase() {
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        authStateListener = firebaseAuth -> {
 
-                if( firebaseAuth.getCurrentUser() == null  ){
-                    Intent intent = new Intent( MainActivity.this, LoginActivity.class );
-                    startActivity( intent );
-                    finish();
-                }
+            if( firebaseAuth.getCurrentUser() == null  ){
+                Intent intent = new Intent( MainActivity.this, LoginActivity.class );
+                startActivity( intent );
+                finish();
             }
         };
     }
 
     private void init() {
-        // Create Drawerlayout
-        this.createDrawerLayout(user, toolbar);
 
         emptyLayout = findViewById(R.id.layout_empty);
         emptyButton = findViewById(R.id.action_add_report);
-
-        // Check permissions Android 6.0+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkPermission();
-        }
 
         // Obter a recycler
         this.viewHolder.recyclerView = findViewById(R.id.recycler_view);
@@ -198,13 +181,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onOpenPdf(int reportId) {
                 // Open PDF
-                AccessDocument accessDocument = new AccessDocument(reportId, reportBusiness).invoke();
+                AccessDocument accessDocument = new AccessDocument(reportId).invoke();
                 Uri uri = accessDocument.getUri();
                 String subject = accessDocument.getSubject();
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(uri, "application/pdf");
-                intent.putExtra(intent.EXTRA_SUBJECT, subject);
+                intent.putExtra(Intent.EXTRA_SUBJECT, subject);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(intent);
 
@@ -214,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onShareReport(int reportId) {
                 // Share PDF the Report
-                AccessDocument accessDocument = new AccessDocument(reportId, reportBusiness).invoke();
+                AccessDocument accessDocument = new AccessDocument(reportId).invoke();
                 ReportItems reportItems = accessDocument.getReportItems();
                 Uri uri = accessDocument.getUri();
                 String subject = accessDocument.getSubject();
@@ -222,9 +205,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
                 intent.setType("pdf/plain");
-                intent.putExtra(intent.EXTRA_SUBJECT, subject);
+                intent.putExtra(Intent.EXTRA_SUBJECT, subject);
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{reportItems.getEmail()});
-                intent.putExtra(Intent.EXTRA_TEXT, "Em anexo o relatório da empresa " + reportItems.getCompany() + " concluído!" + " Realizado no dia " + reportItems.getDate());
+                intent.putExtra(Intent.EXTRA_TEXT, "Em anexo o relatório da empresa " + reportItems.getCompany() + " concluído! Realizado no dia " + reportItems.getDate());
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, "Compartilhar"));
             }
@@ -276,54 +259,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         RecyclerView recyclerView;
     }
 
-    // Permission
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResult) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResult);
-        switch (requestCode) {
-            case REQUEST_PERMISSIONS_CODE:
-                for (int i = 0; i < permissions.length; i++) {
-                    if (permissions[i].equalsIgnoreCase(Manifest.permission.CAMERA)
-                            && grantResult[i] == PackageManager.PERMISSION_GRANTED) {
-                        loadReport();
-                    }
-                }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResult);
-    }
-
-    private void checkPermission() {
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                dialogPermission(getString(R.string.alert_dialog_permission), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
-            } else {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_CODE);
-            }
-        }
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                dialogPermission(getString(R.string.alert_dialog_permission), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
-            } else {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_CODE);
-            }
-        }
-    }
-
-    private void dialogPermission(String message, final String[] permission) {
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle(R.string.txt_permission)
-                .setMessage(message)
-                .setPositiveButton(R.string.txt_to_allow, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(MainActivity.this, permission, REQUEST_PERMISSIONS_CODE);
-                    }
-                })
-                .setNegativeButton(R.string.txt_deny, null)
-                .show();
-    }
-    // Final code permission
-
     // DrawerLayout Menu
     private void inflateMenuNavigation(NavigationView mNavigationView) {
         User user = new User();
@@ -345,7 +280,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
 
-            case R.id.menu_config: {
+            case R.id.menu_reset: {
+                Intent i = (new Intent(this, UpdatePasswordActivity.class));
+                startActivity(i);
+                break;
+            }
+
+            case R.id.menu_delete: {
                 Intent i = (new Intent(this, RemoveUserActivity.class));
                 startActivity(i);
                 break;
@@ -375,20 +316,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (authStateListener != null) {
-            mAuth.removeAuthStateListener(authStateListener);
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (reportBusiness != null){
+            reportBusiness.close();
+        }
+
+        if (authStateListener != null) {
+            mAuth.removeAuthStateListener(authStateListener);
         }
     }
 }

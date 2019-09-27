@@ -60,7 +60,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/btn_select_photo"
             app:layout_constraintEnd_toEndOf="@+id/btn_select_photo"
             app:layout_constraintStart_toStartOf="@+id/btn_select_photo"
-            app:layout_constraintTop_toTopOf="@+id/btn_select_photo" />
+            app:layout_constraintTop_toTopOf="@+id/btn_select_photo"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputName"

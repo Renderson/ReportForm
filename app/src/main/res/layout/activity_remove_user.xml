@@ -15,7 +15,7 @@
         <TextView
             android:id="@+id/txt_up"
             style="@style/TextTitleFormField"
-            android:text=":( Deletar Conta"
+            android:text="@string/label_screen_remove_account"
             android:textColor="@color/colorTextBlack"
             app:layout_constraintStart_toStartOf="@+id/textInputNewPassword"
             app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/txt_up2"
             style="@style/TextDescriptionFormField"
-            android:text="Inserindo a senha, sua conta será deletada e perderá sua lista on line, mas o banco de dados local ficará intacto."
+            android:text="@string/label_screen_remove_info"
             android:textColor="@color/colorTextBlack"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
                 style="@style/FormField"
-                android:hint="Senha"
+                android:hint="@string/password"
                 android:imeOptions="actionGo"
                 android:inputType="textPassword|textCapSentences"
                 android:maxLines="1" />
@@ -51,7 +51,7 @@
             android:id="@+id/btn_signUp"
             style="@style/ButtonFormField"
             android:onClick="removeUser"
-            android:text="Remover"
+            android:text="@string/remove"
             app:layout_constraintStart_toStartOf="@+id/textInputNewPassword"
             app:layout_constraintTop_toBottomOf="@+id/textInputNewPassword" />
     </androidx.constraintlayout.widget.ConstraintLayout>

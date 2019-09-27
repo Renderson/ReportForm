@@ -15,7 +15,7 @@ import com.rendersoncs.reportform.R;
 
 import java.util.Random;
 
-public class MyFireBaseInstanceMessagingService extends FirebaseMessagingService {
+public class NotificationFireBase extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -27,11 +27,10 @@ public class MyFireBaseInstanceMessagingService extends FirebaseMessagingService
 
     private void showNotification(String title, String body) {
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        //String NOTIFICATION_CHANNEL_ID = "com.rendersoncs.reportform.InjectJsonListModeOff";
         String NOTIFICATION_CHANNEL_ID = "com.rendersoncs.reportform";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Notification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "NotificationFireBase", NotificationManager.IMPORTANCE_DEFAULT);
 
             notificationChannel.setDescription("ReportApp");
             notificationChannel.enableLights(true);
@@ -43,7 +42,7 @@ public class MyFireBaseInstanceMessagingService extends FirebaseMessagingService
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         notificationBuilder.setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
+                .setDefaults(android.app.Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_notification_light)
                 .setContentTitle(title)

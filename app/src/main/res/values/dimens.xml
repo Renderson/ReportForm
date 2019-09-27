@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="layout_marginTop_16dp">16dp</dimen>
+    <dimen name="layout_margin_16dp">16dp</dimen>
+    <dimen name="layout_marginBottom_8dp">8dp</dimen>
+    <dimen name="layout_marginEnd_8dp">8dp</dimen>
+
+    <dimen name="layout_height_0dp">0dp</dimen>
+
+    <dimen name="layout_drawer_width">304dp</dimen>
+</resources>

@@ -1,13 +1,13 @@
 package com.rendersoncs.reportform.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.itens.ReportResumeItems;
@@ -45,7 +45,7 @@ public class ReportResumeAdapter extends RecyclerView.Adapter<ReportResumeAdapte
         return this.repoResumeList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder  {
+    class ViewHolder extends RecyclerView.ViewHolder  {
 
         private TextView title_list, description_list, radio_tx;
 

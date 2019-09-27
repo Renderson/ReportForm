@@ -1,5 +1,6 @@
 package com.rendersoncs.reportform.async;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -10,6 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.login.util.User;
+import com.rendersoncs.reportform.view.MainActivity;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,13 +27,7 @@ import java.net.URL;
 import static android.content.ContentValues.TAG;
 
 public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String> {
-    private Context context;
-    private FirebaseAuth mAuth;
     private User user;
-
-    public DownloadJsonFireBaseAsyncTask(Context context){
-        this.context = context;
-    }
 
     protected void onPreExecute() {
         super.onPreExecute();
@@ -42,7 +39,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
         Log.d(TAG, "doInBackground AWS call ");
         try {
 
-            mAuth = FirebaseAuth.getInstance();
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
             user = new User();
             user.setId( mAuth.getCurrentUser().getUid() );
 
@@ -81,7 +78,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
         FileWriter fos = null;
         try {
             fos = new FileWriter(file);
-            fos.write(result.toString());
+            fos.write(result);
             fos.flush();
             fos.close();
         } catch (IOException e) {

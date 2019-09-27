@@ -3,8 +3,12 @@
     <external-path
         name="external_paths"
         path="."/>
-    <external-path
-        name="Documents"
-        path="Documents"/>
+    <!--<external-path-->
+        <!--name="Documents"-->
+        <!--path="Documents"/>-->
+
+    <!--<external-path-->
+        <!--name="my_images"-->
+        <!--path="Android/data/com.rendersoncs.reportform/files/Pictures" />-->
 
 </paths>

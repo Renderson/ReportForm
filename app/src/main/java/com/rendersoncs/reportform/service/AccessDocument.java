@@ -19,9 +19,9 @@ public class AccessDocument {
     private Uri uri;
     private String subject;
     private ReportBusiness reportBusiness;
-    Context context;
+    public Context context;
 
-    public AccessDocument(int reportId, ReportBusiness reportBusiness) {
+    public AccessDocument(int reportId) {
         this.reportId = reportId;
         this.reportBusiness = new ReportBusiness(context);
     }

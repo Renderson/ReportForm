@@ -1,6 +1,8 @@
 package com.rendersoncs.reportform.util;
 
 import android.os.Environment;
+
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.ReportItems;
@@ -18,9 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class InjectJsonListModeOff {
-    private FirebaseAuth mAuth;
-    private User user;
+public class ListJsonOff {
 
     public void addItemsFromJsonList(ArrayList<ReportItems> reportItemsList) {
         try {
@@ -40,19 +40,16 @@ public class InjectJsonListModeOff {
                 reportItemsList.add(reportItems);
 
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (JSONException | IOException e) {
+            Crashlytics.logException(e);
         }
     }
 
     // Read Json and populate recyclerView
     private String readJsonDataFromFile() throws IOException {
 
-        mAuth = FirebaseAuth.getInstance();
-        user = new User();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        User user = new User();
         user.setId( mAuth.getCurrentUser().getUid() );
 
         String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + "Report" + "/" + user.getId() + ".json";

@@ -22,6 +22,7 @@ import com.rendersoncs.reportform.view.ReportActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import com.rendersoncs.reportform.R;
 
@@ -50,7 +51,7 @@ public class ReportFormDialog extends DialogFragment {
 
         // Get date current 19/2/2018
         long date = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat(getString(R.string.date));
+        SimpleDateFormat sdf = new SimpleDateFormat(getString(R.string.date), new Locale("pt", "br"));
         String dateString = sdf.format(date);
         dateTv.setText(dateString);
 
@@ -60,7 +61,7 @@ public class ReportFormDialog extends DialogFragment {
                 .setNegativeButton(R.string.txt_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
                         ReportFormDialog.this.getDialog().cancel();
                     }
                 })
@@ -87,7 +88,7 @@ public class ReportFormDialog extends DialogFragment {
 
                         startActivity(intent);
 
-                        Toast.makeText(getActivity(), R.string.txt_new_report, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.txt_new_report, Toast.LENGTH_SHORT).show();
 
 
                     }
@@ -160,8 +161,14 @@ public class ReportFormDialog extends DialogFragment {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        dismiss();
+    }
+
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        Toast.makeText(getActivity(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
     }
 }

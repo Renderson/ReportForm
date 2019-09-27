@@ -98,6 +98,12 @@ public class NewItemListFireBase extends DialogFragment {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        dismiss();
+    }
+
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
         Toast.makeText(getActivity(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();

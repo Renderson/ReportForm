@@ -1,17 +1,15 @@
 package com.rendersoncs.reportform.view;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,29 +33,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import static com.android.volley.VolleyLog.TAG;
 
 public class ReportResume extends AppCompatActivity {
 
     private ReportBusiness mReportBusiness;
-    ReportItems repoEntity;
-    TextView emailResume, dateResume, companyResume, itemsResume, openPdf;
-    PieChart pieChart;
-    String selected;
-    int mReportId;
+    private ReportItems repoEntity;
+    private TextView emailResume, dateResume, companyResume, itemsResume, openPdf;
+    private PieChart pieChart;
+    private int mReportId;
 
     private RecyclerView recyclerView;
     private List<ReportResumeItems> repoResumeList;
 
     private ArrayList<String> listSelected = new ArrayList<>();
-    public ArrayList listYes = new ArrayList<>();
-    public ArrayList listNot = new ArrayList<>();
-    private HashMap<String, Integer> contListSelected = new HashMap<>();
-
-    int maxList;
+    public ArrayList<String> listYes = new ArrayList<>();
+    public ArrayList<String> listNot = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +57,9 @@ public class ReportResume extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         this.init();
 
@@ -75,7 +68,7 @@ public class ReportResume extends AppCompatActivity {
 
         this.loadReportResume();
         this.createPieChart();
-        this.getOpenPdf();
+        this.openPDF();
     }
 
     private void init() {
@@ -94,20 +87,17 @@ public class ReportResume extends AppCompatActivity {
         openPdf = findViewById(R.id.open_pdf);
     }
 
-    private void getOpenPdf() {
-        openPdf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AccessDocument accessDocument = new AccessDocument(mReportId, mReportBusiness).invoke();
-                Uri uri = accessDocument.getUri();
-                String subject = accessDocument.getSubject();
+    private void openPDF() {
+        openPdf.setOnClickListener(view -> {
+            AccessDocument accessDocument = new AccessDocument(mReportId).invoke();
+            Uri uri = accessDocument.getUri();
+            String subject = accessDocument.getSubject();
 
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(uri, "application/pdf");
-                intent.putExtra(intent.EXTRA_SUBJECT, subject);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(intent);
         });
     }
 
@@ -197,17 +187,17 @@ public class ReportResume extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("StringFormatMatches")
     private void countRadioSelected() {
         try {
             JSONArray arrayL = new JSONArray(repoEntity.getListJson());
             for (int i = 0; i < arrayL.length(); i++) {
                 JSONObject obj = arrayL.getJSONObject(i);
-                selected = obj.getString("radio_tx");
+                String selected = obj.getString("radio_tx");
                 listSelected.add(selected);
             }
 
             for (int i = 0; i < listSelected.size(); i++) {
-                String item = listSelected.get(i);
                 if (listSelected.get(i).equals("Sim")) {
                     listYes.add("Sim");
                 }
@@ -216,11 +206,20 @@ public class ReportResume extends AppCompatActivity {
                 }
             }
 
-            maxList = arrayL.length();
-            this.itemsResume.setText(maxList + " Items selecionados.");
+            int maxList = arrayL.length();
+            this.itemsResume.setText(getString(R.string.item_selected, maxList));
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mReportBusiness != null){
+            mReportBusiness.close();
         }
     }
 }

@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public final class LibraryClass {
 
     public static String PREF = "com.rendersoncs.reportform.PREF";
-    private static DatabaseReference firebase;
+    public static DatabaseReference firebase;
 
     private LibraryClass(){}
 
@@ -30,5 +30,10 @@ public final class LibraryClass {
         SharedPreferences sp = context.getSharedPreferences(PREF, Context.MODE_PRIVATE);
         String token = sp.getString(key, "");
         return (token);
+    }
+
+    public static DatabaseReference closeFireBase(){
+        firebase.onDisconnect();
+        return null;
     }
 }

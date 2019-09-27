@@ -4,9 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -130,17 +134,31 @@ public class CreatePDFViewer {
         paragraph = new Paragraph("   ");
         document.add(paragraph);
 
-        PdfPTable tablel = new PdfPTable(3);
+        PdfPTable tablel = new PdfPTable(4);
         tablel.setWidthPercentage(100.0F);//altura e largura
 
         PdfPCell cel1 = new PdfPCell(new Paragraph("INSTALAÇÕES FÍSICAS ", baseFontBold));
         PdfPCell cel2 = new PdfPCell(new Paragraph("DESCRIÇÂO ", baseFontBold));
         PdfPCell cel3 = new PdfPCell(new Paragraph("AVALIAÇÂO ", baseFontBold));
+        PdfPCell cel4 = new PdfPCell(new Paragraph("PHOTOS ", baseFontBold));
 
         tablel.addCell(cel1);
         tablel.addCell(cel2);
         tablel.addCell(cel3);
+        tablel.addCell(cel4);
 
+        addListItems(paramRepo, listTitle, tablel);
+        document.add(tablel);
+
+        document.close();
+        return localFile2;
+    }
+
+    private void addListItems(ReportItems paramRepo, List listTitle, PdfPTable tablel) throws BadElementException, IOException {
+        PdfPCell cel1;
+        PdfPCell cel2;
+        PdfPCell cel3;
+        PdfPCell cel4;
         try {
             JSONArray arrayL = new JSONArray(paramRepo.getListJson());
             for (int i = 0; i < arrayL.length(); i++) {
@@ -153,22 +171,33 @@ public class CreatePDFViewer {
                 JSONObject obj3 = arrayL.getJSONObject(i);
                 String selected3 = obj3.getString("radio_tx");
 
+                JSONObject obj4 = arrayL.getJSONObject(i);
+                String selected4 = obj4.getString("photo_list");
+                Log.d("PDFImage", selected4);
+
+                byte[] decodedString = Base64.decode(selected4, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                Log.i("log", "PDFImage3: " + decodedByte + " Image");
+
+                Image image1 = Image.getInstance(decodedString);
+                Log.i("log", "PDFImage4: " + image1 + " Image");
+
                 listTitle.add(selected);
                 cel1 = new PdfPCell(new Paragraph(selected));
                 cel2 = new PdfPCell(new Paragraph(selected2));
                 cel3 = new PdfPCell(new Paragraph(selected3));
+                cel4 = new PdfPCell(new Paragraph(selected4));
+                cel4.setImage(image1);
+                cel4.setPadding(5f);
 
                 tablel.addCell(cel1);
                 tablel.addCell(cel2);
                 tablel.addCell(cel3);
+                tablel.addCell(cel4);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        document.add(tablel);
-
-        document.close();
-        return localFile2;
     }
 
     private static PdfPCell createImageCell(Image paramImage)

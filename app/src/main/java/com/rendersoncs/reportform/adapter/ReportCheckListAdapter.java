@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -25,13 +26,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.bumptech.glide.Glide;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.itens.ReportItems;
-import com.rendersoncs.reportform.listener.OnRadioItemClicked;
+import com.rendersoncs.reportform.listener.OnItemListenerClicked;
 
 import static com.android.volley.VolleyLog.TAG;
 
-public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRecyclerAdapter.ViewHolder> {
+public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckListAdapter.ViewHolder> {
     private List<ReportItems> reportItems;
     public SparseBooleanArray expandState = new SparseBooleanArray();
     public ArrayList<Integer> listIDRadio = new ArrayList<Integer>();
@@ -46,13 +48,13 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
-    private OnRadioItemClicked onRadioItemClicked;
+    private OnItemListenerClicked onItemListenerClicked;
 
-    public void setOnRadioItemClicked(OnRadioItemClicked onRadioItemClicked) {
-        this.onRadioItemClicked = onRadioItemClicked;
+    public void setOnItemListenerClicked(OnItemListenerClicked onItemListenerClicked) {
+        this.onItemListenerClicked = onItemListenerClicked;
     }
 
-    public ExpandableRecyclerAdapter(List<ReportItems> reportItems, Context context) {
+    public ReportCheckListAdapter(List<ReportItems> reportItems, Context context) {
         this.context = context;
         this.reportItems = reportItems;
         for (int i = 0; i < reportItems.size(); i++) {
@@ -99,6 +101,21 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                     onClickButton(viewHolder.expandableLayout, viewHolder.buttonLayoutArrow, position);
                 }
             });
+            
+            viewHolder.takePhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onItemListenerClicked.takePhoto(position);
+                }
+            });
+//            if (viewHolder.resultPhoto != null){
+//                Glide.with(context).load(repo.getPhotoId()).centerCrop().into(viewHolder.resultPhoto);
+//            } else {
+//                Glide.with(context).load(repo.getPhotoId()).centerCrop().into(viewHolder.resultPhoto2);
+//            }
+
+            Glide.with(context).load(repo.getPhotoId()).centerCrop().into(viewHolder.resultPhoto);
+            Log.i("LOG", "ImagePath3 " + repo.getPhotoUri());
 
             viewHolder.mRadioButtonConform.setChecked(repo.isOpt1());
             viewHolder.mRadioButtonNotConform.setChecked(repo.isOpt2());
@@ -109,18 +126,10 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                     int selectedRadioButtonID = viewHolder.mRadioGroup.getCheckedRadioButtonId();
-
                     //Test Salve in a ArrayList RadioButton Selected
                     radioButton = group.findViewById(selectedRadioButtonID);
                     int selectedRadioId = radioButton.getId();
                     listIDRadio.add(selectedRadioId);
-//
-//                    String selectedText = (String) viewHolder.tvTitleList.getText();
-//                    String selectedRadioButtonText = radioButton.getText().toString();
-
-//                    listId.add(position);
-//                    listText.add(selectedText);
-//                    listTxtRadio.add(selectedRadioButtonText);
                 }
             });
             // End RadioButton
@@ -145,7 +154,7 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitleList, tvDescription;
-        ImageView mImageView;
+        ImageView takePhoto, resultPhoto, resultPhoto2;
 
         RadioGroup mRadioGroup;
         RadioButton mRadioButtonConform, mRadioButtonNotConform;
@@ -157,7 +166,9 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
 
             tvTitleList = view.findViewById(R.id.textView_title);
             tvDescription = view.findViewById(R.id.textView_subTitle);
-            mImageView = view.findViewById(R.id.photo);
+            takePhoto = view.findViewById(R.id.photo);
+            resultPhoto = view.findViewById(R.id.result_photo);
+            resultPhoto2 = view.findViewById(R.id.result_photo2);
 
             buttonLayoutArrow = view.findViewById(R.id.btnArrow);
             expandableLayout = view.findViewById(R.id.expandableLayout);
@@ -165,7 +176,7 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
     }
 
     //Header
-    public class HeaderVh extends ExpandableRecyclerAdapter.ViewHolder {
+    public class HeaderVh extends ReportCheckListAdapter.ViewHolder {
 
         @BindView(R.id.header_id)
         public TextView headerTitle;
@@ -176,7 +187,7 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
         }
     }
 
-    public class ItemVh extends ExpandableRecyclerAdapter.ViewHolder implements View.OnClickListener {
+    public class ItemVh extends ReportCheckListAdapter.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.textView_title)
         public TextView itemContent;
@@ -189,6 +200,7 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
             mRadioButtonConform = itemView.findViewById(R.id.radio_conform);
             mRadioButtonNotConform = itemView.findViewById(R.id.radio_not_conform);
 
+            takePhoto.setOnClickListener(this);
             mRadioButtonConform.setOnClickListener(this);
             mRadioButtonNotConform.setOnClickListener(this);
         }
@@ -198,13 +210,13 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
 
             switch (v.getId()) {
                 case R.id.radio_conform:
-                    if (onRadioItemClicked != null)
-                        onRadioItemClicked.radioItemChecked(getAdapterPosition(), 1);
+                    if (onItemListenerClicked != null)
+                        onItemListenerClicked.radioItemChecked(getAdapterPosition(), 1);
                     break;
 
                 case R.id.radio_not_conform:
-                    if (onRadioItemClicked != null)
-                        onRadioItemClicked.radioItemChecked(getAdapterPosition(), 2);
+                    if (onItemListenerClicked != null)
+                        onItemListenerClicked.radioItemChecked(getAdapterPosition(), 2);
                     break;
             }
         }
@@ -232,5 +244,12 @@ public class ExpandableRecyclerAdapter extends RecyclerView.Adapter<ExpandableRe
         animator.setInterpolator(new LinearInterpolator());
         return animator;
 
+    }
+
+    public void setImageInItem(int position, Bitmap imageSrc) {
+        ReportItems dataSet = reportItems.get(position);
+        dataSet.setPhotoId(imageSrc);
+        Log.i("LOG", "ImagePath2 " + imageSrc);
+        notifyDataSetChanged();
     }
 }

@@ -65,7 +65,7 @@ public class RecoveryLoginActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(
                                     RecoveryLoginActivity.this,
-                                    getResources().getString(R.string.label_falied),
+                                    getResources().getString(R.string.label_failed),
                                     Toast.LENGTH_SHORT
                             ).show();
                         }

@@ -30,6 +30,7 @@
     <string name="txt_leave">Sair</string>
     <string name="txt_save">Salvar</string>
     <string name="resume_date">Data: %1$s</string>
+    <string name="item_selected">Items selecionados: %1$s</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txt_check_networking">Sem conexão com a Internet</string>
@@ -55,28 +56,36 @@
     <string name="label_screen_to_recovery">Recuperar!</string>
     <string name="label_screen_recovery_worry">Não se preocupe, vamos recuper sua senha!</string>
     <string name="label_go_to_home">Retornar para tela inicial</string>
+    <string name="label_screen_update_password">Alterar Senha!</string>
+    <string name="label_screen_update_strong">Aqui você pode trocar sua senha por uma mais forte!</string>
+    <string name="hint_new_password">Nova senha</string>
+    <string name="label_screen_update_info">Para prosseguir com a atualização informe abaixo sua senha atual.</string>
+    <string name="hint_current_password">Senha atual</string>
+    <string name="change">Alterar</string>
+    <string name="label_screen_remove_account">:( Deletar Conta</string>
+    <string name="label_screen_remove_info">Inserindo a senha, sua conta será deletada e perderá sua lista on line, mas o banco de dados local ficará intacto.</string>
+    <string name="remove">Remover</string>
 
     <!--Activity Login-->
-    <string name="label_login_facebbok_falied">Facebook login falhou, tente novamente!</string>
-    <string name="label_google_falied">Google login falhou, tente novamente!</string>
-    <string name="label_login_social_falied">Login social falhou!</string>
+    <string name="label_login_facebook_failed">Facebook login falhou, tente novamente!</string>
+    <string name="label_google_failed">Google login falhou, tente novamente!</string>
+    <string name="label_login_social_failed">Login social falhou!</string>
     <string name="label_please_entry_data">Por favor! Entre com seus dados.</string>
     <string name="label_account_create">Conta criada com sucesso!</string>
     <string name="label_insert_data_create_account">Por favor! Insira seus dados para criaçao da conta.</string>
     <string name="label_account_removed">Conta removida com sucesso!</string>
     <string name="label_recover_access_send">Recuperação de acesso iniciada. Email enviado.</string>
-    <string name="label_falied">Falhou! Tente novamente</string>
+    <string name="label_failed">Falhou! Tente novamente</string>
     <string name="label_password_update">Senha atualizada com sucesso</string>
-
-    <!--Facebbok-->
-    <string name="facebook_app_id">2284363461680926</string>
 
     <!--DrawerLayout-->
     <string name="open_drawer">Abrir</string>
     <string name="close_drawer">Fechar</string>
     <string name="label_menu_home">Tela Principal</string>
     <string name="label_menu_new_report">Novo relatório</string>
-    <string name="label_menu_config">Configuração conta</string>
+    <string name="label_menu_config">Opções da conta</string>
+    <string name="label_menu_update_password">Trocar senha</string>
+    <string name="label_menu_delete_account">Deletar conta</string>
     <string name="label_menu_others">Outros</string>
     <string name="label_menu_about">Sobre</string>
     <string name="label_menu_logout">Sair</string>
@@ -88,8 +97,15 @@
     <string name="label_calling">Ligar</string>
     <string name="label_calling_whatsapp">Lhe respondo agora</string>
     <string name="label_fedd_back">Me envie seu Feed Back</string>
-    <string name="label_recmmendation">Minhas recomendações</string>
+    <string name="label_recommendation">Minhas recomendações</string>
     <string name="label_not_whatsapp">Não encontramos WhatsApp.</string>
     <string name="label_insert_email">Por favor insira o email cadastrado!</string>
 
+    <!--Facebook ID-->
+    <string name="facebook_app_id">2284363461680926</string>
+
+    <string name="msg_take_image">Tirar foto</string>
+    <string name="msg_select_from_galery">Selecionar da Galeria</string>
+    <string name="label_permission_camera">Precisamos da permissão para acessar a camera.</string>
+    <string name="label_permission_read">Precisamos da permissão de gravar dados, para salvar seu relatório.</string>
 </resources>

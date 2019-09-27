@@ -1,11 +1,17 @@
 package com.rendersoncs.reportform.itens;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 public class ReportItems {
 
     private int id, conformed;
 
     private String company, email, date, photo, listJson;
     private String title, description, header;
+
+    private Bitmap photoId;
+    private Uri photoUri;
 
     private boolean opt1, opt2;
     private int selectedAnswerPosition = -1;
@@ -137,5 +143,21 @@ public class ReportItems {
 
     public void setShine(boolean shine) {
         this.shine = shine;
+    }
+
+    public Bitmap getPhotoId() {
+        return photoId;
+    }
+
+    public void setPhotoId(Bitmap photoId) {
+        this.photoId = photoId;
+    }
+
+    public Uri getPhotoUri() {
+        return photoUri;
+    }
+
+    public void setPhotoUri(Uri photoUri) {
+        this.photoUri = photoUri;
     }
 }

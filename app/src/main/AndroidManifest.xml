@@ -17,6 +17,7 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+        <!--android:name=".leaks.MainApplication"-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -65,16 +66,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
         </activity>
-        <activity android:name=".view.ConfigAccountActivity"
-            android:parentActivityName=".view.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.MainActivity" />
-        </activity>
-        <activity android:name=".view.AboutActivity" />
 
         <service
-            android:name=".service.MyFireBaseInstanceMessagingService"
+            android:name=".service.NotificationFireBase"
             android:permission="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -90,7 +84,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.rendersoncs.reportform.FileProvider"
+            android:authorities="${applicationId}.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true"
             tools:replace="android:authorities">

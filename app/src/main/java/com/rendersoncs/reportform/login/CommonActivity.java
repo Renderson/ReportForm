@@ -26,7 +26,7 @@ abstract public class CommonActivity extends AppCompatActivity {
     }
 
     protected void showToast(String message){
-        Toast.makeText(this,
+        Toast.makeText(getApplicationContext(),
                 message,
                 Toast.LENGTH_LONG)
                 .show();

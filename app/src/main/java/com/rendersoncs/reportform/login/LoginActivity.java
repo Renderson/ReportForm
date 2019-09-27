@@ -2,10 +2,7 @@ package com.rendersoncs.reportform.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -78,7 +75,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
             public void onError(FacebookException error) {
                 Crashlytics.logException(error);
                 closeProgressBar();
-                showSnackBar(getResources().getString(R.string.label_login_facebbok_falied));
+                showSnackBar(getResources().getString(R.string.label_login_facebook_failed));
             }
         });
 
@@ -112,7 +109,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
             GoogleSignInAccount account = googleSignInResult.getSignInAccount();
 
             if (account == null) {
-                showSnackBar(getResources().getString(R.string.label_google_falied));
+                showSnackBar(getResources().getString(R.string.label_google_failed));
                 return;
             }
 
@@ -179,7 +176,7 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (!task.isSuccessful()) {
-                                showSnackBar(getResources().getString(R.string.label_login_social_falied));
+                                showSnackBar(getResources().getString(R.string.label_login_social_failed));
                             }
                         }
                     })

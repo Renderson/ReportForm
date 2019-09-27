@@ -19,7 +19,6 @@ public class ReportListAdapter extends RecyclerView.Adapter<ReportListViewHolder
 
     private List<ReportItems> mRepoEntityList;
     private OnInteractionListener mOnInteractionListener;
-    Context context;
 
     public ReportListAdapter(List<ReportItems> repoEntityList, OnInteractionListener listener) {
         this.mRepoEntityList = repoEntityList;

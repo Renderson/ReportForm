@@ -13,20 +13,15 @@ import com.rendersoncs.reportform.async.DownloadJsonFireBaseAsyncTask;
 import com.rendersoncs.reportform.util.SnackBarHelper;
 
 public class NetworkConnectedService {
-    private Context context;
-
-    public NetworkConnectedService(Context context){
-        this.context = context;
-    }
 
     public void isConnected(Activity activity){
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         assert cm != null;
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             // Download list FireBase
-            DownloadJsonFireBaseAsyncTask async = new DownloadJsonFireBaseAsyncTask(context);
+            DownloadJsonFireBaseAsyncTask async = new DownloadJsonFireBaseAsyncTask();
             async.execute();
         } else {
             Snackbar snackbar = Snackbar

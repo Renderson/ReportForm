@@ -32,4 +32,8 @@ public class ReportBusiness {
         return this.mReportRepository.getReportByQuery("select * from " + DataBaseConstants.REPORT.TABLE_NAME);
     }
 
+    public Boolean close(){
+        return this.mReportRepository.close();
+    }
+
 }
