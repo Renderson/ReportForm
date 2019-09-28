@@ -4,9 +4,12 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -28,6 +31,7 @@ import butterknife.ButterKnife;
 
 import com.bumptech.glide.Glide;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnItemListenerClicked;
 
@@ -99,6 +103,20 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
                 @Override
                 public void onClick(final View v) {
                     onClickButton(viewHolder.expandableLayout, viewHolder.buttonLayoutArrow, position);
+                }
+            });
+
+            viewHolder.tvTitleList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onItemListenerClicked.updateList(position);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("title", viewHolder.tvTitleList.getText().toString());
+//                    NewItemListFireBase newItemListFirebase = new NewItemListFireBase();
+////                    Intent intent = new Intent(context, newItemListFirebase.getClass());
+////                    intent.putExtra("title", viewHolder.tvTitleList.getText().toString());
+////                    intent.putExtra("desc", viewHolder.tvDescription.getText().toString());
+//                    newItemListFirebase.setArguments(bundle);
                 }
             });
             
@@ -200,6 +218,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             mRadioButtonConform = itemView.findViewById(R.id.radio_conform);
             mRadioButtonNotConform = itemView.findViewById(R.id.radio_not_conform);
 
+            tvTitleList.setOnClickListener(this);
             takePhoto.setOnClickListener(this);
             mRadioButtonConform.setOnClickListener(this);
             mRadioButtonNotConform.setOnClickListener(this);

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.constants.ReportConstants;
@@ -61,10 +62,8 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
 
             return stringBuilder.toString().trim();
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            Crashlytics.logException(e);
         }
         return null;
     }

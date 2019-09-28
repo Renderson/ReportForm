@@ -27,6 +27,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -395,6 +396,21 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
             }
         }
+    }
+
+    @Override
+    public void updateList(int position) {
+        NewItemListFireBase nFrag = new NewItemListFireBase();
+        Bundle bundle = new Bundle();
+        ReportItems items = reportItems.get(position);
+
+        bundle.putString("title", items.getTitle());
+        bundle.putString("desc", items.getDescription());
+        Log.d("TestFrag", items.getTitle() + items.getDescription());
+        nFrag.setArguments(bundle);
+        nFrag.show((ReportActivity.this).getSupportFragmentManager(), "new_item");
+
+        //Toast.makeText(this, "Item Title " + position + reportItems.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     // OPen Camera
