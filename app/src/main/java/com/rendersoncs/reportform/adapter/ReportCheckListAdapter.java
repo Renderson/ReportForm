@@ -30,10 +30,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnItemListenerClicked;
+import com.rendersoncs.reportform.login.util.LibraryClass;
 
 import static com.android.volley.VolleyLog.TAG;
 
@@ -110,13 +112,6 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
                 @Override
                 public void onClick(View view) {
                     onItemListenerClicked.updateList(position);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("title", viewHolder.tvTitleList.getText().toString());
-//                    NewItemListFireBase newItemListFirebase = new NewItemListFireBase();
-////                    Intent intent = new Intent(context, newItemListFirebase.getClass());
-////                    intent.putExtra("title", viewHolder.tvTitleList.getText().toString());
-////                    intent.putExtra("desc", viewHolder.tvDescription.getText().toString());
-//                    newItemListFirebase.setArguments(bundle);
                 }
             });
             
@@ -133,7 +128,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
 //            }
 
             Glide.with(context).load(repo.getPhotoId()).centerCrop().into(viewHolder.resultPhoto);
-            Log.i("LOG", "ImagePath3 " + repo.getPhotoUri());
+            Log.i("LOG", "ImagePath3 " + repo.getPhotoId());
 
             viewHolder.mRadioButtonConform.setChecked(repo.isOpt1());
             viewHolder.mRadioButtonNotConform.setChecked(repo.isOpt2());

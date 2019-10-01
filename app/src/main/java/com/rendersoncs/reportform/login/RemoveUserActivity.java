@@ -7,12 +7,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +26,6 @@ import io.fabric.sdk.android.Fabric;
 public class RemoveUserActivity extends AppCompatActivity
         implements ValueEventListener, DatabaseReference.CompletionListener {
 
-    private Toolbar toolbar;
     private User user;
     private EditText password;
     private FirebaseAuth mAuth;
@@ -40,8 +36,6 @@ public class RemoveUserActivity extends AppCompatActivity
         setContentView(R.layout.activity_remove_user);
         Fabric.with(this, new Crashlytics());
 
-        //toolbar =  findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -52,7 +46,6 @@ public class RemoveUserActivity extends AppCompatActivity
     }
 
     private void init(){
-        //toolbar.setTitle( getResources().getString(R.string.remove_user) );
         password = findViewById(R.id.password);
 
         user = new User();
@@ -61,9 +54,13 @@ public class RemoveUserActivity extends AppCompatActivity
     }
 
     public void removeUser( View view ){
-        user.setPassword( password.getText().toString() );
+        if (password.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Por favor insira a senha.", Toast.LENGTH_SHORT).show();
+        } else {
+            user.setPassword(password.getText().toString());
 
-        reauthenticate();
+            reauthenticate();
+        }
     }
 
     private void reauthenticate(){
@@ -79,25 +76,19 @@ public class RemoveUserActivity extends AppCompatActivity
         );
 
         firebaseUser.reauthenticate( credential )
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                .addOnCompleteListener(task -> {
 
-                        if( task.isSuccessful() ){
-                            deleteUser();
-                        }
+                    if( task.isSuccessful() ){
+                        deleteUser();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Crashlytics.logException( e );
-                Toast.makeText(
-                        RemoveUserActivity.this,
-                        e.getMessage(),
-                        Toast.LENGTH_SHORT
-                ).show();
-            }
-        });
+                }).addOnFailureListener(e -> {
+                    Crashlytics.logException( e );
+                    Toast.makeText(
+                            RemoveUserActivity.this,
+                            e.getMessage(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                });
     }
 
     private void deleteUser(){
@@ -107,34 +98,30 @@ public class RemoveUserActivity extends AppCompatActivity
             return;
         }
 
-        firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
+        firebaseUser.delete().addOnCompleteListener(task -> {
 
-                if( !task.isSuccessful() ){
-                    return;
-                }
-
-                user.removeDB( RemoveUserActivity.this );
+            if( !task.isSuccessful() ){
+                return;
             }
+
+            user.removeDB( RemoveUserActivity.this );
         })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Crashlytics.logException( e );
-                        Toast.makeText(
-                                RemoveUserActivity.this,
-                                e.getMessage(),
-                                Toast.LENGTH_SHORT
-                        ).show();
-                    }
+                .addOnFailureListener(e -> {
+                    Crashlytics.logException( e );
+                    Toast.makeText(
+                            RemoveUserActivity.this,
+                            e.getMessage(),
+                            Toast.LENGTH_SHORT
+                    ).show();
                 });
     }
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         User u = dataSnapshot.getValue( User.class );
-        user.setEmail( u.getEmail() );
+        if (u != null) {
+            user.setEmail( u.getEmail() );
+        }
     }
 
     @Override

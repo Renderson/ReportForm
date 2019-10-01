@@ -3,22 +3,24 @@ package com.rendersoncs.reportform.fragment;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
-
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.login.util.User;
@@ -29,7 +31,7 @@ import java.util.Map;
 public class NewItemListFireBase extends DialogFragment {
     private EditText mTitleList;
     private EditText mDescriptionList;
-    private FirebaseAuth mAuth;
+    private String title;
     private User user;
 
     @NonNull
@@ -45,27 +47,24 @@ public class NewItemListFireBase extends DialogFragment {
         mDescriptionList.addTextChangedListener(validateTextWatcher);
 
         String alertButton;
-        if (getArguments() != null){
-            alertButton = "Alterar";
+        if (getArguments() != null) {
+            alertButton = getResources().getString(R.string.change);
         } else {
-            alertButton = "Inserir";
+            alertButton = getResources().getString(R.string.insert);
         }
 
         initFirebase();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "Cancelado", Toast.LENGTH_SHORT).show();
-                        NewItemListFireBase.this.getDialog().cancel();
-                    }
+                .setNegativeButton(getResources().getString(R.string.txt_cancel), (dialog, which) -> {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.txt_cancel), Toast.LENGTH_SHORT).show();
+                    NewItemListFireBase.this.getDialog().cancel();
                 })
 
                 .setPositiveButton(alertButton, (dialog, which) -> {
 
-                    if (getArguments() != null){
+                    if (getArguments() != null) {
                         updateItemList();
                     } else {
                         insertNewItemList();
@@ -75,10 +74,9 @@ public class NewItemListFireBase extends DialogFragment {
         return builder.create();
     }
 
-    private void checkItems(){
+    private void checkItems() {
         if (getArguments() != null) {
-            String title = getArguments().getString("title");
-            Log.d("TestFrag2", title);
+            title = getArguments().getString("title");
             mTitleList.setText(title);
 
             String description = getArguments().getString("desc");
@@ -87,14 +85,26 @@ public class NewItemListFireBase extends DialogFragment {
 
     }
 
-    private void updateItemList(){
+    private void updateItemList() {
         String upTitle = mTitleList.getText().toString();
         String upDescription = mDescriptionList.getText().toString();
 
+        DatabaseReference databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
+        Query query = databaseReference.orderByChild("title").equalTo(title);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    ds.getRef().child("title").setValue(upTitle);
+                    ds.getRef().child("description").setValue(upDescription);
+                }
+            }
 
-//        DatabaseReference databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
-//        databaseReference.orderByChild()
-
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.label_error_update_list), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void insertNewItemList() {
@@ -111,7 +121,7 @@ public class NewItemListFireBase extends DialogFragment {
     }
 
     private void initFirebase() {
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = new User();
         user.setId(mAuth.getCurrentUser().getUid());
     }

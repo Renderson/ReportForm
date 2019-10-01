@@ -252,7 +252,6 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
     public void sendLoginData(View view) {
         if (email.getText().toString().isEmpty() || password.getText().toString().isEmpty()){
             showSnackBar(getResources().getString(R.string.label_please_entry_data));
-            return;
         }else {
             openProgressBar();
             initUser();

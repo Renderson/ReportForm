@@ -65,6 +65,7 @@
     <string name="label_screen_remove_account">:( Deletar Conta</string>
     <string name="label_screen_remove_info">Inserindo a senha, sua conta será deletada e perderá sua lista on line, mas o banco de dados local ficará intacto.</string>
     <string name="remove">Remover</string>
+    <string name="insert">Inserir</string>
 
     <!--Activity Login-->
     <string name="label_login_facebook_failed">Facebook login falhou, tente novamente!</string>
@@ -108,4 +109,5 @@
     <string name="msg_select_from_galery">Selecionar da Galeria</string>
     <string name="label_permission_camera">Precisamos da permissão para acessar a camera.</string>
     <string name="label_permission_read">Precisamos da permissão de gravar dados, para salvar seu relatório.</string>
+    <string name="label_error_update_list">Error ao alterar item da lista.</string>
 </resources>

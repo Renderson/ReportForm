@@ -39,6 +39,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.BuildConfig;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportCheckListAdapter;
@@ -63,6 +64,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,6 +96,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private JSONArray jsArray = new JSONArray();
 
     private DatabaseReference databaseReference;
+    private User user = new User();
+
 
     private ResizeImage resizeImage = new ResizeImage();
     private Uri photoUri;
@@ -114,7 +118,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         setTitle(R.string.title_report);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        User user = new User();
         user.setId(mAuth.getCurrentUser().getUid());
 
         databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
@@ -410,7 +413,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         nFrag.setArguments(bundle);
         nFrag.show((ReportActivity.this).getSupportFragmentManager(), "new_item");
 
-        //Toast.makeText(this, "Item Title " + position + reportItems.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     // OPen Camera
