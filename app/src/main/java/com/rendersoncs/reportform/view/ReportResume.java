@@ -120,8 +120,8 @@ public class ReportResume extends AppCompatActivity {
         int mxNot = listNot.size();
         int mxYes = listYes.size();
 
-        yValues.add(new PieEntry(mxYes, "Sim"));
-        yValues.add(new PieEntry(mxNot, "Não"));
+        yValues.add(new PieEntry(mxYes, "Conforme"));
+        yValues.add(new PieEntry(mxNot, "Não Conforme"));
 
         PieDataSet dataSet = new PieDataSet(yValues, "");
         dataSet.setSliceSpace(3f);
@@ -198,11 +198,11 @@ public class ReportResume extends AppCompatActivity {
             }
 
             for (int i = 0; i < listSelected.size(); i++) {
-                if (listSelected.get(i).equals("Sim")) {
-                    listYes.add("Sim");
+                if (listSelected.get(i).equals("Conforme")) {
+                    listYes.add("Conforme");
                 }
-                if (listSelected.get(i).equals("Não")) {
-                    listNot.add("Não");
+                if (listSelected.get(i).equals("Não Conforme")) {
+                    listNot.add("Não Conforme");
                 }
             }
 

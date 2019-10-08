@@ -81,13 +81,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         setTitle(R.string.title_report_list);
 
-        this.checkUserFirebase();
-
         // Check NetWorking
         this.netService.isConnected(MainActivity.this);
 
+        this.checkUserFirebase();
+
         mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
         mAuth = FirebaseAuth.getInstance();
+        mAuth.addAuthStateListener( authStateListener );
         FirebaseUser user = mAuth.getCurrentUser();
         databaseReference = LibraryClass.getFirebase();
         //databaseReference.keepSynced(true);
@@ -98,12 +99,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void checkUserFirebase() {
-        authStateListener = firebaseAuth -> {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-            if( firebaseAuth.getCurrentUser() == null  ){
-                Intent intent = new Intent( MainActivity.this, LoginActivity.class );
-                startActivity( intent );
-                finish();
+                if( firebaseAuth.getCurrentUser() == null  ){
+                    Intent intent = new Intent( MainActivity.this, LoginActivity.class );
+                    startActivity( intent );
+                    finish();
+                }
             }
         };
     }
@@ -152,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView profileEmail = headerLayout.findViewById(R.id.txt_profile_mail);
         ImageView profileView = headerLayout.findViewById(R.id.img_profile);
 
-        info.getInfoUserFirebase(this, user, databaseReference, profileName, profileEmail, profileView);
+        info.getInfoUserFirebase(getApplicationContext(), user, databaseReference, profileName, profileEmail, profileView);
     }
 
     private void clickListenerItems() {
@@ -281,14 +285,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             case R.id.menu_reset: {
-                Intent i = (new Intent(this, UpdatePasswordActivity.class));
-                startActivity(i);
+                startActivity(new Intent(this, UpdatePasswordActivity.class));
                 break;
             }
 
             case R.id.menu_delete: {
-                Intent i = (new Intent(this, RemoveUserActivity.class));
-                startActivity(i);
+                startActivity(new Intent(this, RemoveUserActivity.class));
                 break;
             }
 

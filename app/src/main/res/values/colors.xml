@@ -16,6 +16,7 @@
     <color name="colorGrey">#888888</color>
     <color name="colorWhatsAppLogo">#2BB201</color>
     <color name="colorLinkedInLogo">#0077B5</color>
+    <color name="colorRowSelected">#3F51B599</color>
 
 
 </resources>

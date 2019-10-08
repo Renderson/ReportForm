@@ -128,24 +128,26 @@ public class CreatePDFViewer {
         document.add(paragraph);
 
         // Create Table Check-List
-        paragraph = new Paragraph("Check List", baseFontBoldList);
+        paragraph = new Paragraph("Relatório de Auditoria", baseFontBoldList);
         paragraph.setAlignment(1);
         document.add(paragraph);
         paragraph = new Paragraph("   ");
         document.add(paragraph);
 
-        PdfPTable tablel = new PdfPTable(4);
+        PdfPTable tablel = new PdfPTable(5);
         tablel.setWidthPercentage(100.0F);//altura e largura
 
         PdfPCell cel1 = new PdfPCell(new Paragraph("INSTALAÇÕES FÍSICAS ", baseFontBold));
         PdfPCell cel2 = new PdfPCell(new Paragraph("DESCRIÇÂO ", baseFontBold));
-        PdfPCell cel3 = new PdfPCell(new Paragraph("AVALIAÇÂO ", baseFontBold));
-        PdfPCell cel4 = new PdfPCell(new Paragraph("PHOTOS ", baseFontBold));
+        PdfPCell cel3 = new PdfPCell(new Paragraph("CONFORMIDADE ", baseFontBold));
+        PdfPCell cel4 = new PdfPCell(new Paragraph("OBSERVAÇÃO ", baseFontBold));
+        PdfPCell cel5 = new PdfPCell(new Paragraph("FOTOS ", baseFontBold));
 
         tablel.addCell(cel1);
         tablel.addCell(cel2);
         tablel.addCell(cel3);
         tablel.addCell(cel4);
+        tablel.addCell(cel5);
 
         addListItems(paramRepo, listTitle, tablel);
         document.add(tablel);
@@ -155,45 +157,52 @@ public class CreatePDFViewer {
     }
 
     private void addListItems(ReportItems paramRepo, List listTitle, PdfPTable tablel) throws BadElementException, IOException {
-        PdfPCell cel1;
-        PdfPCell cel2;
-        PdfPCell cel3;
-        PdfPCell cel4;
+        PdfPCell celTitle;
+        PdfPCell celDescription;
+        PdfPCell celRadio;
+        PdfPCell celNote;
+        PdfPCell celImage;
         try {
             JSONArray arrayL = new JSONArray(paramRepo.getListJson());
             for (int i = 0; i < arrayL.length(); i++) {
-                JSONObject obj = arrayL.getJSONObject(i);
-                String selected = obj.getString("title_list");
+                JSONObject objTitle = arrayL.getJSONObject(i);
+                String title = objTitle.getString("title_list");
 
-                JSONObject obj2 = arrayL.getJSONObject(i);
-                String selected2 = obj2.getString("description_list");
+                JSONObject objDescription = arrayL.getJSONObject(i);
+                String description = objDescription.getString("description_list");
 
-                JSONObject obj3 = arrayL.getJSONObject(i);
-                String selected3 = obj3.getString("radio_tx");
+                JSONObject objRadio = arrayL.getJSONObject(i);
+                String radio = objRadio.getString("radio_tx");
 
-                JSONObject obj4 = arrayL.getJSONObject(i);
-                String selected4 = obj4.getString("photo_list");
-                Log.d("PDFImage", selected4);
+                JSONObject objNote = arrayL.getJSONObject(i);
+                String notes = objNote.getString("notes_list");
+                Log.d("Notes", notes);
 
-                byte[] decodedString = Base64.decode(selected4, Base64.DEFAULT);
+                JSONObject objImage = arrayL.getJSONObject(i);
+                String image = objImage.getString("photo_list");
+                Log.d("PDFImage", image);
+
+                byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 Log.i("log", "PDFImage3: " + decodedByte + " Image");
 
                 Image image1 = Image.getInstance(decodedString);
                 Log.i("log", "PDFImage4: " + image1 + " Image");
 
-                listTitle.add(selected);
-                cel1 = new PdfPCell(new Paragraph(selected));
-                cel2 = new PdfPCell(new Paragraph(selected2));
-                cel3 = new PdfPCell(new Paragraph(selected3));
-                cel4 = new PdfPCell(new Paragraph(selected4));
-                cel4.setImage(image1);
-                cel4.setPadding(5f);
+                listTitle.add(title);
+                celTitle = new PdfPCell(new Paragraph(title));
+                celDescription = new PdfPCell(new Paragraph(description));
+                celRadio = new PdfPCell(new Paragraph(radio));
+                celNote = new PdfPCell(new Paragraph(notes));
+                celImage = new PdfPCell(new Paragraph(image));
+                celImage.setImage(image1);
+                celImage.setPadding(5f);
 
-                tablel.addCell(cel1);
-                tablel.addCell(cel2);
-                tablel.addCell(cel3);
-                tablel.addCell(cel4);
+                tablel.addCell(celTitle);
+                tablel.addCell(celDescription);
+                tablel.addCell(celRadio);
+                tablel.addCell(celNote);
+                tablel.addCell(celImage);
             }
         } catch (JSONException e) {
             e.printStackTrace();

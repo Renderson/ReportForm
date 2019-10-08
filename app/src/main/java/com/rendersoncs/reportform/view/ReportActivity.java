@@ -27,7 +27,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +38,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.BuildConfig;
 import com.rendersoncs.reportform.R;
@@ -47,6 +47,7 @@ import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.async.PDFAsyncTask;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.fragment.NewItemListFireBase;
+import com.rendersoncs.reportform.fragment.ReportNoteFragment;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnItemListenerClicked;
 import com.rendersoncs.reportform.login.util.LibraryClass;
@@ -64,7 +65,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,6 +92,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private ArrayList<String> listTitle = new ArrayList<>();
     private ArrayList<String> listDescription = new ArrayList<>();
     private ArrayList<String> listRadio = new ArrayList<>();
+    private ArrayList<String> listNotes = new ArrayList<>();
     private ArrayList<String> listPhoto = new ArrayList<>();
     private JSONArray jsArray = new JSONArray();
 
@@ -127,7 +128,12 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         mAdapter.setOnItemListenerClicked(this);
         RecyclerView.LayoutManager llm = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(llm);
+
+//        ItemTouchHelper.Callback callback = new ItemMoveCallBack(mAdapter);
+//        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+//        touchHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(mAdapter);
+        //mAdapter.notifyDataSetChanged();
 
         this.isConnected();
 
@@ -151,7 +157,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
         FloatingActionButton fab = findViewById(R.id.fab_new_item);
         fab.setOnClickListener(v -> startNewItemListFireBase());
-        //mAdapter.notifyDataSetChanged();
 
         // Animated FloatingButton
         animated.animatedFab(recyclerView, fab);
@@ -191,7 +196,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 mKeys.add(key);
 
                 int index = mKeys.indexOf(key);
-                mAdapter.notifyItemChanged(index);
+                mAdapter.notifyDataSetChanged();
+                //mAdapter.notifyItemChanged(index);
             }
 
             @Override
@@ -201,7 +207,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
                 int index = mKeys.indexOf(key);
                 ReportActivity.this.reportItems.set(index, reportItems);
-                mAdapter.notifyItemChanged(index);
+                //mAdapter.notifyItemChanged(index);
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -211,7 +217,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
                 int index = mKeys.indexOf(key);
                 reportItems.remove(index);
-                mAdapter.notifyItemRemoved(index);
+                mKeys.remove(index);
+                //mAdapter.notifyItemRemoved(index);
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -225,7 +232,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
             }
         });
-//        mAdapter.notifyDataSetChanged();
     }
 
     // Menu
@@ -271,7 +277,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                             "Limpar lista?",
                             "Deseja realmente limpar a seção? Esse processo vai apagar todo seu progresso!",
                             "Sim",
-                            (dialogInterface, i) -> clearRadioButton(),
+                            (dialogInterface, i) -> clearCheckList(),
                             "Não", null, false);
                 }
                 break;
@@ -295,6 +301,11 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private void handleSave() {
 
         this.checkAnswers();
+//        if (listRadio.size() > listPhoto.size()){
+//            Toast.makeText(this, "Exitem item selecionado sem foto!", Toast.LENGTH_SHORT).show();
+//            Log.i("log", "Item: " + listRadio + " listRadioS");
+//            Log.i("log", "Item: " + listPhoto.size() + " listPhotoS");
+//        } else {
 
         final ReportItems reportItems = new ReportItems();
         reportItems.setCompany(resultCompany.getText().toString());
@@ -302,12 +313,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         reportItems.setDate(resultDate.getText().toString());
 
         // Convert ArrayList in Json Object
-        for (int i = 0; (i < listRadio.size()) && (i < listTitle.size()) && (i < listDescription.size()) && (i < listPhoto.size()); i++) {
+        for (int i = 0; (i < listRadio.size()) && (i < listTitle.size()) && (i < listDescription.size()) && (i < listNotes.size()) && (i < listPhoto.size()); i++) {
             JSONObject jsObject = new JSONObject();
             try {
                 jsObject.put("title_list", listTitle.get(i));
                 jsObject.put("description_list", listDescription.get(i));
                 jsObject.put("radio_tx", listRadio.get(i));
+                jsObject.put("notes_list", listNotes.get(i));
                 jsObject.put("photo_list", listPhoto.get(i));
 
             } catch (JSONException e) {
@@ -332,29 +344,18 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             Toast.makeText(getApplicationContext(), R.string.txt_error_save, Toast.LENGTH_SHORT).show();
             finish();
         }
+        //}
     }
 
-    // Clear all every Lists and reload Adapter
-    private void clearRadioButton() {
-        for (int i = 0; i < reportItems.size(); i++) {
-            if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2()) {
-                reportItems.get(i).setOpt1(false);
-                reportItems.get(i).setOpt2(false);
-            }
-        }
-        listTitle.clear();
-        listRadio.clear();
-        mAdapter.listIDRadio.clear();
+    // Clear every Lists and reload Adapter
+    private void clearCheckList() {
 
-        if (mAdapter.radioButton.isChecked()) {
-            mAdapter.radioButton.clearFocus();
-        }
-        mAdapter.notifyDataSetChanged();
-        mAdapter.expandState.clear();
+        mAdapter.listIDRadio.clear();
+        reportItems.clear();
+        this.isConnected();
 
         Toast.makeText(getApplicationContext(), "Lista vazia!", Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public void radioItemChecked(int itemPosition, int optNum) {
@@ -377,10 +378,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         for (int i = 0; i < reportItems.size(); i++) {
             if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2()) {
                 if (reportItems.get(i).getSelectedAnswerPosition() == 1) {
-                    String yes = "Sim";
+                    String yes = "Conforme";
                     listRadio.add(yes);
                 } else {
-                    String not = "Não";
+                    String not = "Não Conforme";
                     listRadio.add(not);
                 }
 
@@ -392,15 +393,29 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 listDescription.add(description);
                 Log.i("LOG", "getDescription " + listDescription);
 
+                String note = reportItems.get(i).getNote();
+                if (note == null){
+                    note = "Sem observação";
+                    listNotes.add(note);
+                } else {
+                    listNotes.add(note);
+                    Log.i("LOG", "getNotes " + listNotes);
+                }
+
                 Bitmap bitmapPhoto = reportItems.get(i).getPhotoId();
-                String encodeImage = resizeImage.getEncoded64Image(bitmapPhoto);
-                listPhoto.add(encodeImage);
-                Log.i("List ", "Lista Photo " + listPhoto + " item");
+                if (bitmapPhoto == null) {
+                    return;
+                } else {
+                    String encodeImage = resizeImage.getEncoded64Image(bitmapPhoto);
+                    listPhoto.add(encodeImage);
+                    Log.i("List ", "Lista Photo " + listPhoto.size() + " item");
+                }
 
             }
         }
     }
 
+    // Update Item List FireBase
     @Override
     public void updateList(int position) {
         NewItemListFireBase nFrag = new NewItemListFireBase();
@@ -412,6 +427,49 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         Log.d("TestFrag", items.getTitle() + items.getDescription());
         nFrag.setArguments(bundle);
         nFrag.show((ReportActivity.this).getSupportFragmentManager(), "new_item");
+
+    }
+
+    // Remove Item List FireBase
+    public void removeItem(int position) {
+        ReportItems items = reportItems.get(position);
+
+        alertDialog.showDialog(ReportActivity.this,
+                "Excluir!",
+                "Ao confirmar, o item da lista será excluído.",
+                "Confirmar",
+                (dialogInterface, i) -> {
+                    Query query = databaseReference.orderByChild("title").equalTo(items.getTitle());
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                ds.getRef().removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_error_update_list), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                },
+                "Cancelar", null, false);
+    }
+
+    // Insert Note
+    public void insertNote(int pos) {
+        position = pos;
+        ReportNoteFragment fragNote = new ReportNoteFragment(mAdapter);
+        Bundle bundle = new Bundle();
+        ReportItems items = reportItems.get(position);
+
+        bundle.putString("note", items.getNote());
+        bundle.putInt("position", position);
+        fragNote.setArguments(bundle);
+        Log.d("NoteFrag ", items.getNote() + position);
+        fragNote.show((ReportActivity.this).getSupportFragmentManager(), "insert_note");
 
     }
 
@@ -483,6 +541,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
 
                 ResizeImage.decodeBitmap(photoUri, mAdapter, position);
+                radioItemChecked(position, 1);
             }
         }
         if (requestCode == REQUEST_CODE_GALLERY && resultCode == RESULT_OK && data != null) {
@@ -490,6 +549,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
                 mAdapter.setImageInItem(position, bitmap);
+                radioItemChecked(position, 1);
                 Log.i("LOG", "ImagePath " + bitmap);
 
             } catch (IOException e) {

@@ -1,14 +1,17 @@
 package com.rendersoncs.reportform.adapter;
 
 import android.animation.ObjectAnimator;
+import android.content.ClipData;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -22,8 +25,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,11 +45,12 @@ import com.rendersoncs.reportform.login.util.LibraryClass;
 
 import static com.android.volley.VolleyLog.TAG;
 
-public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckListAdapter.ViewHolder> {
+public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckListAdapter.ViewHolder> implements ItemMoveCallBack.ItemTouchHelperContract{
     private List<ReportItems> reportItems;
-    public SparseBooleanArray expandState = new SparseBooleanArray();
+    private SparseBooleanArray expandState = new SparseBooleanArray();
     public ArrayList<Integer> listIDRadio = new ArrayList<Integer>();
     public Context context;
+    public Boolean itemPhoto = false;
 
     public ArrayList<String> listTxtRadio = new ArrayList<>();
     public ArrayList<String> listText = new ArrayList<>();
@@ -83,10 +90,16 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
-        //Header
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
+        int position = viewHolder.getAdapterPosition();
         final ReportItems repo = reportItems.get(position);
+        itemsListViewHolder(viewHolder, position, repo);
 
+        Log.i(TAG, "onBindViewHolder invoked" + position);
+    }
+
+    private void itemsListViewHolder(@NonNull ViewHolder viewHolder, int position, ReportItems repo) {
+        //Header
         if (viewHolder instanceof HeaderVh) {
             ((HeaderVh) viewHolder).headerTitle.setText(repo.getTitle());
 
@@ -114,24 +127,62 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
                     onItemListenerClicked.updateList(position);
                 }
             });
-            
+
+            //((ItemVh) viewHolder).itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            viewHolder.tvTitleList.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    onItemListenerClicked.removeItem(position);
+                    return false;
+                }
+            });
+
+            viewHolder.resultPhoto2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onItemListenerClicked.insertNote(position);
+                }
+            });
+
             viewHolder.takePhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onItemListenerClicked.takePhoto(position);
                 }
             });
-//            if (viewHolder.resultPhoto != null){
-//                Glide.with(context).load(repo.getPhotoId()).centerCrop().into(viewHolder.resultPhoto);
-//            } else {
-//                Glide.with(context).load(repo.getPhotoId()).centerCrop().into(viewHolder.resultPhoto2);
-//            }
 
-            Glide.with(context).load(repo.getPhotoId()).centerCrop().into(viewHolder.resultPhoto);
-            Log.i("LOG", "ImagePath3 " + repo.getPhotoId());
+            if (repo.getPhotoId() == null){
+                viewHolder.resultPhoto.setImageAlpha(R.drawable.image);
+                viewHolder.check.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));
+                viewHolder.checkImage.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));
+            } else {
+                viewHolder.mRadioButtonConform.setChecked(true);
+                viewHolder.checkImage.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
+                Glide.with(context).load(repo.getPhotoId()).centerCrop().into(viewHolder.resultPhoto);
+                Log.i("LOG", "ImagePath3 " + repo.getPhotoId());
+            }
+
+            if (repo.getNote() == null || repo.getNote().isEmpty()){
+                viewHolder.resultPhoto2.setImageAlpha(R.drawable.ic_action_note);
+                viewHolder.checkNote.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));
+            } else {
+                viewHolder.resultPhoto2.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
+                viewHolder.checkNote.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
+            }
 
             viewHolder.mRadioButtonConform.setChecked(repo.isOpt1());
             viewHolder.mRadioButtonNotConform.setChecked(repo.isOpt2());
+
+            if (viewHolder.mRadioButtonConform.isChecked()){
+                listIDRadio.add(1);
+                viewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioYes);
+                viewHolder.check.setColorFilter(ContextCompat.getColor(context, R.color.colorRadioYes));
+
+            } else if (viewHolder.mRadioButtonNotConform.isChecked()) {
+                listIDRadio.add(2);
+                viewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioNot);
+                viewHolder.check.setColorFilter(ContextCompat.getColor(context, R.color.colorRadioYes));
+            }
 
             //Test onClick RadioButton
             viewHolder.mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -142,12 +193,11 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
                     //Test Salve in a ArrayList RadioButton Selected
                     radioButton = group.findViewById(selectedRadioButtonID);
                     int selectedRadioId = radioButton.getId();
-                    listIDRadio.add(selectedRadioId);
+                    //listIDRadio.add(selectedRadioId);
                 }
             });
             // End RadioButton
         }
-        Log.i(TAG, "onBindViewHolder invoked" + position);
     }
 
     public int getItemViewType(int i) {
@@ -167,7 +217,8 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitleList, tvDescription;
-        ImageView takePhoto, resultPhoto, resultPhoto2;
+        public ImageView takePhoto, resultPhoto, check, checkImage,resultPhoto2, checkNote;
+        View rowView;
 
         RadioGroup mRadioGroup;
         RadioButton mRadioButtonConform, mRadioButtonNotConform;
@@ -177,11 +228,15 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
         private ViewHolder(View view) {
             super(view);
 
+            rowView = view;
             tvTitleList = view.findViewById(R.id.textView_title);
             tvDescription = view.findViewById(R.id.textView_subTitle);
             takePhoto = view.findViewById(R.id.photo);
             resultPhoto = view.findViewById(R.id.result_photo);
+            check = view.findViewById(R.id.action_check);
+            checkImage = view.findViewById(R.id.action_image);
             resultPhoto2 = view.findViewById(R.id.result_photo2);
+            checkNote = view.findViewById(R.id.action_note);
 
             buttonLayoutArrow = view.findViewById(R.id.btnArrow);
             expandableLayout = view.findViewById(R.id.expandableLayout);
@@ -265,5 +320,47 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
         dataSet.setPhotoId(imageSrc);
         Log.i("LOG", "ImagePath2 " + imageSrc);
         notifyDataSetChanged();
+    }
+
+    public void insertNote(int position, String note){
+        ReportItems dataSet = reportItems.get(position);
+        dataSet.setNote(note);
+        Log.i("LOG", "Note " + note);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRowMoved(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition){
+            for (int i = fromPosition; i < toPosition; i++){
+                Collections.swap(reportItems, i, i + 1);
+                //notifyItemMoved(fromPosition, toPosition);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--){
+                Collections.swap(reportItems, i, i - 1);
+                //notifyItemMoved(fromPosition, toPosition);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+
+        new Thread((Runnable) () ->{
+            ReportItems item1 = reportItems.get(fromPosition);
+            ReportItems item2 = reportItems.get(toPosition);
+
+            item1.setPosition(toPosition);
+            item2.setPosition(toPosition);
+
+        }).start();
+    }
+
+    @Override
+    public void onRowSelected(ViewHolder myViewHolder) {
+        myViewHolder.rowView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRowSelected));
+    }
+
+    @Override
+    public void onRowClear(ViewHolder myViewHolder) {
+        myViewHolder.rowView.setBackgroundColor(Color.WHITE);
     }
 }

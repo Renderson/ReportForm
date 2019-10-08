@@ -5,5 +5,9 @@ public interface OnItemListenerClicked {
 
     void takePhoto(int position);
 
+    void insertNote(int position);
+
     void updateList(int position);
+
+    void removeItem(int position);
 }

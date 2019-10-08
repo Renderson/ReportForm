@@ -5,7 +5,8 @@ import android.net.Uri;
 
 public class ReportItems {
 
-    private int id, conformed;
+    private String note;
+    private int id, conformed, position;
 
     private String company, email, date, photo, listJson;
     private String title, description, header;
@@ -159,5 +160,21 @@ public class ReportItems {
 
     public void setPhotoUri(Uri photoUri) {
         this.photoUri = photoUri;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

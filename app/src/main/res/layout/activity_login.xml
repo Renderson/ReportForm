@@ -87,7 +87,7 @@
             android:id="@+id/textView6"
             style="@style/TextBottomFormField"
             android:layout_marginEnd="@dimen/layout_marginEnd_8dp"
-            android:layout_marginBottom="@dimen/layout_marginBottom_8dp"
+            android:layout_marginBottom="@dimen/layout_margin_8dp"
             android:onClick="callReset"
             android:text="Recuper Senha?"
             app:layout_constraintBottom_toBottomOf="@+id/button"
