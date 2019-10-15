@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Report Form</string>
-    <string name="version_name">Versão 1.0</string>
+    <string name="version">Versão 1.0</string>
     <string name="alert_dialog_permission">É preciso a permissão para salvar/acessar arquivos no seu dispositivo.</string>
     <string name="txt_to_allow">Permitir</string>
     <string name="txt_deny">Negar</string>
@@ -15,8 +15,8 @@
     <string name="txt_error_save">Error ao salvar!</string>
     <string name="alert_leave_the_report">Sair do relatório?</string>
     <string name="txt_leave_the_report">Desaja realmente sair do relatório? Você perderá todo seu progresso!</string>
-    <string name="txt_continue">Continuar</string>
-    <string name="txt_cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
     <string name="alert_remove_report">Remover relatório!</string>
     <string name="txt_remove_report">Deseja realmente remover o relatório?</string>
     <string name="txt_share_report">Compartilhar relatório</string>
@@ -110,4 +110,11 @@
     <string name="label_permission_camera">Precisamos da permissão para acessar a camera.</string>
     <string name="label_permission_read">Precisamos da permissão de gravar dados, para salvar seu relatório.</string>
     <string name="label_error_update_list">Error ao alterar item da lista.</string>
+    <string name="label_error_return_photo_full">Algo deu errado, tente novamente!</string>
+    <string name="label_photo_full">Imagem full</string>
+    <string name="label_nothing_image">Não há imagem a ser mostrada.</string>
+    <string name="label_remove_item_list">Ao confirmar, o item será removido da lista.</string>
+    <string name="radio_according">Conforme</string>
+    <string name="radio_not_applicable">Não Aplicável</string>
+    <string name="radio_not_according">Não Conforme</string>
 </resources>

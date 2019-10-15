@@ -47,6 +47,7 @@ import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.async.PDFAsyncTask;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.fragment.NewItemListFireBase;
+import com.rendersoncs.reportform.fragment.PhotoFullFragment;
 import com.rendersoncs.reportform.fragment.ReportNoteFragment;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnItemListenerClicked;
@@ -62,6 +63,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -95,6 +97,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private ArrayList<String> listNotes = new ArrayList<>();
     private ArrayList<String> listPhoto = new ArrayList<>();
     private JSONArray jsArray = new JSONArray();
+    private Boolean checkList = true;
 
     private DatabaseReference databaseReference;
     private User user = new User();
@@ -137,6 +140,18 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
         this.isConnected();
 
+        this.getBundleReportFromDialog();
+
+        this.mReportBusiness = new ReportBusiness(this);
+
+        FloatingActionButton fab = findViewById(R.id.fab_new_item);
+        fab.setOnClickListener(v -> startNewItemListFireBase());
+
+        // Animated FloatingButton
+        animated.animatedFab(recyclerView, fab);
+    }
+
+    private void getBundleReportFromDialog() {
         // get text from DialogFragment
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -152,14 +167,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         String date = bundle.getString("date");
         resultDate = findViewById(R.id.result_date);
         resultDate.setText(date);
-
-        this.mReportBusiness = new ReportBusiness(this);
-
-        FloatingActionButton fab = findViewById(R.id.fab_new_item);
-        fab.setOnClickListener(v -> startNewItemListFireBase());
-
-        // Animated FloatingButton
-        animated.animatedFab(recyclerView, fab);
     }
 
     private void startNewItemListFireBase() {
@@ -179,6 +186,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         } else {
             findViewById(R.id.progressBar).setVisibility(View.GONE);
             jsonListModeOff.addItemsFromJsonList(reportItems);
+            mAdapter.notifyDataSetChanged();
             //Toast.makeText(getApplicationContext(), "Lista offLine", Toast.LENGTH_SHORT).show();
         }
     }
@@ -289,12 +297,12 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         alertDialog.showDialog(ReportActivity.this,
                 getResources().getString(R.string.alert_leave_the_report),
                 getResources().getString(R.string.txt_leave_the_report),
-                getResources().getString(R.string.txt_continue),
+                getResources().getString(R.string.confirm),
                 (dialogInterface, i) -> {
                     this.closeMethods();
                     finish();
                 },
-                getResources().getString(R.string.txt_cancel), null, false);
+                getResources().getString(R.string.cancel), null, false);
     }
 
     // Save Company, Email, Data, List
@@ -351,6 +359,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private void clearCheckList() {
 
         mAdapter.listIDRadio.clear();
+        mAdapter.expandState.clear();
         reportItems.clear();
         this.isConnected();
 
@@ -369,6 +378,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             case 2:
                 reportItems.get(itemPosition).setOpt2(true);
                 break;
+
+            case 3:
+                reportItems.get(itemPosition).setOpt3(true);
+                break;
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -376,13 +389,18 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private void checkAnswers() {
 
         for (int i = 0; i < reportItems.size(); i++) {
-            if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2()) {
+            if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2() || reportItems.get(i).isOpt3()) {
                 if (reportItems.get(i).getSelectedAnswerPosition() == 1) {
-                    String yes = "Conforme";
-                    listRadio.add(yes);
-                } else {
-                    String not = "Não Conforme";
-                    listRadio.add(not);
+                    String C = getResources().getString(R.string.radio_according);
+                    listRadio.add(C);
+                }
+                if (reportItems.get(i).getSelectedAnswerPosition() == 2) {
+                    String NA = getResources().getString(R.string.radio_not_applicable);
+                    listRadio.add(NA);
+                }
+                if (reportItems.get(i).getSelectedAnswerPosition() == 3) {
+                    String NC = getResources().getString(R.string.radio_not_according);
+                    listRadio.add(NC);
                 }
 
                 String title = reportItems.get(i).getTitle();
@@ -394,7 +412,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 Log.i("LOG", "getDescription " + listDescription);
 
                 String note = reportItems.get(i).getNote();
-                if (note == null){
+                if (note == null) {
                     note = "Sem observação";
                     listNotes.add(note);
                 } else {
@@ -410,9 +428,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     listPhoto.add(encodeImage);
                     Log.i("List ", "Lista Photo " + listPhoto.size() + " item");
                 }
-
             }
         }
+        Log.i("List ", "Size Photo " + listPhoto.size() + " item");
+        Log.i("List ", "Size Radio " + listRadio.size() + " item");
     }
 
     // Update Item List FireBase
@@ -435,9 +454,9 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         ReportItems items = reportItems.get(position);
 
         alertDialog.showDialog(ReportActivity.this,
-                "Excluir!",
-                "Ao confirmar, o item da lista será excluído.",
-                "Confirmar",
+                getResources().getString(R.string.remove),
+                getResources().getString(R.string.label_remove_item_list),
+                getResources().getString(R.string.confirm),
                 (dialogInterface, i) -> {
                     Query query = databaseReference.orderByChild("title").equalTo(items.getTitle());
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -455,7 +474,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     });
 
                 },
-                "Cancelar", null, false);
+                getResources().getString(R.string.cancel), null, false);
     }
 
     // Insert Note
@@ -471,6 +490,32 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         Log.d("NoteFrag ", items.getNote() + position);
         fragNote.show((ReportActivity.this).getSupportFragmentManager(), "insert_note");
 
+    }
+
+    // Show Photo Full
+    public void photoFull(int pos) {
+        position = pos;
+        PhotoFullFragment fullFragment = new PhotoFullFragment();
+        Bundle bundle = new Bundle();
+        ReportItems items = reportItems.get(position);
+
+        Bitmap bitmap = items.getPhotoId();
+
+        if (bitmap == null) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_nothing_image), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] bytes = stream.toByteArray();
+
+        bundle.putInt("position", position);
+        bundle.putByteArray("image", bytes);
+
+        fullFragment.setArguments(bundle);
+        fullFragment.show(getSupportFragmentManager(), "photoFull");
+        Log.i("FullFrag ", " " + bytes);
     }
 
     // OPen Camera

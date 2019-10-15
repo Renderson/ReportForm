@@ -39,12 +39,12 @@
 //    private int position;
 //    private Context context;
 //
-//    protected void openGallery1() {
+//    protected void openGallery() {
 //        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 //        startActivityForResult(intent, REQUEST_CODE_GALLERY);
 //    }
 //
-//    public void openCamera1(Activity activity) {
+//    public void openCamera(Activity activity) {
 //        File photoFile;
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -57,7 +57,7 @@
 //                        photoFile = path.createImageFile();
 //
 //                        if (photoFile != null) {
-//                            Uri photoUri = FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".FileProvider", photoFile);
+//                            photoUri = FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".FileProvider", photoFile);
 //                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
 //                            startActivityForResult(takePictureIntent, REQUEST_CODE_CAMERA);
 //                        }

@@ -28,7 +28,7 @@ public class AboutFragment extends BottomSheetFragment {
         adsElement.setTitle(getResources().getString(R.string.app_name));
 
         Element versionElement = new Element();
-        versionElement.setTitle(getString(R.string.version_name));
+        versionElement.setTitle(getString(R.string.version));
 
         View aboutPage = (new AboutPage(this.getActivity()))
                 .setImage(R.drawable.no_result)

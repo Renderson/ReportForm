@@ -75,14 +75,14 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
                                 new AlertDialog.Builder(mContext)
                                         .setTitle(R.string.alert_remove_report)
                                         .setMessage(R.string.txt_remove_report)
-                                        .setPositiveButton(R.string.txt_continue, new DialogInterface.OnClickListener() {
+                                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 // Delete item
                                                 listener.onDeleteClick(repoEntity.getId());
                                             }
                                         })
-                                        .setNeutralButton(R.string.txt_cancel, null)
+                                        .setNeutralButton(R.string.cancel, null)
                                         .show();
                                 return true;
 

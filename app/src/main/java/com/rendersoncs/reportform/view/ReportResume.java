@@ -47,8 +47,9 @@ public class ReportResume extends AppCompatActivity {
     private List<ReportResumeItems> repoResumeList;
 
     private ArrayList<String> listSelected = new ArrayList<>();
-    public ArrayList<String> listYes = new ArrayList<>();
-    public ArrayList<String> listNot = new ArrayList<>();
+    public ArrayList<String> listRadioC = new ArrayList<>();
+    public ArrayList<String> listRadioNA = new ArrayList<>();
+    public ArrayList<String> listRadioNC = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,17 +118,19 @@ public class ReportResume extends AppCompatActivity {
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
 
-        int mxNot = listNot.size();
-        int mxYes = listYes.size();
+        int mxC = listRadioC.size();
+        int mxNA = listRadioNA.size();
+        int mxNC = listRadioNC.size();
 
-        yValues.add(new PieEntry(mxYes, "Conforme"));
-        yValues.add(new PieEntry(mxNot, "Não Conforme"));
+        yValues.add(new PieEntry(mxC, getResources().getString(R.string.radio_according)));
+        yValues.add(new PieEntry(mxNA, getResources().getString(R.string.radio_not_applicable)));
+        yValues.add(new PieEntry(mxNC, getResources().getString(R.string.radio_not_according)));
 
         PieDataSet dataSet = new PieDataSet(yValues, "");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         dataSet.setValueTextSize(24f);
-        dataSet.setColors(getResources().getColor(R.color.colorRadioYes), getResources().getColor(R.color.colorRadioNot));
+        dataSet.setColors(getResources().getColor(R.color.colorRadioC), getResources().getColor(R.color.colorRadioNA), getResources().getColor(R.color.colorRadioNC));
 
         // Animation
         pieChart.animateY(800, Easing.EaseInCirc);
@@ -198,11 +201,14 @@ public class ReportResume extends AppCompatActivity {
             }
 
             for (int i = 0; i < listSelected.size(); i++) {
-                if (listSelected.get(i).equals("Conforme")) {
-                    listYes.add("Conforme");
+                if (listSelected.get(i).equals(getResources().getString(R.string.radio_according))) {
+                    listRadioC.add(getResources().getString(R.string.radio_according));
                 }
-                if (listSelected.get(i).equals("Não Conforme")) {
-                    listNot.add("Não Conforme");
+                if (listSelected.get(i).equals(getResources().getString(R.string.radio_not_applicable))) {
+                    listRadioNA.add(getResources().getString(R.string.radio_not_applicable));
+                }
+                if (listSelected.get(i).equals(getResources().getString(R.string.radio_not_according))) {
+                    listRadioNC.add(getResources().getString(R.string.radio_not_according));
                 }
             }
 

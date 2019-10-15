@@ -57,8 +57,8 @@ public class NewItemListFireBase extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
-                .setNegativeButton(getResources().getString(R.string.txt_cancel), (dialog, which) -> {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.txt_cancel), Toast.LENGTH_SHORT).show();
+                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
+                    //Toast.makeText(getActivity(), getResources().getString(R.string.txt_cancel), Toast.LENGTH_SHORT).show();
                     NewItemListFireBase.this.getDialog().cancel();
                 })
 

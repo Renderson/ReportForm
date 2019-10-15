@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
@@ -25,6 +26,8 @@ public class ReportNoteFragment extends DialogFragment {
         this.mAdapter = mAdapter;
     }
 
+    @NonNull
+    @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.fragment_report_note, null);
@@ -39,8 +42,8 @@ public class ReportNoteFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
-                .setNegativeButton("Cancelar", (dialog, which) ->{ })
-                .setPositiveButton("Inserir", (dialog, which)->{
+                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) ->{ })
+                .setPositiveButton(getResources().getString(R.string.insert), (dialog, which)->{
 
                     if (getNote == null){
                         insertNewNote();
@@ -55,14 +58,14 @@ public class ReportNoteFragment extends DialogFragment {
     private void insertNewNote() {
         String newNote = note.getText().toString();
         mAdapter.insertNote(position, newNote);
-        Log.d("NoteFrag ", "Adapter1 " + position + newNote);
+        Log.d("NoteFrag ", "InsertNote " + position + newNote);
     }
 
     private void updateNote(){
         if (getArguments() != null){
             String updateNote = note.getText().toString();
             mAdapter.insertNote(position, updateNote);
-            Log.d("NoteFrag ", "Adapter2 " + position + updateNote);
+            Log.d("NoteFrag ", "UpdateNote " + position + updateNote);
         }
     }
 

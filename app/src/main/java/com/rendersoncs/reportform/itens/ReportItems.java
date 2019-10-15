@@ -14,7 +14,7 @@ public class ReportItems {
     private Bitmap photoId;
     private Uri photoUri;
 
-    private boolean opt1, opt2;
+    private boolean opt1, opt2, opt3;
     private int selectedAnswerPosition = -1;
     private boolean shine;
 
@@ -116,6 +116,7 @@ public class ReportItems {
         this.opt1 = opt1;
         if (opt1){
             setOpt2(false);
+            setOpt3(false);
         }
     }
 
@@ -127,6 +128,19 @@ public class ReportItems {
         this.opt2 = opt2;
         if (opt2){
             setOpt1(false);
+            setOpt3(false);
+        }
+    }
+
+    public boolean isOpt3() {
+        return opt3;
+    }
+
+    public void setOpt3(boolean opt3) {
+        this.opt3 = opt3;
+        if (opt3){
+            setOpt1(false);
+            setOpt2(false);
         }
     }
 

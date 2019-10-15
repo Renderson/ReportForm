@@ -10,8 +10,9 @@
     <color name="colorTextBlack">#222222</color>
     <color name="colorResume">#FF3F58E4</color>
 
-    <color name="colorRadioYes">#ff99cc00</color>
-    <color name="colorRadioNot">#ffcc0000</color>
+    <color name="colorRadioC">#ff99cc00</color>
+    <color name="colorRadioNA">#ff33b5e5</color>
+    <color name="colorRadioNC">#ffcc0000</color>
 
     <color name="colorGrey">#888888</color>
     <color name="colorWhatsAppLogo">#2BB201</color>

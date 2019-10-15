@@ -11,6 +11,12 @@
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="2dp">
 
+
+    <ImageView
+        android:id="@+id/action_check"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,35 +48,35 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/action_check"
-                android:src="@drawable/ic_action_check"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_alignBottom="@+id/textView_title"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="15dp"
-                android:layout_toEndOf="@+id/textView_title" />
+<!--            <ImageView-->
+<!--                android:id="@+id/action_check"-->
+<!--                android:src="@drawable/ic_action_check"-->
+<!--                android:layout_width="20dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_alignBottom="@+id/textView_title"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_toEndOf="@+id/textView_title" />-->
 
-            <ImageView
-                android:id="@+id/action_image"
-                android:src="@drawable/ic_action_image"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_alignBottom="@+id/action_check"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@+id/action_check" />
+<!--            <ImageView-->
+<!--                android:id="@+id/action_image"-->
+<!--                android:src="@drawable/ic_action_image"-->
+<!--                android:layout_width="20dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_alignBottom="@+id/action_check"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginStart="5dp"-->
+<!--                android:layout_toEndOf="@+id/action_check" />-->
 
-            <ImageView
-                android:id="@+id/action_note"
-                android:src="@drawable/ic_action_note"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_alignBottom="@+id/action_image"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@+id/action_image" />
+<!--            <ImageView-->
+<!--                android:id="@+id/action_note"-->
+<!--                android:src="@drawable/ic_action_note"-->
+<!--                android:layout_width="20dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_alignBottom="@+id/action_image"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginStart="5dp"-->
+<!--                android:layout_toEndOf="@+id/action_image" />-->
 
             <!--My dropdown Button -->
             <RelativeLayout
@@ -136,11 +142,11 @@
                     android:src="@drawable/image"/>
 
                 <ImageView
-                    android:id="@+id/result_photo2"
+                    android:id="@+id/note"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="4dp"
-                    android:padding="10dp"
+                    android:padding="12dp"
                     android:src="@drawable/ic_action_note"/>
 
                 <RelativeLayout
@@ -165,13 +171,13 @@
                             android:checked="false"
                             android:text="C" />
 
-                        <!--androidx.appcompat.widget.AppCompatRadioButton
+                        <androidx.appcompat.widget.AppCompatRadioButton
                             android:id="@+id/radio_not_applicable"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:buttonTint="@android:color/holo_blue_light"
                             android:checked="false"
-                            android:text="Não aplicável" /-->
+                            android:text="NA" />
 
                         <androidx.appcompat.widget.AppCompatRadioButton
                             android:id="@+id/radio_not_conform"

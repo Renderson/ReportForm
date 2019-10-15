@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rendersoncs.reportform.view.ReportActivity;
 
@@ -58,10 +57,10 @@ public class ReportFormDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
 
-                .setNegativeButton(R.string.txt_cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
                         ReportFormDialog.this.getDialog().cancel();
                     }
                 })
@@ -87,10 +86,7 @@ public class ReportFormDialog extends DialogFragment {
                         intent.putExtras(bundle);
 
                         startActivity(intent);
-
-                        Toast.makeText(getContext(), R.string.txt_new_report, Toast.LENGTH_SHORT).show();
-
-
+                        //Toast.makeText(getContext(), R.string.txt_new_report, Toast.LENGTH_SHORT).show();
                     }
                 });
 

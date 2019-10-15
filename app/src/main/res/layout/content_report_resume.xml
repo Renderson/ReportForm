@@ -170,7 +170,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="8dp"
                     android:text="ACESSAR"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/about_text_color"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/img_pdf"
                     app:layout_constraintTop_toTopOf="@+id/img_pdf" />
