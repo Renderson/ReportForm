@@ -65,7 +65,7 @@ public class ReportFormDialog extends DialogFragment {
                     }
                 })
 
-                .setPositiveButton(R.string.txt_start, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(getActivity(), ReportActivity.class);

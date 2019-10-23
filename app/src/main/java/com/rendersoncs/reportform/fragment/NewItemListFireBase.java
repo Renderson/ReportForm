@@ -163,6 +163,6 @@ public class NewItemListFireBase extends DialogFragment {
 
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        Toast.makeText(getActivity(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.canceled, Toast.LENGTH_SHORT).show();
     }
 }

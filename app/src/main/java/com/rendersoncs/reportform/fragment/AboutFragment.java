@@ -9,12 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.rendersoncs.reportform.R;
 
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
-public class AboutFragment extends BottomSheetFragment {
+public class AboutFragment extends BottomSheetDialogFragment {
 
     private static final String NUMBER = "985700958";
     private static final String NUMBER_WHATS = "+5511985700958";
@@ -22,7 +25,7 @@ public class AboutFragment extends BottomSheetFragment {
     private static final String LINKED_IN_ID = "renderson-cerqueira-14a91a53";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         Element adsElement = new Element();
         adsElement.setTitle(getResources().getString(R.string.app_name));
@@ -30,7 +33,7 @@ public class AboutFragment extends BottomSheetFragment {
         Element versionElement = new Element();
         versionElement.setTitle(getString(R.string.version));
 
-        View aboutPage = (new AboutPage(this.getActivity()))
+        return (new AboutPage(this.getActivity()))
                 .setImage(R.drawable.no_result)
                 .setDescription(getString(R.string.label_about_app))
                 .addItem(versionElement)
@@ -42,8 +45,6 @@ public class AboutFragment extends BottomSheetFragment {
                 .addGroup(getString(R.string.label_more_work))
                 .addItem(getItemLinkedIn())
                 .create();
-
-        return aboutPage;
     }
 
     private Element getItemPhone() {
@@ -51,13 +52,10 @@ public class AboutFragment extends BottomSheetFragment {
                 .setIconTint(R.color.colorGrey)
                 .setGravity(Gravity.START)
                 .setIconDrawable(R.drawable.ic_phone_in_talk_black_24dp)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent i = new Intent(Intent.ACTION_DIAL);
-                        i.setData(Uri.parse("tel:$" + NUMBER));
-                        startActivity(i);
-                    }
+                .setOnClickListener(view -> {
+                    Intent i = new Intent(Intent.ACTION_DIAL);
+                    i.setData(Uri.parse("tel:$" + NUMBER));
+                    startActivity(i);
                 });
     }
 
@@ -66,26 +64,18 @@ public class AboutFragment extends BottomSheetFragment {
                 .setIconTint(R.color.colorWhatsAppLogo)
                 .setGravity(Gravity.START)
                 .setIconDrawable(R.drawable.ic_whatsapp_black_24dp)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        whatsAppHelp();
-                    }
-                });
+                .setOnClickListener(view -> whatsAppHelp());
     }
 
     private Element getItemEmail() {
         return (new Element()).setTitle(getString(R.string.label_fedd_back))
                 .setIconDrawable(R.drawable.ic_mail_in_box_black_24dp)
                 .setIconTint(R.color.colorGrey)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent i = new Intent(Intent.ACTION_SENDTO);
-                        i.setData(Uri.parse("mailto:"));
-                        i.putExtra(Intent.EXTRA_EMAIL, new String[]{EMAIL});
-                        startActivity(i);
-                    }
+                .setOnClickListener(view -> {
+                    Intent i = new Intent(Intent.ACTION_SENDTO);
+                    i.setData(Uri.parse("mailto:"));
+                    i.putExtra(Intent.EXTRA_EMAIL, new String[]{EMAIL});
+                    startActivity(i);
                 });
     }
 
@@ -94,17 +84,14 @@ public class AboutFragment extends BottomSheetFragment {
                 .setIconTint(R.color.colorLinkedInLogo)
                 .setGravity(Gravity.START)
                 .setIconDrawable(R.drawable.ic_linkedin_box_black_24dp)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("linkedin://profile/" + LINKED_IN_ID));
-                        i.setPackage("com.linkedin.android");
+                .setOnClickListener(view -> {
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("linkedin://profile/" + LINKED_IN_ID));
+                    i.setPackage("com.linkedin.android");
 
-                        if (i.resolveActivity(getContext().getPackageManager()) == null) {
-                            i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.linkedin.com/profile/view?id=$" + LINKED_IN_ID));
-                        }
-                        startActivity(i);
+                    if (i.resolveActivity(getContext().getPackageManager()) == null) {
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.linkedin.com/profile/view?id=$" + LINKED_IN_ID));
                     }
+                    startActivity(i);
                 });
     }
 

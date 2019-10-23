@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import com.bumptech.glide.Glide;
 import com.rendersoncs.reportform.R;
 
-public class PhotoFullFragment extends DialogFragment {
+public class FullPhotoFragment extends DialogFragment {
 
     @Nullable
     @Override

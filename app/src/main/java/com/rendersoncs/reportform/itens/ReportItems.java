@@ -1,18 +1,17 @@
 package com.rendersoncs.reportform.itens;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 public class ReportItems {
 
-    private String note;
     private int id, conformed, position;
 
-    private String company, email, date, photo, listJson;
+    private String company, email, date, photo, note, listJson;
     private String title, description, header;
 
     private Bitmap photoId;
-    private Uri photoUri;
 
     private boolean opt1, opt2, opt3;
     private int selectedAnswerPosition = -1;
@@ -24,9 +23,67 @@ public class ReportItems {
         this.description = description;
     }
 
-    public ReportItems() {
+    public ReportItems() { }
 
-    }
+//    protected ReportItems(Parcel in) {
+//        note = in.readString();
+//        id = in.readInt();
+//        conformed = in.readInt();
+//        position = in.readInt();
+//        company = in.readString();
+//        email = in.readString();
+//        date = in.readString();
+//        photo = in.readString();
+//        listJson = in.readString();
+//        title = in.readString();
+//        description = in.readString();
+//        header = in.readString();
+//        photoId = in.readParcelable(Bitmap.class.getClassLoader());
+//        opt1 = in.readByte() != 0;
+//        opt2 = in.readByte() != 0;
+//        opt3 = in.readByte() != 0;
+//        selectedAnswerPosition = in.readInt();
+//        shine = in.readByte() != 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel parcel, int i) {
+//        parcel.writeString(this.note);
+//        parcel.writeValue(this.id);
+//        parcel.writeValue(this.conformed);
+//        parcel.writeValue(this.position);
+//        parcel.writeString(this.company);
+//        parcel.writeString(this.email);
+//        parcel.writeString(this.date);
+//        parcel.writeString(this.photo);
+//        parcel.writeString(this.listJson);
+//        parcel.writeString(this.title);
+//        parcel.writeString(this.description);
+//        parcel.writeString(this.header);
+//        parcel.writeValue(this.photoId);
+//        parcel.writeValue(this.opt1);
+//        parcel.writeValue(this.opt2);
+//        parcel.writeValue(this.opt3);
+//        parcel.writeValue(this.selectedAnswerPosition);
+//        parcel.writeValue(this.shine);
+//    }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    public static final Creator<ReportItems> CREATOR = new Creator<ReportItems>() {
+//        @Override
+//        public ReportItems createFromParcel(Parcel in) {
+//            return new ReportItems(in);
+//        }
+//
+//        @Override
+//        public ReportItems[] newArray(int size) {
+//            return new ReportItems[size];
+//        }
+//    };
 
     public int getId() {
         return id;
@@ -166,14 +223,6 @@ public class ReportItems {
 
     public void setPhotoId(Bitmap photoId) {
         this.photoId = photoId;
-    }
-
-    public Uri getPhotoUri() {
-        return photoUri;
-    }
-
-    public void setPhotoUri(Uri photoUri) {
-        this.photoUri = photoUri;
     }
 
     public int getPosition() {

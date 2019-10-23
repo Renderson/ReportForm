@@ -99,49 +99,26 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             viewHolder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
             viewHolder.buttonLayoutArrow.setRotation(expandState.get(position) ? 180f : 0f);
-            viewHolder.buttonLayoutArrow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    onClickButton(viewHolder.expandableLayout, viewHolder.buttonLayoutArrow, position);
-                }
-            });
+            viewHolder.buttonLayoutArrow.setOnClickListener(v ->
+                    onClickButton(viewHolder.expandableLayout, viewHolder.buttonLayoutArrow, position));
 
-            viewHolder.tvTitleList.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onItemListenerClicked.updateList(position);
-                }
-            });
+            viewHolder.tvTitleList.setOnClickListener(view ->
+                    onItemListenerClicked.updateList(position));
 
             //((ItemVh) viewHolder).itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            viewHolder.tvTitleList.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    onItemListenerClicked.removeItem(position);
-                    return false;
-                }
+            viewHolder.tvTitleList.setOnLongClickListener(view -> {
+                onItemListenerClicked.removeItem(position);
+                return false;
             });
 
-            viewHolder.note.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onItemListenerClicked.insertNote(position);
-                }
-            });
+            viewHolder.note.setOnClickListener(view ->
+                    onItemListenerClicked.insertNote(position));
 
-            viewHolder.takePhoto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onItemListenerClicked.takePhoto(position);
-                }
-            });
+            viewHolder.takePhoto.setOnClickListener(view ->
+                    onItemListenerClicked.takePhoto(position));
 
-            viewHolder.resultPhoto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onItemListenerClicked.photoFull(position);
-                }
-            });
+            viewHolder.resultPhoto.setOnClickListener(view ->
+                    onItemListenerClicked.fullPhoto(position));
 
             if (repo.getPhotoId() == null){
                 viewHolder.resultPhoto.setImageAlpha(R.drawable.image);

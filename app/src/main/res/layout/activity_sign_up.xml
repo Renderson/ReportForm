@@ -41,11 +41,11 @@
 
         <Button
             android:id="@+id/btn_select_photo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/width_sign"
+            android:layout_height="@dimen/height_sign"
+            android:layout_marginTop="@dimen/margin_16"
             android:background="@drawable/bg_button_img_round"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_14"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />

@@ -5,12 +5,12 @@
     <item android:id="@+id/save"
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_arrow"
-        android:title="@string/txt_save"/>
+        android:title="@string/save"/>
 
     <item android:id="@+id/close"
         android:orderInCategory="100"
         android:icon="@drawable/ic_delete"
-        android:title="@string/txt_leave"/>
+        android:title="@string/leave"/>
 
     <item android:id="@+id/clear"
         android:orderInCategory="100"

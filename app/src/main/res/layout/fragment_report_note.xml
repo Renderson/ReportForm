@@ -3,9 +3,9 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    card_view:cardCornerRadius="8dp"
-    card_view:cardElevation="2dp">
+    android:layout_margin="@dimen/margin_8"
+    card_view:cardCornerRadius="@dimen/cornerRadius_2"
+    card_view:cardElevation="@dimen/elevation_2">
 
 
     <LinearLayout
@@ -16,25 +16,25 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:paddingStart="4dp"
-            android:text="Observação!"
+            android:layout_margin="@dimen/margin_16"
+            android:paddingStart="@dimen/margin_4"
+            android:paddingEnd="@dimen/margin_4"
+            android:text="@string/label_observation"
             android:textColorHint="@color/colorTextBlack"
-            android:textSize="22sp"
+            android:textSize="@dimen/text_size_22"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/txt_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/layout_margin_16dp"
-            android:layout_marginTop="@dimen/layout_margin_8dp"
-            android:layout_marginEnd="@dimen/layout_margin_16dp"
-            android:layout_marginBottom="@dimen/layout_marginTop_16dp"
-            android:hint="Texto..."
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:layout_marginBottom="@dimen/margin_16"
+            android:hint="@string/label_text_observation"
             android:textColorHint="@color/about_description_text_color"
-            android:textSize="18sp" />
-
+            android:textSize="@dimen/text_size_18" />
 
     </LinearLayout>
 

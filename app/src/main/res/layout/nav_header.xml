@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="170dp"
-    android:padding="16dp"
+    android:padding="@dimen/padding_16"
     android:gravity="bottom"
     android:background="@drawable/nav_header"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -13,7 +13,7 @@
         android:id="@+id/img_profile"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/margin_8"
         app:civ_border_width="2dp"
         app:civ_border_color="@color/colorWhite"
         android:src="@drawable/ic_action_person"/>
@@ -28,7 +28,7 @@
 
     <TextView
         android:id="@+id/txt_profile_mail"
-        android:text="renderson@gmail.com"
+        android:text="@string/mail_dev_renderson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp" />

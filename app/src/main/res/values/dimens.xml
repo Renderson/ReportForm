@@ -1,11 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="layout_marginTop_16dp">16dp</dimen>
-    <dimen name="layout_margin_16dp">16dp</dimen>
-    <dimen name="layout_margin_8dp">8dp</dimen>
-    <dimen name="layout_marginEnd_8dp">8dp</dimen>
 
-    <dimen name="layout_height_0dp">0dp</dimen>
+    <dimen name="margin_2">2dp</dimen>
+    <dimen name="margin_4">4dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_18">18dp</dimen>
+    <dimen name="margin_32">32dp</dimen>
 
-    <dimen name="layout_drawer_width">304dp</dimen>
+    <dimen name="cornerRadius_4">4dp</dimen>
+    <dimen name="cornerRadius_2">2dp</dimen>
+    <dimen name="elevation_4">4dp</dimen>
+    <dimen name="elevation_2">2dp</dimen>
+
+    <dimen name="height_image_check">2dp</dimen>
+    <dimen name="layout_0">0dp</dimen>
+
+    <dimen name="drawer_width">304dp</dimen>
+
+    <dimen name="height_48">48dp</dimen>
+    <dimen name="width_48">48dp</dimen>
+
+    <dimen name="width_sign">120dp</dimen>
+    <dimen name="height_sign">120dp</dimen>
+
+    <dimen name="padding_2">2dp</dimen>
+    <dimen name="padding_4">4dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
+    <dimen name="padding_12">12dp</dimen>
+    <dimen name="padding_16">16dp</dimen>
+
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_22">22sp</dimen>
+    <dimen name="text_size_30">30sp</dimen>
+
+    <dimen name="social_button">150dp</dimen>
+    <dimen name="height_collapsingToolbar_resume">190dp</dimen>
+    <dimen name="overlapTop_resume">105dp</dimen>
 </resources>

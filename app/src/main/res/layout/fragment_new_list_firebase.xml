@@ -29,25 +29,24 @@
 
         <EditText
             android:id="@+id/txt_title_list"
-            android:hint="Titulo"
+            android:hint="@string/label_title_resume"
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_marginRight="@dimen/margin_16"
+            android:layout_marginLeft="@dimen/margin_16"
             android:imeOptions="actionNext"/>
 
         <EditText
             android:id="@+id/txt_description_list"
-            android:hint="Descrição..."
+            android:hint="@string/label_description_resume"
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center|left|top"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_marginRight="@dimen/margin_16"
+            android:layout_marginLeft="@dimen/margin_16"
             android:imeOptions="actionDone"/>
 
     </LinearLayout>

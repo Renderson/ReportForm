@@ -26,10 +26,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:layout_margin="18dp"
-            android:text="Novo Relatório"
+            android:layout_margin="@dimen/margin_18"
+            android:text="@string/label_menu_new_report"
             android:textColor="@color/colorTextBlack"
-            android:textSize="18sp" />
+            android:textSize="@dimen/text_size_18" />
 
         <ImageView
             android:id="@+id/img_date_id"
@@ -38,17 +38,16 @@
             android:layout_weight="0"
             android:layout_gravity="center"
             android:background="@android:drawable/ic_menu_today"
-
-            android:padding="16dp" />
+            android:padding="@dimen/padding_16" />
 
         <TextView
             android:id="@+id/date_Id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="16dp"
-            android:text="19/02/1984" />
+            android:layout_marginStart="@dimen/margin_4"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:text="@string/format_date" />
 
 
     </LinearLayout>
@@ -63,11 +62,10 @@
             android:id="@+id/company_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/margin_16"
             android:imeOptions="actionNext"
-            android:hint="Empresa:" />
+            android:hint="@string/company" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/TextLabel"
@@ -78,9 +76,9 @@
             android:id="@+id/email_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/margin_16"
             android:imeOptions="actionDone"
-            android:hint="Email:" />
+            android:hint="@string/mail" />
     </com.google.android.material.textfield.TextInputLayout>
 
 

@@ -1,5 +1,6 @@
 package com.rendersoncs.reportform.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportCheckListAdapter;
+
+import java.util.Objects;
 
 public class ReportNoteFragment extends DialogFragment {
 
@@ -29,21 +32,28 @@ public class ReportNoteFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View view = inflater.inflate(R.layout.fragment_report_note, null);
+        LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
+        @SuppressLint("InflateParams") final View view = inflater.inflate(R.layout.fragment_report_note, null);
 
         note = view.findViewById(R.id.txt_note);
 
-        if (getArguments() != null){
+        if (getArguments() != null) {
             position = getArguments().getInt("position");
             getNote = getArguments().getString("note");
             note.setText(getNote);
         }
 
+        String alertButton;
+        if (getNote != null){
+            alertButton = getResources().getString(R.string.change);
+        } else {
+            alertButton = getResources().getString(R.string.insert);
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
                 .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) ->{ })
-                .setPositiveButton(getResources().getString(R.string.insert), (dialog, which)->{
+                .setPositiveButton(alertButton, (dialog, which)->{
 
                     if (getNote == null){
                         insertNewNote();

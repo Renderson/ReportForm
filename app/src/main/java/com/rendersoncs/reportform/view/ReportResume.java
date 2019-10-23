@@ -122,9 +122,9 @@ public class ReportResume extends AppCompatActivity {
         int mxNA = listRadioNA.size();
         int mxNC = listRadioNC.size();
 
-        yValues.add(new PieEntry(mxC, getResources().getString(R.string.radio_according)));
-        yValues.add(new PieEntry(mxNA, getResources().getString(R.string.radio_not_applicable)));
-        yValues.add(new PieEntry(mxNC, getResources().getString(R.string.radio_not_according)));
+        yValues.add(new PieEntry(mxC, getResources().getString(R.string.according)));
+        yValues.add(new PieEntry(mxNA, getResources().getString(R.string.not_applicable)));
+        yValues.add(new PieEntry(mxNC, getResources().getString(R.string.not_according)));
 
         PieDataSet dataSet = new PieDataSet(yValues, "");
         dataSet.setSliceSpace(3f);
@@ -201,14 +201,14 @@ public class ReportResume extends AppCompatActivity {
             }
 
             for (int i = 0; i < listSelected.size(); i++) {
-                if (listSelected.get(i).equals(getResources().getString(R.string.radio_according))) {
-                    listRadioC.add(getResources().getString(R.string.radio_according));
+                if (listSelected.get(i).equals(getResources().getString(R.string.according))) {
+                    listRadioC.add(getResources().getString(R.string.according));
                 }
-                if (listSelected.get(i).equals(getResources().getString(R.string.radio_not_applicable))) {
-                    listRadioNA.add(getResources().getString(R.string.radio_not_applicable));
+                if (listSelected.get(i).equals(getResources().getString(R.string.not_applicable))) {
+                    listRadioNA.add(getResources().getString(R.string.not_applicable));
                 }
-                if (listSelected.get(i).equals(getResources().getString(R.string.radio_not_according))) {
-                    listRadioNC.add(getResources().getString(R.string.radio_not_according));
+                if (listSelected.get(i).equals(getResources().getString(R.string.not_according))) {
+                    listRadioNC.add(getResources().getString(R.string.not_according));
                 }
             }
 

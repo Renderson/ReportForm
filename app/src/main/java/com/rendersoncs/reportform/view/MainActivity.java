@@ -99,15 +99,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void checkUserFirebase() {
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        authStateListener = firebaseAuth -> {
 
-                if( firebaseAuth.getCurrentUser() == null  ){
-                    Intent intent = new Intent( MainActivity.this, LoginActivity.class );
-                    startActivity( intent );
-                    finish();
-                }
+            if( firebaseAuth.getCurrentUser() == null  ){
+                Intent intent = new Intent( MainActivity.this, LoginActivity.class );
+                startActivity( intent );
+                finish();
             }
         };
     }
@@ -181,10 +178,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
             }
 
-            // Create PDF
+            // Open PDF
             @Override
             public void onOpenPdf(int reportId) {
-                // Open PDF
+
                 AccessDocument accessDocument = new AccessDocument(reportId).invoke();
                 Uri uri = accessDocument.getUri();
                 String subject = accessDocument.getSubject();
@@ -200,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Share PDF
             @Override
             public void onShareReport(int reportId) {
-                // Share PDF the Report
+
                 AccessDocument accessDocument = new AccessDocument(reportId).invoke();
                 ReportItems reportItems = accessDocument.getReportItems();
                 Uri uri = accessDocument.getUri();
@@ -214,11 +211,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent.putExtra(Intent.EXTRA_TEXT, "Em anexo o relatório da empresa " + reportItems.getCompany() + " concluído! Realizado no dia " + reportItems.getDate());
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, "Compartilhar"));
-            }
-
-            @Override
-            public void onBottomSheet(int reportId) {
-                startBottomSheetFragment();
             }
 
             // Delete Item list
@@ -238,11 +230,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void startReportFormDialog() {
         ReportFormDialog reportFormDialog = new ReportFormDialog();
         reportFormDialog.show(getSupportFragmentManager(), "report_dialog");
-    }
-
-    private void startBottomSheetFragment() {
-//        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
-//        bottomSheetFragment.show(getSupportFragmentManager(), "report_sheet");
     }
 
     private void loadReport() {

@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -47,7 +48,7 @@ import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.async.PDFAsyncTask;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.fragment.NewItemListFireBase;
-import com.rendersoncs.reportform.fragment.PhotoFullFragment;
+import com.rendersoncs.reportform.fragment.FullPhotoFragment;
 import com.rendersoncs.reportform.fragment.ReportNoteFragment;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnItemListenerClicked;
@@ -67,6 +68,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,6 +83,9 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private static final int REQUEST_CODE_GALLERY = 2006;
     private static final int REQUEST_PERMISSIONS = 0;
     private static final int REQUEST_PERMISSIONS_READ_WHITE = 128;
+
+    private static final String LIST_STATE = "list_state";
+    private static final String BUNDLE_RECYCLER_LAYOUT= "recycler_layout";
 
     private ReportBusiness mReportBusiness;
     private ListJsonOff jsonListModeOff = new ListJsonOff();
@@ -97,11 +103,11 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private ArrayList<String> listNotes = new ArrayList<>();
     private ArrayList<String> listPhoto = new ArrayList<>();
     private JSONArray jsArray = new JSONArray();
-    private Boolean checkList = true;
+
+    public Parcelable savedRecyclerLayoutState;
 
     private DatabaseReference databaseReference;
     private User user = new User();
-
 
     private ResizeImage resizeImage = new ResizeImage();
     private Uri photoUri;
@@ -122,22 +128,20 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         setTitle(R.string.title_report);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        user.setId(mAuth.getCurrentUser().getUid());
+        user.setId(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
 
         databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
         //databaseReference.keepSynced(true);
 
-        mAdapter = new ReportCheckListAdapter(reportItems, this);
-        mAdapter.setOnItemListenerClicked(this);
-        RecyclerView.LayoutManager llm = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        recyclerView.setLayoutManager(llm);
-
-//        ItemTouchHelper.Callback callback = new ItemMoveCallBack(mAdapter);
-//        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-//        touchHelper.attachToRecyclerView(recyclerView);
-        recyclerView.setAdapter(mAdapter);
-        //mAdapter.notifyDataSetChanged();
-
+//        if (savedInstanceState != null) {
+//            findViewById(R.id.progressBar).setVisibility(View.GONE);
+//            reportItems = savedInstanceState.getParcelableArrayList(LIST_STATE);
+//            savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+//        } else {
+//            this.initViews();
+//            this.isConnected();
+//        }
+        this.initViews();
         this.isConnected();
 
         this.getBundleReportFromDialog();
@@ -149,6 +153,19 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
         // Animated FloatingButton
         animated.animatedFab(recyclerView, fab);
+    }
+
+    private void initViews() {
+        mAdapter = new ReportCheckListAdapter(reportItems, this);
+        mAdapter.setOnItemListenerClicked(this);
+        RecyclerView.LayoutManager llm = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(llm);
+
+//        ItemTouchHelper.Callback callback = new ItemMoveCallBack(mAdapter);
+//        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+//        touchHelper.attachToRecyclerView(recyclerView);
+        recyclerView.setAdapter(mAdapter);
+        //mAdapter.notifyDataSetChanged();
     }
 
     private void getBundleReportFromDialog() {
@@ -203,7 +220,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 String key = dataSnapshot.getKey();
                 mKeys.add(key);
 
-                int index = mKeys.indexOf(key);
+                //int index = mKeys.indexOf(key);
                 mAdapter.notifyDataSetChanged();
                 //mAdapter.notifyItemChanged(index);
             }
@@ -231,14 +248,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             }
 
             @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
     }
 
@@ -251,15 +264,29 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+
+            // Save report
             case R.id.save:
+                this.checkAnswers();
                 if (mAdapter.listIDRadio.isEmpty()) {
                     alertDialog.showDialog(ReportActivity.this,
                             getResources().getString(R.string.txt_empty_report),
                             getResources().getString(R.string.txt_choice_item),
-                            getResources().getString(R.string.txt_back),
+                            getResources().getString(R.string.back),
                             (dialogInterface, i) -> {
                             },
                             null, null, false);
+
+                } else if (listRadio.size() > listPhoto.size()) {
+                    alertDialog.showDialog(ReportActivity.this,
+                            "Verificar Lista!",
+                            "Há item selecionado que não contém a foto, verifique antes de salvar!",
+                            getResources().getString(R.string.back),
+                            (dialogInterface, i) -> {
+                            },
+                            null, null, false);
+                    this.clearList();
+
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         if (ContextCompat.checkSelfPermission(ReportActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -279,14 +306,14 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
             case R.id.clear:
                 if (mAdapter.listIDRadio.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Lista vazia!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_list_clear), Toast.LENGTH_SHORT).show();
                 } else {
                     alertDialog.showDialog(ReportActivity.this,
-                            "Limpar lista?",
-                            "Deseja realmente limpar a seção? Esse processo vai apagar todo seu progresso!",
-                            "Sim",
+                            getResources().getString(R.string.label_clear_list),
+                            getResources().getString(R.string.label_accept_clear_list),
+                            getResources().getString(R.string.confirm),
                             (dialogInterface, i) -> clearCheckList(),
-                            "Não", null, false);
+                            getResources().getString(R.string.cancel), null, false);
                 }
                 break;
         }
@@ -307,13 +334,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
     // Save Company, Email, Data, List
     private void handleSave() {
-
-        this.checkAnswers();
-//        if (listRadio.size() > listPhoto.size()){
-//            Toast.makeText(this, "Exitem item selecionado sem foto!", Toast.LENGTH_SHORT).show();
-//            Log.i("log", "Item: " + listRadio + " listRadioS");
-//            Log.i("log", "Item: " + listPhoto.size() + " listPhotoS");
-//        } else {
 
         final ReportItems reportItems = new ReportItems();
         reportItems.setCompany(resultCompany.getText().toString());
@@ -352,7 +372,15 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             Toast.makeText(getApplicationContext(), R.string.txt_error_save, Toast.LENGTH_SHORT).show();
             finish();
         }
-        //}
+    }
+
+    // Clear list
+    private void clearList() {
+        listRadio.clear();
+        listPhoto.clear();
+        listTitle.clear();
+        listDescription.clear();
+        listNotes.clear();
     }
 
     // Clear every Lists and reload Adapter
@@ -391,15 +419,15 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         for (int i = 0; i < reportItems.size(); i++) {
             if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2() || reportItems.get(i).isOpt3()) {
                 if (reportItems.get(i).getSelectedAnswerPosition() == 1) {
-                    String C = getResources().getString(R.string.radio_according);
+                    String C = getResources().getString(R.string.according);
                     listRadio.add(C);
                 }
                 if (reportItems.get(i).getSelectedAnswerPosition() == 2) {
-                    String NA = getResources().getString(R.string.radio_not_applicable);
+                    String NA = getResources().getString(R.string.not_applicable);
                     listRadio.add(NA);
                 }
                 if (reportItems.get(i).getSelectedAnswerPosition() == 3) {
-                    String NC = getResources().getString(R.string.radio_not_according);
+                    String NC = getResources().getString(R.string.not_according);
                     listRadio.add(NC);
                 }
 
@@ -413,7 +441,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
                 String note = reportItems.get(i).getNote();
                 if (note == null) {
-                    note = "Sem observação";
+                    note = getResources().getString(R.string.label_not_observation);
                     listNotes.add(note);
                 } else {
                     listNotes.add(note);
@@ -493,9 +521,9 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     }
 
     // Show Photo Full
-    public void photoFull(int pos) {
+    public void fullPhoto(int pos) {
         position = pos;
-        PhotoFullFragment fullFragment = new PhotoFullFragment();
+        FullPhotoFragment fullFragment = new FullPhotoFragment();
         Bundle bundle = new Bundle();
         ReportItems items = reportItems.get(position);
 
@@ -514,8 +542,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         bundle.putByteArray("image", bytes);
 
         fullFragment.setArguments(bundle);
-        fullFragment.show(getSupportFragmentManager(), "photoFull");
-        Log.i("FullFrag ", " " + bytes);
+        fullFragment.show(getSupportFragmentManager(), "fullPhoto");
+        Log.i("FullFrag ", " " + Arrays.toString(bytes));
     }
 
     // OPen Camera
@@ -539,11 +567,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         dialog.show();
     }
 
+    // Open Gallery
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, REQUEST_CODE_GALLERY);
     }
 
+    // OPen Camera
     private void openCamera() {
         File photoFile;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -586,8 +616,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
 
                 ResizeImage.decodeBitmap(photoUri, mAdapter, position);
-                radioItemChecked(position, 1);
             }
+            radioItemChecked(position, 1);
         }
         if (requestCode == REQUEST_CODE_GALLERY && resultCode == RESULT_OK && data != null) {
             Uri mSelectedUri = data.getData();
@@ -632,6 +662,20 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             }
         }
     }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle savedInstanceState) {
+//        super.onSaveInstanceState(savedInstanceState);
+//        savedInstanceState.putParcelableArrayList(LIST_STATE, reportItems);
+//        savedInstanceState.putParcelable(BUNDLE_RECYCLER_LAYOUT, recyclerView.getLayoutManager().onSaveInstanceState());
+//    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        reportItems = savedInstanceState.getParcelableArrayList(LIST_STATE);
+//        savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+//        super.onRestoreInstanceState(savedInstanceState);
+//    }
 
     @Override
     public void onBackPressed() {
