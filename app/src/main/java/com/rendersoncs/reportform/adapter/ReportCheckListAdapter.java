@@ -83,8 +83,10 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
         Log.i(TAG, "onBindViewHolder invoked" + position);
     }
 
-    private void itemsListViewHolder(@NonNull ViewHolder viewHolder, int position, ReportItems repo) {
+    private void itemsListViewHolder(@NonNull ViewHolder viewHolder, int i, ReportItems repo) {
         //Header
+        int position = viewHolder.getAdapterPosition();
+
         if (viewHolder instanceof HeaderVh) {
             ((HeaderVh) viewHolder).headerTitle.setText(repo.getTitle());
 

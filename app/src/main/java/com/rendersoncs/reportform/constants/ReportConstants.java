@@ -27,12 +27,12 @@ public class ReportConstants {
         public static final int LIMITS_TEXT = 14;
     }
 
-    public static class CONFIRMATION {
-
-        public static final int CONFORM = 1;
-        public static final int NOT_APPLICABLE = 2;
-        public static final int NOT_CONFORM = 3;
-
+    public static class LIST_ITEMS {
+        public static final String TITLE = "title";
+        public static final String DESCRIPTION = "description";
+        public static final String CONFORMITY = "conformity";
+        public static final String NOTE = "note";
+        public static final String PHOTO = "photo";
     }
 
     public  static  class TEST {

@@ -2,35 +2,53 @@ package com.rendersoncs.reportform.itens;
 
 public class ReportResumeItems {
 
-    private String title_list, description_list, radio_tx;
+    private String title, description, conformity, note, photo;
 
-    public ReportResumeItems(String title_list, String description_list, String radio_tx){
-        this.title_list = title_list;
-        this.description_list = description_list;
-        this.radio_tx = radio_tx;
+    public ReportResumeItems(String title, String description, String conformity, String note, String photo){
+        this.title = title;
+        this.description = description;
+        this.conformity = conformity;
+        this.note = note;
+        this.photo = photo;
     }
 
-    public String getTitle_list() {
-        return title_list;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitle_list(String title_list) {
-        this.title_list = title_list;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getRadio_tx() {
-        return radio_tx;
+    public String getConformity() {
+        return conformity;
     }
 
-    public void setRadio_tx(String radio_tx) {
-        this.radio_tx = radio_tx;
+    public void setConformity(String conformity) {
+        this.conformity = conformity;
     }
 
-    public String getDescription_list() {
-        return description_list;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescription_list(String description_list) {
-        this.description_list = description_list;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

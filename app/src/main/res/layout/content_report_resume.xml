@@ -63,7 +63,7 @@
                     android:layout_marginStart="@dimen/margin_16"
                     android:layout_marginTop="22dp"
                     android:layout_weight="1"
-                    android:text="@string/name"
+                    android:text="@string/company"
                     android:textSize="@dimen/text_size_12"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"

@@ -2,9 +2,13 @@ package com.rendersoncs.reportform.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +27,10 @@ import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportResumeAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
+import com.rendersoncs.reportform.fragment.FullPhotoFragment;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.itens.ReportResumeItems;
+import com.rendersoncs.reportform.listener.OnItemListenerClicked;
 import com.rendersoncs.reportform.service.AccessDocument;
 import com.rendersoncs.reportform.util.MyDividerItemDecoration;
 
@@ -32,10 +38,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class ReportResume extends AppCompatActivity {
+public class ReportResume extends AppCompatActivity implements OnItemListenerClicked {
 
     private ReportBusiness mReportBusiness;
     private ReportItems repoEntity;
@@ -58,7 +66,7 @@ public class ReportResume extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -162,7 +170,7 @@ public class ReportResume extends AppCompatActivity {
             this.dateResume.setText(getString(R.string.resume_date, repoEntity.getDate()));
             this.companyResume.setText(repoEntity.getCompany());
 
-            setTitle("Empresa " + repoEntity.getCompany());
+            setTitle("Empresa" + repoEntity.getCompany());
 
             this.populateRecyclerViewResume();
             this.countRadioSelected();
@@ -179,10 +187,15 @@ public class ReportResume extends AppCompatActivity {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject jo = array.getJSONObject(i);
 
-                ReportResumeItems repoJson = new ReportResumeItems(jo.getString("title_list"), jo.getString("description_list"), jo.getString("radio_tx"));
+                ReportResumeItems repoJson = new ReportResumeItems(jo.getString(ReportConstants.LIST_ITEMS.TITLE),
+                        jo.getString(ReportConstants.LIST_ITEMS.DESCRIPTION),
+                        jo.getString(ReportConstants.LIST_ITEMS.CONFORMITY),
+                        jo.getString(ReportConstants.LIST_ITEMS.NOTE),
+                        jo.getString(ReportConstants.LIST_ITEMS.PHOTO));
                 repoResumeList.add(repoJson);
             }
             RecyclerView.Adapter adapter = new ReportResumeAdapter(repoResumeList, this);
+            ((ReportResumeAdapter) adapter).setOnItemListenerClicked(this);
             recyclerView.setAdapter(adapter);
 
         } catch (JSONException e) {
@@ -196,7 +209,7 @@ public class ReportResume extends AppCompatActivity {
             JSONArray arrayL = new JSONArray(repoEntity.getListJson());
             for (int i = 0; i < arrayL.length(); i++) {
                 JSONObject obj = arrayL.getJSONObject(i);
-                String selected = obj.getString("radio_tx");
+                String selected = obj.getString(ReportConstants.LIST_ITEMS.CONFORMITY);
                 listSelected.add(selected);
             }
 
@@ -224,8 +237,53 @@ public class ReportResume extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (mReportBusiness != null){
+        if (mReportBusiness != null) {
             mReportBusiness.close();
         }
+    }
+
+    @Override
+    public void radioItemChecked(int itemPosition, int optNum) {
+
+    }
+
+    @Override
+    public void takePhoto(int position) {
+
+    }
+
+    @Override
+    public void fullPhoto(int position) {
+        //position = pos;
+        FullPhotoFragment fullFragment = new FullPhotoFragment();
+        Bundle bundle = new Bundle();
+        ReportResumeItems items = repoResumeList.get(position);
+
+        String image = items.getPhoto();
+        //Log.i("FullFrag1 ", " " + image);
+
+        byte[] bytes = Base64.decode(image, Base64.DEFAULT);
+
+        bundle.putInt("position", position);
+        bundle.putByteArray("image", bytes);
+
+        fullFragment.setArguments(bundle);
+        fullFragment.show(getSupportFragmentManager(), "fullPhoto");
+        //Log.i("FullFrag ", " " + Arrays.toString(bytes));
+    }
+
+    @Override
+    public void insertNote(int position) {
+
+    }
+
+    @Override
+    public void updateList(int position) {
+
+    }
+
+    @Override
+    public void removeItem(int position) {
+
     }
 }

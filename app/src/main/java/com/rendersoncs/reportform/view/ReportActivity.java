@@ -47,6 +47,7 @@ import com.rendersoncs.reportform.adapter.ReportCheckListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.async.PDFAsyncTask;
 import com.rendersoncs.reportform.business.ReportBusiness;
+import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.fragment.FullPhotoFragment;
 import com.rendersoncs.reportform.fragment.ReportNoteFragment;
@@ -84,8 +85,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private static final int REQUEST_PERMISSIONS = 0;
     private static final int REQUEST_PERMISSIONS_READ_WHITE = 128;
 
-    private static final String LIST_STATE = "list_state";
-    private static final String BUNDLE_RECYCLER_LAYOUT= "recycler_layout";
+//    private static final String LIST_STATE = "list_state";
+//    private static final String BUNDLE_RECYCLER_LAYOUT= "recycler_layout";
 
     private ReportBusiness mReportBusiness;
     private ListJsonOff jsonListModeOff = new ListJsonOff();
@@ -139,7 +140,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 //            savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
 //        } else {
 //            this.initViews();
-//            this.isConnected();
 //        }
         this.initViews();
         this.isConnected();
@@ -344,11 +344,11 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         for (int i = 0; (i < listRadio.size()) && (i < listTitle.size()) && (i < listDescription.size()) && (i < listNotes.size()) && (i < listPhoto.size()); i++) {
             JSONObject jsObject = new JSONObject();
             try {
-                jsObject.put("title_list", listTitle.get(i));
-                jsObject.put("description_list", listDescription.get(i));
-                jsObject.put("radio_tx", listRadio.get(i));
-                jsObject.put("notes_list", listNotes.get(i));
-                jsObject.put("photo_list", listPhoto.get(i));
+                jsObject.put(ReportConstants.LIST_ITEMS.TITLE, listTitle.get(i));
+                jsObject.put(ReportConstants.LIST_ITEMS.DESCRIPTION, listDescription.get(i));
+                jsObject.put(ReportConstants.LIST_ITEMS.CONFORMITY, listRadio.get(i));
+                jsObject.put(ReportConstants.LIST_ITEMS.NOTE, listNotes.get(i));
+                jsObject.put(ReportConstants.LIST_ITEMS.PHOTO, listPhoto.get(i));
 
             } catch (JSONException e) {
                 e.printStackTrace();

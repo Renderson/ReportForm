@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent.setType("pdf/plain");
                 intent.putExtra(Intent.EXTRA_SUBJECT, subject);
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{reportItems.getEmail()});
-                intent.putExtra(Intent.EXTRA_TEXT, "Em anexo o relatório da empresa " + reportItems.getCompany() + " concluído! Realizado no dia " + reportItems.getDate());
+                intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.label_attach_report, reportItems.getCompany()) + " " + reportItems.getDate());
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, "Compartilhar"));
             }

@@ -150,11 +150,12 @@
     <string name="label_date">Data</string>
     <string name="mail_dev_renderson">renderson.cs@gmail.com</string>
     <string name="total_itens">Total Itens</string>
-    <string name="label_list_selected">Lista Items selecionados</string>
+    <string name="label_list_selected">Items selecionados</string>
     <string name="image_for_resume">Imagem para Resume</string>
     <string name="image_pdf">Image PDF</string>
     <string name="company">Empresa</string>
     <string name="label_clear_list">Limpar lista?</string>
     <string name="label_accept_clear_list">Deseja realmente limpar a seção? Esse processo vai apagar todo seu progresso!</string>
     <string name="label_list_clear">Lista vazia!</string>
+    <string name="label_attach_report">Em anexo o relatório da empresa %1$s concluído! Realizado no dia</string>
 </resources>

@@ -25,6 +25,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.ReportItems;
 
 import org.apache.commons.io.FilenameUtils;
@@ -166,20 +167,20 @@ public class CreatePDFViewer {
             JSONArray arrayL = new JSONArray(paramRepo.getListJson());
             for (int i = 0; i < arrayL.length(); i++) {
                 JSONObject objTitle = arrayL.getJSONObject(i);
-                String title = objTitle.getString("title_list");
+                String title = objTitle.getString(ReportConstants.LIST_ITEMS.TITLE);
 
                 JSONObject objDescription = arrayL.getJSONObject(i);
-                String description = objDescription.getString("description_list");
+                String description = objDescription.getString(ReportConstants.LIST_ITEMS.DESCRIPTION);
 
                 JSONObject objRadio = arrayL.getJSONObject(i);
-                String radio = objRadio.getString("radio_tx");
+                String radio = objRadio.getString(ReportConstants.LIST_ITEMS.CONFORMITY);
 
                 JSONObject objNote = arrayL.getJSONObject(i);
-                String notes = objNote.getString("notes_list");
+                String notes = objNote.getString(ReportConstants.LIST_ITEMS.NOTE);
                 Log.d("Notes", notes);
 
                 JSONObject objImage = arrayL.getJSONObject(i);
-                String image = objImage.getString("photo_list");
+                String image = objImage.getString(ReportConstants.LIST_ITEMS.PHOTO);
                 Log.d("PDFImage", image);
 
                 byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
