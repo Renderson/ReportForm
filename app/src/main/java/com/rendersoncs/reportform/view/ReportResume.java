@@ -165,7 +165,7 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
             this.dateResume.setText(getString(R.string.resume_date, repoEntity.getDate()));
             this.companyResume.setText(repoEntity.getCompany());
 
-            setTitle("Empresa" + repoEntity.getCompany());
+            setTitle("Empresa " + repoEntity.getCompany());
 
             this.populateRecyclerViewResume();
             this.countRadioSelected();

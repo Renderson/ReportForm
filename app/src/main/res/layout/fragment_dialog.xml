@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@color/colorPrimary">
+        android:background="@drawable/nav_header">
 
         <ImageView
             android:layout_width="75dp"
@@ -49,9 +49,7 @@
             android:layout_marginEnd="@dimen/margin_16"
             android:text="@string/format_date" />
 
-
     </LinearLayout>
-
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/TextLabel"
@@ -77,9 +75,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_16"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionGo"
             android:hint="@string/mail" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
 </LinearLayout>
