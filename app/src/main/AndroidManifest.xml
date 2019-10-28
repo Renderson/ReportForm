@@ -66,6 +66,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
         </activity>
+        <activity android:name=".view.EditReportActivity" />
 
         <service
             android:name=".service.NotificationFireBase"

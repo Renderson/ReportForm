@@ -15,4 +15,7 @@ public interface OnInteractionListener {
 
     /* Click for Share Report*/
     void onShareReport(int reportId);
+
+    /* Click for Edit Report*/
+    void onEditReport(int id);
 }

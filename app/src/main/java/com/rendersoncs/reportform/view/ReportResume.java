@@ -2,13 +2,10 @@ package com.rendersoncs.reportform.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,9 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ReportResume extends AppCompatActivity implements OnItemListenerClicked {
@@ -265,7 +260,7 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
         byte[] bytes = Base64.decode(image, Base64.DEFAULT);
 
         bundle.putInt("position", position);
-        bundle.putByteArray("image", bytes);
+        bundle.putByteArray(ReportConstants.LIST_ITEMS.PHOTO, bytes);
 
         fullFragment.setArguments(bundle);
         fullFragment.show(getSupportFragmentManager(), "fullPhoto");

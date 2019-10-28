@@ -20,6 +20,10 @@ public class ReportBusiness {
         return this.mReportRepository.insert(repo);
     }
 
+    public Boolean update(ReportItems repo){
+        return this.mReportRepository.update(repo);
+    }
+
     public Boolean remove(int reportId){
         return this.mReportRepository.remove(reportId);
     }

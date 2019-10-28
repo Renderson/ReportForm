@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.view.ReportActivity;
 
 import java.text.SimpleDateFormat;
@@ -80,9 +81,9 @@ public class ReportFormDialog extends DialogFragment {
                         date = dateTv.getText().toString();
 
                         Bundle bundle = new Bundle();
-                        bundle.putString("company", company);
-                        bundle.putString("email", email);
-                        bundle.putString("date", date);
+                        bundle.putString(ReportConstants.LIST_ITEMS.COMPANY, company);
+                        bundle.putString(ReportConstants.LIST_ITEMS.EMAIL, email);
+                        bundle.putString(ReportConstants.LIST_ITEMS.DATE, date);
                         intent.putExtras(bundle);
 
                         startActivity(intent);

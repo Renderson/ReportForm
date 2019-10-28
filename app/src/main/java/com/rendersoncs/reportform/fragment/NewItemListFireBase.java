@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.login.util.User;
 
@@ -53,7 +54,7 @@ public class NewItemListFireBase extends DialogFragment {
             alertButton = getResources().getString(R.string.insert);
         }
 
-        initFirebase();
+        initFireBase();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
@@ -76,10 +77,10 @@ public class NewItemListFireBase extends DialogFragment {
 
     private void checkItems() {
         if (getArguments() != null) {
-            title = getArguments().getString("title");
+            title = getArguments().getString(ReportConstants.LIST_ITEMS.TITLE);
             mTitleList.setText(title);
 
-            String description = getArguments().getString("desc");
+            String description = getArguments().getString(ReportConstants.LIST_ITEMS.DESCRIPTION);
             mDescriptionList.setText(description);
         }
 
@@ -90,13 +91,13 @@ public class NewItemListFireBase extends DialogFragment {
         String upDescription = mDescriptionList.getText().toString();
 
         DatabaseReference databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
-        Query query = databaseReference.orderByChild("title").equalTo(title);
+        Query query = databaseReference.orderByChild(ReportConstants.LIST_ITEMS.TITLE).equalTo(title);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    ds.getRef().child("title").setValue(upTitle);
-                    ds.getRef().child("description").setValue(upDescription);
+                    ds.getRef().child(ReportConstants.LIST_ITEMS.TITLE).setValue(upTitle);
+                    ds.getRef().child(ReportConstants.LIST_ITEMS.DESCRIPTION).setValue(upDescription);
                 }
             }
 
@@ -114,13 +115,13 @@ public class NewItemListFireBase extends DialogFragment {
         final String key = FirebaseDatabase.getInstance().getReference().child("users").child(user.getId()).child("list").push().getKey();
         HashMap<String, String> dataMap = new HashMap<>();
         Map<String, Object> childUpdates = new HashMap<>();
-        dataMap.put("title", mTitle);
-        dataMap.put("description", mDescription);
+        dataMap.put(ReportConstants.LIST_ITEMS.TITLE, mTitle);
+        dataMap.put(ReportConstants.LIST_ITEMS.DESCRIPTION, mDescription);
         childUpdates.put("/users/" + user.getId() + "/list/" + key, dataMap);
         FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
     }
 
-    private void initFirebase() {
+    private void initFireBase() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = new User();
         user.setId(mAuth.getCurrentUser().getUid());
@@ -139,6 +140,7 @@ public class NewItemListFireBase extends DialogFragment {
             String descriptionValidate = mDescriptionList.getText().toString().trim();
 
             AlertDialog dialog = (AlertDialog) getDialog();
+            assert dialog != null;
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!titleValidate.isEmpty() && !descriptionValidate.isEmpty());
         }
 
@@ -152,6 +154,7 @@ public class NewItemListFireBase extends DialogFragment {
         super.onResume();
         checkItems();
         AlertDialog dialog = (AlertDialog) getDialog();
+        assert dialog != null;
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
     }
 
@@ -161,7 +164,7 @@ public class NewItemListFireBase extends DialogFragment {
         dismiss();
     }
 
-    public void onCancel(DialogInterface dialog) {
+    public void onCancel(@NonNull DialogInterface dialog) {
         super.onCancel(dialog);
         Toast.makeText(getActivity(), R.string.canceled, Toast.LENGTH_SHORT).show();
     }

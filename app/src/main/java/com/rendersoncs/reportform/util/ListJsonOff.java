@@ -31,8 +31,8 @@ public class ListJsonOff {
                 String dynamicKey = iterator.next();
                 JSONObject jsKeys = js.getJSONObject(dynamicKey);
 
-                String itemTitle = jsKeys.getString(ReportConstants.ConstantsFireBase.FIRE_TITLE);
-                String itemDescription = jsKeys.getString(ReportConstants.ConstantsFireBase.FIRE_DESCRIPTION);
+                String itemTitle = jsKeys.getString(ReportConstants.LIST_ITEMS.TITLE);
+                String itemDescription = jsKeys.getString(ReportConstants.LIST_ITEMS.DESCRIPTION);
 
                 ReportItems reportItems = new ReportItems();
                 reportItems.setTitle(itemTitle);

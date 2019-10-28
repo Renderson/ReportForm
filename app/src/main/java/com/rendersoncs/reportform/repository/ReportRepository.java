@@ -55,6 +55,31 @@ public class ReportRepository {
         }
     }
 
+    public Boolean update(ReportItems reportItems){
+        try {
+
+            SQLiteDatabase sqLiteDatabase = this.mReportDataBaseHelper.getWritableDatabase();
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DataBaseConstants.REPORT.COLUMNS.COMPANY, reportItems.getCompany());
+            contentValues.put(DataBaseConstants.REPORT.COLUMNS.EMAIL, reportItems.getEmail());
+            contentValues.put(DataBaseConstants.REPORT.COLUMNS.DATE, reportItems.getDate());
+            contentValues.put(DataBaseConstants.REPORT.COLUMNS.GRADES, reportItems.getConformed());
+            contentValues.put(DataBaseConstants.REPORT.COLUMNS.LIST, reportItems.getListJson());
+            contentValues.put(DataBaseConstants.REPORT.COLUMNS.PHOTO, reportItems.getPhoto());
+
+            String selection = DataBaseConstants.REPORT.COLUMNS.ID + " = ?";
+            String[] selectionArgs = {String.valueOf(reportItems.getId())};
+
+            sqLiteDatabase.update(DataBaseConstants.REPORT.TABLE_NAME, contentValues, selection, selectionArgs);
+
+            return true;
+
+        } catch (Exception e){
+            return false;
+        }
+    }
+
     public Boolean remove(int id) {
         try {
 

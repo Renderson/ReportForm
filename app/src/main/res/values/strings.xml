@@ -156,6 +156,9 @@
     <string name="company">Empresa</string>
     <string name="label_clear_list">Limpar lista?</string>
     <string name="label_accept_clear_list">Deseja realmente limpar a seção? Esse processo vai apagar todo seu progresso!</string>
-    <string name="label_list_clear">Lista vazia!</string>
     <string name="label_attach_report">Em anexo o relatório da empresa %1$s concluído! Realizado no dia</string>
+    <string name="label_report_update">Relatório Alterado!</string>
+    <string name="share">Compartilhar</string>
+    <string name="label_empty_list">Lista vazia!</string>
+    <string name="check">VERIFICAR</string>
 </resources>

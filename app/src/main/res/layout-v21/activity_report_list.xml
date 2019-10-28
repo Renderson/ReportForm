@@ -5,8 +5,9 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_4"
     android:layout_marginLeft="@dimen/margin_8"
-    android:layout_marginBottom="@dimen/margin_8"
+    android:layout_marginBottom="@dimen/margin_4"
     android:layout_marginRight="@dimen/margin_8"
     card_view:cardCornerRadius="@dimen/cornerRadius_4"
     card_view:cardElevation="@dimen/elevation_4">

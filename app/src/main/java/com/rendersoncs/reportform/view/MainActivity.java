@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -22,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,6 +44,7 @@ import com.rendersoncs.reportform.service.AccessDocument;
 import com.rendersoncs.reportform.service.NetworkConnectedService;
 import com.rendersoncs.reportform.util.GetInfoUserFirebase;
 import com.rendersoncs.reportform.util.RVEmptyObserver;
+import com.rendersoncs.reportform.util.SnackBarHelper;
 
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Check NetWorking
         this.netService.isConnected(MainActivity.this);
 
-        this.checkUserFirebase();
+        this.checkUserFireBase();
 
         mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
         mAuth = FirebaseAuth.getInstance();
@@ -93,12 +94,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         databaseReference = LibraryClass.getFirebase();
         //databaseReference.keepSynced(true);
 
-        // Create Drawerlayout
+        // Create Drawer layout
         this.createDrawerLayout(user, toolbar);
 
     }
 
-    private void checkUserFirebase() {
+    private void checkUserFireBase() {
         authStateListener = firebaseAuth -> {
 
             if( firebaseAuth.getCurrentUser() == null  ){
@@ -210,18 +211,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{reportItems.getEmail()});
                 intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.label_attach_report, reportItems.getCompany()) + " " + reportItems.getDate());
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(intent, "Compartilhar"));
+                startActivity(Intent.createChooser(intent, getResources().getString(R.string.share)));
+            }
+
+            @Override
+            public void onEditReport(int reportId) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(ReportConstants.ConstantsBundle.REPORT_ID, reportId);
+
+                Intent intent = new Intent(MainActivity.this, ReportActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
 
             // Delete Item list
             @Override
             public void onDeleteClick(int id) {
-                // Remove relatórios do banco de dados
+                // Removed report DB
                 reportBusiness.remove(id);
                 fab.show();
-                Toast.makeText(MainActivity.this, R.string.txt_report_removed, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar
+                        .make(MainActivity.this.findViewById(R.id.floatButton), MainActivity.this.getString(R.string.txt_report_removed), Snackbar.LENGTH_LONG);
+                SnackBarHelper.configSnackBar(MainActivity.this, snackbar);
+                snackbar.show();
 
-                // Lista novamente os relatórios
+                // List the reports again
                 loadReport();
             }
         };
@@ -235,14 +249,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void loadReport() {
         List<ReportItems> reportItems = this.reportBusiness.getInvited();
 
-        // Definir um adapter
+        // Define an adapter
         ReportListAdapter reportListAdapter = new ReportListAdapter(reportItems, listener);
         this.viewHolder.recyclerView.setAdapter(reportListAdapter);
 
-        // Notifica o Adapter mudança na lista
+        // Notify Adapter Change in List
         reportListAdapter.notifyDataSetChanged();
 
-        // Mostra imagen quando não á itens
+        // Show image when no items
         reportListAdapter.registerAdapterDataObserver(new RVEmptyObserver(this.viewHolder.recyclerView, emptyLayout, fab));
     }
 

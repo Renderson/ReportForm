@@ -6,13 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,8 +49,8 @@ import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.async.PDFAsyncTask;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
-import com.rendersoncs.reportform.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.fragment.FullPhotoFragment;
+import com.rendersoncs.reportform.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.fragment.ReportNoteFragment;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnItemListenerClicked;
@@ -96,6 +97,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private ReportCheckListAdapter mAdapter;
 
     private TextView resultCompany, resultEmail, resultDate;
+    private PDFAsyncTask asy = new PDFAsyncTask(ReportActivity.this);
     private AnimatedFloatingButton animated = new AnimatedFloatingButton();
 
     private ArrayList<String> listTitle = new ArrayList<>();
@@ -105,7 +107,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private ArrayList<String> listPhoto = new ArrayList<>();
     private JSONArray jsArray = new JSONArray();
 
-    public Parcelable savedRecyclerLayoutState;
+    // Val for Edit Report
+    private int mReportId = 0;
+    private ArrayList<String> editConformity = new ArrayList<>();
+    private ArrayList<String> editNotes = new ArrayList<>();
+    private ArrayList<String> editPhoto = new ArrayList<>();
+
+    //public Parcelable savedRecyclerLayoutState;
 
     private DatabaseReference databaseReference;
     private User user = new User();
@@ -131,7 +139,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user.setId(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
 
-        databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
+        //databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
         //databaseReference.keepSynced(true);
 
 //        if (savedInstanceState != null) {
@@ -141,12 +149,24 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 //        } else {
 //            this.initViews();
 //        }
-        this.initViews();
-        this.isConnected();
-
-        this.getBundleReportFromDialog();
-
         this.mReportBusiness = new ReportBusiness(this);
+        this.initViews();
+        //this.isConnected();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            this.mReportId = bundle.getInt(ReportConstants.ConstantsBundle.REPORT_ID);
+        }
+        if (mReportId == 0){
+            databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
+            this.isConnected();
+            this.getBundleReportFromDialog();
+        } else {
+            findViewById(R.id.progressBar).setVisibility(View.GONE);
+//            EditReportActivity edit = new EditReportActivity();
+//            edit.loadEditReportExt(mReportId, mAdapter, mReportBusiness, recyclerView);
+            this.loadEditReport();
+        }
 
         FloatingActionButton fab = findViewById(R.id.fab_new_item);
         fab.setOnClickListener(v -> startNewItemListFireBase());
@@ -156,6 +176,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     }
 
     private void initViews() {
+        resultCompany = findViewById(R.id.result_company);
+        resultEmail = findViewById(R.id.result_email);
+        resultDate = findViewById(R.id.result_date);
+
         mAdapter = new ReportCheckListAdapter(reportItems, this);
         mAdapter.setOnItemListenerClicked(this);
         RecyclerView.LayoutManager llm = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
@@ -168,21 +192,88 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         //mAdapter.notifyDataSetChanged();
     }
 
+    private void loadEditReport() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            this.mReportId = bundle.getInt(ReportConstants.ConstantsBundle.REPORT_ID);
+
+            ReportItems repoEntity = this.mReportBusiness.load(this.mReportId);
+            this.resultCompany.setText(repoEntity.getCompany());
+            this.resultEmail.setText(repoEntity.getEmail());
+            this.resultDate.setText(repoEntity.getDate());
+
+            try {
+                JSONArray array = new JSONArray(repoEntity.getListJson());
+
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject jo = array.getJSONObject(i);
+
+                    String conformity = jo.getString(ReportConstants.LIST_ITEMS.CONFORMITY);
+                    editConformity.add(conformity);
+
+                    String note = jo.getString(ReportConstants.LIST_ITEMS.NOTE);
+                    editNotes.add(note);
+
+                    String photo = jo.getString(ReportConstants.LIST_ITEMS.PHOTO);
+                    editPhoto.add(photo);
+
+                    ReportItems repoJson = new ReportItems(jo.getString(ReportConstants.LIST_ITEMS.TITLE),
+                            jo.getString(ReportConstants.LIST_ITEMS.DESCRIPTION), jo.getString("title"));
+                    reportItems.add(repoJson);
+                }
+
+                for (int i = 0; i < editConformity.size(); i++) {
+                    if (editConformity.get(i).equals(getResources().getString(R.string.according))) {
+                        this.radioItemChecked(i, 1);
+                    }
+                    if (editConformity.get(i).equals(getResources().getString(R.string.not_applicable))) {
+                        this.radioItemChecked(i, 2);
+                    }
+                    if (editConformity.get(i).equals(getResources().getString(R.string.not_according))) {
+                        this.radioItemChecked(i, 3);
+                    }
+                }
+
+                for (int i = 0; i < editNotes.size(); i ++){
+                    String notes = editNotes.get(i);
+                    mAdapter.insertNote(i, notes);
+                    Log.i("log", "NOTES: " + i + notes + " notes");
+                }
+
+                for (int i = 0; i < editPhoto.size(); i ++){
+                    String photos = editPhoto.get(i);
+
+                    byte[] decodedString = Base64.decode(photos, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                    mAdapter.setImageInItem(i, decodedByte);
+                }
+
+                mAdapter = new ReportCheckListAdapter(reportItems, this);
+                mAdapter.setOnItemListenerClicked(this);
+                recyclerView.setAdapter(mAdapter);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void getBundleReportFromDialog() {
         // get text from DialogFragment
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         assert bundle != null;
-        String company = bundle.getString("company");
-        resultCompany = findViewById(R.id.result_company);
+        String company = bundle.getString(ReportConstants.LIST_ITEMS.COMPANY);
         resultCompany.setText(company);
 
-        String email = bundle.getString("email");
-        resultEmail = findViewById(R.id.result_email);
+        String email = bundle.getString(ReportConstants.LIST_ITEMS.EMAIL);
         resultEmail.setText(email);
 
-        String date = bundle.getString("date");
-        resultDate = findViewById(R.id.result_date);
+        String date = bundle.getString(ReportConstants.LIST_ITEMS.DATE);
         resultDate.setText(date);
     }
 
@@ -306,7 +397,11 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
             case R.id.clear:
                 if (mAdapter.listIDRadio.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_list_clear), Toast.LENGTH_SHORT).show();
+                    Snackbar snackbar = Snackbar
+                            .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(R.string.label_empty_list), Snackbar.LENGTH_LONG);
+                    SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
+                    snackbar.show();
+                    //Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_list_clear), Toast.LENGTH_SHORT).show();
                 } else {
                     alertDialog.showDialog(ReportActivity.this,
                             getResources().getString(R.string.label_clear_list),
@@ -361,16 +456,29 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         // Finish JsonObject
 
         //Save
-        if (this.mReportBusiness.insert(reportItems)) {
-            // Execute Async create PDF
-            PDFAsyncTask asy = new PDFAsyncTask(ReportActivity.this);
-            asy.execute(reportItems);
-            Toast.makeText(getApplicationContext(), R.string.txt_report_save, Toast.LENGTH_SHORT).show();
-            this.closeMethods();
-            finish();
+        if (this.mReportId == 0){
+            if (this.mReportBusiness.insert(reportItems)) {
+                // Execute Async create PDF
+                asy.execute(reportItems);
+                Toast.makeText(getApplicationContext(), R.string.txt_report_save, Toast.LENGTH_SHORT).show();
+                this.closeMethods();
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.txt_error_save, Toast.LENGTH_SHORT).show();
+                finish();
+            }
         } else {
-            Toast.makeText(getApplicationContext(), R.string.txt_error_save, Toast.LENGTH_SHORT).show();
-            finish();
+            reportItems.setId(this.mReportId);
+            if (this.mReportBusiness.update(reportItems)) {
+                // Execute Async create PDF
+                asy.execute(reportItems);
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_report_update), Toast.LENGTH_SHORT).show();
+                this.closeMethods();
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.txt_error_save, Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
     }
 
@@ -391,7 +499,11 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         reportItems.clear();
         this.isConnected();
 
-        Toast.makeText(getApplicationContext(), "Lista vazia!", Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar
+                .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(R.string.label_empty_list), Snackbar.LENGTH_LONG);
+        SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
+        snackbar.show();
+        //Toast.makeText(getApplicationContext(), R.string.label_empty_list, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -469,8 +581,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         Bundle bundle = new Bundle();
         ReportItems items = reportItems.get(position);
 
-        bundle.putString("title", items.getTitle());
-        bundle.putString("desc", items.getDescription());
+        bundle.putString(ReportConstants.LIST_ITEMS.TITLE, items.getTitle());
+        bundle.putString(ReportConstants.LIST_ITEMS.DESCRIPTION, items.getDescription());
         Log.d("TestFrag", items.getTitle() + items.getDescription());
         nFrag.setArguments(bundle);
         nFrag.show((ReportActivity.this).getSupportFragmentManager(), "new_item");
@@ -512,8 +624,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         Bundle bundle = new Bundle();
         ReportItems items = reportItems.get(position);
 
-        bundle.putString("note", items.getNote());
-        bundle.putInt("position", position);
+        bundle.putString(ReportConstants.LIST_ITEMS.NOTE, items.getNote());
+        bundle.putInt(ReportConstants.LIST_ITEMS.POSITION, position);
         fragNote.setArguments(bundle);
         Log.d("NoteFrag ", items.getNote() + position);
         fragNote.show((ReportActivity.this).getSupportFragmentManager(), "insert_note");
@@ -538,8 +650,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] bytes = stream.toByteArray();
 
-        bundle.putInt("position", position);
-        bundle.putByteArray("image", bytes);
+        bundle.putInt(ReportConstants.LIST_ITEMS.POSITION, position);
+        bundle.putByteArray(ReportConstants.LIST_ITEMS.PHOTO, bytes);
 
         fullFragment.setArguments(bundle);
         fullFragment.show(getSupportFragmentManager(), "fullPhoto");

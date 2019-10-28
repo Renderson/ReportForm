@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportCheckListAdapter;
+import com.rendersoncs.reportform.constants.ReportConstants;
 
 import java.util.Objects;
 
@@ -38,8 +39,8 @@ public class ReportNoteFragment extends DialogFragment {
         note = view.findViewById(R.id.txt_note);
 
         if (getArguments() != null) {
-            position = getArguments().getInt("position");
-            getNote = getArguments().getString("note");
+            position = getArguments().getInt(ReportConstants.LIST_ITEMS.POSITION);
+            getNote = getArguments().getString(ReportConstants.LIST_ITEMS.NOTE);
             note.setText(getNote);
         }
 

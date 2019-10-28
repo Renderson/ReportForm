@@ -26,7 +26,7 @@ public class NetworkConnectedService {
         } else {
             Snackbar snackbar = Snackbar
                     .make(activity.findViewById(R.id.floatButton), activity.getString(R.string.txt_check_networking), Snackbar.LENGTH_LONG)
-                    .setAction("VERIFICAR", view -> {
+                    .setAction(activity.getResources().getString(R.string.check), view -> {
                             Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
                             activity.startActivity(intent);
                         });
