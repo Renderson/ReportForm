@@ -12,10 +12,10 @@ import java.io.File;
 
 import static android.content.ContentValues.TAG;
 
-public class PDFAsyncTask extends AsyncTask<ReportItems, Void, File> {
+public class PDFCreateAsync extends AsyncTask<ReportItems, Void, File> {
     private Context context;
 
-    public PDFAsyncTask(Context context){
+    public PDFCreateAsync(Context context){
         this.context = context;
     }
 

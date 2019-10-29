@@ -39,8 +39,8 @@ public class ReportNoteFragment extends DialogFragment {
         note = view.findViewById(R.id.txt_note);
 
         if (getArguments() != null) {
-            position = getArguments().getInt(ReportConstants.LIST_ITEMS.POSITION);
-            getNote = getArguments().getString(ReportConstants.LIST_ITEMS.NOTE);
+            position = getArguments().getInt(ReportConstants.ITEM.POSITION);
+            getNote = getArguments().getString(ReportConstants.ITEM.NOTE);
             note.setText(getNote);
         }
 

@@ -67,8 +67,8 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
 
         this.init();
 
-        // Camada Business
-        this.mReportBusiness = new ReportBusiness(this);
+        // Business Layer
+        this.mReportBusiness = new ReportBusiness(ReportResume.this);
 
         this.loadReportResume();
         this.createPieChart();
@@ -77,7 +77,7 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
 
     private void init() {
         recyclerView = findViewById(R.id.resume_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(ReportResume.this));
         recyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
 
         pieChart = findViewById(R.id.pieChart);
@@ -171,7 +171,7 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
             this.countRadioSelected();
 
         } else {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -182,14 +182,14 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
             for (int i = 0; i < array.length(); i++) {
                 JSONObject jo = array.getJSONObject(i);
 
-                ReportResumeItems repoJson = new ReportResumeItems(jo.getString(ReportConstants.LIST_ITEMS.TITLE),
-                        jo.getString(ReportConstants.LIST_ITEMS.DESCRIPTION),
-                        jo.getString(ReportConstants.LIST_ITEMS.CONFORMITY),
-                        jo.getString(ReportConstants.LIST_ITEMS.NOTE),
-                        jo.getString(ReportConstants.LIST_ITEMS.PHOTO));
+                ReportResumeItems repoJson = new ReportResumeItems(jo.getString(ReportConstants.ITEM.TITLE),
+                        jo.getString(ReportConstants.ITEM.DESCRIPTION),
+                        jo.getString(ReportConstants.ITEM.CONFORMITY),
+                        jo.getString(ReportConstants.ITEM.NOTE),
+                        jo.getString(ReportConstants.ITEM.PHOTO));
                 repoResumeList.add(repoJson);
             }
-            RecyclerView.Adapter adapter = new ReportResumeAdapter(repoResumeList, this);
+            RecyclerView.Adapter adapter = new ReportResumeAdapter(repoResumeList, ReportResume.this);
             ((ReportResumeAdapter) adapter).setOnItemListenerClicked(this);
             recyclerView.setAdapter(adapter);
 
@@ -204,7 +204,7 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
             JSONArray arrayL = new JSONArray(repoEntity.getListJson());
             for (int i = 0; i < arrayL.length(); i++) {
                 JSONObject obj = arrayL.getJSONObject(i);
-                String selected = obj.getString(ReportConstants.LIST_ITEMS.CONFORMITY);
+                String selected = obj.getString(ReportConstants.ITEM.CONFORMITY);
                 listSelected.add(selected);
             }
 
@@ -260,7 +260,7 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
         byte[] bytes = Base64.decode(image, Base64.DEFAULT);
 
         bundle.putInt("position", position);
-        bundle.putByteArray(ReportConstants.LIST_ITEMS.PHOTO, bytes);
+        bundle.putByteArray(ReportConstants.ITEM.PHOTO, bytes);
 
         fullFragment.setArguments(bundle);
         fullFragment.show(getSupportFragmentManager(), "fullPhoto");

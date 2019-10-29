@@ -4,13 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 
 import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -37,7 +35,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 
 public class CreatePDFViewer {
 
@@ -167,20 +164,20 @@ public class CreatePDFViewer {
             JSONArray arrayL = new JSONArray(paramRepo.getListJson());
             for (int i = 0; i < arrayL.length(); i++) {
                 JSONObject objTitle = arrayL.getJSONObject(i);
-                String title = objTitle.getString(ReportConstants.LIST_ITEMS.TITLE);
+                String title = objTitle.getString(ReportConstants.ITEM.TITLE);
 
                 JSONObject objDescription = arrayL.getJSONObject(i);
-                String description = objDescription.getString(ReportConstants.LIST_ITEMS.DESCRIPTION);
+                String description = objDescription.getString(ReportConstants.ITEM.DESCRIPTION);
 
                 JSONObject objRadio = arrayL.getJSONObject(i);
-                String radio = objRadio.getString(ReportConstants.LIST_ITEMS.CONFORMITY);
+                String radio = objRadio.getString(ReportConstants.ITEM.CONFORMITY);
 
                 JSONObject objNote = arrayL.getJSONObject(i);
-                String notes = objNote.getString(ReportConstants.LIST_ITEMS.NOTE);
+                String notes = objNote.getString(ReportConstants.ITEM.NOTE);
                 Log.d("Notes", notes);
 
                 JSONObject objImage = arrayL.getJSONObject(i);
-                String image = objImage.getString(ReportConstants.LIST_ITEMS.PHOTO);
+                String image = objImage.getString(ReportConstants.ITEM.PHOTO);
                 Log.d("PDFImage", image);
 
                 byte[] decodedString = Base64.decode(image, Base64.DEFAULT);

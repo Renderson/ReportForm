@@ -38,18 +38,18 @@
 //                for (int i = 0; i < array.length(); i++) {
 //                    JSONObject jo = array.getJSONObject(i);
 //
-//                    String conformity = jo.getString(ReportConstants.LIST_ITEMS.CONFORMITY);
+//                    String conformity = jo.getString(ReportConstants.ITEM.CONFORMITY);
 //                    editConformity.add(conformity);
 //                    Log.i("log", "TESTE: " + i + editConformity + " notes");
 //
-//                    String note = jo.getString(ReportConstants.LIST_ITEMS.NOTE);
+//                    String note = jo.getString(ReportConstants.ITEM.NOTE);
 //                    editNotes.add(note);
 //
-//                    String photo = jo.getString(ReportConstants.LIST_ITEMS.PHOTO);
+//                    String photo = jo.getString(ReportConstants.ITEM.PHOTO);
 //                    editPhoto.add(photo);
 //
-//                    ReportItems repoJson = new ReportItems(jo.getString(ReportConstants.LIST_ITEMS.TITLE),
-//                            jo.getString(ReportConstants.LIST_ITEMS.DESCRIPTION), jo.getString("title"));
+//                    ReportItems repoJson = new ReportItems(jo.getString(ReportConstants.ITEM.TITLE),
+//                            jo.getString(ReportConstants.ITEM.DESCRIPTION), jo.getString("title"));
 //                    reportItems.add(repoJson);
 //                }
 //

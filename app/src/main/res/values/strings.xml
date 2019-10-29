@@ -8,17 +8,11 @@
     <string name="txt_report_removed">Relatório removido com sucesso!</string>
     <string name="title_report_list">Lista Relatórios</string>
     <string name="title_report">Relatório</string>
-    <string name="txt_empty_report">Relátorio vazio!</string>
-    <string name="txt_choice_item">Para salvar seu relatório, deve ter no mínimo 1 lista marcada.</string>
     <string name="back">Voltar</string>
     <string name="txt_report_save">Relatório salvo!</string>
     <string name="txt_error_save">Error ao salvar!</string>
-    <string name="alert_leave_the_report">Sair do relatório?</string>
-    <string name="txt_leave_the_report">Desaja realmente sair do relatório? Você perderá todo seu progresso!</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
-    <string name="alert_remove_report">Remover relatório!</string>
-    <string name="txt_remove_report">Deseja realmente remover o relatório?</string>
     <string name="txt_share_report">Compartilhar relatório</string>
     <string name="canceled">Cancelado!</string>
     <string name="start">Começar</string>
@@ -154,13 +148,22 @@
     <string name="image_for_resume">Imagem para Resume</string>
     <string name="image_pdf">Image PDF</string>
     <string name="company">Empresa</string>
-    <string name="label_clear_list">Limpar lista?</string>
-    <string name="label_accept_clear_list">Deseja realmente limpar a seção? Esse processo vai apagar todo seu progresso!</string>
-    <string name="label_attach_report">Em anexo o relatório da empresa %1$s concluído! Realizado no dia</string>
-    <string name="label_report_update">Relatório Alterado!</string>
     <string name="share">Compartilhar</string>
     <string name="label_empty_list">Lista vazia!</string>
     <string name="check">VERIFICAR</string>
+    <string name="label_attach_report">Em anexo o relatório da empresa %1$s concluído! Realizado no dia</string>
+    <string name="label_report_update">Relatório Alterado!</string>
+
+    <!--Alerts Dialogs-->
+    <string name="alert_clear_list">Limpar lista?</string>
+    <string name="alert_clear_list_text">Deseja realmente limpar a seção? Esse processo vai apagar todo seu progresso!</string>
     <string name="alert_check_list">Verificar Lista!</string>
     <string name="alert_check_list_text">Há item selecionado que não contém a foto, verifique antes de salvar!</string>
+    <string name="alert_remove_report">Remover relatório!</string>
+    <string name="alert_remove_report_text">Deseja realmente remover o relatório?</string>
+    <string name="alert_empty_report">Relátorio vazio!</string>
+    <string name="alert_empty_report_text">Para salvar seu relatório, deve ter no mínimo 1 lista marcada.</string>
+    <string name="alert_leave_the_report">Sair do relatório?</string>
+    <string name="alert_leave_the_report_text">Desaja realmente sair do relatório? Você perderá todo seu progresso!</string>
+    <string name="error">Error</string>
 </resources>

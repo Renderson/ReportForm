@@ -46,7 +46,7 @@ import com.rendersoncs.reportform.BuildConfig;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportCheckListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
-import com.rendersoncs.reportform.async.PDFAsyncTask;
+import com.rendersoncs.reportform.async.PDFCreateAsync;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.FullPhotoFragment;
@@ -97,7 +97,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private ReportCheckListAdapter mAdapter;
 
     private TextView resultCompany, resultEmail, resultDate;
-    private PDFAsyncTask asy = new PDFAsyncTask(ReportActivity.this);
+    private PDFCreateAsync pdfCreateAsync = new PDFCreateAsync(ReportActivity.this);
     private AnimatedFloatingButton animated = new AnimatedFloatingButton();
 
     private ArrayList<String> listTitle = new ArrayList<>();
@@ -206,31 +206,31 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 JSONArray array = new JSONArray(repoEntity.getListJson());
 
                 for (int i = 0; i < array.length(); i++) {
-                    JSONObject jo = array.getJSONObject(i);
+                    JSONObject object = array.getJSONObject(i);
 
-                    String conformity = jo.getString(ReportConstants.LIST_ITEMS.CONFORMITY);
+                    String conformity = object.getString(ReportConstants.ITEM.CONFORMITY);
                     editConformity.add(conformity);
 
-                    String note = jo.getString(ReportConstants.LIST_ITEMS.NOTE);
+                    String note = object.getString(ReportConstants.ITEM.NOTE);
                     editNotes.add(note);
 
-                    String photo = jo.getString(ReportConstants.LIST_ITEMS.PHOTO);
+                    String photo = object.getString(ReportConstants.ITEM.PHOTO);
                     editPhoto.add(photo);
 
-                    ReportItems repoJson = new ReportItems(jo.getString(ReportConstants.LIST_ITEMS.TITLE),
-                            jo.getString(ReportConstants.LIST_ITEMS.DESCRIPTION), jo.getString("title"));
+                    ReportItems repoJson = new ReportItems(object.getString(ReportConstants.ITEM.TITLE),
+                            object.getString(ReportConstants.ITEM.DESCRIPTION), object.getString("title"));
                     reportItems.add(repoJson);
                 }
 
                 for (int i = 0; i < editConformity.size(); i++) {
                     if (editConformity.get(i).equals(getResources().getString(R.string.according))) {
-                        this.radioItemChecked(i, 1);
+                        this.radioItemChecked(i, ReportConstants.ITEM.OPT_NUM1);
                     }
                     if (editConformity.get(i).equals(getResources().getString(R.string.not_applicable))) {
-                        this.radioItemChecked(i, 2);
+                        this.radioItemChecked(i, ReportConstants.ITEM.OPT_NUM2);
                     }
                     if (editConformity.get(i).equals(getResources().getString(R.string.not_according))) {
-                        this.radioItemChecked(i, 3);
+                        this.radioItemChecked(i, ReportConstants.ITEM.OPT_NUM3);
                     }
                 }
 
@@ -244,13 +244,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     String photos = editPhoto.get(i);
 
                     byte[] decodedString = Base64.decode(photos, Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                    mAdapter.setImageInItem(i, decodedByte);
+                    mAdapter.setImageInItem(i, bitmap);
                 }
 
-                mAdapter = new ReportCheckListAdapter(reportItems, this);
-                mAdapter.setOnItemListenerClicked(this);
+                mAdapter = new ReportCheckListAdapter(reportItems, ReportActivity.this);
+                mAdapter.setOnItemListenerClicked(ReportActivity.this);
                 recyclerView.setAdapter(mAdapter);
 
             } catch (JSONException e) {
@@ -267,13 +267,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         assert bundle != null;
-        String company = bundle.getString(ReportConstants.LIST_ITEMS.COMPANY);
+        String company = bundle.getString(ReportConstants.ITEM.COMPANY);
         resultCompany.setText(company);
 
-        String email = bundle.getString(ReportConstants.LIST_ITEMS.EMAIL);
+        String email = bundle.getString(ReportConstants.ITEM.EMAIL);
         resultEmail.setText(email);
 
-        String date = bundle.getString(ReportConstants.LIST_ITEMS.DATE);
+        String date = bundle.getString(ReportConstants.ITEM.DATE);
         resultDate.setText(date);
     }
 
@@ -361,8 +361,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 this.checkAnswers();
                 if (this.listPhoto.isEmpty()) {
                     this.alertDialog.showDialog(ReportActivity.this,
-                            getResources().getString(R.string.txt_empty_report),
-                            getResources().getString(R.string.txt_choice_item),
+                            getResources().getString(R.string.alert_empty_report),
+                            getResources().getString(R.string.alert_empty_report_text),
                             getResources().getString(R.string.back),
                             (dialogInterface, i) -> {
                             },
@@ -405,8 +405,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     //Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_list_clear), Toast.LENGTH_SHORT).show();
                 } else {
                     alertDialog.showDialog(ReportActivity.this,
-                            getResources().getString(R.string.label_clear_list),
-                            getResources().getString(R.string.label_accept_clear_list),
+                            getResources().getString(R.string.alert_clear_list),
+                            getResources().getString(R.string.alert_clear_list_text),
                             getResources().getString(R.string.confirm),
                             (dialogInterface, i) -> this.clearCheckList(),
                             getResources().getString(R.string.cancel), null, false);
@@ -419,7 +419,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private void alertDialogClose() {
         alertDialog.showDialog(ReportActivity.this,
                 getResources().getString(R.string.alert_leave_the_report),
-                getResources().getString(R.string.txt_leave_the_report),
+                getResources().getString(R.string.alert_leave_the_report_text),
                 getResources().getString(R.string.confirm),
                 (dialogInterface, i) -> {
                     this.closeMethods();
@@ -440,11 +440,11 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         for (int i = 0; (i < listRadio.size()) && (i < listTitle.size()) && (i < listDescription.size()) && (i < listNotes.size()) && (i < listPhoto.size()); i++) {
             JSONObject jsObject = new JSONObject();
             try {
-                jsObject.put(ReportConstants.LIST_ITEMS.TITLE, listTitle.get(i));
-                jsObject.put(ReportConstants.LIST_ITEMS.DESCRIPTION, listDescription.get(i));
-                jsObject.put(ReportConstants.LIST_ITEMS.CONFORMITY, listRadio.get(i));
-                jsObject.put(ReportConstants.LIST_ITEMS.NOTE, listNotes.get(i));
-                jsObject.put(ReportConstants.LIST_ITEMS.PHOTO, listPhoto.get(i));
+                jsObject.put(ReportConstants.ITEM.TITLE, listTitle.get(i));
+                jsObject.put(ReportConstants.ITEM.DESCRIPTION, listDescription.get(i));
+                jsObject.put(ReportConstants.ITEM.CONFORMITY, listRadio.get(i));
+                jsObject.put(ReportConstants.ITEM.NOTE, listNotes.get(i));
+                jsObject.put(ReportConstants.ITEM.PHOTO, listPhoto.get(i));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -460,7 +460,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         if (this.mReportId == 0){
             if (this.mReportBusiness.insert(reportItems)) {
                 // Execute Async create PDF
-                asy.execute(reportItems);
+                pdfCreateAsync.execute(reportItems);
                 Toast.makeText(getApplicationContext(), R.string.txt_report_save, Toast.LENGTH_SHORT).show();
                 this.closeMethods();
                 finish();
@@ -472,7 +472,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             reportItems.setId(this.mReportId);
             if (this.mReportBusiness.update(reportItems)) {
                 // Execute Async create PDF
-                asy.execute(reportItems);
+                pdfCreateAsync.execute(reportItems);
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_report_update), Toast.LENGTH_SHORT).show();
                 this.closeMethods();
                 finish();
@@ -495,7 +495,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     // Clear every Lists and reload Adapter
     private void clearCheckList() {
 
-        mAdapter.listIDRadio.clear();
+        //mAdapter.listIDRadio.clear();
         mAdapter.expandState.clear();
         reportItems.clear();
         this.isConnected();
@@ -531,15 +531,15 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
         for (int i = 0; i < reportItems.size(); i++) {
             if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2() || reportItems.get(i).isOpt3()) {
-                if (reportItems.get(i).getSelectedAnswerPosition() == 1) {
+                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM1) {
                     String C = getResources().getString(R.string.according);
                     listRadio.add(C);
                 }
-                if (reportItems.get(i).getSelectedAnswerPosition() == 2) {
+                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2) {
                     String NA = getResources().getString(R.string.not_applicable);
                     listRadio.add(NA);
                 }
-                if (reportItems.get(i).getSelectedAnswerPosition() == 3) {
+                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM3) {
                     String NC = getResources().getString(R.string.not_according);
                     listRadio.add(NC);
                 }
@@ -582,8 +582,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         Bundle bundle = new Bundle();
         ReportItems items = reportItems.get(position);
 
-        bundle.putString(ReportConstants.LIST_ITEMS.TITLE, items.getTitle());
-        bundle.putString(ReportConstants.LIST_ITEMS.DESCRIPTION, items.getDescription());
+        bundle.putString(ReportConstants.ITEM.TITLE, items.getTitle());
+        bundle.putString(ReportConstants.ITEM.DESCRIPTION, items.getDescription());
         Log.d("TestFrag", items.getTitle() + items.getDescription());
         nFrag.setArguments(bundle);
         nFrag.show((ReportActivity.this).getSupportFragmentManager(), "new_item");
@@ -625,8 +625,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         Bundle bundle = new Bundle();
         ReportItems items = reportItems.get(position);
 
-        bundle.putString(ReportConstants.LIST_ITEMS.NOTE, items.getNote());
-        bundle.putInt(ReportConstants.LIST_ITEMS.POSITION, position);
+        bundle.putString(ReportConstants.ITEM.NOTE, items.getNote());
+        bundle.putInt(ReportConstants.ITEM.POSITION, position);
         fragNote.setArguments(bundle);
         Log.d("NoteFrag ", items.getNote() + position);
         fragNote.show((ReportActivity.this).getSupportFragmentManager(), "insert_note");
@@ -651,8 +651,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] bytes = stream.toByteArray();
 
-        bundle.putInt(ReportConstants.LIST_ITEMS.POSITION, position);
-        bundle.putByteArray(ReportConstants.LIST_ITEMS.PHOTO, bytes);
+        bundle.putInt(ReportConstants.ITEM.POSITION, position);
+        bundle.putByteArray(ReportConstants.ITEM.PHOTO, bytes);
 
         fullFragment.setArguments(bundle);
         fullFragment.show(getSupportFragmentManager(), "fullPhoto");

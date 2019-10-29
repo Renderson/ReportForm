@@ -28,7 +28,7 @@ public class SnackBarHelper {
 
     private static void setRoundBordersBg (Context context, Snackbar snackbar) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            snackbar.getView().setBackground(context.getDrawable(R.drawable.bg_sbackbar));
+            snackbar.getView().setBackground(context.getDrawable(R.drawable.bg_snackbar));
         }
     }
 }

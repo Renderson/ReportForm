@@ -31,6 +31,7 @@ import butterknife.ButterKnife;
 
 import com.bumptech.glide.Glide;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnItemListenerClicked;
 
@@ -39,7 +40,7 @@ import static com.android.volley.VolleyLog.TAG;
 public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckListAdapter.ViewHolder> implements ItemMoveCallBack.ItemTouchHelperContract{
     private List<ReportItems> reportItems;
     public SparseBooleanArray expandState = new SparseBooleanArray();
-    public ArrayList<Integer> listIDRadio = new ArrayList<Integer>();
+    //public ArrayList<Integer> listIDRadio = new ArrayList<Integer>();
     public Context context;
 
     private static final int TYPE_HEADER = 0;
@@ -205,10 +206,10 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             takePhoto = view.findViewById(R.id.photo);
             resultPhoto = view.findViewById(R.id.result_photo);
             check = view.findViewById(R.id.action_check);
-            //checkImage = view.findViewById(R.id.action_image);
             note = view.findViewById(R.id.note);
-            //checkNote = view.findViewById(R.id.action_note);
             resetItem = view.findViewById(R.id.action_reset_item);
+            //checkNote = view.findViewById(R.id.action_note);
+            //checkImage = view.findViewById(R.id.action_image);
 
             buttonLayoutArrow = view.findViewById(R.id.btnArrow);
             expandableLayout = view.findViewById(R.id.expandableLayout);
@@ -255,17 +256,17 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             switch (v.getId()) {
                 case R.id.radio_conform:
                     if (onItemListenerClicked != null)
-                        onItemListenerClicked.radioItemChecked(getAdapterPosition(), 1);
+                        onItemListenerClicked.radioItemChecked(getAdapterPosition(), ReportConstants.ITEM.OPT_NUM1);
                     break;
 
                 case R.id.radio_not_applicable:
                     if (onItemListenerClicked != null)
-                        onItemListenerClicked.radioItemChecked(getAdapterPosition(), 2);
+                        onItemListenerClicked.radioItemChecked(getAdapterPosition(), ReportConstants.ITEM.OPT_NUM2);
                     break;
 
                 case R.id.radio_not_conform:
                     if (onItemListenerClicked != null)
-                        onItemListenerClicked.radioItemChecked(getAdapterPosition(), 3);
+                        onItemListenerClicked.radioItemChecked(getAdapterPosition(), ReportConstants.ITEM.OPT_NUM3);
                     break;
             }
         }

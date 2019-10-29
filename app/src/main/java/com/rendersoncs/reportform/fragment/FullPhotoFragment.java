@@ -30,7 +30,7 @@ public class FullPhotoFragment extends DialogFragment {
             Toast.makeText(getActivity(), getResources().getString(R.string.label_error_return_photo_full), Toast.LENGTH_SHORT).show();
         }
 
-        byte[] bytes = getArguments().getByteArray(ReportConstants.LIST_ITEMS.PHOTO);
+        byte[] bytes = getArguments().getByteArray(ReportConstants.ITEM.PHOTO);
         assert bytes != null;
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 

@@ -77,10 +77,10 @@ public class NewItemListFireBase extends DialogFragment {
 
     private void checkItems() {
         if (getArguments() != null) {
-            title = getArguments().getString(ReportConstants.LIST_ITEMS.TITLE);
+            title = getArguments().getString(ReportConstants.ITEM.TITLE);
             mTitleList.setText(title);
 
-            String description = getArguments().getString(ReportConstants.LIST_ITEMS.DESCRIPTION);
+            String description = getArguments().getString(ReportConstants.ITEM.DESCRIPTION);
             mDescriptionList.setText(description);
         }
 
@@ -91,13 +91,13 @@ public class NewItemListFireBase extends DialogFragment {
         String upDescription = mDescriptionList.getText().toString();
 
         DatabaseReference databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
-        Query query = databaseReference.orderByChild(ReportConstants.LIST_ITEMS.TITLE).equalTo(title);
+        Query query = databaseReference.orderByChild(ReportConstants.ITEM.TITLE).equalTo(title);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    ds.getRef().child(ReportConstants.LIST_ITEMS.TITLE).setValue(upTitle);
-                    ds.getRef().child(ReportConstants.LIST_ITEMS.DESCRIPTION).setValue(upDescription);
+                    ds.getRef().child(ReportConstants.ITEM.TITLE).setValue(upTitle);
+                    ds.getRef().child(ReportConstants.ITEM.DESCRIPTION).setValue(upDescription);
                 }
             }
 
@@ -115,8 +115,8 @@ public class NewItemListFireBase extends DialogFragment {
         final String key = FirebaseDatabase.getInstance().getReference().child("users").child(user.getId()).child("list").push().getKey();
         HashMap<String, String> dataMap = new HashMap<>();
         Map<String, Object> childUpdates = new HashMap<>();
-        dataMap.put(ReportConstants.LIST_ITEMS.TITLE, mTitle);
-        dataMap.put(ReportConstants.LIST_ITEMS.DESCRIPTION, mDescription);
+        dataMap.put(ReportConstants.ITEM.TITLE, mTitle);
+        dataMap.put(ReportConstants.ITEM.DESCRIPTION, mDescription);
         childUpdates.put("/users/" + user.getId() + "/list/" + key, dataMap);
         FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
     }

@@ -18,7 +18,7 @@ public class ReportConstants {
         public static final int LIMITS_TEXT = 14;
     }
 
-    public static class LIST_ITEMS {
+    public static class ITEM {
         public static final String POSITION = "position";
         public static final String COMPANY = "company";
         public static final String EMAIL = "email";
@@ -28,5 +28,9 @@ public class ReportConstants {
         public static final String CONFORMITY = "conformity";
         public static final String NOTE = "note";
         public static final String PHOTO = "photo";
+
+        public static final int OPT_NUM1 = 1;
+        public static final int OPT_NUM2 = 2;
+        public static final int OPT_NUM3 = 3;
     }
 }

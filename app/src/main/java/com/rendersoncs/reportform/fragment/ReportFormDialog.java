@@ -81,9 +81,9 @@ public class ReportFormDialog extends DialogFragment {
                         date = dateTv.getText().toString();
 
                         Bundle bundle = new Bundle();
-                        bundle.putString(ReportConstants.LIST_ITEMS.COMPANY, company);
-                        bundle.putString(ReportConstants.LIST_ITEMS.EMAIL, email);
-                        bundle.putString(ReportConstants.LIST_ITEMS.DATE, date);
+                        bundle.putString(ReportConstants.ITEM.COMPANY, company);
+                        bundle.putString(ReportConstants.ITEM.EMAIL, email);
+                        bundle.putString(ReportConstants.ITEM.DATE, date);
                         intent.putExtras(bundle);
 
                         startActivity(intent);
