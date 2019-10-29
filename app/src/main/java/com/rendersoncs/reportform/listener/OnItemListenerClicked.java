@@ -12,4 +12,6 @@ public interface OnItemListenerClicked {
     void updateList(int position);
 
     void removeItem(int position);
+
+    void resetItem(int position);
 }

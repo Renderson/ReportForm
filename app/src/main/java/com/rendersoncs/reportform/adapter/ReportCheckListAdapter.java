@@ -122,10 +122,13 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             viewHolder.resultPhoto.setOnClickListener(view ->
                     onItemListenerClicked.fullPhoto(position));
 
+            viewHolder.resetItem.setOnClickListener(view ->
+                    onItemListenerClicked.resetItem(position));
+
             if (repo.getPhotoId() == null){
                 viewHolder.resultPhoto.setImageAlpha(R.drawable.image);
                 viewHolder.check.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));
-                //viewHolder.checkImage.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));
+                viewHolder.resetItem.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));
             } else {
                 viewHolder.mRadioButtonConform.setChecked(true);
                 //viewHolder.checkImage.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
@@ -146,20 +149,23 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             viewHolder.mRadioButtonNotConform.setChecked(repo.isOpt3());
 
             if (viewHolder.mRadioButtonConform.isChecked()){
-                listIDRadio.add(1);
+                //listIDRadio.add(1);
                 viewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioC);
                 viewHolder.check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioC));
+                viewHolder.resetItem.clearColorFilter();
 
             } if (viewHolder.mRadioButtonNotApplicable.isChecked()) {
-                listIDRadio.add(2);
+                //listIDRadio.add(2);
                 viewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioNA);
                 viewHolder.check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioNA));
+                viewHolder.resetItem.clearColorFilter();
             }
 
             else if (viewHolder.mRadioButtonNotConform.isChecked()) {
-                listIDRadio.add(3);
+                //listIDRadio.add(3);
                 viewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioNC);
                 viewHolder.check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioNC));
+                viewHolder.resetItem.clearColorFilter();
             }
         }
     }
@@ -182,7 +188,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitleList, tvDescription;
-        ImageView takePhoto, resultPhoto, check, checkImage, note, checkNote;
+        ImageView takePhoto, resultPhoto, check, checkImage, note, checkNote, resetItem;
         View rowView;
 
         RadioGroup mRadioGroup;
@@ -202,6 +208,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             //checkImage = view.findViewById(R.id.action_image);
             note = view.findViewById(R.id.note);
             //checkNote = view.findViewById(R.id.action_note);
+            resetItem = view.findViewById(R.id.action_reset_item);
 
             buttonLayoutArrow = view.findViewById(R.id.btnArrow);
             expandableLayout = view.findViewById(R.id.expandableLayout);

@@ -281,4 +281,7 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
     public void removeItem(int position) {
 
     }
+
+    @Override
+    public void resetItem(int position) {}
 }

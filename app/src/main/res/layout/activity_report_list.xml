@@ -54,6 +54,19 @@
                 android:focusable="true"
                 android:background="?attr/selectableItemBackgroundBorderless"/>
 
+            <ImageView
+                android:id="@+id/action_reset_item"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/textView_title"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/textView_title"
+                android:src="@drawable/ic_action_reset_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+
             <!--            <ImageView-->
             <!--                android:id="@+id/action_check"-->
             <!--                android:src="@drawable/ic_action_check"-->

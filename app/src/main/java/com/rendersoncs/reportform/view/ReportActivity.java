@@ -359,19 +359,20 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             // Save report
             case R.id.save:
                 this.checkAnswers();
-                if (mAdapter.listIDRadio.isEmpty()) {
-                    alertDialog.showDialog(ReportActivity.this,
+                if (this.listPhoto.isEmpty()) {
+                    this.alertDialog.showDialog(ReportActivity.this,
                             getResources().getString(R.string.txt_empty_report),
                             getResources().getString(R.string.txt_choice_item),
                             getResources().getString(R.string.back),
                             (dialogInterface, i) -> {
                             },
                             null, null, false);
+                    this.clearList();
 
-                } else if (listRadio.size() > listPhoto.size()) {
-                    alertDialog.showDialog(ReportActivity.this,
-                            "Verificar Lista!",
-                            "Há item selecionado que não contém a foto, verifique antes de salvar!",
+                } else if (this.listRadio.size() > this.listPhoto.size()) {
+                    this.alertDialog.showDialog(ReportActivity.this,
+                            getResources().getString(R.string.alert_check_list),
+                            getResources().getString(R.string.alert_check_list_text),
                             getResources().getString(R.string.back),
                             (dialogInterface, i) -> {
                             },
@@ -396,7 +397,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 break;
 
             case R.id.clear:
-                if (mAdapter.listIDRadio.isEmpty()) {
+                if (this.listPhoto.isEmpty()) {
                     Snackbar snackbar = Snackbar
                             .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(R.string.label_empty_list), Snackbar.LENGTH_LONG);
                     SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
@@ -407,7 +408,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                             getResources().getString(R.string.label_clear_list),
                             getResources().getString(R.string.label_accept_clear_list),
                             getResources().getString(R.string.confirm),
-                            (dialogInterface, i) -> clearCheckList(),
+                            (dialogInterface, i) -> this.clearCheckList(),
                             getResources().getString(R.string.cancel), null, false);
                 }
                 break;
@@ -656,6 +657,20 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         fullFragment.setArguments(bundle);
         fullFragment.show(getSupportFragmentManager(), "fullPhoto");
         Log.i("FullFrag ", " " + Arrays.toString(bytes));
+    }
+
+    // Reset Item Adapter
+    @Override
+    public void resetItem(int pos) {
+        position = pos;
+        ReportItems items = reportItems.get(position);
+
+        mAdapter.setImageInItem(position, null);
+        mAdapter.insertNote(position, null);
+        items.setOpt1(false);
+        items.setOpt2(false);
+        items.setOpt3(false);
+        mAdapter.notifyDataSetChanged();
     }
 
     // OPen Camera
