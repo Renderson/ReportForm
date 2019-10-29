@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +47,7 @@ import com.rendersoncs.reportform.util.GetInfoUserFirebase;
 import com.rendersoncs.reportform.util.RVEmptyObserver;
 import com.rendersoncs.reportform.util.SnackBarHelper;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -214,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(Intent.createChooser(intent, getResources().getString(R.string.share)));
             }
 
+            // Edit Report
             @Override
             public void onEditReport(int reportId) {
                 Bundle bundle = new Bundle();
@@ -226,17 +229,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Delete Item list
             @Override
-            public void onDeleteClick(int id) {
-                // Removed report DB
-                reportBusiness.remove(id);
+            public void onDeleteClick(int reportId) {
+                // Removed report DB and File PDF
+                AccessDocument accessDocument = new AccessDocument(reportId).invoke();
+                Uri uri = accessDocument.getUri();
+                String subject = accessDocument.getSubject();
+                MainActivity.this.getContentResolver().delete(uri, subject, null);
+
+                reportBusiness.remove(reportId);
                 fab.show();
+
+                // List the reports again
+                loadReport();
+
                 Snackbar snackbar = Snackbar
                         .make(MainActivity.this.findViewById(R.id.floatButton), MainActivity.this.getString(R.string.txt_report_removed), Snackbar.LENGTH_LONG);
                 SnackBarHelper.configSnackBar(MainActivity.this, snackbar);
                 snackbar.show();
-
-                // List the reports again
-                loadReport();
             }
         };
     }
