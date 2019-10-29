@@ -804,6 +804,15 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 //        super.onRestoreInstanceState(savedInstanceState);
 //    }
 
+    public static void delete(File fileDirectory){
+        if (fileDirectory == null){
+            return;
+        } else if (fileDirectory.isDirectory())
+            for (File child : Objects.requireNonNull(fileDirectory.listFiles()))
+                delete(child);
+        fileDirectory.delete();
+    }
+
     @Override
     public void onBackPressed() {
         this.alertDialogClose();
@@ -812,7 +821,9 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        closeMethods();
+        this.closeMethods();
+        File file = path.getStorageDir();
+        delete(file);
     }
 
     private void closeMethods() {

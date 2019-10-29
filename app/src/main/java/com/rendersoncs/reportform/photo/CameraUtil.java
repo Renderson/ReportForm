@@ -9,13 +9,14 @@ import java.util.Date;
 import java.util.Locale;
 
 public class CameraUtil {
+    private File storageDir;
 
     private String currentPhotoPath = "";
 
     public File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HHmmss", new Locale("pt", "br")).format(new Date());
         String imageFileName = "IMG_" + timeStamp + "_";
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Report-Images");
+        storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Report-Images");
 
         if (!storageDir.exists()) {
             storageDir.mkdir();
@@ -25,6 +26,10 @@ public class CameraUtil {
         currentPhotoPath = image.getAbsolutePath();
         return image;
 
+    }
+
+    public File getStorageDir() {
+        return storageDir;
     }
 
 }
