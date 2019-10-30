@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_empty"
+    android:id="@+id/layout_report_list_empty"
     android:visibility="gone"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,7 +12,7 @@
         android:layout_height="150dp"
         android:layout_margin="@dimen/margin_8"
         android:visibility="visible"
-        android:background="@drawable/ic_list_check_grey"
+        android:background="@drawable/ic_new_item_list_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
         android:layout_margin="@dimen/margin_8"
         android:fontFamily="sans-serif"
         android:textStyle="bold"
-        android:text="@string/label_nothing_report"
+        android:text="@string/label_no_items_list"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textSize="@dimen/text_size_30"
         android:visibility="visible"
@@ -40,28 +40,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_8"
-        android:text="@string/label_create_new_report"
+        android:text="@string/label_create_list_for_start"
         android:textSize="@dimen/text_size_14"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/empty_view2" />
-
-    <Button
-        android:id="@+id/action_add_report"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_32"
-        android:background="@drawable/button_shape_rectangular"
-        android:text="@string/label_button_create_report"
-        android:textAllCaps="false"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/text_size_12"
-        android:textStyle="bold"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/empty_view3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:id="@+id/cl_detail_form">
 
+    <include layout="@layout/activity_report_list_empty"/>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"

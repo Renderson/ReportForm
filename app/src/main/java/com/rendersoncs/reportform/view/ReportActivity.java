@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +61,7 @@ import com.rendersoncs.reportform.photo.CameraUtil;
 import com.rendersoncs.reportform.photo.ResizeImage;
 import com.rendersoncs.reportform.util.AlertDialogUtil;
 import com.rendersoncs.reportform.util.ListJsonOff;
+import com.rendersoncs.reportform.util.RVEmptyObserver;
 import com.rendersoncs.reportform.util.SnackBarHelper;
 
 import org.json.JSONArray;
@@ -95,6 +97,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private ArrayList<ReportItems> reportItems = new ArrayList<>();
     private ArrayList<String> mKeys = new ArrayList<>();
     private ReportCheckListAdapter mAdapter;
+    private FloatingActionButton fab;
+    private View emptyLayout;
 
     private TextView resultCompany, resultEmail, resultDate;
     private PDFCreateAsync pdfCreateAsync = new PDFCreateAsync(ReportActivity.this);
@@ -158,17 +162,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             this.mReportId = bundle.getInt(ReportConstants.ConstantsBundle.REPORT_ID);
         }
         if (mReportId == 0){
-            databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
-            this.isConnected();
-            this.getBundleReportFromDialog();
+            loadListFire();
         } else {
             findViewById(R.id.progressBar).setVisibility(View.GONE);
-//            EditReportActivity edit = new EditReportActivity();
-//            edit.loadEditReportExt(mReportId, mAdapter, mReportBusiness, recyclerView);
             this.loadEditReport();
         }
 
-        FloatingActionButton fab = findViewById(R.id.fab_new_item);
+        fab = findViewById(R.id.fab_new_item);
         fab.setOnClickListener(v -> startNewItemListFireBase());
 
         // Animated FloatingButton
@@ -179,17 +179,28 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         resultCompany = findViewById(R.id.result_company);
         resultEmail = findViewById(R.id.result_email);
         resultDate = findViewById(R.id.result_date);
+        emptyLayout = findViewById(R.id.layout_report_list_empty);
 
         mAdapter = new ReportCheckListAdapter(reportItems, this);
         mAdapter.setOnItemListenerClicked(this);
         RecyclerView.LayoutManager llm = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(llm);
-
-//        ItemTouchHelper.Callback callback = new ItemMoveCallBack(mAdapter);
-//        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-//        touchHelper.attachToRecyclerView(recyclerView);
+//
+////        ItemTouchHelper.Callback callback = new ItemMoveCallBack(mAdapter);
+////        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+////        touchHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(mAdapter);
-        //mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
+    }
+
+    private void loadListFire(){
+        findViewById(R.id.progressBar).setVisibility(View.GONE);
+
+        databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
+        this.isConnected();
+        this.getBundleReportFromDialog();
+
+        mAdapter.registerAdapterDataObserver(new RVEmptyObserver(recyclerView, emptyLayout, fab));
     }
 
     private void loadEditReport() {
@@ -397,7 +408,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 break;
 
             case R.id.clear:
-                if (this.listPhoto.isEmpty()) {
+                this.checkAnswers();
+                if (this.listPhoto.isEmpty() || listRadio.isEmpty()) {
                     Snackbar snackbar = Snackbar
                             .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(R.string.label_empty_list), Snackbar.LENGTH_LONG);
                     SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
@@ -498,6 +510,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         //mAdapter.listIDRadio.clear();
         mAdapter.expandState.clear();
         reportItems.clear();
+        this.clearList();
         this.isConnected();
 
         Snackbar snackbar = Snackbar
@@ -810,7 +823,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         } else if (fileDirectory.isDirectory())
             for (File child : Objects.requireNonNull(fileDirectory.listFiles()))
                 delete(child);
-        fileDirectory.delete();
+        boolean delete = fileDirectory.delete();
     }
 
     @Override

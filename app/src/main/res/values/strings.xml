@@ -132,6 +132,8 @@
     <string name="label_text_observation">Texto…</string>
     <string name="label_nothing_report">Nenhum relatório!</string>
     <string name="label_create_new_report">Crie relatórios para preencher sua lista.</string>
+    <string name="label_no_items_list">Nenhum item na lista!</string>
+    <string name="label_create_list_for_start">Crie items para sua lista para começar a criar relatórios!</string>
     <string name="label_button_create_report">CRIAR RELATÓRIO</string>
     <string name="lbael_image_empty">Imagem layout Empty</string>
     <string name="label_report">Relatórios</string>
