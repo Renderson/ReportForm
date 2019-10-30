@@ -54,7 +54,7 @@
             android:layout_marginEnd="@dimen/margin_8"
             android:layout_marginBottom="@dimen/margin_8"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_dots"
+            android:src="@drawable/ic_action_dots"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"

@@ -37,7 +37,7 @@
             android:layout_height="35dp"
             android:layout_weight="0"
             android:layout_gravity="center"
-            android:background="@android:drawable/ic_menu_today"
+            android:background="@drawable/ic_action_today"
             android:padding="@dimen/padding_16" />
 
         <TextView

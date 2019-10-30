@@ -4,17 +4,14 @@
 
     <item android:id="@+id/save"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_action_arrow"
         android:title="@string/save"/>
 
     <item android:id="@+id/close"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_delete"
+        android:orderInCategory="101"
         android:title="@string/leave"/>
 
     <item android:id="@+id/clear"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_delete"
+        android:orderInCategory="102"
         android:title="@string/txt_to_clean"/>
 
 </menu>

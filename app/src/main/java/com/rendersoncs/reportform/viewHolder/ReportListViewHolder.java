@@ -45,7 +45,7 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
 
             PopupMenu popupMenu = new PopupMenu(mContext, overflow);
             setForceShowIcon(popupMenu);
-            popupMenu.inflate(R.menu.menu_report);
+            popupMenu.inflate(R.menu.menu_main);
             popupMenu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
                     case R.id.action_resume:

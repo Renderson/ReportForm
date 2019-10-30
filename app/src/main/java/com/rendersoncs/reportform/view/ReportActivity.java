@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -155,7 +154,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 //        }
         this.mReportBusiness = new ReportBusiness(this);
         this.initViews();
-        //this.isConnected();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -167,12 +165,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             findViewById(R.id.progressBar).setVisibility(View.GONE);
             this.loadEditReport();
         }
-
-        fab = findViewById(R.id.fab_new_item);
-        fab.setOnClickListener(v -> startNewItemListFireBase());
-
-        // Animated FloatingButton
-        animated.animatedFab(recyclerView, fab);
     }
 
     private void initViews() {
@@ -191,6 +183,12 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 ////        touchHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(mAdapter);
 //        mAdapter.notifyDataSetChanged();
+
+        fab = findViewById(R.id.fab_new_item);
+        fab.setOnClickListener(v -> startNewItemListFireBase());
+
+        // Animated FloatingButton
+        animated.animatedFab(recyclerView, fab);
     }
 
     private void loadListFire(){
@@ -204,6 +202,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     }
 
     private void loadEditReport() {
+        findViewById(R.id.fab_new_item).setVisibility(View.GONE);
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             this.mReportId = bundle.getInt(ReportConstants.ConstantsBundle.REPORT_ID);
@@ -360,7 +360,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     // Menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_expandable, menu);
+        getMenuInflater().inflate(R.menu.menu_report_list, menu);
         return true;
     }
 

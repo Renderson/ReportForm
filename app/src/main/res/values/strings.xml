@@ -168,4 +168,6 @@
     <string name="alert_leave_the_report">Sair do relatório?</string>
     <string name="alert_leave_the_report_text">Desaja realmente sair do relatório? Você perderá todo seu progresso!</string>
     <string name="error">Error</string>
+    <string name="edit">Editar</string>
+    <string name="summary">Resumo</string>
 </resources>
