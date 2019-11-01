@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,6 +99,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private ReportCheckListAdapter mAdapter;
     private FloatingActionButton fab;
     private View emptyLayout;
+    Button emptyButton;
 
     private TextView resultCompany, resultEmail, resultDate;
     private PDFCreateAsync pdfCreateAsync = new PDFCreateAsync(ReportActivity.this);
@@ -172,6 +174,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         resultEmail = findViewById(R.id.result_email);
         resultDate = findViewById(R.id.result_date);
         emptyLayout = findViewById(R.id.layout_report_list_empty);
+        emptyButton = findViewById(R.id.action_add_item);
 
         mAdapter = new ReportCheckListAdapter(reportItems, this);
         mAdapter.setOnItemListenerClicked(this);
@@ -187,14 +190,16 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         fab = findViewById(R.id.fab_new_item);
         fab.setOnClickListener(v -> startNewItemListFireBase());
 
-        // Animated FloatingButton
+        emptyButton.setOnClickListener(v -> startNewItemListFireBase());
+
+//        // Animated FloatingButton
         animated.animatedFab(recyclerView, fab);
     }
 
     private void loadListFire(){
         findViewById(R.id.progressBar).setVisibility(View.GONE);
 
-        databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
+//        databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
         this.isConnected();
         this.getBundleReportFromDialog();
 
@@ -299,13 +304,16 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+            databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
             this.addItemsFromFireBase();
             //Toast.makeText(getApplicationContext(), "Lista onLine", Toast.LENGTH_SHORT).show();
 
         } else {
             findViewById(R.id.progressBar).setVisibility(View.GONE);
+            findViewById(R.id.action_add_item).setVisibility(View.GONE);
+            fab.setEnabled(false);
             jsonListModeOff.addItemsFromJsonList(reportItems);
-            mAdapter.notifyDataSetChanged();
+            //mAdapter.notifyDataSetChanged();
             //Toast.makeText(getApplicationContext(), "Lista offLine", Toast.LENGTH_SHORT).show();
         }
     }
