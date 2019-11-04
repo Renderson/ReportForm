@@ -6,23 +6,25 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.login.util.User;
-import com.rendersoncs.reportform.view.MainActivity;
+import com.rendersoncs.reportform.util.AlertDialogUtil;
 
 public class HomeActivity extends AppCompatActivity {
-
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+//    private AlertDialogUtil alertDialog = new AlertDialogUtil();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        // For Version TEST
+//        this.alertDialog.showDialog(HomeActivity.this,
+//                "Versão de Teste!",
+//                "Olá, você está usando uma versão de teste, com isso algumas coisas podem sair errado, tenha paciência e passe para nós o seu feed back.",
+//                "ok",
+//                (dialogInterface, i) -> { },
+//                null, null, false);
 
     }
 

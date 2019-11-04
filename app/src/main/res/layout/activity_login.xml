@@ -89,7 +89,7 @@
             android:layout_marginEnd="@dimen/margin_8"
             android:layout_marginBottom="@dimen/margin_8"
             android:onClick="callReset"
-            android:text="Recuper Senha?"
+            android:text="@string/label_recover_password"
             app:layout_constraintBottom_toBottomOf="@+id/button"
             app:layout_constraintEnd_toEndOf="@+id/textInputPassword"
             app:layout_constraintTop_toBottomOf="@+id/textInputPassword" />
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_16"
-            android:text="ou"
+            android:text="@string/label_or"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textView6"
             app:layout_constraintHorizontal_bias="0.501"

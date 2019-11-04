@@ -41,7 +41,7 @@ public class AccessDocument {
     public AccessDocument invoke() {
         reportItems = reportBusiness.load(reportId);
 
-        subject = String.format("Relatorio-%s-%s", reportItems.getCompany(), reportItems.getDate());
+        subject = String.format("Report-%s-%s", reportItems.getCompany(), reportItems.getDate());
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

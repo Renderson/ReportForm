@@ -63,7 +63,7 @@ public class CreatePDFViewer {
         //arrayOfObject[1] = date;
         String str = FilenameUtils.normalize(String.format("Relatorio-%s-%s.pdf", arrayOfObject));*/
 
-        String str = FilenameUtils.normalize(String.format("Relatorio-%s-%s.pdf", paramRepo.getCompany(), paramRepo.getDate()));
+        String str = FilenameUtils.normalize(String.format(context.getResources().getString(R.string.label_name_archive), paramRepo.getCompany(), paramRepo.getDate()));
         Log.i("PDF", "Gerar PDF!!!! " + str + " Nome Arquivo");
 
         File mFilePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report");
@@ -89,7 +89,7 @@ public class CreatePDFViewer {
         table.setWidths(new int[]{1, 2});//setando a altura e largura
         table.addCell(createImageCell(image));
 
-        Paragraph paragraph = new Paragraph(new Chunk("Auditoria Técnica - Segurança Alimentar", baseFont));
+        Paragraph paragraph = new Paragraph(new Chunk(context.getResources().getString(R.string.label_paragraph_pdf_audit), baseFont));
         paragraph.setSpacingAfter(lineSpace);
         paragraph.setSpacingBefore(lineSpace);
         paragraph.setAlignment(2);
@@ -102,7 +102,7 @@ public class CreatePDFViewer {
         document.add(UNDERLINE);
 
         //New paragraph Company
-        paragraph = new Paragraph(new Chunk("Nome da Empresa: ", baseFontBold));
+        paragraph = new Paragraph(new Chunk(context.getResources().getString(R.string.label_paragraph_pdf_company), baseFontBold));
         paragraph.setSpacingAfter(lineSpaceSmall);
         paragraph.setSpacingBefore(lineSpaceSmall);
         paragraph.add(new Chunk(paramRepo.getCompany(), baseFont));
@@ -110,7 +110,7 @@ public class CreatePDFViewer {
         document.add(paragraph);
 
         //New paragraph E-mail
-        paragraph = new Paragraph(new Chunk("E-mail da empresa: ", baseFontBold));
+        paragraph = new Paragraph(new Chunk(context.getResources().getString(R.string.label_paragraph_pdf_mail_company), baseFontBold));
         paragraph.setSpacingAfter(lineSpaceSmall);
         paragraph.setSpacingBefore(lineSpaceSmall);
         paragraph.add(new Chunk(paramRepo.getEmail(), baseFont));
@@ -118,7 +118,7 @@ public class CreatePDFViewer {
         document.add(paragraph);
 
         //New paragraph Date
-        paragraph = new Paragraph(new Chunk("Data da Vistoria: ", baseFontBold));
+        paragraph = new Paragraph(new Chunk(context.getResources().getString(R.string.label_paragraph_pdf_date), baseFontBold));
         paragraph.setSpacingAfter(lineSpaceSmall);
         paragraph.setSpacingBefore(lineSpaceSmall);
         paragraph.add(new Chunk(paramRepo.getDate(), baseFont));
@@ -126,7 +126,7 @@ public class CreatePDFViewer {
         document.add(paragraph);
 
         // Create Table Check-List
-        paragraph = new Paragraph("Relatório de Auditoria", baseFontBoldList);
+        paragraph = new Paragraph(context.getResources().getString(R.string.label_paragraph_pdf_report), baseFontBoldList);
         paragraph.setAlignment(1);
         document.add(paragraph);
         paragraph = new Paragraph("   ");
@@ -135,11 +135,11 @@ public class CreatePDFViewer {
         PdfPTable tablel = new PdfPTable(5);
         tablel.setWidthPercentage(100.0F);//altura e largura
 
-        PdfPCell cel1 = new PdfPCell(new Paragraph("INSTALAÇÕES FÍSICAS ", baseFontBold));
-        PdfPCell cel2 = new PdfPCell(new Paragraph("DESCRIÇÂO ", baseFontBold));
-        PdfPCell cel3 = new PdfPCell(new Paragraph("CONFORMIDADE ", baseFontBold));
-        PdfPCell cel4 = new PdfPCell(new Paragraph("OBSERVAÇÃO ", baseFontBold));
-        PdfPCell cel5 = new PdfPCell(new Paragraph("FOTOS ", baseFontBold));
+        PdfPCell cel1 = new PdfPCell(new Paragraph(context.getResources().getString(R.string.label_paragraph_pdf_installations), baseFontBold));
+        PdfPCell cel2 = new PdfPCell(new Paragraph(context.getResources().getString(R.string.label_paragraph_pdf_description), baseFontBold));
+        PdfPCell cel3 = new PdfPCell(new Paragraph(context.getResources().getString(R.string.label_paragraph_pdf_conformity), baseFontBold));
+        PdfPCell cel4 = new PdfPCell(new Paragraph(context.getResources().getString(R.string.label_paragraph_pdf_note), baseFontBold));
+        PdfPCell cel5 = new PdfPCell(new Paragraph(context.getResources().getString(R.string.label_paragraph_pdf_photo), baseFontBold));
 
         tablel.addCell(cel1);
         tablel.addCell(cel2);

@@ -192,7 +192,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
         emptyButton.setOnClickListener(v -> startNewItemListFireBase());
 
-//        // Animated FloatingButton
+        // Animated FloatingButton
         animated.animatedFab(recyclerView, fab);
     }
 
@@ -765,14 +765,14 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
                 ResizeImage.decodeBitmap(photoUri, mAdapter, position);
             }
-            radioItemChecked(position, 1);
+            this.radioItemChecked(position, 1);
         }
         if (requestCode == REQUEST_CODE_GALLERY && resultCode == RESULT_OK && data != null) {
             Uri mSelectedUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
                 mAdapter.setImageInItem(position, bitmap);
-                radioItemChecked(position, 1);
+                this.radioItemChecked(position, 1);
                 Log.i("LOG", "ImagePath " + bitmap);
 
             } catch (IOException e) {
@@ -788,8 +788,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         if (requestCode == REQUEST_PERMISSIONS) {
             if (grantResults.length > REQUEST_PERMISSIONS && grantResults[REQUEST_PERMISSIONS] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                dialog.dismiss();
-                openCamera();
+                this.dialog.dismiss();
+                this.openCamera();
             } else {
                 Snackbar snackbar = Snackbar
                         .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(R.string.label_permission_camera), Snackbar.LENGTH_LONG);

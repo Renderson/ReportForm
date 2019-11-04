@@ -57,7 +57,8 @@
         <activity android:name=".login.RecoveryLoginActivity" />
         <activity android:name=".login.UpdatePasswordActivity" />
         <activity android:name=".login.RemoveUserActivity" />
-        <activity android:name=".view.ReportActivity" />
+        <activity android:name=".view.ReportActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".view.MainActivity"/>
         <activity
             android:name=".view.ReportResume"
@@ -66,7 +67,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
         </activity>
-        <activity android:name=".view.EditReportActivity" />
 
         <service
             android:name=".service.NotificationFireBase"

@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_32"
         android:background="@drawable/button_shape_rectangular"
-        android:text="CRIAR ITEMS"
+        android:text="@string/label_create_items"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/text_size_12"

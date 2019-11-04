@@ -101,6 +101,8 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
         openProgressBar();
         initUser();
         saveUser();
+        // For Version Test
+//        Toast.makeText(getApplicationContext(), getResources().getString(R.string.version_beta), Toast.LENGTH_SHORT).show();
     }
 
     public void callLogin(View view) {

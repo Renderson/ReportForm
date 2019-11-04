@@ -3,6 +3,7 @@ package com.rendersoncs.reportform.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -261,6 +262,8 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
 
     // login Facebook
     public void sendLoginFacebookData(View view) {
+        // For Version Test
+//        Toast.makeText(getApplicationContext(), getResources().getString(R.string.version_beta), Toast.LENGTH_SHORT).show();
         LoginManager
                 .getInstance()
                 .logInWithReadPermissions(
@@ -297,6 +300,8 @@ public class LoginActivity extends CommonActivity implements GoogleApiClient.OnC
 
     // Google
     public void sendLoginGoogleData(View view) {
+        // For Version Test
+//        Toast.makeText(getApplicationContext(), getResources().getString(R.string.version_beta), Toast.LENGTH_SHORT).show();
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE);
     }
