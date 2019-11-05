@@ -53,7 +53,7 @@ public class UpdatePasswordActivity extends AppCompatActivity implements ValueEv
 
     public void update( View view ){
         if (newPassword.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Por favor insira a senha.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.label_up_insert_password), Toast.LENGTH_SHORT).show();
         } else {
             user.setNewPassword(newPassword.getText().toString());
             user.setPassword(password.getText().toString());

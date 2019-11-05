@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "list_id");
                 mFireBaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                bundle.putInt(ReportConstants.ConstantsBundle.REPORT_ID, reportId);
+                bundle.putInt(ReportConstants.CONST_BUNDLE_ID.REPORT_ID, reportId);
 
                 Intent intent = new Intent(MainActivity.this, ReportResume.class);
                 intent.putExtras(bundle);
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onEditReport(int reportId) {
                 Bundle bundle = new Bundle();
-                bundle.putInt(ReportConstants.ConstantsBundle.REPORT_ID, reportId);
+                bundle.putInt(ReportConstants.CONST_BUNDLE_ID.REPORT_ID, reportId);
 
                 Intent intent = new Intent(MainActivity.this, ReportActivity.class);
                 intent.putExtras(bundle);

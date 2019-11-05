@@ -6,10 +6,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.textfield.TextInputEditText;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -40,7 +44,7 @@ public class ReportFormDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View view = inflater.inflate(R.layout.fragment_dialog,null);
+        final View view = inflater.inflate(R.layout.fragment_dialog, null);
 
         companyTv = view.findViewById(R.id.company_id);
         emailTv = view.findViewById(R.id.email_id);
@@ -62,7 +66,7 @@ public class ReportFormDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(getContext(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
-                        ReportFormDialog.this.getDialog().cancel();
+                        dismiss();
                     }
                 })
 
@@ -161,6 +165,12 @@ public class ReportFormDialog extends DialogFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        dismiss();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         dismiss();
     }
 

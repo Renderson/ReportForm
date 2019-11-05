@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -37,9 +36,9 @@ public class NewItemListFireBase extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(final Bundle savedInstanceState) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View view = inflater.inflate(R.layout.fragment_new_list_firebase, null);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_new_list_firebase, null);
 
         mTitleList = view.findViewById(R.id.txt_title_list);
         mDescriptionList = view.findViewById(R.id.txt_description_list);
@@ -56,11 +55,9 @@ public class NewItemListFireBase extends DialogFragment {
 
         initFireBase();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
                 .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
-                    //Toast.makeText(getActivity(), getResources().getString(R.string.txt_cancel), Toast.LENGTH_SHORT).show();
-                    NewItemListFireBase.this.getDialog().cancel();
+                    dismiss();
                 })
 
                 .setPositiveButton(alertButton, (dialog, which) -> {
@@ -90,7 +87,7 @@ public class NewItemListFireBase extends DialogFragment {
         String upTitle = mTitleList.getText().toString();
         String upDescription = mDescriptionList.getText().toString();
 
-        DatabaseReference databaseReference = LibraryClass.getFirebase().child("users").child(user.getId()).child("list");
+        DatabaseReference databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_LIST);
         Query query = databaseReference.orderByChild(ReportConstants.ITEM.TITLE).equalTo(title);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -112,12 +109,12 @@ public class NewItemListFireBase extends DialogFragment {
         String mTitle = mTitleList.getText().toString();
         String mDescription = mDescriptionList.getText().toString();
 
-        final String key = FirebaseDatabase.getInstance().getReference().child("users").child(user.getId()).child("list").push().getKey();
+        final String key = FirebaseDatabase.getInstance().getReference().child(ReportConstants.FIRE_BASE.FIRE_USERS).child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_LIST).push().getKey();
         HashMap<String, String> dataMap = new HashMap<>();
         Map<String, Object> childUpdates = new HashMap<>();
         dataMap.put(ReportConstants.ITEM.TITLE, mTitle);
         dataMap.put(ReportConstants.ITEM.DESCRIPTION, mDescription);
-        childUpdates.put("/users/" + user.getId() + "/list/" + key, dataMap);
+        childUpdates.put("/" + ReportConstants.FIRE_BASE.FIRE_USERS + "/" + user.getId() + "/" + ReportConstants.FIRE_BASE.FIRE_LIST + "/" + key, dataMap);
         FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
     }
 

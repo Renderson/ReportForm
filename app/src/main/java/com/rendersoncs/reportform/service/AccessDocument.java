@@ -45,7 +45,7 @@ public class AccessDocument {
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            uri = FileProvider.getUriForFile(context, ReportConstants.ConstantsProvider.PACKAGE_FILE_PROVIDER, file);
+            uri = FileProvider.getUriForFile(context, ReportConstants.PACKAGE.FILE_PROVIDER, file);
         } else {
             uri = Uri.fromFile(file);
         }

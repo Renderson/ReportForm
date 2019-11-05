@@ -62,6 +62,7 @@
     <string name="insert">Insert</string>
     <string name="label_recover_password">Recover Password?</string>
     <string name="label_or">or</string>
+    <string name="label_sign_insert_photo">Insert photo</string>
 
     <!--Activity Login-->
     <string name="label_login_facebook_failed">Facebook login failed, try again!</string>
@@ -187,5 +188,6 @@
     <string name="label_paragraph_pdf_note">NOTE</string>
     <string name="label_paragraph_pdf_photo">PHOTOS</string>
     <string name="label_name_archive">Report-%s-%s.pdf</string>
+    <string name="label_up_insert_password">Please enter password.</string>
 
 </resources>

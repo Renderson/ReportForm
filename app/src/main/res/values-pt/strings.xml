@@ -62,6 +62,7 @@
     <string name="insert">Inserir</string>
     <string name="label_recover_password">Recuper Senha?</string>
     <string name="label_or">ou</string>
+    <string name="label_sign_insert_photo">Insira foto</string>
 
     <!--Activity Login-->
     <string name="label_login_facebook_failed">Facebook login falhou, tente novamente!</string>
@@ -69,7 +70,7 @@
     <string name="label_login_social_failed">Login social falhou!</string>
     <string name="label_please_entry_data">Por favor! Entre com seus dados.</string>
     <string name="label_account_create">Conta criada com sucesso!</string>
-    <string name="label_insert_data_create_account">Por favor! Insira seus dados para criaçao da conta.</string>
+    <string name="label_insert_data_create_account">Por favor! Insira seus dados para criação da conta.</string>
     <string name="label_account_removed">Conta removida com sucesso!</string>
     <string name="label_recover_access_send">Recuperação de acesso iniciada. Email enviado.</string>
     <string name="label_failed">Falhou! Tente novamente</string>
@@ -105,7 +106,7 @@
 
     <string name="msg_take_image">Tirar foto</string>
     <string name="msg_select_from_galery">Selecionar da Galeria</string>
-    <string name="label_permission_camera">Precisamos da permissão para acessar a camera.</string>
+    <string name="label_permission_camera">Precisamos da permissão para acessar a câmera.</string>
     <string name="label_permission_read">Precisamos da permissão de gravar dados, para salvar seu relatório.</string>
     <string name="label_error_update_list">Error ao alterar item da lista.</string>
     <string name="label_error_return_photo_full">Algo deu errado, tente novamente!</string>
@@ -125,7 +126,7 @@
     <!--Labels Activity-->
     <string name="image_note">note</string>
     <string name="image_result_photo">result photo</string>
-    <string name="image_camera">camera</string>
+    <string name="image_camera">câmera</string>
     <string name="label_list_text">Text</string>
     <string name="label_list_title">Title</string>
     <string name="image_background_check">check color</string>
@@ -187,5 +188,6 @@
     <string name="label_paragraph_pdf_note">OBSERVAÇÃO</string>
     <string name="label_paragraph_pdf_photo">FOTOS</string>
     <string name="label_name_archive">Report-%s-%s.pdf</string>
+    <string name="label_up_insert_password">Por favor insira a senha.</string>
 
 </resources>

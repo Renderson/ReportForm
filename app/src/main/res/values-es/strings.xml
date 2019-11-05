@@ -30,7 +30,7 @@
     <string name="txt_check_networking">Sin conexión a internet</string>
 
     <!-- Activity Forms -->
-    <string name="label_home_welcome">Bienvenido!</string>
+    <string name="label_home_welcome">Bien venido!</string>
     <string name="label_home_description">Crea tus informes mucho más fácil.</string>
     <string name="access">Acceso</string>
     <string name="label_home_not_register">No registrado?</string>
@@ -62,10 +62,11 @@
     <string name="insert">Insertar</string>
     <string name="label_recover_password">Recuperar contraseña?</string>
     <string name="label_or">o</string>
+    <string name="label_sign_insert_photo">Insertar foto</string>
 
     <!--Activity Login-->
-    <string name="label_login_facebook_failed">Error de inicio de sesión en Facebook, ¡inténtalo de nuevo!</string>
-    <string name="label_google_failed">Error de inicio de sesión en Google, ¡inténtalo de nuevo!</string>
+    <string name="label_login_facebook_failed">Error de inicio de sesión en Facebook, inténtalo de nuevo!</string>
+    <string name="label_google_failed">Error de inicio de sesión en Google, inténtalo de nuevo!</string>
     <string name="label_login_social_failed">Inicio de sesión social fallido!</string>
     <string name="label_please_entry_data">Por favor! Ingrese sus datos.</string>
     <string name="label_account_create">Cuenta creada con éxito!</string>
@@ -187,5 +188,6 @@
     <string name="label_paragraph_pdf_note">NOTA</string>
     <string name="label_paragraph_pdf_photo">FOTOS</string>
     <string name="label_name_archive">Report-%s-%s.pdf</string>
+    <string name="label_up_insert_password">Por favor ingrese la contraseña.</string>
 
 </resources>

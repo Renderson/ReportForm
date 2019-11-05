@@ -36,7 +36,7 @@ public class ReportListViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(final ReportItems repoEntity, final OnInteractionListener listener) {
-        this.CompanyView.setText(StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.ConstantsCharacters.LIMITS_TEXT));
+        this.CompanyView.setText(StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.CHARACTERS.LIMITS_TEXT));
         this.DateView.setText(repoEntity.getDate());
 
         itemView.setOnClickListener(v -> listener.onOpenPdf(repoEntity.getId()));

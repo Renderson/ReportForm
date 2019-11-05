@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ValueEventListener;
+import com.rendersoncs.reportform.constants.ReportConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -102,7 +103,7 @@ public class User {
     }
 
     public void saveDB(DatabaseReference.CompletionListener... completionListener){
-        DatabaseReference firebase = LibraryClass.getFirebase().child("users").child(getId()).child("credential");
+        DatabaseReference firebase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
         Log.i("LOG", "Tokens: " + firebase);
 
         if( completionListener.length == 0 ){
@@ -115,7 +116,7 @@ public class User {
 
     public void updateDB( DatabaseReference.CompletionListener... completionListener ){
 
-        DatabaseReference firebase = LibraryClass.getFirebase().child("users").child( getId() ).child("credential");
+        DatabaseReference firebase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
 
         Map<String, Object> map = new HashMap<>();
         setNameInMap(map);
@@ -139,7 +140,7 @@ public class User {
     }
 
     public void contextDataDB( Context context ){
-        DatabaseReference firebase = LibraryClass.getFirebase().child("users").child( getId() ).child("credential");
+        DatabaseReference firebase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
         firebase.addListenerForSingleValueEvent( (ValueEventListener) context );
     }
 

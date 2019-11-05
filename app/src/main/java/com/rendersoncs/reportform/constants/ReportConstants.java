@@ -2,19 +2,24 @@ package com.rendersoncs.reportform.constants;
 
 public class ReportConstants {
 
-    public static class ConstantsProvider{
-        public static final String PACKAGE_FILE_PROVIDER = "com.rendersoncs.reportform.FileProvider";
+    public static class PACKAGE {
+        public static final String FILE_PROVIDER = "com.rendersoncs.reportform.FileProvider";
     }
 
-    public static class ConstantsFireBase{
+    public static class FIRE_BASE {
         public static final String URL = "https://reportform-20b2a.firebaseio.com/users";
+        public static final String FIRE_USERS = "users";
+        public static final String FIRE_CREDENTIAL = "credential";
+        public static final String FIRE_PHOTO = "photoUrl";
+        public static final String FIRE_LIST = "list";
+        public static final String FIRE_NAME = "name";
     }
 
-    public static class ConstantsBundle {
+    public static class CONST_BUNDLE_ID {
         public static final String REPORT_ID = "reportId";
     }
 
-    public static class ConstantsCharacters{
+    public static class CHARACTERS {
         public static final int LIMITS_TEXT = 14;
     }
 

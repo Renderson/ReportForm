@@ -37,10 +37,9 @@ import com.rendersoncs.reportform.listener.OnItemListenerClicked;
 
 import static com.android.volley.VolleyLog.TAG;
 
-public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckListAdapter.ViewHolder> implements ItemMoveCallBack.ItemTouchHelperContract{
+public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckListAdapter.ViewHolder> /*implements ItemMoveCallBack.ItemTouchHelperContract*/{
     private List<ReportItems> reportItems;
     public SparseBooleanArray expandState = new SparseBooleanArray();
-    //public ArrayList<Integer> listIDRadio = new ArrayList<Integer>();
     public Context context;
 
     private static final int TYPE_HEADER = 0;
@@ -79,15 +78,13 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
         int position = viewHolder.getAdapterPosition();
         final ReportItems repo = reportItems.get(position);
 
-        itemsListViewHolder(viewHolder, position, repo);
+        this.itemsListViewHolder(viewHolder, position, repo);
 
         Log.i(TAG, "onBindViewHolder invoked" + position);
     }
 
-    private void itemsListViewHolder(@NonNull ViewHolder viewHolder, int i, ReportItems repo) {
+    private void itemsListViewHolder(@NonNull ViewHolder viewHolder, int position, ReportItems repo) {
         //Header
-        int position = viewHolder.getAdapterPosition();
-
         if (viewHolder instanceof HeaderVh) {
             ((HeaderVh) viewHolder).headerTitle.setText(repo.getTitle());
 
@@ -150,20 +147,17 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             viewHolder.mRadioButtonNotConform.setChecked(repo.isOpt3());
 
             if (viewHolder.mRadioButtonConform.isChecked()){
-                //listIDRadio.add(1);
                 viewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioC);
                 viewHolder.check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioC));
                 viewHolder.resetItem.clearColorFilter();
 
             } if (viewHolder.mRadioButtonNotApplicable.isChecked()) {
-                //listIDRadio.add(2);
                 viewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioNA);
                 viewHolder.check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioNA));
                 viewHolder.resetItem.clearColorFilter();
             }
 
             else if (viewHolder.mRadioButtonNotConform.isChecked()) {
-                //listIDRadio.add(3);
                 viewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioNC);
                 viewHolder.check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioNC));
                 viewHolder.resetItem.clearColorFilter();
@@ -208,8 +202,8 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             check = view.findViewById(R.id.action_check);
             note = view.findViewById(R.id.note);
             resetItem = view.findViewById(R.id.action_reset_item);
-            //checkNote = view.findViewById(R.id.action_note);
-            //checkImage = view.findViewById(R.id.action_image);
+            /*checkNote = view.findViewById(R.id.action_note);
+            checkImage = view.findViewById(R.id.action_image);*/
 
             buttonLayoutArrow = view.findViewById(R.id.btnArrow);
             expandableLayout = view.findViewById(R.id.expandableLayout);
@@ -313,7 +307,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
     }
 
     // ItemMoveCallBack
-    @Override
+    /*@Override
     public void onRowMoved(int fromPosition, int toPosition) {
         if (fromPosition < toPosition){
             for (int i = fromPosition; i < toPosition; i++){
@@ -344,6 +338,6 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
     @Override
     public void onRowClear(ViewHolder myViewHolder) {
         myViewHolder.rowView.setBackgroundColor(Color.WHITE);
-    }
+    }*/
     // End ItemMoveCallBack
 }

@@ -1,18 +1,13 @@
 package com.rendersoncs.reportform.async;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.constants.ReportConstants;
-import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.login.util.User;
-import com.rendersoncs.reportform.view.MainActivity;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,9 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static android.content.ContentValues.TAG;
@@ -44,7 +37,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
             user = new User();
             user.setId( mAuth.getCurrentUser().getUid() );
 
-            URL url = new URL(ReportConstants.ConstantsFireBase.URL + "/" +user.getId() +".json");
+            URL url = new URL(ReportConstants.FIRE_BASE.URL + "/" +user.getId() +".json");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));

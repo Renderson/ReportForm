@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.rendersoncs.reportform.constants.ReportConstants;
 
 public class GetInfoUserFirebase {
 
@@ -35,7 +36,11 @@ public class GetInfoUserFirebase {
                     databaseReference.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String nameCurrentUser = (String) dataSnapshot.child("users").child(user.getUid()).child("credential").child("name").getValue();
+                            String nameCurrentUser = (String) dataSnapshot.child(ReportConstants.FIRE_BASE.FIRE_USERS)
+                                    .child(user.getUid())
+                                    .child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL)
+                                    .child(ReportConstants.FIRE_BASE.FIRE_NAME)
+                                    .getValue();
                             profileName.setText(nameCurrentUser);
                         }
 
@@ -48,7 +53,10 @@ public class GetInfoUserFirebase {
                     databaseReference.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String currentPhoto = (String) dataSnapshot.child("users").child(user.getUid()).child("photoUrl").getValue();
+                            String currentPhoto = (String) dataSnapshot.child(ReportConstants.FIRE_BASE.FIRE_USERS)
+                                    .child(user.getUid())
+                                    .child(ReportConstants.FIRE_BASE.FIRE_PHOTO)
+                                    .getValue();
 
                             Glide.with(context).load(currentPhoto).into(profileView);
                         }

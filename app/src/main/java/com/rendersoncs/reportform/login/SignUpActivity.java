@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
@@ -25,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.login.util.User;
 
@@ -42,6 +42,9 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     private Button mBtnSelectedPhoto;
     private Uri mSelectedUri;
     private ImageView mImgPhoto;
+
+    private static final int GALLERY = 2035;
+    private static final int ALPHA = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,7 +105,7 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
         initUser();
         saveUser();
         // For Version Test
-//        Toast.makeText(getApplicationContext(), getResources().getString(R.string.version_beta), Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(getApplicationContext(), getResources().getString(R.string.version_beta), Toast.LENGTH_SHORT).show();*/
     }
 
     public void callLogin(View view) {
@@ -129,13 +132,10 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
                     closeProgressBar();
                     savePhotoFirebase();
                 }
-            }).addOnFailureListener(this, new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    closeProgressBar();
-                    Crashlytics.logException(e);
-                    showSnackBar(e.getMessage());
-                }
+            }).addOnFailureListener(this, e -> {
+                closeProgressBar();
+                Crashlytics.logException(e);
+                showSnackBar(e.getMessage());
             });
         }
     }
@@ -144,8 +144,7 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
         String filename = UUID.randomUUID().toString();
         final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + filename);
         if (mSelectedUri == null) {
-            showSnackBar("Insira foto");
-            return;
+            showSnackBar(getResources().getString(R.string.label_sign_insert_photo));
         } else {
             ref.putFile(mSelectedUri)
                     .addOnSuccessListener(taskSnapshot ->
@@ -154,7 +153,7 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
                                         String photoUri = uri.toString();
                                         Log.i("log", "Item: " + photoUri + " profileUrl");
 
-                                        DatabaseReference ref1 = LibraryClass.getFirebase().child("users").child(user.getId()).child("photoUrl");
+                                        DatabaseReference ref1 = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_PHOTO);
                                         ref1.setValue(photoUri).addOnSuccessListener(aVoid -> {
                                         });
                                     })).addOnFailureListener(e -> {
@@ -168,29 +167,27 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     private void selectPhoto() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, GALLERY);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 0) {
+        if (requestCode == GALLERY) {
             if (data != null) {
                 mSelectedUri = data.getData();
-                Bitmap bitmap = null;
+                Bitmap bitmap;
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
                     mImgPhoto.setImageDrawable(new BitmapDrawable(this.getResources(), bitmap));
-                    mBtnSelectedPhoto.setAlpha(0);
+                    mBtnSelectedPhoto.setAlpha(ALPHA);
 
                 } catch (IOException e) {
                     Crashlytics.logException(e);
                     showSnackBar(e.getMessage());
                 }
             }
-        } else {
-            return;
         }
     }
 
