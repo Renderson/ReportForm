@@ -47,7 +47,7 @@ public class ItemMoveCallBack extends ItemTouchHelper.Callback {
         super.onSelectedChanged(viewHolder, actionState);
     }
 
-    public void clearView(RecyclerView recyclerView,  RecyclerView.ViewHolder viewHolder){
+    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder){
         super.clearView(recyclerView, viewHolder);
 
         if (viewHolder instanceof ReportCheckListAdapter.ViewHolder){

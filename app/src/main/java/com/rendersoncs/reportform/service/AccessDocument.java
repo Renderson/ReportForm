@@ -14,12 +14,12 @@ import com.rendersoncs.reportform.itens.ReportItems;
 import java.io.File;
 
 public class AccessDocument {
-    private int reportId;
+    private final int reportId;
     private ReportItems reportItems;
     private Uri uri;
     private String subject;
-    private ReportBusiness reportBusiness;
-    public Context context;
+    private final ReportBusiness reportBusiness;
+    private Context context;
 
     public AccessDocument(int reportId) {
         this.reportId = reportId;

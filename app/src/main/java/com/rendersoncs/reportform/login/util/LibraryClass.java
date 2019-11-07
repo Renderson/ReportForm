@@ -8,8 +8,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public final class LibraryClass {
 
-    public static String PREF = "com.rendersoncs.reportform.PREF";
-    public static DatabaseReference firebase;
+    private static final String PREF = "com.rendersoncs.reportform.PREF";
+    private static DatabaseReference firebase;
 
     private LibraryClass(){}
 
@@ -28,8 +28,7 @@ public final class LibraryClass {
 
     static public String getSP(Context context, String key){
         SharedPreferences sp = context.getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        String token = sp.getString(key, "");
-        return (token);
+        return (sp.getString(key, ""));
     }
 
     public static DatabaseReference closeFireBase(){

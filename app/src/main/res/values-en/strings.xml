@@ -63,6 +63,7 @@
     <string name="label_recover_password">Recover Password?</string>
     <string name="label_or">or</string>
     <string name="label_sign_insert_photo">Insert photo</string>
+    <string name="label_insert_password">Please enter password.</string>
 
     <!--Activity Login-->
     <string name="label_login_facebook_failed">Facebook login failed, try again!</string>
@@ -95,17 +96,17 @@
     <string name="label_entry_contact">Contact</string>
     <string name="label_more_work">More about my work</string>
     <string name="label_calling">Turn on</string>
-    <string name="label_calling_whatsapp">I answer you now</string>
-    <string name="label_fedd_back">Send me your feed back</string>
+    <string name="label_calling_whatsApp">I answer you now</string>
+    <string name="label_feed_back">Send me your feed back</string>
     <string name="label_recommendation">My recommendations</string>
-    <string name="label_not_whatsapp">We did not find WhatsApp.</string>
+    <string name="label_not_whatsApp">We did not find WhatsApp.</string>
     <string name="label_insert_email">Please enter your registered email address!</string>
 
     <!--Facebook ID-->
     <string name="facebook_app_id">2284363461680926</string>
 
     <string name="msg_take_image">Take a picture</string>
-    <string name="msg_select_from_galery">Select from Gallery</string>
+    <string name="msg_select_from_gallery">Select from Gallery</string>
     <string name="label_permission_camera">We need permission to access the camera.</string>
     <string name="label_permission_read">We need permission to write data to save your report.</string>
     <string name="label_error_update_list">Error changing list item.</string>
@@ -138,7 +139,7 @@
     <string name="label_no_items_list">No items in the list!</string>
     <string name="label_create_list_for_start">Create items for your list to start creating reports!</string>
     <string name="label_button_create_report">CREATE REPORT</string>
-    <string name="lbael_image_empty">Empty layout image</string>
+    <string name="label_image_empty">Empty layout image</string>
     <string name="label_report">Reporting</string>
     <string name="format_date">19/02/1984</string>
     <string name="label_image_overflow">overflow</string>
@@ -148,7 +149,7 @@
     <string name="dev_renderson">Renderson Cerqueira</string>
     <string name="label_date">Date</string>
     <string name="mail_dev_renderson">renderson.cs@gmail.com</string>
-    <string name="total_itens">Total Items</string>
+    <string name="total_items">Total Items</string>
     <string name="label_list_selected">Selected Items</string>
     <string name="image_for_resume">Image for Resume</string>
     <string name="image_pdf">PDF Image</string>
@@ -188,6 +189,4 @@
     <string name="label_paragraph_pdf_note">NOTE</string>
     <string name="label_paragraph_pdf_photo">PHOTOS</string>
     <string name="label_name_archive">Report-%s-%s.pdf</string>
-    <string name="label_up_insert_password">Please enter password.</string>
-
 </resources>

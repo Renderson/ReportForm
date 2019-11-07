@@ -96,11 +96,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private ListJsonOff jsonListModeOff = new ListJsonOff();
 
     private ArrayList<ReportItems> reportItems = new ArrayList<>();
-    private ArrayList<String> mKeys = new ArrayList<>();
+    private final ArrayList<String> mKeys = new ArrayList<>();
     private ReportCheckListAdapter mAdapter;
     private FloatingActionButton fab;
     private View emptyLayout;
-    Button emptyButton;
 
     private TextView resultCompany, resultEmail, resultDate;
     private PDFCreateAsync pdfCreateAsync = new PDFCreateAsync(ReportActivity.this);
@@ -172,7 +171,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         resultEmail = findViewById(R.id.result_email);
         resultDate = findViewById(R.id.result_date);
         emptyLayout = findViewById(R.id.layout_report_list_empty);
-        emptyButton = findViewById(R.id.action_add_item);
+        Button emptyButton = findViewById(R.id.action_add_item);
 
         mAdapter = new ReportCheckListAdapter(reportItems, this);
         mAdapter.setOnItemListenerClicked(this);
@@ -303,7 +302,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_LIST);
             this.addItemsFromFireBase();
-            //Toast.makeText(getApplicationContext(), "Lista onLine", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "List onLine", Toast.LENGTH_SHORT).show();
 
         } else {
             findViewById(R.id.progressBar).setVisibility(View.GONE);
@@ -311,12 +310,12 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             fab.setEnabled(false);
             jsonListModeOff.addItemsFromJsonList(reportItems);
             //mAdapter.notifyDataSetChanged();
-            //Toast.makeText(getApplicationContext(), "Lista offLine", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "List offLine", Toast.LENGTH_SHORT).show();
         }
     }
 
     // Sync RecyclerView with FireBase
-    public void addItemsFromFireBase() {
+    private void addItemsFromFireBase() {
 
         databaseReference.addChildEventListener(new ChildEventListener() {
 
@@ -581,7 +580,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 } else {
                     String encodeImage = resizeImage.getEncoded64Image(bitmapPhoto);
                     listPhoto.add(encodeImage);
-                    Log.i("List ", "Lista Photo " + listPhoto.size() + " item");
+                    Log.i("List ", "List Photo " + listPhoto.size() + " item");
                 }
             }
         }
@@ -693,7 +692,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         position = pos;
         final String[] items = new String[]{
                 this.getString(R.string.msg_take_image),
-                this.getString(R.string.msg_select_from_galery)
+                this.getString(R.string.msg_select_from_gallery)
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
@@ -819,7 +818,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         super.onRestoreInstanceState(savedInstanceState);
     }*/
 
-    public static void delete(File fileDirectory) {
+    private static void delete(File fileDirectory) {
         if (fileDirectory == null) {
             return;
         } else if (fileDirectory.isDirectory())

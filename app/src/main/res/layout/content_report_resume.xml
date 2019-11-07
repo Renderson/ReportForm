@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constr"
+    android:id="@+id/resume_constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -75,7 +75,7 @@
                     android:layout_height="19dp"
                     android:layout_marginTop="@dimen/margin_8"
                     android:text="@string/dev_renderson"
-                    android:textColor="@color/colorTextBlack"
+                    android:textColor="@color/colorBlack"
                     app:layout_constraintStart_toStartOf="@+id/txt1"
                     app:layout_constraintTop_toBottomOf="@+id/txt1" />
 
@@ -102,7 +102,7 @@
                     android:layout_marginTop="@dimen/margin_8"
                     android:layout_marginEnd="@dimen/margin_8"
                     android:text="@string/format_date"
-                    android:textColor="@color/colorTextBlack"
+                    android:textColor="@color/colorBlack"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/txt2"
                     app:layout_constraintTop_toBottomOf="@+id/txt2" />
@@ -114,7 +114,7 @@
                     android:layout_marginStart="@dimen/margin_16"
                     android:layout_marginTop="@dimen/margin_4"
                     android:layout_marginEnd="@dimen/margin_16"
-                    android:background="@color/colorTextBlack"
+                    android:background="@color/colorBlack"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/company_resume" />
@@ -137,7 +137,7 @@
                     android:layout_height="19dp"
                     android:layout_marginTop="@dimen/margin_4"
                     android:text="@string/mail_dev_renderson"
-                    android:textColor="@color/colorTextBlack"
+                    android:textColor="@color/colorBlack"
                     app:layout_constraintStart_toStartOf="@+id/txt1"
                     app:layout_constraintTop_toBottomOf="@+id/txt3" />
 
@@ -148,7 +148,7 @@
                     android:layout_marginStart="@dimen/margin_16"
                     android:layout_marginTop="@dimen/margin_4"
                     android:layout_marginEnd="@dimen/margin_16"
-                    android:background="@color/colorTextBlack"
+                    android:background="@color/colorBlack"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/email_resume" />
@@ -202,8 +202,8 @@
             android:layout_marginStart="@dimen/margin_16"
             android:layout_marginTop="@dimen/margin_8"
             android:layout_marginBottom="@dimen/margin_8"
-            android:text="@string/total_itens"
-            android:textColor="@color/colorTextBlack" />
+            android:text="@string/total_items"
+            android:textColor="@color/colorBlack" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChart"
@@ -235,7 +235,7 @@
                 android:layout_marginTop="@dimen/margin_8"
                 android:layout_marginBottom="@dimen/margin_8"
                 android:text="@string/label_list_selected"
-                android:textColor="@color/colorTextBlack"
+                android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text_size_16"
                 android:textStyle="bold" />
 

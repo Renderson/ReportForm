@@ -9,7 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.rendersoncs.reportform.R;
 
-public class HeaderViewHolderExp extends RecyclerView.ViewHolder {
+class HeaderViewHolderExp extends RecyclerView.ViewHolder {
     @BindView(R.id.header_id)
 
     public TextView headerTitle;

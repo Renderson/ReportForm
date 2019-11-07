@@ -34,7 +34,7 @@ public class AboutFragment extends BottomSheetDialogFragment {
         versionElement.setTitle(getString(R.string.version));
 
         return (new AboutPage(this.getActivity()))
-                .setImage(R.drawable.no_result)
+                .setImage(R.mipmap.ic_launcher_round)
                 .setDescription(getString(R.string.label_about_app))
                 .addItem(versionElement)
                 .addItem(adsElement)
@@ -60,7 +60,7 @@ public class AboutFragment extends BottomSheetDialogFragment {
     }
 
     private Element getItemWhatsApp() {
-        return (new Element()).setTitle(getString(R.string.label_calling_whatsapp))
+        return (new Element()).setTitle(getString(R.string.label_calling_whatsApp))
                 .setIconTint(R.color.colorWhatsAppLogo)
                 .setGravity(Gravity.START)
                 .setIconDrawable(R.drawable.ic_whatsapp_black_24dp)
@@ -68,7 +68,7 @@ public class AboutFragment extends BottomSheetDialogFragment {
     }
 
     private Element getItemEmail() {
-        return (new Element()).setTitle(getString(R.string.label_fedd_back))
+        return (new Element()).setTitle(getString(R.string.label_feed_back))
                 .setIconDrawable(R.drawable.ic_mail_in_box_black_24dp)
                 .setIconTint(R.color.colorGrey)
                 .setOnClickListener(view -> {
@@ -102,7 +102,7 @@ public class AboutFragment extends BottomSheetDialogFragment {
         if (i.resolveActivity(getContext().getPackageManager()) != null){
             startActivity(i);
         } else {
-            Toast.makeText(getActivity(), getResources().getString(R.string.label_not_whatsapp), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.label_not_whatsApp), Toast.LENGTH_SHORT).show();
         }
     }
 }

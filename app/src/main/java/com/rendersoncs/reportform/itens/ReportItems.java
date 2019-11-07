@@ -1,8 +1,6 @@
 package com.rendersoncs.reportform.itens;
 
 import android.graphics.Bitmap;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 public class ReportItems {
 

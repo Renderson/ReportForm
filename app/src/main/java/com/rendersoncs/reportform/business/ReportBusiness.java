@@ -24,8 +24,8 @@ public class ReportBusiness {
         return this.mReportRepository.update(repo);
     }
 
-    public Boolean remove(int reportId){
-        return this.mReportRepository.remove(reportId);
+    public void remove(int reportId){
+        this.mReportRepository.remove(reportId);
     }
 
     public ReportItems load(int reportId){
@@ -36,8 +36,8 @@ public class ReportBusiness {
         return this.mReportRepository.getReportByQuery("select * from " + DataBaseConstants.REPORT.TABLE_NAME);
     }
 
-    public Boolean close(){
-        return this.mReportRepository.close();
+    public void close(){
+        this.mReportRepository.close();
     }
 
 }

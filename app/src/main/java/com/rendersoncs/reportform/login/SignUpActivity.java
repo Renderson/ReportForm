@@ -54,8 +54,8 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
 
         mAuth = FirebaseAuth.getInstance();
 
-        mAuthStateListener = firebaseAuth -> {
-            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        mAuthStateListener = fireBaseAuth -> {
+            FirebaseUser firebaseUser = fireBaseAuth.getCurrentUser();
 
             if (firebaseUser == null || user.getId() != null) {
                 return;
@@ -130,7 +130,7 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
             ).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     closeProgressBar();
-                    savePhotoFirebase();
+                    savePhotoFireBase();
                 }
             }).addOnFailureListener(this, e -> {
                 closeProgressBar();
@@ -140,7 +140,7 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
         }
     }
 
-    private void savePhotoFirebase() {
+    private void savePhotoFireBase() {
         String filename = UUID.randomUUID().toString();
         final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + filename);
         if (mSelectedUri == null) {

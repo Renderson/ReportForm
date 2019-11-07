@@ -1,7 +1,5 @@
 package com.rendersoncs.reportform.listener;
 
-import java.io.File;
-
 public interface OnInteractionListener {
 
     /* Click for List Report*/

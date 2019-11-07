@@ -63,6 +63,7 @@
     <string name="label_recover_password">Recuperar contraseña?</string>
     <string name="label_or">o</string>
     <string name="label_sign_insert_photo">Insertar foto</string>
+    <string name="label_insert_password">Por favor ingrese la contraseña.</string>
 
     <!--Activity Login-->
     <string name="label_login_facebook_failed">Error de inicio de sesión en Facebook, inténtalo de nuevo!</string>
@@ -95,17 +96,17 @@
     <string name="label_entry_contact">Entre en contacto</string>
     <string name="label_more_work">Más sobre mi trabajo</string>
     <string name="label_calling">Llamar</string>
-    <string name="label_calling_whatsapp">Te contesto ahora</string>
-    <string name="label_fedd_back">Envíame tu comentario</string>
+    <string name="label_calling_whatsApp">Te contesto ahora</string>
+    <string name="label_feed_back">Envíame tu comentario</string>
     <string name="label_recommendation">Mis recomendaciones</string>
-    <string name="label_not_whatsapp">No encontramos WhatsApp.</string>
+    <string name="label_not_whatsApp">No encontramos WhatsApp.</string>
     <string name="label_insert_email">Por favor ingrese su dirección de correo electrónico registrada!</string>
 
     <!--Facebook ID-->
     <string name="facebook_app_id">2284363461680926</string>
 
     <string name="msg_take_image">Tomar la foto</string>
-    <string name="msg_select_from_galery">Seleccionar de la galería</string>
+    <string name="msg_select_from_gallery">Seleccionar de la galería</string>
     <string name="label_permission_camera">Necesitamos permiso para acceder a la cámara.</string>
     <string name="label_permission_read">Necesitamos permiso para escribir datos para guardar su informe.</string>
     <string name="label_error_update_list">Error al cambiar el elemento de la lista.</string>
@@ -138,7 +139,7 @@
     <string name="label_no_items_list">No hay elementos en la lista!</string>
     <string name="label_create_list_for_start">Crea elementos para tu lista para comenzar a crear informes!</string>
     <string name="label_button_create_report">CREAR INFORME</string>
-    <string name="lbael_image_empty">Imagen de diseño vacía</string>
+    <string name="label_image_empty">Imagen de diseño vacía</string>
     <string name="label_report">Informes</string>
     <string name="format_date">19/02/1984</string>
     <string name="label_image_overflow">desbordamiento</string>
@@ -148,7 +149,7 @@
     <string name="dev_renderson">Renderson Cerqueira</string>
     <string name="label_date">Fecha</string>
     <string name="mail_dev_renderson">renderson.cs@gmail.com</string>
-    <string name="total_itens">Artículos totales</string>
+    <string name="total_items">Artículos totales</string>
     <string name="label_list_selected">Artículos seleccionados</string>
     <string name="image_for_resume">Imagen para currículum</string>
     <string name="image_pdf">Imagen PDF</string>
@@ -188,6 +189,4 @@
     <string name="label_paragraph_pdf_note">NOTA</string>
     <string name="label_paragraph_pdf_photo">FOTOS</string>
     <string name="label_name_archive">Report-%s-%s.pdf</string>
-    <string name="label_up_insert_password">Por favor ingrese la contraseña.</string>
-
 </resources>

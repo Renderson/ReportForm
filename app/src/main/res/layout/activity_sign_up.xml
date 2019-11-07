@@ -26,7 +26,7 @@
             android:id="@+id/textView4"
             style="@style/TextTitleFormField"
             android:text="@string/label_screen_register"
-            android:textColor="@color/colorTextBlack"
+            android:textColor="@color/colorBlack"
             app:layout_constraintStart_toStartOf="@+id/textInputName"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +34,7 @@
             android:id="@+id/textView5"
             style="@style/TextDescriptionFormField"
             android:text="@string/label_screen_register_create"
-            android:textColor="@color/colorTextBlack"
+            android:textColor="@color/colorBlack"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />

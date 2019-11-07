@@ -16,7 +16,7 @@
             android:id="@+id/txt_up"
             style="@style/TextTitleFormField"
             android:text="@string/label_screen_remove_account"
-            android:textColor="@color/colorTextBlack"
+            android:textColor="@color/colorBlack"
             app:layout_constraintStart_toStartOf="@+id/textInputNewPassword"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +24,7 @@
             android:id="@+id/txt_up2"
             style="@style/TextDescriptionFormField"
             android:text="@string/label_screen_remove_info"
-            android:textColor="@color/colorTextBlack"
+            android:textColor="@color/colorBlack"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/txt_up"

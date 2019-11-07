@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.rendersoncs.reportform.constants.DataBaseConstants;
 
-public class ReportDataBaseHelper extends SQLiteOpenHelper {
+class ReportDataBaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "Report.db";

@@ -16,9 +16,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.constants.ReportConstants;
 
-public class GetInfoUserFirebase {
+public class GetInfoUserFireBase {
 
-    public void getInfoUserFirebase
+    public void getInfoUserFireBase
             (Context context,
              FirebaseUser user,
              DatabaseReference databaseReference,

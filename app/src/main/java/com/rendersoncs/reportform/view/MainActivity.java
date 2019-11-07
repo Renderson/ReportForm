@@ -1,6 +1,5 @@
 package com.rendersoncs.reportform.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,7 +41,7 @@ import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.login.util.User;
 import com.rendersoncs.reportform.service.AccessDocument;
 import com.rendersoncs.reportform.service.NetworkConnectedService;
-import com.rendersoncs.reportform.util.GetInfoUserFirebase;
+import com.rendersoncs.reportform.util.GetInfoUserFireBase;
 import com.rendersoncs.reportform.util.RVEmptyObserver;
 import com.rendersoncs.reportform.util.SnackBarHelper;
 
@@ -64,13 +63,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private OnInteractionListener listener;
 
     private DrawerLayout drawerLayout;
-    private GetInfoUserFirebase info = new GetInfoUserFirebase();
-    DatabaseReference databaseReference;
+    private GetInfoUserFireBase info = new GetInfoUserFireBase();
+    private DatabaseReference databaseReference;
 
-    public Context context;
-    View emptyLayout;
-    Button emptyButton;
-    FloatingActionButton fab;
+    private View emptyLayout;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,19 +110,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void init() {
 
         emptyLayout = findViewById(R.id.layout_empty);
-        emptyButton = findViewById(R.id.action_add_report);
+        Button emptyButton = findViewById(R.id.action_add_report);
 
-        // Obter a recycler
+        // Get the recycler
         this.viewHolder.recyclerView = findViewById(R.id.recycler_view);
 
-        // Camada Business
+        // Business layer
         this.reportBusiness = new ReportBusiness(this);
 
         // Listener
         this.clickListenerItems();
 
-        // Define um layout
-        this.viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(this.context));
+        // Define a layout
+        this.viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         fab = findViewById(R.id.floatButton);
         fab.setOnClickListener(v -> startReportFormDialog());
@@ -154,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView profileEmail = headerLayout.findViewById(R.id.txt_profile_mail);
         ImageView profileView = headerLayout.findViewById(R.id.img_profile);
 
-        info.getInfoUserFirebase(getApplicationContext(), user, databaseReference, profileName, profileEmail, profileView);
+        info.getInfoUserFireBase(getApplicationContext(), user, databaseReference, profileName, profileEmail, profileView);
     }
 
     private void clickListenerItems() {

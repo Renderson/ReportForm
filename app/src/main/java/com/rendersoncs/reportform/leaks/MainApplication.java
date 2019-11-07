@@ -8,7 +8,7 @@ import androidx.multidex.MultiDex;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
-public class MainApplication extends Application {
+class MainApplication extends Application {
 
     private RefWatcher refWatcher;
 

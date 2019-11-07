@@ -59,12 +59,12 @@ public class CreatePDFViewer {
         /*Object[] arrayOfObject = new Object[2];
         arrayOfObject[0] = paramRepo.getCompany().replaceAll(" ", "_");
         arrayOfObject[1] = new SimpleDateFormat("dd-MM-yyyy").format(paramRepo.getDate()).trim();
-        Log.i("PDF", "Gerar PDF!!!! " + arrayOfObject + " Nome arrayOfObject");
+        Log.i("PDF", "Generate PDF!!!! " + arrayOfObject + " Nome arrayOfObject");
         //arrayOfObject[1] = date;
-        String str = FilenameUtils.normalize(String.format("Relatorio-%s-%s.pdf", arrayOfObject));*/
+        String str = FilenameUtils.normalize(String.format("Report-%s-%s.pdf", arrayOfObject));*/
 
         String str = FilenameUtils.normalize(String.format(context.getResources().getString(R.string.label_name_archive), paramRepo.getCompany(), paramRepo.getDate()));
-        Log.i("PDF", "Gerar PDF!!!! " + str + " Nome Arquivo");
+        Log.i("PDF", "Generate PDF!!!! " + str + " File Name");
 
         File mFilePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report");
         if (!mFilePath.exists())
@@ -85,8 +85,8 @@ public class CreatePDFViewer {
         Image image = Image.getInstance(localByteArrayOutputStream.toByteArray());
 
         PdfPTable table = new PdfPTable(2);
-        table.setWidthPercentage(100.0F);//altura e largura
-        table.setWidths(new int[]{1, 2});//setando a altura e largura
+        table.setWidthPercentage(100.0F);//Height and width
+        table.setWidths(new int[]{1, 2});//setting the height and width
         table.addCell(createImageCell(image));
 
         Paragraph paragraph = new Paragraph(new Chunk(context.getResources().getString(R.string.label_paragraph_pdf_audit), baseFont));
@@ -133,7 +133,7 @@ public class CreatePDFViewer {
         document.add(paragraph);
 
         PdfPTable tablel = new PdfPTable(5);
-        tablel.setWidthPercentage(100.0F);//altura e largura
+        tablel.setWidthPercentage(100.0F);//Height and width
 
         PdfPCell cel1 = new PdfPCell(new Paragraph(context.getResources().getString(R.string.label_paragraph_pdf_installations), baseFontBold));
         PdfPCell cel2 = new PdfPCell(new Paragraph(context.getResources().getString(R.string.label_paragraph_pdf_description), baseFontBold));
@@ -154,7 +154,7 @@ public class CreatePDFViewer {
         return localFile2;
     }
 
-    private void addListItems(ReportItems paramRepo, List listTitle, PdfPTable tablel) throws BadElementException, IOException {
+    private void addListItems(ReportItems paramRepo, List listTitle, PdfPTable pTable) throws BadElementException, IOException {
         PdfPCell celTitle;
         PdfPCell celDescription;
         PdfPCell celRadio;
@@ -196,19 +196,18 @@ public class CreatePDFViewer {
                 celImage.setImage(image1);
                 celImage.setPadding(5f);
 
-                tablel.addCell(celTitle);
-                tablel.addCell(celDescription);
-                tablel.addCell(celRadio);
-                tablel.addCell(celNote);
-                tablel.addCell(celImage);
+                pTable.addCell(celTitle);
+                pTable.addCell(celDescription);
+                pTable.addCell(celRadio);
+                pTable.addCell(celNote);
+                pTable.addCell(celImage);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private static PdfPCell createImageCell(Image paramImage)
-            throws DocumentException {
+    private static PdfPCell createImageCell(Image paramImage) {
         PdfPCell localPdfPCell = new PdfPCell(paramImage, true);
         localPdfPCell.setBorder(0);
         return localPdfPCell;
@@ -219,9 +218,8 @@ public class CreatePDFViewer {
         return createImageCell(Image.getInstance(paramString));
     }
 
-    //Lado direito
-    public static PdfPCell createTextCell(Paragraph paramParagraph)
-            throws DocumentException {
+    //Right side
+    public static PdfPCell createTextCell(Paragraph paramParagraph) {
         paramParagraph.setAlignment(0);
         paramParagraph.setIndentationLeft(lineSpaceSmall);
         PdfPCell localPdfPCell = new PdfPCell();

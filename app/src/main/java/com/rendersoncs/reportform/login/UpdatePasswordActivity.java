@@ -53,16 +53,16 @@ public class UpdatePasswordActivity extends AppCompatActivity implements ValueEv
 
     public void update( View view ){
         if (newPassword.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.label_up_insert_password), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.label_insert_password), Toast.LENGTH_SHORT).show();
         } else {
             user.setNewPassword(newPassword.getText().toString());
             user.setPassword(password.getText().toString());
 
-            reauthenticate();
+            reAuthenticate();
         }
     }
 
-    private void reauthenticate(){
+    private void reAuthenticate(){
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
         if( firebaseUser == null ){
@@ -135,7 +135,7 @@ public class UpdatePasswordActivity extends AppCompatActivity implements ValueEv
     }
 
     @Override
-    public void onCancelled(DatabaseError firebaseError) {
-        Crashlytics.logException( firebaseError.toException() );
+    public void onCancelled(DatabaseError fireBaseError) {
+        Crashlytics.logException( fireBaseError.toException() );
     }
 }

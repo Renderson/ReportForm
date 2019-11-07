@@ -80,7 +80,7 @@ public class ReportRepository {
         }
     }
 
-    public Boolean remove(int id) {
+    public void remove(int id) {
         try {
 
             SQLiteDatabase sqLiteDatabase = this.mReportDataBaseHelper.getWritableDatabase();
@@ -90,10 +90,7 @@ public class ReportRepository {
 
             sqLiteDatabase.delete(DataBaseConstants.REPORT.TABLE_NAME, whereClause, whereArgs);
 
-            return true;
-
         } catch (Exception e) {
-            return false;
         }
     }
 
@@ -178,10 +175,9 @@ public class ReportRepository {
         super.finalize();
     }
 
-    public Boolean close(){
+    public void close(){
         if (null != mReportDataBaseHelper)
         mReportDataBaseHelper.close();
-        return null;
     }
 }
 

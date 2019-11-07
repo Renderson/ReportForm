@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 public class RVEmptyObserver extends RecyclerView.AdapterDataObserver {
-    public View emptyView;
-    public View floatingActionButton;
+    private View emptyView;
+    private View floatingActionButton;
     private RecyclerView recyclerView;
 
     public RVEmptyObserver(RecyclerView rv, View ev, View fb){

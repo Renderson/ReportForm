@@ -12,14 +12,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User {
-    public static String PROVIDER = "com.rendersoncs.reportform.login.util.User.PROVIDER";
+    private static String PROVIDER = "com.rendersoncs.reportform.login.util.User.PROVIDER";
 
     private String id;
     private String name;
     private String email;
     private String password;
     private String newPassword;
-    private String profileUrl;
 
     public User(){}
 
@@ -98,25 +97,25 @@ public class User {
         LibraryClass.saveSP(context, PROVIDER, token);
     }
 
-    public String getProviderSP(Context context){
+    private String getProviderSP(Context context){
         return (LibraryClass.getSP(context, PROVIDER));
     }
 
     public void saveDB(DatabaseReference.CompletionListener... completionListener){
-        DatabaseReference firebase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
-        Log.i("LOG", "Tokens: " + firebase);
+        DatabaseReference fireBase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
+        Log.i("LOG", "Tokens: " + fireBase);
 
         if( completionListener.length == 0 ){
-            firebase.setValue(this);
+            fireBase.setValue(this);
         }
         else{
-            firebase.setValue(this, completionListener[0]);
+            fireBase.setValue(this, completionListener[0]);
         }
     }
 
     public void updateDB( DatabaseReference.CompletionListener... completionListener ){
 
-        DatabaseReference firebase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
+        DatabaseReference fireBase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
 
         Map<String, Object> map = new HashMap<>();
         setNameInMap(map);
@@ -127,24 +126,20 @@ public class User {
         }
 
         if( completionListener.length > 0 ){
-            firebase.updateChildren(map, completionListener[0]);
+            fireBase.updateChildren(map, completionListener[0]);
         }
         else{
-            firebase.updateChildren(map);
+            fireBase.updateChildren(map);
         }
     }
 
     public void removeDB( DatabaseReference.CompletionListener completionListener ){
-        DatabaseReference firebase = LibraryClass.getFirebase().child("users").child( getId() );
-        firebase.setValue(null, completionListener);
+        DatabaseReference fireBase = LibraryClass.getFirebase().child("users").child( getId() );
+        fireBase.setValue(null, completionListener);
     }
 
     public void contextDataDB( Context context ){
-        DatabaseReference firebase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
-        firebase.addListenerForSingleValueEvent( (ValueEventListener) context );
-    }
-
-    public String getProfileUrl() {
-        return profileUrl;
+        DatabaseReference fireBase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
+        fireBase.addListenerForSingleValueEvent( (ValueEventListener) context );
     }
 }

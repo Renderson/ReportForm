@@ -7,11 +7,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.rendersoncs.reportform.R;
 
@@ -50,7 +48,6 @@ public class RecoveryLoginActivity extends AppCompatActivity {
     public void reset( View view ){
         if (email.getText().toString().isEmpty()){
             Toast.makeText(this, getResources().getString(R.string.label_insert_email), Toast.LENGTH_SHORT).show();
-            return;
         }else {
             firebaseAuth
                     .sendPasswordResetEmail(email.getText().toString())
@@ -70,12 +67,7 @@ public class RecoveryLoginActivity extends AppCompatActivity {
                             ).show();
                         }
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Crashlytics.logException(e);
-                        }
-                    });
+                    .addOnFailureListener(Crashlytics::logException);
         }
     }
 }

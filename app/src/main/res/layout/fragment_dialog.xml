@@ -28,7 +28,7 @@
             android:layout_weight="3"
             android:layout_margin="@dimen/margin_18"
             android:text="@string/label_menu_new_report"
-            android:textColor="@color/colorTextBlack"
+            android:textColor="@color/colorBlack"
             android:textSize="@dimen/text_size_18" />
 
         <ImageView

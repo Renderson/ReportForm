@@ -20,7 +20,7 @@
             android:paddingStart="@dimen/margin_4"
             android:paddingEnd="@dimen/margin_4"
             android:text="@string/label_observation"
-            android:textColorHint="@color/colorTextBlack"
+            android:textColorHint="@color/colorBlack"
             android:textSize="@dimen/text_size_22"
             android:textStyle="bold" />
 
@@ -34,7 +34,9 @@
             android:layout_marginBottom="@dimen/margin_16"
             android:hint="@string/label_text_observation"
             android:textColorHint="@color/about_description_text_color"
-            android:textSize="@dimen/text_size_18" />
+            android:textSize="@dimen/text_size_18"
+            android:inputType="textAutoCorrect"
+            android:importantForAutofill="no" />
 
     </LinearLayout>
 

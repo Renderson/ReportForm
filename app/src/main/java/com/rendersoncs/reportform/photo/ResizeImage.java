@@ -34,11 +34,11 @@ public class ResizeImage {
         return imgString;
     }
 
-    public static Bitmap scaleBitmap(Bitmap bitmap, int wantedWidth, int wantedHeight) {
-        Bitmap output = Bitmap.createBitmap(wantedWidth, wantedHeight, Bitmap.Config.ARGB_8888);
+    private static Bitmap scaleBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(ResizeImage.WANTED_WIDTH, ResizeImage.WANTED_HEIGHT, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
         Matrix m = new Matrix();
-        m.setScale((float) wantedWidth / bitmap.getWidth(), (float) wantedHeight / bitmap.getHeight());
+        m.setScale((float) ResizeImage.WANTED_WIDTH / bitmap.getWidth(), (float) ResizeImage.WANTED_HEIGHT / bitmap.getHeight());
         canvas.drawBitmap(bitmap, m, new Paint());
 
         return output;
@@ -65,7 +65,7 @@ public class ResizeImage {
         try {
             input1 = cr.openInputStream(photoUri);
             Bitmap takenImage = BitmapFactory.decodeStream(input1);
-            Bitmap photo = scaleBitmap(takenImage, WANTED_WIDTH, WANTED_HEIGHT);
+            Bitmap photo = scaleBitmap(takenImage);
             mAdapter.setImageInItem(position, photo);
             if (input1 != null) {
                 input1.close();

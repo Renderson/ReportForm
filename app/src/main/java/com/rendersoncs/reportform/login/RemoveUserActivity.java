@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,15 +54,15 @@ public class RemoveUserActivity extends AppCompatActivity
 
     public void removeUser( View view ){
         if (password.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Por favor insira a senha.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.label_insert_password), Toast.LENGTH_SHORT).show();
         } else {
             user.setPassword(password.getText().toString());
 
-            reauthenticate();
+            reAuthenticate();
         }
     }
 
-    private void reauthenticate(){
+    private void reAuthenticate(){
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
         if( firebaseUser == null ){
@@ -125,8 +124,8 @@ public class RemoveUserActivity extends AppCompatActivity
     }
 
     @Override
-    public void onCancelled(@NonNull DatabaseError firebaseError) {
-        Crashlytics.logException( firebaseError.toException() );
+    public void onCancelled(@NonNull DatabaseError fireBaseError) {
+        Crashlytics.logException( fireBaseError.toException() );
     }
 
     @Override

@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -22,8 +21,6 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,7 +37,7 @@ import static com.android.volley.VolleyLog.TAG;
 public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckListAdapter.ViewHolder> /*implements ItemMoveCallBack.ItemTouchHelperContract*/{
     private List<ReportItems> reportItems;
     public SparseBooleanArray expandState = new SparseBooleanArray();
-    public Context context;
+    private Context context;
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
@@ -211,7 +208,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
     }
 
     //Header
-    public class HeaderVh extends ReportCheckListAdapter.ViewHolder {
+    class HeaderVh extends ReportCheckListAdapter.ViewHolder {
 
         @BindView(R.id.header_id)
         public TextView headerTitle;
@@ -222,7 +219,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
         }
     }
 
-    public class ItemVh extends ReportCheckListAdapter.ViewHolder implements View.OnClickListener {
+    class ItemVh extends ReportCheckListAdapter.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.textView_title)
         public TextView itemContent;

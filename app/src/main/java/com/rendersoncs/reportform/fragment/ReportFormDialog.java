@@ -62,61 +62,52 @@ public class ReportFormDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
 
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Toast.makeText(getContext(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
-                        dismiss();
-                    }
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                    //Toast.makeText(getContext(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
+                    dismiss();
                 })
 
-                .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getActivity(), ReportActivity.class);
+                .setPositiveButton(R.string.start, (dialog, which) -> {
+                    Intent intent = new Intent(getActivity(), ReportActivity.class);
 
-                        /// Passando valores digitados para ReportActivity
-                        String company = "";
-                        String email = "";
-                        String date = "";
+                    // Passing typed values to ReportActivity
+                    String company = "";
+                    String email = "";
+                    String date1 = "";
 
-                        company = companyTv.getText().toString();
-                        email = emailTv.getText().toString();
-                        date = dateTv.getText().toString();
+                    company = companyTv.getText().toString();
+                    email = emailTv.getText().toString();
+                    date1 = dateTv.getText().toString();
 
-                        Bundle bundle = new Bundle();
-                        bundle.putString(ReportConstants.ITEM.COMPANY, company);
-                        bundle.putString(ReportConstants.ITEM.EMAIL, email);
-                        bundle.putString(ReportConstants.ITEM.DATE, date);
-                        intent.putExtras(bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ReportConstants.ITEM.COMPANY, company);
+                    bundle.putString(ReportConstants.ITEM.EMAIL, email);
+                    bundle.putString(ReportConstants.ITEM.DATE, date1);
+                    intent.putExtras(bundle);
 
-                        startActivity(intent);
-                        //Toast.makeText(getContext(), R.string.txt_new_report, Toast.LENGTH_SHORT).show();
-                    }
+                    startActivity(intent);
+                    //Toast.makeText(getContext(), R.string.txt_new_report, Toast.LENGTH_SHORT).show();
                 });
 
-        dateTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        dateTv.setOnClickListener(v -> {
 
-                mCalendar = Calendar.getInstance();
-                mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
-                mMonth = mCalendar.get(Calendar.MONTH);
-                mYear = mCalendar.get(Calendar.YEAR);
+            mCalendar = Calendar.getInstance();
+            mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
+            mMonth = mCalendar.get(Calendar.MONTH);
+            mYear = mCalendar.get(Calendar.YEAR);
 
-                mDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            mDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
 
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onDateSet(DatePicker view1, int year, int month, int day) {
 
-                        dateTv.setText(day + getString(R.string.space_date) + (month + 1) + getString(R.string.space_date) + year);
+                    dateTv.setText(day + getString(R.string.space_date) + (month + 1) + getString(R.string.space_date) + year);
 
-                    }
-                }, mYear, mMonth, mDay);
-                //datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-                mDatePickerDialog.show();
-            }
+                }
+            }, mYear, mMonth, mDay);
+            //datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+            mDatePickerDialog.show();
         });
         return builder.create();
     }

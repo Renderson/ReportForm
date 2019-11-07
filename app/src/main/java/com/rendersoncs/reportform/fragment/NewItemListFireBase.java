@@ -56,9 +56,7 @@ public class NewItemListFireBase extends DialogFragment {
         initFireBase();
 
         builder.setView(view)
-                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
-                    dismiss();
-                })
+                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> dismiss())
 
                 .setPositiveButton(alertButton, (dialog, which) -> {
 

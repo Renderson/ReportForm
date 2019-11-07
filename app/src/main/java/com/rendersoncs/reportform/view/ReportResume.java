@@ -50,9 +50,9 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
     private List<ReportResumeItems> repoResumeList;
 
     private ArrayList<String> listSelected = new ArrayList<>();
-    public ArrayList<String> listRadioC = new ArrayList<>();
-    public ArrayList<String> listRadioNA = new ArrayList<>();
-    public ArrayList<String> listRadioNC = new ArrayList<>();
+    private ArrayList<String> listRadioC = new ArrayList<>();
+    private ArrayList<String> listRadioNA = new ArrayList<>();
+    private ArrayList<String> listRadioNC = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +165,7 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
             this.dateResume.setText(getString(R.string.resume_date, repoEntity.getDate()));
             this.companyResume.setText(repoEntity.getCompany());
 
-            setTitle("Empresa " + repoEntity.getCompany());
+            setTitle(getResources().getString(R.string.company)+ " " + repoEntity.getCompany());
 
             this.populateRecyclerViewResume();
             this.countRadioSelected();

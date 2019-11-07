@@ -29,7 +29,7 @@
             style="@style/TextTitleFormField"
             android:layout_height="@dimen/layout_0"
             android:text="@string/label_screen_login_hello"
-            android:textColor="@color/colorTextBlack"
+            android:textColor="@color/colorBlack"
             app:layout_constraintStart_toStartOf="@+id/textInputEmail"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,7 +37,7 @@
             android:id="@+id/textView5"
             style="@style/TextDescriptionFormField"
             android:text="@string/label_screen_login_lets_go"
-            android:textColor="@color/colorTextBlack"
+            android:textColor="@color/colorBlack"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -114,7 +114,7 @@
             android:layout_marginStart="@dimen/margin_16"
             android:layout_marginTop="@dimen/margin_8"
             android:background="@drawable/button_shape_facebook_login"
-            android:fontFamily="@font/facebolf"
+            android:fontFamily="@font/face_bold"
             android:onClick="sendLoginFacebookData"
             android:paddingStart="20dp"
             android:paddingEnd="0dp"
