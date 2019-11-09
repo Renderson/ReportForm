@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -575,7 +577,19 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 }
 
                 Bitmap bitmapPhoto = reportItems.get(i).getPhotoId();
-                if (bitmapPhoto == null) {
+                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2) {
+
+                    Drawable d = getResources().getDrawable(R.drawable.walpaper_not_applicable);
+
+                    Bitmap b = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(b);
+                    d.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                    d.draw(canvas);
+
+                    String encodeImage = resizeImage.getEncoded64Image(b);
+                    listPhoto.add(encodeImage);
+
+                } else if (bitmapPhoto == null) {
                     return;
                 } else {
                     String encodeImage = resizeImage.getEncoded64Image(bitmapPhoto);

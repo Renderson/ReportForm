@@ -2,11 +2,6 @@ package com.rendersoncs.reportform.adapter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -21,16 +16,20 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.listener.OnItemListenerClicked;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static com.android.volley.VolleyLog.TAG;
 
@@ -126,17 +125,17 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
                 viewHolder.resetItem.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));
             } else {
                 viewHolder.mRadioButtonConform.setChecked(true);
-                //viewHolder.checkImage.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
+                /*viewHolder.checkImage.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));*/
                 Glide.with(context).load(repo.getPhotoId()).centerCrop().into(viewHolder.resultPhoto);
                 Log.i("LOG", "ImagePath3 " + repo.getPhotoId());
             }
 
             if (repo.getNote() == null || repo.getNote().isEmpty()){
                 viewHolder.note.setImageAlpha(R.drawable.ic_action_note);
-                //viewHolder.checkNote.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));
+                /*viewHolder.checkNote.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));*/
             } else {
                 viewHolder.note.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
-                //viewHolder.checkNote.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
+                /*viewHolder.checkNote.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));*/
             }
 
             viewHolder.mRadioButtonConform.setChecked(repo.isOpt1());
@@ -149,7 +148,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
                 viewHolder.resetItem.clearColorFilter();
 
             } if (viewHolder.mRadioButtonNotApplicable.isChecked()) {
-                viewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioNA);
+                /*viewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioNA);*/
                 viewHolder.check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioNA));
                 viewHolder.resetItem.clearColorFilter();
             }

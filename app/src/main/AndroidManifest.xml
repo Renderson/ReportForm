@@ -59,7 +59,8 @@
         <activity android:name=".login.RemoveUserActivity" />
         <activity android:name=".view.ReportActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.MainActivity"/>
+        <activity android:name=".view.MainActivity"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".view.ReportResume"
             android:parentActivityName=".view.MainActivity">
