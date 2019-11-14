@@ -24,6 +24,7 @@ import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportResumeAdapter;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
+import com.rendersoncs.reportform.extension.StringExtension;
 import com.rendersoncs.reportform.fragment.FullPhotoFragment;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.itens.ReportResumeItems;
@@ -162,10 +163,10 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
 
             repoEntity = this.mReportBusiness.load(mReportId);
             this.emailResume.setText(repoEntity.getEmail());
-            this.dateResume.setText(getString(R.string.resume_date, repoEntity.getDate()));
-            this.companyResume.setText(repoEntity.getCompany());
+            this.dateResume.setText(repoEntity.getDate());
+            this.companyResume.setText(StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.CHARACTERS.LIMITS_TEXT));
 
-            setTitle(getResources().getString(R.string.company)+ " " + repoEntity.getCompany());
+            setTitle(getResources().getString(R.string.company)+ " " + StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.CHARACTERS.LIMITS_TEXT));
 
             this.populateRecyclerViewResume();
             this.countRadioSelected();
