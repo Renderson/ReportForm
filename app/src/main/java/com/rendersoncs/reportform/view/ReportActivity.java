@@ -49,6 +49,7 @@ import com.rendersoncs.reportform.BuildConfig;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportCheckListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
+import com.rendersoncs.reportform.async.ReportDataBaseAsyncTask;
 import com.rendersoncs.reportform.async.PDFCreateAsync;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
@@ -91,6 +92,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private static final int REQUEST_PERMISSIONS_GRANTED = 1;
     private static final int REQUEST_PERMISSIONS_READ_WHITE = 128;
 
+    // SavedInstanceState
     /*private static final String LIST_STATE = "list_state";
     private static final String BUNDLE_RECYCLER_LAYOUT= "recycler_layout";*/
 
@@ -146,6 +148,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user.setId(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
 
+        // SavedInstanceState
         /*if (savedInstanceState != null) {
             findViewById(R.id.progressBar).setVisibility(View.GONE);
             reportItems = savedInstanceState.getParcelableArrayList(LIST_STATE);
@@ -153,6 +156,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         } else {
             this.initViews();
         }*/
+
         this.mReportBusiness = new ReportBusiness(this);
         this.initViews();
 
@@ -180,10 +184,12 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         RecyclerView.LayoutManager llm = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(llm);
 
+        // Implementation ItemTouchHelper
         /*ItemTouchHelper.Callback callback = new ItemMoveCallBack(mAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);
         mAdapter.notifyDataSetChanged();*/
+
         recyclerView.setAdapter(mAdapter);
 
         fab = findViewById(R.id.fab_new_item);
@@ -304,15 +310,12 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_LIST);
             this.addItemsFromFireBase();
-            //Toast.makeText(getApplicationContext(), "List onLine", Toast.LENGTH_SHORT).show();
 
         } else {
             findViewById(R.id.progressBar).setVisibility(View.GONE);
             findViewById(R.id.action_add_item).setVisibility(View.GONE);
             fab.setEnabled(false);
             jsonListModeOff.addItemsFromJsonList(reportItems);
-            //mAdapter.notifyDataSetChanged();
-            //Toast.makeText(getApplicationContext(), "List offLine", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -414,11 +417,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
             case R.id.clear:
                 this.checkAnswers();
-                if (this.listPhoto.isEmpty() || listRadio.isEmpty()) {
-                    Snackbar snackbar = Snackbar
-                            .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(R.string.label_empty_list), Snackbar.LENGTH_LONG);
-                    SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
-                    snackbar.show();
+                if (this.listPhoto.isEmpty() || this.listRadio.isEmpty()) {
+                    showSnackBar(R.string.label_empty_list);
                 } else {
                     alertDialog.showDialog(ReportActivity.this,
                             getResources().getString(R.string.alert_clear_list),
@@ -472,31 +472,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         Log.i("log", "Item: " + jsArray + " jsArray");
         // Finish JsonObject
 
-        //Save
-        if (this.mReportId == 0) {
-            if (this.mReportBusiness.insert(reportItems)) {
-                // Execute Async create PDF
-                pdfCreateAsync.execute(reportItems);
-                Toast.makeText(getApplicationContext(), R.string.txt_report_save, Toast.LENGTH_SHORT).show();
-                this.closeMethods();
-                finish();
-            } else {
-                Toast.makeText(getApplicationContext(), R.string.txt_error_save, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        } else {
-            reportItems.setId(this.mReportId);
-            if (this.mReportBusiness.update(reportItems)) {
-                // Execute Async create PDF
-                pdfCreateAsync.execute(reportItems);
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_report_update), Toast.LENGTH_SHORT).show();
-                this.closeMethods();
-                finish();
-            } else {
-                Toast.makeText(getApplicationContext(), R.string.txt_error_save, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
+        // Save Report in SQLite
+        new ReportDataBaseAsyncTask(ReportActivity.this, pdfCreateAsync, mReportId, mReportBusiness, reportItems, this::finish).execute();
     }
 
     // Clear list
@@ -516,10 +493,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         this.clearList();
         this.isConnected();
 
-        Snackbar snackbar = Snackbar
-                .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(R.string.label_empty_list), Snackbar.LENGTH_LONG);
-        SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
-        snackbar.show();
+        showSnackBar(R.string.label_empty_list);
     }
 
     @Override
@@ -797,10 +771,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 this.dialog.dismiss();
                 this.openCamera();
             } else {
-                Snackbar snackbar = Snackbar
-                        .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(R.string.label_permission_camera), Snackbar.LENGTH_LONG);
-                SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
-                snackbar.show();
+                showSnackBar(R.string.label_permission_camera);
             }
         }
 
@@ -809,10 +780,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     && grantResults[REQUEST_PERMISSIONS_GRANTED] == PackageManager.PERMISSION_GRANTED) {
                 this.handleSave();
             } else {
-                Snackbar snackbar = Snackbar
-                        .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(R.string.label_permission_read), Snackbar.LENGTH_LONG);
-                SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
-                snackbar.show();
+                showSnackBar(R.string.label_permission_read);
             }
         }
     }
@@ -831,6 +799,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
         super.onRestoreInstanceState(savedInstanceState);
     }*/
+
+    private void showSnackBar(int label) {
+        Snackbar snackbar = Snackbar
+                .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(label), Snackbar.LENGTH_LONG);
+        SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
+        snackbar.show();
+    }
 
     private static void delete(File fileDirectory) {
         if (fileDirectory == null) {

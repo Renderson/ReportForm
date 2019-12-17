@@ -27,7 +27,7 @@ import com.rendersoncs.reportform.listener.OnItemListenerClicked;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReportCheckListViewHolder extends RecyclerView.ViewHolder {
+public class ReportCheckListViewHolder extends RecyclerView.ReportViewHolder {
 
     public SparseBooleanArray expandState = new SparseBooleanArray();
     private TextView tvTitleList, tvDescription;
@@ -59,7 +59,7 @@ public class ReportCheckListViewHolder extends RecyclerView.ViewHolder {
         this.context = context;
     }
 
-    public void bindData(@NonNull RecyclerView.ViewHolder viewHolder, int position, ReportItems repo, final OnItemListenerClicked onItemListenerClicked, SparseBooleanArray expandState) {
+    public void bindData(@NonNull RecyclerView.ReportViewHolder viewHolder, int position, ReportItems repo, final OnItemListenerClicked onItemListenerClicked, SparseBooleanArray expandState) {
         //Header
         if (viewHolder instanceof ReportCheckListViewHolder.HeaderVh) {
             ((ReportCheckListViewHolder.HeaderVh) viewHolder).headerTitle.setText(repo.getTitle());
@@ -138,7 +138,7 @@ public class ReportCheckListViewHolder extends RecyclerView.ViewHolder {
     }
 
     //Header
-    public class HeaderVh extends RecyclerView.ViewHolder {
+    public class HeaderVh extends RecyclerView.ReportViewHolder {
 
         @BindView(R.id.header_id)
         public TextView headerTitle;
@@ -149,7 +149,7 @@ public class ReportCheckListViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public class ItemVh extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ItemVh extends RecyclerView.ReportViewHolder implements View.OnClickListener {
 
         @BindView(R.id.textView_title)
         public TextView itemContent;

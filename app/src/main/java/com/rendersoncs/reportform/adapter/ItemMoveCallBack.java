@@ -39,9 +39,9 @@ public class ItemMoveCallBack extends ItemTouchHelper.Callback {
 
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState){
         if (actionState != ItemTouchHelper.ACTION_STATE_IDLE){
-            if (viewHolder instanceof ReportCheckListAdapter.ViewHolder){
-                ReportCheckListAdapter.ViewHolder myViewHolder = (ReportCheckListAdapter.ViewHolder) viewHolder;
-                mAdapter.onRowSelected(myViewHolder);
+            if (viewHolder instanceof ReportCheckListAdapter.ReportViewHolder){
+                ReportCheckListAdapter.ReportViewHolder myReportViewHolder = (ReportCheckListAdapter.ReportViewHolder) viewHolder;
+                mAdapter.onRowSelected(myReportViewHolder);
             }
         }
         super.onSelectedChanged(viewHolder, actionState);
@@ -50,15 +50,15 @@ public class ItemMoveCallBack extends ItemTouchHelper.Callback {
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder){
         super.clearView(recyclerView, viewHolder);
 
-        if (viewHolder instanceof ReportCheckListAdapter.ViewHolder){
-            ReportCheckListAdapter.ViewHolder myViewHolder = (ReportCheckListAdapter.ViewHolder) viewHolder;
-            mAdapter.onRowClear(myViewHolder);
+        if (viewHolder instanceof ReportCheckListAdapter.ReportViewHolder){
+            ReportCheckListAdapter.ReportViewHolder myReportViewHolder = (ReportCheckListAdapter.ReportViewHolder) viewHolder;
+            mAdapter.onRowClear(myReportViewHolder);
         }
     }
 
     public interface ItemTouchHelperContract {
         void onRowMoved(int fromPosition, int toPosition);
-        void onRowSelected(ReportCheckListAdapter.ViewHolder myViewHolder);
-        void onRowClear(ReportCheckListAdapter.ViewHolder myViewHolder);
+        void onRowSelected(ReportCheckListAdapter.ReportViewHolder myReportViewHolder);
+        void onRowClear(ReportCheckListAdapter.ReportViewHolder myReportViewHolder);
     }
 }
