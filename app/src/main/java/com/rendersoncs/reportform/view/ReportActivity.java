@@ -105,7 +105,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private FloatingActionButton fab;
     private View emptyLayout;
 
-    private TextView resultCompany, resultEmail, resultDate;
+    private TextView resultCompany, resultEmail, resultDate, scores;
     private PDFCreateAsync pdfCreateAsync = new PDFCreateAsync(ReportActivity.this);
     private AnimatedFloatingButton animated = new AnimatedFloatingButton();
 
@@ -176,6 +176,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         resultCompany = findViewById(R.id.result_company);
         resultEmail = findViewById(R.id.result_email);
         resultDate = findViewById(R.id.result_date);
+        scores = findViewById(R.id.score);
         emptyLayout = findViewById(R.id.layout_report_list_empty);
         Button emptyButton = findViewById(R.id.action_add_item);
 
@@ -417,7 +418,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
             case R.id.clear:
                 this.checkAnswers();
-                if (this.listPhoto.isEmpty() || this.listRadio.isEmpty()) {
+                if (this.listRadio.isEmpty()) {
                     showSnackBar(R.string.label_empty_list);
                 } else {
                     alertDialog.showDialog(ReportActivity.this,
@@ -496,6 +497,50 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         showSnackBar(R.string.label_empty_list);
     }
 
+    private float getScore(){
+        ArrayList<String> listMax = new ArrayList<>();
+        listMax.clear();
+
+        float NCT =  0.7f;
+        float soma = 0f;
+        float sizeList = 0f;
+
+        for (int i = 0; i < reportItems.size(); i++) {
+            if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2() || reportItems.get(i).isOpt3()) {
+                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM1) {
+                    String C = getResources().getString(R.string.according);
+                    listMax.add(C);
+                }
+                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2) {
+                    String NA = getResources().getString(R.string.not_applicable);
+                    listMax.add(NA);
+                }
+                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM3) {
+                    String NC = getResources().getString(R.string.not_according);
+                    listMax.add(NC);
+                    soma = NCT++;
+                    //Log.i("LOG", "Total Item S " + soma + " " + NCT);
+                }
+            }
+        }
+        int listRadioMax = listMax.size();
+        if (listRadioMax >= 0 && listRadioMax <= 10){
+            sizeList = 10f;
+        }
+        float total = sizeList - soma;
+        scores.setText(Float.toString(total));
+        /*if (total == 10){
+            Log.i("LOG", "Total Item " + listRadioMax + " " + total + " " + soma);
+        } else if (total == 9.3f){
+            float ff = total + 0.3f;
+            scores.setText(Float.toString(ff));
+            Log.i("LOG", "Total Item " + ff + " FF");
+        }*/
+
+
+        return total;
+    }
+
     @Override
     public void radioItemChecked(int itemPosition, int optNum) {
         reportItems.get(itemPosition).setSelectedAnswerPosition(optNum);
@@ -503,14 +548,17 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         switch (optNum) {
             case 1:
                 reportItems.get(itemPosition).setOpt1(true);
+                getScore();
                 break;
 
             case 2:
                 reportItems.get(itemPosition).setOpt2(true);
+                getScore();
                 break;
 
             case 3:
                 reportItems.get(itemPosition).setOpt3(true);
+                getScore();
                 break;
         }
         mAdapter.notifyDataSetChanged();

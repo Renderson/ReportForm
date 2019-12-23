@@ -25,6 +25,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
@@ -188,6 +189,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent.setDataAndType(uri, "application/pdf");
                 intent.putExtra(Intent.EXTRA_SUBJECT, subject);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "pdf_id");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "pdf");
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "open_pdf");
+                mFireBaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                bundle.putString("pdf_open", "pdf");
+                mFireBaseAnalytics.logEvent("open_pdf_listener", bundle);
+
                 startActivity(intent);
 
             }

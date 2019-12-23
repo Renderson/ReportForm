@@ -87,7 +87,12 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
 
     private boolean isPositionHeader(int position) {
         // Position Header
-        return position == -1;
+        return position == 0 ||
+                position == 30 ||
+                position == 45 ||
+                position == 103 || //i == 0 || i == 21 || i == 30
+                position == 122 || //i == 0 || i == 21 || i == 30
+                position == 133; //i == 0 || i == 21 || i == 30
     }
 
     @Override
