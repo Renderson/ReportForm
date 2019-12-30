@@ -25,7 +25,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
         mAuth = FirebaseAuth.getInstance();
-        mAuth.addAuthStateListener( authStateListener );
+        mAuth.addAuthStateListener(authStateListener);
         FirebaseUser user = mAuth.getCurrentUser();
         databaseReference = LibraryClass.getFirebase();
         //databaseReference.keepSynced(true);
@@ -100,9 +99,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void checkUserFireBase() {
         authStateListener = firebaseAuth -> {
 
-            if( firebaseAuth.getCurrentUser() == null  ){
-                Intent intent = new Intent( MainActivity.this, LoginActivity.class );
-                startActivity( intent );
+            if (firebaseAuth.getCurrentUser() == null) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
                 finish();
             }
         };
@@ -282,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // DrawerLayout Menu
     private void inflateMenuNavigation(NavigationView mNavigationView) {
         User user = new User();
-        if (user.isSocialNetworkLogged(getApplicationContext())){
+        if (user.isSocialNetworkLogged(getApplicationContext())) {
             mNavigationView.getMenu().clear();
             mNavigationView.inflateMenu(R.menu.menu_social_network_logged);
         }
@@ -346,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         super.onDestroy();
 
-        if (reportBusiness != null){
+        if (reportBusiness != null) {
             reportBusiness.close();
         }
 

@@ -4,19 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.rendersoncs.reportform.adapter.checkListAdapter.ReportRecyclerView;
+
 public class ItemMoveCallBack extends ItemTouchHelper.Callback {
 
     private final ItemTouchHelperContract mAdapter;
 
-    public ItemMoveCallBack(ItemTouchHelperContract adapter){
+    public ItemMoveCallBack(ItemTouchHelperContract adapter) {
         this.mAdapter = adapter;
     }
 
-    public boolean isLongPressDragEnabled(){
+    public boolean isLongPressDragEnabled() {
         return true;
     }
 
-    public boolean isItemViewSwipeEnabled(){
+    public boolean isItemViewSwipeEnabled() {
         return false;
     }
 
@@ -37,28 +39,30 @@ public class ItemMoveCallBack extends ItemTouchHelper.Callback {
 
     }
 
-    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState){
-        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE){
-            if (viewHolder instanceof ReportCheckListAdapter.ReportViewHolder){
-                ReportCheckListAdapter.ReportViewHolder myReportViewHolder = (ReportCheckListAdapter.ReportViewHolder) viewHolder;
+    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+            if (viewHolder instanceof ReportRecyclerView.ReportViewHolder) {
+                ReportRecyclerView.ReportViewHolder myReportViewHolder = (ReportRecyclerView.ReportViewHolder) viewHolder;
                 mAdapter.onRowSelected(myReportViewHolder);
             }
         }
         super.onSelectedChanged(viewHolder, actionState);
     }
 
-    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder){
+    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
 
-        if (viewHolder instanceof ReportCheckListAdapter.ReportViewHolder){
-            ReportCheckListAdapter.ReportViewHolder myReportViewHolder = (ReportCheckListAdapter.ReportViewHolder) viewHolder;
+        if (viewHolder instanceof ReportRecyclerView.ReportViewHolder) {
+            ReportRecyclerView.ReportViewHolder myReportViewHolder = (ReportRecyclerView.ReportViewHolder) viewHolder;
             mAdapter.onRowClear(myReportViewHolder);
         }
     }
 
     public interface ItemTouchHelperContract {
         void onRowMoved(int fromPosition, int toPosition);
-        void onRowSelected(ReportCheckListAdapter.ReportViewHolder myReportViewHolder);
-        void onRowClear(ReportCheckListAdapter.ReportViewHolder myReportViewHolder);
+
+        void onRowSelected(ReportRecyclerView.ReportViewHolder myReportViewHolder);
+
+        void onRowClear(ReportRecyclerView.ReportViewHolder myReportViewHolder);
     }
 }

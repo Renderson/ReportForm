@@ -13,20 +13,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.adapter.ReportCheckListAdapter;
+import com.rendersoncs.reportform.adapter.checkListAdapter.ReportRecyclerView;
 import com.rendersoncs.reportform.constants.ReportConstants;
 
 import java.util.Objects;
 
 public class ReportNoteFragment extends DialogFragment {
 
-    private ReportCheckListAdapter mAdapter;
+    private ReportRecyclerView mAdapter;
     private EditText note;
     private String getNote;
     private int position;
 
 
-    public ReportNoteFragment(ReportCheckListAdapter mAdapter) {
+    public ReportNoteFragment(ReportRecyclerView mAdapter) {
         this.mAdapter = mAdapter;
     }
 
@@ -45,7 +45,7 @@ public class ReportNoteFragment extends DialogFragment {
         }
 
         String alertButton;
-        if (getNote != null){
+        if (getNote != null) {
             alertButton = getResources().getString(R.string.change);
         } else {
             alertButton = getResources().getString(R.string.insert);
@@ -53,10 +53,11 @@ public class ReportNoteFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
-                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) ->{ })
-                .setPositiveButton(alertButton, (dialog, which)->{
+                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
+                })
+                .setPositiveButton(alertButton, (dialog, which) -> {
 
-                    if (getNote == null){
+                    if (getNote == null) {
                         insertNewNote();
                     } else {
                         updateNote();
@@ -72,8 +73,8 @@ public class ReportNoteFragment extends DialogFragment {
         Log.d("NoteFrag ", "InsertNote " + position + newNote);
     }
 
-    private void updateNote(){
-        if (getArguments() != null){
+    private void updateNote() {
+        if (getArguments() != null) {
             String updateNote = note.getText().toString();
             mAdapter.insertNote(position, updateNote);
             Log.d("NoteFrag ", "UpdateNote " + position + updateNote);

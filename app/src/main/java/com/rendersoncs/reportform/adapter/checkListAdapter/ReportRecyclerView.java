@@ -1,13 +1,11 @@
-package com.rendersoncs.reportform.adapter;
+package com.rendersoncs.reportform.adapter.checkListAdapter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,13 +31,11 @@ import butterknife.ButterKnife;
 
 import static com.android.volley.VolleyLog.TAG;
 
-public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckListAdapter.ReportViewHolder> /*implements ItemMoveCallBack.ItemTouchHelperContract*/{
-    private List<ReportItems> reportItems;
-    public SparseBooleanArray expandState = new SparseBooleanArray();
-    private Context context;
+public abstract class ReportRecyclerView extends RecyclerView.Adapter<ReportRecyclerView.ReportViewHolder> /*implements ItemMoveCallBack.ItemTouchHelperContract*/ {
 
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ITEM = 1;
+    public List<ReportItems> reportItems;
+    public SparseBooleanArray expandState = new SparseBooleanArray();
+    public Context context;
 
     private OnItemListenerClicked onItemListenerClicked;
 
@@ -47,7 +43,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
         this.onItemListenerClicked = onItemListenerClicked;
     }
 
-    public ReportCheckListAdapter(List<ReportItems> reportItems, Context context) {
+    ReportRecyclerView(List<ReportItems> reportItems, Context context) {
         this.context = context;
         this.reportItems = reportItems;
         for (int i = 0; i < reportItems.size(); i++) {
@@ -55,44 +51,15 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
         }
     }
 
-    @NonNull
-    @Override
-    public ReportCheckListAdapter.ReportViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        this.context = viewGroup.getContext();
-        if (i == TYPE_HEADER) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.header_layout, viewGroup, false);
-            return new HeaderVh(view);
-        } else if (i == TYPE_ITEM) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_report_list, viewGroup, false);
-            return new ItemVh(view);
-        }
-        throw new RuntimeException("No macth for" + i + ".");
-    }
 
     @Override
-    public void onBindViewHolder(ReportCheckListAdapter.ReportViewHolder reportViewHolder, int i) {
+    public void onBindViewHolder(ReportRecyclerView.ReportViewHolder reportViewHolder, int i) {
         int position = reportViewHolder.getAdapterPosition();
         final ReportItems repo = reportItems.get(position);
 
         reportViewHolder.itemsListViewHolder(reportViewHolder, position, repo);
 
         Log.i(TAG, "onBindViewHolder invoked" + position);
-    }
-
-    public int getItemViewType(int i) {
-        if (isPositionHeader(i))
-            return TYPE_HEADER;
-        return TYPE_ITEM;
-    }
-
-    private boolean isPositionHeader(int position) {
-        // Position Header
-        return position == 0 ||
-                position == 30 ||
-                position == 45 ||
-                position == 103 || //i == 0 || i == 21 || i == 30
-                position == 122 || //i == 0 || i == 21 || i == 30
-                position == 133; //i == 0 || i == 21 || i == 30
     }
 
     @Override
@@ -128,13 +95,13 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             expandableLayout = view.findViewById(R.id.expandableLayout);
         }
 
-        private void itemsListViewHolder(ReportViewHolder reportViewHolder, int position, ReportItems repo) {
+        private void itemsListViewHolder(ReportRecyclerView.ReportViewHolder reportViewHolder, int position, ReportItems repo) {
             //Header
-            if (reportViewHolder instanceof HeaderVh) {
-                ((HeaderVh) reportViewHolder).headerTitle.setText(repo.getTitle());
+            if (reportViewHolder instanceof ReportRecyclerView.HeaderVh) {
+                ((ReportRecyclerView.HeaderVh) reportViewHolder).headerTitle.setText(repo.getTitle());
 
-            } else if (reportViewHolder instanceof ItemVh) {
-                ((ItemVh) reportViewHolder).tvTitleList.setText(repo.getTitle());
+            } else if (reportViewHolder instanceof ReportRecyclerView.ItemVh) {
+                ((ReportRecyclerView.ItemVh) reportViewHolder).tvTitleList.setText(repo.getTitle());
 
                 reportViewHolder.setIsRecyclable(false);
                 tvTitleList.setText(reportItems.get(position).getTitle());
@@ -177,7 +144,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
         }
 
         private void answersItems(ReportItems repo) {
-            if (repo.getPhotoId() == null){
+            if (repo.getPhotoId() == null) {
                 resultPhoto.setImageAlpha(R.drawable.image);
                 check.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));
                 resetItem.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));
@@ -188,7 +155,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
                 Log.i("LOG", "ImagePath3 " + repo.getPhotoId());
             }
 
-            if (repo.getNote() == null || repo.getNote().isEmpty()){
+            if (repo.getNote() == null || repo.getNote().isEmpty()) {
                 note.setImageAlpha(R.drawable.ic_action_note);
                 /*reportViewHolder.checkNote.setColorFilter(ContextCompat.getColor(context, R.color.colorWhite));*/
             } else {
@@ -200,7 +167,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
             mRadioButtonNotApplicable.setChecked(repo.isOpt2());
             mRadioButtonNotConform.setChecked(repo.isOpt3());
 
-            if (mRadioButtonConform.isChecked()){
+            if (mRadioButtonConform.isChecked()) {
                 resultPhoto.setBackgroundResource(R.color.colorRadioC);
                 check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioC));
                 resetItem.clearColorFilter();
@@ -210,9 +177,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
                 /*reportViewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioNA);*/
                 check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioNA));
                 resetItem.clearColorFilter();
-            }
-
-            else if (mRadioButtonNotConform.isChecked()) {
+            } else if (mRadioButtonNotConform.isChecked()) {
                 resultPhoto.setBackgroundResource(R.color.colorRadioNC);
                 check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioNC));
                 resetItem.clearColorFilter();
@@ -221,23 +186,23 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
     }
 
     //Header
-    class HeaderVh extends ReportViewHolder {
+    class HeaderVh extends ReportRecyclerView.ReportViewHolder {
 
         @BindView(R.id.header_id)
         public TextView headerTitle;
 
-        private HeaderVh(@NonNull View view) {
+        public HeaderVh(@NonNull View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
     }
 
-    class ItemVh extends ReportViewHolder implements View.OnClickListener {
+    class ItemVh extends ReportRecyclerView.ReportViewHolder implements View.OnClickListener {
 
         @BindView(R.id.textView_title)
         public TextView itemContent;
 
-        private ItemVh(View itemView) {
+        public ItemVh(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
@@ -309,7 +274,7 @@ public class ReportCheckListAdapter extends RecyclerView.Adapter<ReportCheckList
     }
 
     // Set result note
-    public void insertNote(int position, String note){
+    public void insertNote(int position, String note) {
         ReportItems dataSet = reportItems.get(position);
         dataSet.setNote(note);
         Log.i("LOG", "Note " + note);

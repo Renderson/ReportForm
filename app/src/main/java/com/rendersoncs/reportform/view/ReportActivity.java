@@ -47,10 +47,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.BuildConfig;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.adapter.ReportCheckListAdapter;
+import com.rendersoncs.reportform.adapter.checkListAdapter.EditCheckListReportAdapter;
+import com.rendersoncs.reportform.adapter.checkListAdapter.ReportRecyclerView;
+import com.rendersoncs.reportform.adapter.checkListAdapter.CheckListReportAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
-import com.rendersoncs.reportform.async.ReportDataBaseAsyncTask;
 import com.rendersoncs.reportform.async.PDFCreateAsync;
+import com.rendersoncs.reportform.async.ReportDataBaseAsyncTask;
 import com.rendersoncs.reportform.business.ReportBusiness;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.fragment.FullPhotoFragment;
@@ -101,7 +103,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
     private ArrayList<ReportItems> reportItems = new ArrayList<>();
     private final ArrayList<String> mKeys = new ArrayList<>();
-    private ReportCheckListAdapter mAdapter;
+    private ReportRecyclerView mAdapter;
     private FloatingActionButton fab;
     private View emptyLayout;
 
@@ -165,7 +167,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             this.mReportId = bundle.getInt(ReportConstants.CONST_BUNDLE_ID.REPORT_ID);
         }
         if (mReportId == 0) {
-            loadListFire();
+            this.loadListFire();
         } else {
             findViewById(R.id.progressBar).setVisibility(View.GONE);
             this.loadEditReport();
@@ -180,7 +182,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         emptyLayout = findViewById(R.id.layout_report_list_empty);
         Button emptyButton = findViewById(R.id.action_add_item);
 
-        mAdapter = new ReportCheckListAdapter(reportItems, this);
+        mAdapter = new CheckListReportAdapter(reportItems, this);
         mAdapter.setOnItemListenerClicked(this);
         RecyclerView.LayoutManager llm = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(llm);
@@ -239,7 +241,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     editPhoto.add(photo);
 
                     ReportItems repoJson = new ReportItems(object.getString(ReportConstants.ITEM.TITLE),
-                            object.getString(ReportConstants.ITEM.DESCRIPTION), object.getString("title"));
+                            object.getString(ReportConstants.ITEM.DESCRIPTION), null);
                     reportItems.add(repoJson);
                 }
 
@@ -270,7 +272,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     mAdapter.setImageInItem(i, bitmap);
                 }
 
-                mAdapter = new ReportCheckListAdapter(reportItems, ReportActivity.this);
+                mAdapter = new EditCheckListReportAdapter(reportItems, ReportActivity.this);
                 mAdapter.setOnItemListenerClicked(ReportActivity.this);
                 recyclerView.setAdapter(mAdapter);
 
@@ -497,11 +499,11 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         showSnackBar(R.string.label_empty_list);
     }
 
-    private float getScore(){
+    private float getScore() {
         ArrayList<String> listMax = new ArrayList<>();
         listMax.clear();
 
-        float NCT =  0.7f;
+        float NCT = 0.7f;
         float soma = 0f;
         float sizeList = 0f;
 
@@ -524,7 +526,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             }
         }
         int listRadioMax = listMax.size();
-        if (listRadioMax >= 0 && listRadioMax <= 10){
+        if (listRadioMax >= 0 && listRadioMax <= 10) {
             sizeList = 10f;
         }
         float total = sizeList - soma;

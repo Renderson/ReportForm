@@ -11,7 +11,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.rendersoncs.reportform.adapter.ReportCheckListAdapter;
+import com.rendersoncs.reportform.adapter.checkListAdapter.ReportRecyclerView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -24,7 +24,7 @@ public class ResizeImage {
     private static final int WANTED_HEIGHT = 480;
 
     // Convert image Base64 String
-    public String getEncoded64Image(Bitmap bitmap){
+    public String getEncoded64Image(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
         byte[] byteFormat = stream.toByteArray();
@@ -44,7 +44,7 @@ public class ResizeImage {
         return output;
     }
 
-    public static void decodeBitmap(Uri photoUri, ReportCheckListAdapter mAdapter, int position) {
+    public static void decodeBitmap(Uri photoUri, ReportRecyclerView mAdapter, int position) {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         ContentResolver cr = getApplicationContext().getContentResolver();
