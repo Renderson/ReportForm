@@ -164,7 +164,7 @@
     <string name="alert_clear_list">Limpar lista?</string>
     <string name="alert_clear_list_text">Deseja realmente limpar a seção? Esse processo vai apagar todo seu progresso!</string>
     <string name="alert_check_list">Verificar Lista!</string>
-    <string name="alert_check_list_text">Há item selecionado que não contém a foto, verifique antes de salvar! Item marcado como Não Aplicavél, não entra nessa regra!</string>
+    <string name="alert_check_list_text">Há item Não Conforme que não contém a foto, verifique antes de salvar! Item marcado como Conforme e Não Aplicavél, não entra nessa regra!</string>
     <string name="alert_remove_report">Remover relatório!</string>
     <string name="alert_remove_report_text">Deseja realmente remover o relatório?</string>
     <string name="alert_empty_report">Relátorio vazio!</string>

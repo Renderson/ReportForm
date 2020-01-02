@@ -164,7 +164,7 @@
     <string name="alert_clear_list">Borrar lista?</string>
     <string name="alert_clear_list_text">De verdad quieres limpiar la sección? ¡Este proceso borrará todo tu progreso!</string>
     <string name="alert_check_list">Lista de verificación!</string>
-    <string name="alert_check_list_text">Hay un elemento seleccionado que no contiene la foto, verifique antes de guardar! El artículo marcado como No aplicable, no está sujeto a esta regla!</string>
+    <string name="alert_check_list_text">Ningún artículo compatible que no contenga foto, verifique antes de guardar! El artículo marcado como Cumple y No Aplicable no cumple con esta regla!</string>
     <string name="alert_remove_report">Eliminar informe!</string>
     <string name="alert_remove_report_text">Realmente quieres eliminar el informe?</string>
     <string name="alert_empty_report">Informe vacío!</string>

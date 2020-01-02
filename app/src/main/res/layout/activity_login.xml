@@ -18,11 +18,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_16"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/btn_recovery"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button2" />
+            app:layout_constraintTop_toBottomOf="@+id/button" />
 
         <TextView
             android:id="@+id/textView4"
@@ -94,7 +94,7 @@
             app:layout_constraintEnd_toEndOf="@+id/textInputPassword"
             app:layout_constraintTop_toBottomOf="@+id/textInputPassword" />
 
-        <TextView
+        <!--<TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
             android:text="@string/register"
             app:layout_constraintBottom_toBottomOf="@+id/txt3"
             app:layout_constraintStart_toEndOf="@+id/txt3"
-            app:layout_constraintTop_toTopOf="@+id/txt3" />
+            app:layout_constraintTop_toTopOf="@+id/txt3" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

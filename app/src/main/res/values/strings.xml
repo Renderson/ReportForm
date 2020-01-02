@@ -164,7 +164,7 @@
     <string name="alert_clear_list">Clear list?</string>
     <string name="alert_clear_list_text">Do you really want to clean the section? This process will erase all your progress!</string>
     <string name="alert_check_list">Check List!</string>
-    <string name="alert_check_list_text">There is selected item that does not contain the photo, check before saving! Item marked Not Applicable, does not fall under this rule!</string>
+    <string name="alert_check_list_text">No Compliant item that does not contain photo, check before saving! Item marked as Compliant and Not Applicable, does not fit this rule!</string>
     <string name="alert_remove_report">Remove report!</string>
     <string name="alert_remove_report_text">DDo you really want to remove the report?</string>
     <string name="alert_empty_report">Empty report!</string>

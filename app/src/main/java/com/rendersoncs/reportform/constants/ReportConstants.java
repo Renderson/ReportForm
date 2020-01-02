@@ -38,4 +38,10 @@ public class ReportConstants {
         public static final int OPT_NUM2 = 2;
         public static final int OPT_NUM3 = 3;
     }
+
+    public static class PHOTO {
+        public static final int REQUEST_CODE_GALLERY = 2006;
+        public static final int REQUEST_CODE_CAMERA = 2000;
+        public static final int REQUEST_PERMISSIONS_CAMERA = 0;
+    }
 }

@@ -31,13 +31,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -45,11 +45,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.rendersoncs.reportform.BuildConfig;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.adapter.checkListAdapter.CheckListReportAdapter;
 import com.rendersoncs.reportform.adapter.checkListAdapter.EditCheckListReportAdapter;
 import com.rendersoncs.reportform.adapter.checkListAdapter.ReportRecyclerView;
-import com.rendersoncs.reportform.adapter.checkListAdapter.CheckListReportAdapter;
 import com.rendersoncs.reportform.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.async.PDFCreateAsync;
 import com.rendersoncs.reportform.async.ReportDataBaseAsyncTask;
@@ -64,6 +63,7 @@ import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.login.util.User;
 import com.rendersoncs.reportform.photo.CameraUtil;
 import com.rendersoncs.reportform.photo.ResizeImage;
+import com.rendersoncs.reportform.photo.TakePicture;
 import com.rendersoncs.reportform.util.AlertDialogUtil;
 import com.rendersoncs.reportform.util.ListJsonOff;
 import com.rendersoncs.reportform.util.RVEmptyObserver;
@@ -88,8 +88,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     @BindView(R.id.recycler_view_form)
     RecyclerView recyclerView;
 
-    private static final int REQUEST_CODE_CAMERA = 2000;
-    private static final int REQUEST_CODE_GALLERY = 2006;
     private static final int REQUEST_PERMISSIONS = 0;
     private static final int REQUEST_PERMISSIONS_GRANTED = 1;
     private static final int REQUEST_PERMISSIONS_READ_WHITE = 128;
@@ -127,10 +125,11 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     //public Parcelable savedRecyclerLayoutState;
 
     private DatabaseReference databaseReference;
+    private FirebaseAnalytics mFireBaseAnalytics;
     private User user = new User();
 
     private ResizeImage resizeImage = new ResizeImage();
-    private Uri photoUri;
+    private TakePicture takePicture = new TakePicture();
     private AlertDialog dialog;
     private int position;
 
@@ -148,6 +147,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         setTitle(R.string.title_report);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
         user.setId(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
 
         // SavedInstanceState
@@ -178,7 +178,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         resultCompany = findViewById(R.id.result_company);
         resultEmail = findViewById(R.id.result_email);
         resultDate = findViewById(R.id.result_date);
-        scores = findViewById(R.id.score);
+        //scores = findViewById(R.id.score);
         emptyLayout = findViewById(R.id.layout_report_list_empty);
         Button emptyButton = findViewById(R.id.action_add_item);
 
@@ -476,7 +476,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         // Finish JsonObject
 
         // Save Report in SQLite
-        new ReportDataBaseAsyncTask(ReportActivity.this, pdfCreateAsync, mReportId, mReportBusiness, reportItems, this::finish).execute();
+        new ReportDataBaseAsyncTask(ReportActivity.this, pdfCreateAsync, mReportId, mReportBusiness, reportItems, mFireBaseAnalytics, this::finish).execute();
     }
 
     // Clear list
@@ -499,7 +499,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         showSnackBar(R.string.label_empty_list);
     }
 
-    private float getScore() {
+    /*private float getScore() {
         ArrayList<String> listMax = new ArrayList<>();
         listMax.clear();
 
@@ -526,22 +526,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             }
         }
         int listRadioMax = listMax.size();
-        if (listRadioMax >= 0 && listRadioMax <= 10) {
+        if (listRadioMax >= 0 && listRadioMax <= 20) {
             sizeList = 10f;
         }
         float total = sizeList - soma;
         scores.setText(Float.toString(total));
-        /*if (total == 10){
-            Log.i("LOG", "Total Item " + listRadioMax + " " + total + " " + soma);
-        } else if (total == 9.3f){
-            float ff = total + 0.3f;
-            scores.setText(Float.toString(ff));
-            Log.i("LOG", "Total Item " + ff + " FF");
-        }*/
-
-
         return total;
-    }
+    }*/
 
     @Override
     public void radioItemChecked(int itemPosition, int optNum) {
@@ -550,17 +541,17 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         switch (optNum) {
             case 1:
                 reportItems.get(itemPosition).setOpt1(true);
-                getScore();
+                //getScore();
                 break;
 
             case 2:
                 reportItems.get(itemPosition).setOpt2(true);
-                getScore();
+                //getScore();
                 break;
 
             case 3:
                 reportItems.get(itemPosition).setOpt3(true);
-                getScore();
+                //getScore();
                 break;
         }
         mAdapter.notifyDataSetChanged();
@@ -601,9 +592,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 }
 
                 Bitmap bitmapPhoto = reportItems.get(i).getPhotoId();
-                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2) {
+                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM1 ||
+                        reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2) {
 
-                    Drawable d = getResources().getDrawable(R.drawable.walpaper_not_applicable);
+                    Drawable d = getResources().getDrawable(R.drawable.walpaper_not_photo);
 
                     Bitmap b = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(b);
@@ -736,74 +728,35 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
         builder.setItems(items, (dialogInterface, i) -> {
             if (i == 0) {
-                openCamera();
+                takePicture.openCamera(ReportActivity.this);
             } else {
-                openGallery();
+                takePicture.openGallery(ReportActivity.this);
             }
         });
         dialog = builder.create();
         dialog.show();
     }
 
-    // Open Gallery
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, REQUEST_CODE_GALLERY);
-    }
-
-    // OPen Camera
-    private void openCamera() {
-        File photoFile;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (ContextCompat.checkSelfPermission(ReportActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(ReportActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS);
-            } else {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    try {
-                        photoFile = path.createImageFile();
-
-                        if (photoFile != null) {
-                            photoUri = FileProvider.getUriForFile(ReportActivity.this, BuildConfig.APPLICATION_ID + ".FileProvider", photoFile);
-                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                            startActivityForResult(takePictureIntent, REQUEST_CODE_CAMERA);
-                        }
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        Crashlytics.log(e.getMessage());
-                    }
-                }
-            }
-        } else {
-            try {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                photoFile = path.createImageFile();
-                photoUri = Uri.fromFile(photoFile);
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA);
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                Crashlytics.log(e.getMessage());
-            }
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_CANCELED) {
-            if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
+            if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
+
+                Uri photoUri = takePicture.getPathUri();
 
                 ResizeImage.decodeBitmap(photoUri, mAdapter, position);
+                Log.i("LOG", "ImagePathCameraPath " + photoUri + " " + data.getData());
             }
             this.radioItemChecked(position, ReportConstants.ITEM.OPT_NUM1);
         }
-        if (requestCode == REQUEST_CODE_GALLERY && resultCode == RESULT_OK && data != null) {
+        if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_GALLERY && resultCode == RESULT_OK && data != null) {
             Uri mSelectedUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
                 mAdapter.setImageInItem(position, bitmap);
                 this.radioItemChecked(position, ReportConstants.ITEM.OPT_NUM1);
-                Log.i("LOG", "ImagePath " + bitmap);
+                Log.i("LOG", "ImagePathGallery " + bitmap);
 
             } catch (IOException e) {
                 Crashlytics.logException(e);
@@ -819,7 +772,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             if (grantResults.length > REQUEST_PERMISSIONS && grantResults[REQUEST_PERMISSIONS] == PackageManager.PERMISSION_GRANTED
                     && grantResults[REQUEST_PERMISSIONS_GRANTED] == PackageManager.PERMISSION_GRANTED) {
                 this.dialog.dismiss();
-                this.openCamera();
+                takePicture.openCamera(ReportActivity.this);
             } else {
                 showSnackBar(R.string.label_permission_camera);
             }

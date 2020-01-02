@@ -27,6 +27,7 @@ import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.constants.ReportConstants;
 import com.rendersoncs.reportform.login.util.LibraryClass;
 import com.rendersoncs.reportform.login.util.User;
+import com.rendersoncs.reportform.photo.TakePicture;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -42,8 +43,8 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     private Button mBtnSelectedPhoto;
     private Uri mSelectedUri;
     private ImageView mImgPhoto;
+    private TakePicture takePicture = new TakePicture();
 
-    private static final int GALLERY = 2035;
     private static final int ALPHA = 0;
 
     @Override
@@ -153,7 +154,8 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
                                         String photoUri = uri.toString();
                                         Log.i("log", "Item: " + photoUri + " profileUrl");
 
-                                        DatabaseReference ref1 = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_PHOTO);
+                                        DatabaseReference ref1 = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS)
+                                                .child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_PHOTO);
                                         ref1.setValue(photoUri).addOnSuccessListener(aVoid -> {
                                         });
                                     })).addOnFailureListener(e -> {
@@ -165,16 +167,14 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     }
 
     private void selectPhoto() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, GALLERY);
+        takePicture.openGallery(SignUpActivity.this);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == GALLERY) {
+        if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_GALLERY) {
             if (data != null) {
                 mSelectedUri = data.getData();
                 Bitmap bitmap;

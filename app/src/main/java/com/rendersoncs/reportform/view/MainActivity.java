@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Create Drawer layout
         this.createDrawerLayout(user, toolbar);
-
     }
 
     private void checkUserFireBase() {
@@ -172,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 bundle = new Bundle();
                 bundle.putString("select_list", "list");
                 mFireBaseAnalytics.logEvent("select_list_event", bundle);
-
                 startActivity(intent);
             }
 
@@ -188,18 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent.setDataAndType(uri, "application/pdf");
                 intent.putExtra(Intent.EXTRA_SUBJECT, subject);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "pdf_id");
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "pdf");
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "open_pdf");
-                mFireBaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                bundle.putString("pdf_open", "pdf");
-                mFireBaseAnalytics.logEvent("open_pdf_listener", bundle);
-
                 startActivity(intent);
-
             }
 
             // Share PDF
