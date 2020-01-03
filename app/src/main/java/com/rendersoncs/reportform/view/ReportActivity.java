@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -128,7 +126,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private FirebaseAnalytics mFireBaseAnalytics;
     private User user = new User();
 
-    private ResizeImage resizeImage = new ResizeImage();
+    private CheckAnswerList checkAnswerList = new CheckAnswerList();
     private TakePicture takePicture = new TakePicture();
     private AlertDialog dialog;
     private int position;
@@ -311,7 +309,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_LIST);
+            databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS)
+                    .child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_LIST);
             this.addItemsFromFireBase();
 
         } else {
@@ -403,8 +402,11 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        if (ContextCompat.checkSelfPermission(ReportActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(ReportActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_READ_WHITE);
+                        if (ContextCompat.checkSelfPermission(ReportActivity.this,
+                                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(ReportActivity.this,
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_READ_WHITE);
                         } else {
                             this.handleSave();
                         }
@@ -456,7 +458,12 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         reportItems.setDate(resultDate.getText().toString());
 
         // Convert ArrayList in Json Object
-        for (int i = 0; (i < listRadio.size()) && (i < listTitle.size()) && (i < listDescription.size()) && (i < listNotes.size()) && (i < listPhoto.size()); i++) {
+        for (int i = 0; (i < listRadio.size())
+                && (i < listTitle.size())
+                && (i < listDescription.size())
+                && (i < listNotes.size())
+                && (i < listPhoto.size()); i++) {
+
             JSONObject jsObject = new JSONObject();
             try {
                 jsObject.put(ReportConstants.ITEM.TITLE, listTitle.get(i));
@@ -476,7 +483,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         // Finish JsonObject
 
         // Save Report in SQLite
-        new ReportDataBaseAsyncTask(ReportActivity.this, pdfCreateAsync, mReportId, mReportBusiness, reportItems, mFireBaseAnalytics, this::finish).execute();
+        new ReportDataBaseAsyncTask(ReportActivity.this,
+                pdfCreateAsync,
+                mReportId,
+                mReportBusiness,
+                reportItems,
+                mFireBaseAnalytics,
+                this::finish).execute();
     }
 
     // Clear list
@@ -558,64 +571,15 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     }
 
     private void checkAnswers() {
-
         for (int i = 0; i < reportItems.size(); i++) {
             if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2() || reportItems.get(i).isOpt3()) {
-                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM1) {
-                    String C = getResources().getString(R.string.according);
-                    listRadio.add(C);
-                }
-                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2) {
-                    String NA = getResources().getString(R.string.not_applicable);
-                    listRadio.add(NA);
-                }
-                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM3) {
-                    String NC = getResources().getString(R.string.not_according);
-                    listRadio.add(NC);
-                }
 
-                String title = reportItems.get(i).getTitle();
-                listTitle.add(title);
-                Log.i("LOG", "getTitle " + listTitle);
-
-                String description = reportItems.get(i).getDescription();
-                listDescription.add(description);
-                Log.i("LOG", "getDescription " + listDescription);
-
-                String note = reportItems.get(i).getNote();
-                if (note == null) {
-                    note = getResources().getString(R.string.label_not_observation);
-                    listNotes.add(note);
-                } else {
-                    listNotes.add(note);
-                    Log.i("LOG", "getNotes " + listNotes);
-                }
-
-                Bitmap bitmapPhoto = reportItems.get(i).getPhotoId();
-                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM1 ||
-                        reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2) {
-
-                    Drawable d = getResources().getDrawable(R.drawable.walpaper_not_photo);
-
-                    Bitmap b = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(b);
-                    d.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                    d.draw(canvas);
-
-                    String encodeImage = resizeImage.getEncoded64Image(b);
-                    listPhoto.add(encodeImage);
-
-                } else if (bitmapPhoto == null) {
-                    return;
-                } else {
-                    String encodeImage = resizeImage.getEncoded64Image(bitmapPhoto);
-                    listPhoto.add(encodeImage);
-                    Log.i("List ", "List Photo " + listPhoto.size() + " item");
-                }
+                checkAnswerList.checkAnswerList(i, reportItems, listTitle, listDescription);
+                checkAnswerList.checkAnswerNote(ReportActivity.this, i, reportItems, listNotes);
+                checkAnswerList.checkAnswerRadiosButtons(ReportActivity.this, i, reportItems, listRadio);
+                checkAnswerList.checkAnswerPhoto(ReportActivity.this, i, reportItems, listPhoto);
             }
         }
-        Log.i("List ", "Size Photo " + listPhoto.size() + " item");
-        Log.i("List ", "Size Radio " + listRadio.size() + " item");
     }
 
     // Update Item List FireBase
@@ -717,7 +681,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     }
 
     // OPen Camera
-    @Override
     public void takePhoto(int pos) {
         position = pos;
         final String[] items = new String[]{
@@ -769,7 +732,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_PERMISSIONS) {
-            if (grantResults.length > REQUEST_PERMISSIONS && grantResults[REQUEST_PERMISSIONS] == PackageManager.PERMISSION_GRANTED
+            if (grantResults.length > REQUEST_PERMISSIONS
+                    && grantResults[REQUEST_PERMISSIONS] == PackageManager.PERMISSION_GRANTED
                     && grantResults[REQUEST_PERMISSIONS_GRANTED] == PackageManager.PERMISSION_GRANTED) {
                 this.dialog.dismiss();
                 takePicture.openCamera(ReportActivity.this);
@@ -779,7 +743,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         }
 
         if (requestCode == REQUEST_PERMISSIONS_READ_WHITE) {
-            if (grantResults.length > REQUEST_PERMISSIONS && grantResults[REQUEST_PERMISSIONS] == PackageManager.PERMISSION_GRANTED
+            if (grantResults.length > REQUEST_PERMISSIONS
+                    && grantResults[REQUEST_PERMISSIONS] == PackageManager.PERMISSION_GRANTED
                     && grantResults[REQUEST_PERMISSIONS_GRANTED] == PackageManager.PERMISSION_GRANTED) {
                 this.handleSave();
             } else {
@@ -805,7 +770,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
     private void showSnackBar(int label) {
         Snackbar snackbar = Snackbar
-                .make(ReportActivity.this.findViewById(R.id.fab_new_item), ReportActivity.this.getString(label), Snackbar.LENGTH_LONG);
+                .make(ReportActivity.this.findViewById(R.id.fab_new_item),
+                        ReportActivity.this.getString(label), Snackbar.LENGTH_LONG);
         SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
         snackbar.show();
     }

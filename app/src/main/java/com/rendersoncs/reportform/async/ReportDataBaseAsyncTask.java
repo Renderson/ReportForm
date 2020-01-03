@@ -59,8 +59,8 @@ public class ReportDataBaseAsyncTask extends AsyncTask<Void, Void, Void> {
         }
         if (mReportId == 0) {
             Bundle bundle = new Bundle();
-            bundle.putString("pdf_open", "pdf");
-            mFireBaseAnalytics.logEvent("open_pdf_renderson", bundle);
+            bundle.putString("report_generated", "report_pdf");
+            mFireBaseAnalytics.logEvent("relatorios_gerados_renderson", bundle);
 
             mReportBusiness.insert(reportItems);
         } else {
