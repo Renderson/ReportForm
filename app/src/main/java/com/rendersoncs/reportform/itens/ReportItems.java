@@ -6,7 +6,7 @@ public class ReportItems {
 
     private int id, conformed, position;
 
-    private String company, email, date, photo, note, listJson;
+    private String company, email, controller, date, photo, note, listJson;
     private String title, description, header;
 
     private Bitmap photoId;
@@ -105,6 +105,14 @@ public class ReportItems {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getController() {
+        return controller;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
     }
 
     public String getDate() {

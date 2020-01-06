@@ -37,6 +37,7 @@ public class ReportFormDialog extends DialogFragment {
     private TextView dateTv;
     private TextInputEditText companyTv;
     private TextInputEditText emailTv;
+    private TextInputEditText controllerTv;
 
     private int mDay, mMonth, mYear;
 
@@ -48,10 +49,19 @@ public class ReportFormDialog extends DialogFragment {
 
         companyTv = view.findViewById(R.id.company_id);
         emailTv = view.findViewById(R.id.email_id);
+        controllerTv = view.findViewById(R.id.controller_id);
         dateTv = view.findViewById(R.id.date_Id);
 
         companyTv.addTextChangedListener(validateTextWatcher);
         emailTv.addTextChangedListener(validateTextWatcher);
+
+        if (getArguments() == null){
+            controllerTv.setText("");
+        } else {
+            String controllerBundle = getArguments().getString(ReportConstants.ITEM.CONTROLLER);
+            controllerTv.setText(controllerBundle);
+            controllerTv.addTextChangedListener(validateTextWatcher);
+        }
 
         // Get date current 19/2/2018
         long date = System.currentTimeMillis();
@@ -74,14 +84,17 @@ public class ReportFormDialog extends DialogFragment {
                     String company = "";
                     String email = "";
                     String date1 = "";
+                    String controller = "";
 
                     company = companyTv.getText().toString();
                     email = emailTv.getText().toString();
+                    controller = controllerTv.getText().toString();
                     date1 = dateTv.getText().toString();
 
                     Bundle bundle = new Bundle();
                     bundle.putString(ReportConstants.ITEM.COMPANY, company);
                     bundle.putString(ReportConstants.ITEM.EMAIL, email);
+                    bundle.putString(ReportConstants.ITEM.CONTROLLER, controller);
                     bundle.putString(ReportConstants.ITEM.DATE, date1);
                     intent.putExtras(bundle);
 
@@ -122,9 +135,12 @@ public class ReportFormDialog extends DialogFragment {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             String companyValidate = companyTv.getText().toString().trim();
+            String controllerValidate = controllerTv.getText().toString().trim();
 
             AlertDialog dialog = (AlertDialog) getDialog();
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!companyValidate.isEmpty() && isValidateEmail());
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!companyValidate.isEmpty() &&
+                    isValidateEmail() &&
+                    !controllerValidate.isEmpty());
         }
 
         @Override

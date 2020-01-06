@@ -3,6 +3,7 @@ package com.rendersoncs.reportform.view;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private View emptyLayout;
     private FloatingActionButton fab;
+    private TextView profileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         this.inflateMenuNavigation(mNavigationView);
 
-        TextView profileName = headerLayout.findViewById(R.id.txt_profile_name);
+        profileName = headerLayout.findViewById(R.id.txt_profile_name);
         TextView profileEmail = headerLayout.findViewById(R.id.txt_profile_mail);
         ImageView profileView = headerLayout.findViewById(R.id.img_profile);
 
@@ -244,7 +246,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void startReportFormDialog() {
         ReportFormDialog reportFormDialog = new ReportFormDialog();
-        reportFormDialog.show(getSupportFragmentManager(), "report_dialog");
+        String controller = profileName.getText().toString();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(ReportConstants.ITEM.CONTROLLER, controller);
+        reportFormDialog.setArguments(bundle);
+
+        reportFormDialog.show((MainActivity.this).getSupportFragmentManager(), "report_dialog");
+        Log.i("NameInfo ", controller);
     }
 
     private void loadReport() {

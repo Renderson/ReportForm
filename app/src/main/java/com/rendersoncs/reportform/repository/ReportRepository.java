@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.constants.DataBaseConstants;
 import com.rendersoncs.reportform.itens.ReportItems;
 
@@ -40,6 +41,7 @@ public class ReportRepository {
             ContentValues insertValues = new ContentValues();
             insertValues.put(DataBaseConstants.REPORT.COLUMNS.COMPANY, repo.getCompany());
             insertValues.put(DataBaseConstants.REPORT.COLUMNS.EMAIL, repo.getEmail());
+            insertValues.put(DataBaseConstants.REPORT.COLUMNS.CONTROLLER, repo.getController());
             insertValues.put(DataBaseConstants.REPORT.COLUMNS.DATE, repo.getDate());
             insertValues.put(DataBaseConstants.REPORT.COLUMNS.GRADES, repo.getConformed());
             insertValues.put(DataBaseConstants.REPORT.COLUMNS.LIST, repo.getListJson());
@@ -63,6 +65,7 @@ public class ReportRepository {
             ContentValues contentValues = new ContentValues();
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.COMPANY, reportItems.getCompany());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.EMAIL, reportItems.getEmail());
+            contentValues.put(DataBaseConstants.REPORT.COLUMNS.CONTROLLER, reportItems.getController());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.DATE, reportItems.getDate());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.GRADES, reportItems.getConformed());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.LIST, reportItems.getListJson());
@@ -105,6 +108,7 @@ public class ReportRepository {
                     DataBaseConstants.REPORT.COLUMNS.ID,
                     DataBaseConstants.REPORT.COLUMNS.COMPANY,
                     DataBaseConstants.REPORT.COLUMNS.EMAIL,
+                    DataBaseConstants.REPORT.COLUMNS.CONTROLLER,
                     DataBaseConstants.REPORT.COLUMNS.LIST,
                     DataBaseConstants.REPORT.COLUMNS.DATE
 
@@ -119,6 +123,7 @@ public class ReportRepository {
                 repoEntity.setId(cursor.getInt(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.ID)));
                 repoEntity.setCompany(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.COMPANY)));
                 repoEntity.setEmail(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.EMAIL)));
+                repoEntity.setController(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.CONTROLLER)));
                 repoEntity.setDate(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.DATE)));
                 repoEntity.setListJson(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.LIST)));
             }
@@ -149,6 +154,7 @@ public class ReportRepository {
                     repoEntity.setId(cursor.getInt(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.ID)));
                     repoEntity.setCompany(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.COMPANY)));
                     repoEntity.setEmail(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.EMAIL)));
+                    repoEntity.setController(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.CONTROLLER)));
                     repoEntity.setDate(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.DATE)));
                     repoEntity.setConformed(cursor.getInt(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.GRADES)));
                     repoEntity.setListJson(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.LIST)));

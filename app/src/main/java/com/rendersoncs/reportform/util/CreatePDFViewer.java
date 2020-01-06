@@ -101,7 +101,7 @@ public class CreatePDFViewer {
         document.add(table);
         document.add(UNDERLINE);
 
-        //New paragraph Company
+        // New paragraph Company
         paragraph = new Paragraph(new Chunk(context.getResources().getString(R.string.label_paragraph_pdf_company), baseFontBold));
         paragraph.setSpacingAfter(lineSpaceSmall);
         paragraph.setSpacingBefore(lineSpaceSmall);
@@ -109,7 +109,7 @@ public class CreatePDFViewer {
         paragraph.setAlignment(0);
         document.add(paragraph);
 
-        //New paragraph E-mail
+        // New paragraph E-mail
         paragraph = new Paragraph(new Chunk(context.getResources().getString(R.string.label_paragraph_pdf_mail_company), baseFontBold));
         paragraph.setSpacingAfter(lineSpaceSmall);
         paragraph.setSpacingBefore(lineSpaceSmall);
@@ -117,7 +117,15 @@ public class CreatePDFViewer {
         paragraph.setAlignment(0);
         document.add(paragraph);
 
-        //New paragraph Date
+        // New paragraph Controller
+        paragraph = new Paragraph(new Chunk(context.getResources().getString(R.string.label_paragraph_pdf_audit_officer), baseFontBold));
+        paragraph.setSpacingAfter(lineSpaceSmall);
+        paragraph.setSpacingBefore(lineSpaceSmall);
+        paragraph.add(new Chunk(paramRepo.getController(), baseFont));
+        paragraph.setAlignment(0);
+        document.add(paragraph);
+
+        // New paragraph Date
         paragraph = new Paragraph(new Chunk(context.getResources().getString(R.string.label_paragraph_pdf_date), baseFontBold));
         paragraph.setSpacingAfter(lineSpaceSmall);
         paragraph.setSpacingBefore(lineSpaceSmall);
@@ -218,7 +226,7 @@ public class CreatePDFViewer {
         return createImageCell(Image.getInstance(paramString));
     }
 
-    //Right side
+    // Right side
     public static PdfPCell createTextCell(Paragraph paramParagraph) {
         paramParagraph.setAlignment(0);
         paramParagraph.setIndentationLeft(lineSpaceSmall);

@@ -183,6 +183,7 @@
     <string name="label_paragraph_pdf_audit">Technical Audit - Food Safety</string>
     <string name="label_paragraph_pdf_company">Company Name:</string>
     <string name="label_paragraph_pdf_mail_company">Company Email:</string>
+    <string name="label_paragraph_pdf_audit_officer">Audit Officer:</string>
     <string name="label_paragraph_pdf_date">Survey Date:</string>
     <string name="label_paragraph_pdf_report">Audit Report</string>
     <string name="label_paragraph_pdf_installations">PHYSICAL FACILITIES</string>

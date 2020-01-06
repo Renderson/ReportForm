@@ -104,6 +104,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private View emptyLayout;
 
     private TextView resultCompany, resultEmail, resultDate, scores;
+    private String resultController = "";
     private PDFCreateAsync pdfCreateAsync = new PDFCreateAsync(ReportActivity.this);
     private AnimatedFloatingButton animated = new AnimatedFloatingButton();
 
@@ -294,6 +295,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         String email = bundle.getString(ReportConstants.ITEM.EMAIL);
         resultEmail.setText(email);
 
+        resultController = bundle.getString(ReportConstants.ITEM.CONTROLLER);
+
         String date = bundle.getString(ReportConstants.ITEM.DATE);
         resultDate.setText(date);
     }
@@ -455,6 +458,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         final ReportItems reportItems = new ReportItems();
         reportItems.setCompany(resultCompany.getText().toString());
         reportItems.setEmail(resultEmail.getText().toString());
+        reportItems.setController(resultController);
         reportItems.setDate(resultDate.getText().toString());
 
         // Convert ArrayList in Json Object

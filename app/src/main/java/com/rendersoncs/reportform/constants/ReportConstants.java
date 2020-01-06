@@ -27,6 +27,7 @@ public class ReportConstants {
         public static final String POSITION = "position";
         public static final String COMPANY = "company";
         public static final String EMAIL = "email";
+        public static final String CONTROLLER = "controller";
         public static final String DATE = "date";
         public static final String TITLE = "title";
         public static final String DESCRIPTION = "description";

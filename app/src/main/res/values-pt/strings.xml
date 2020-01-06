@@ -183,6 +183,7 @@
     <string name="label_paragraph_pdf_audit">Auditoria Técnica - Segurança Alimentar</string>
     <string name="label_paragraph_pdf_company">Nome da Empresa:</string>
     <string name="label_paragraph_pdf_mail_company">E-mail da empresa:</string>
+    <string name="label_paragraph_pdf_audit_officer">Responsável pela auditoria:</string>
     <string name="label_paragraph_pdf_date">Data da Vistoria:</string>
     <string name="label_paragraph_pdf_report">Relatório de Auditoria</string>
     <string name="label_paragraph_pdf_installations">INSTALAÇÕES FÍSICAS</string>
