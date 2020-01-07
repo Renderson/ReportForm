@@ -8,7 +8,7 @@ import com.rendersoncs.reportform.constants.DataBaseConstants;
 
 class ReportDataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "Report.db";
 
     private static final String SQL_CREATE_TABLE_REPORT =
@@ -17,6 +17,7 @@ class ReportDataBaseHelper extends SQLiteOpenHelper {
                     + DataBaseConstants.REPORT.COLUMNS.COMPANY + " text, "
                     + DataBaseConstants.REPORT.COLUMNS.EMAIL + " text, "
                     + DataBaseConstants.REPORT.COLUMNS.CONTROLLER + " text, "
+                    + DataBaseConstants.REPORT.COLUMNS.SCORE + " text, "
                     + DataBaseConstants.REPORT.COLUMNS.DATE + " text, "
                     + DataBaseConstants.REPORT.COLUMNS.GRADES + " integer, "
                     + DataBaseConstants.REPORT.COLUMNS.LIST + " text, "

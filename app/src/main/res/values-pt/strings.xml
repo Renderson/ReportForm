@@ -171,6 +171,9 @@
     <string name="alert_empty_report_text">Para salvar seu relatório, você deve ter pelo menos um item marcado.</string>
     <string name="alert_leave_the_report">Sair do relatório?</string>
     <string name="alert_leave_the_report_text">Desaja realmente sair do relatório? Você perderá todo seu progresso!</string>
+    <string name="alert_punctuation">Pontuação</string>
+    <string name="alert_punctuation_label1">A empresa está %1$s, foram selecionados</string>
+    <string name="alert_punctuation_label2">itens, a soma dos itens gerou a NOTA %1$s, ao clicar em CONFIRMAR salvará o seu relatório e gerará um PDF com todas as informações!</string>
     <string name="error">Error</string>
     <string name="edit">Editar</string>
     <string name="summary">Resumo</string>

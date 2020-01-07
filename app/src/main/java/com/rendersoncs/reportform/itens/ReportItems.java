@@ -6,7 +6,7 @@ public class ReportItems {
 
     private int id, conformed, position;
 
-    private String company, email, controller, date, photo, note, listJson;
+    private String company, email, controller, date, photo, note, score, listJson;
     private String title, description, header;
 
     private Bitmap photoId;
@@ -245,5 +245,13 @@ public class ReportItems {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
     }
 }

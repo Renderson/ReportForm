@@ -103,7 +103,7 @@
                     app:layout_constraintStart_toEndOf="@+id/txt_mail"
                     app:layout_constraintTop_toTopOf="@+id/txt_mail" />
 
-                <!--<TextView
+                <TextView
                     android:id="@+id/label_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/label_score"
                     app:layout_constraintStart_toEndOf="@+id/label_score"
                     app:layout_constraintTop_toTopOf="@+id/label_score"
-                    tools:text="50" />-->
+                    tools:text="50" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

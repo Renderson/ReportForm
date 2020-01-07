@@ -1,5 +1,6 @@
 package com.rendersoncs.reportform.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import androidx.core.view.ViewCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.view.ReportActivity;
 
 public class SnackBarHelper {
 
@@ -30,5 +32,13 @@ public class SnackBarHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             snackbar.getView().setBackground(context.getDrawable(R.drawable.bg_snackbar));
         }
+    }
+
+    public void showSnackBar(Activity activity, int id, int label) {
+        Snackbar snackbar = Snackbar
+                .make(activity.findViewById(id),
+                        activity.getString(label), Snackbar.LENGTH_LONG);
+        SnackBarHelper.configSnackBar(activity, snackbar);
+        snackbar.show();
     }
 }

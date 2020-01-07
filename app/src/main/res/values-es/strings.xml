@@ -171,6 +171,9 @@
     <string name="alert_empty_report_text">Para guardar su informe, debe tener al menos un elemento marcado.</string>
     <string name="alert_leave_the_report">Dejar informe?</string>
     <string name="alert_leave_the_report_text">De verdad quieres dejar el informe? ¡Perderás todo tu progreso!</string>
+    <string name="alert_punctuation">Puntuación</string>
+    <string name="alert_punctuation_label1">La empresa es %1$s, fueron seleccionados</string>
+    <string name="alert_punctuation_label2">elementos que fueron añadidos juntos y tenían un valor de %1$s, cuando se hace clic CONFIRMAR se guardarán su informe y generar un PDF con toda la información!</string>
     <string name="error">Error</string>
     <string name="edit">Editar</string>
     <string name="summary">Resumen</string>

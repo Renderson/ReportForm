@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -58,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private NetworkConnectedService netService = new NetworkConnectedService();
     private AnimatedFloatingButton animated = new AnimatedFloatingButton();
+    private SnackBarHelper snackBarHelper = new SnackBarHelper();
 
     private ViewHolder viewHolder = new ViewHolder();
     private ReportBusiness reportBusiness;
@@ -236,10 +236,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // List the reports again
                 loadReport();
 
-                Snackbar snackbar = Snackbar
-                        .make(MainActivity.this.findViewById(R.id.floatButton), MainActivity.this.getString(R.string.txt_report_removed), Snackbar.LENGTH_LONG);
-                SnackBarHelper.configSnackBar(MainActivity.this, snackbar);
-                snackbar.show();
+                snackBarHelper.showSnackBar(MainActivity.this, R.id.floatButton, R.string.txt_report_removed);
             }
         };
     }

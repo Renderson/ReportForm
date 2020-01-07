@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -105,6 +104,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
     private TextView resultCompany, resultEmail, resultDate, scores;
     private String resultController = "";
+    private String resultScore = "";
+    private int listRadioMax = 0;
     private PDFCreateAsync pdfCreateAsync = new PDFCreateAsync(ReportActivity.this);
     private AnimatedFloatingButton animated = new AnimatedFloatingButton();
 
@@ -127,6 +128,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private FirebaseAnalytics mFireBaseAnalytics;
     private User user = new User();
 
+    private SnackBarHelper snackBarHelper = new SnackBarHelper();
     private CheckAnswerList checkAnswerList = new CheckAnswerList();
     private TakePicture takePicture = new TakePicture();
     private AlertDialog dialog;
@@ -177,7 +179,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         resultCompany = findViewById(R.id.result_company);
         resultEmail = findViewById(R.id.result_email);
         resultDate = findViewById(R.id.result_date);
-        //scores = findViewById(R.id.score);
+        scores = findViewById(R.id.score);
         emptyLayout = findViewById(R.id.layout_report_list_empty);
         Button emptyButton = findViewById(R.id.action_add_item);
 
@@ -411,10 +413,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                                             Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_READ_WHITE);
                         } else {
-                            this.handleSave();
+                            this.alertDialogScore();
                         }
                     } else {
-                        this.handleSave();
+                        this.alertDialogScore();
                     }
                 }
                 break;
@@ -426,7 +428,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             case R.id.clear:
                 this.checkAnswers();
                 if (this.listRadio.isEmpty()) {
-                    showSnackBar(R.string.label_empty_list);
+                    snackBarHelper.showSnackBar(ReportActivity.this, R.id.fab_new_item, R.string.label_empty_list);
                 } else {
                     alertDialog.showDialog(ReportActivity.this,
                             getResources().getString(R.string.alert_clear_list),
@@ -438,6 +440,20 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void alertDialogScore() {
+        alertDialog.showDialogScore(ReportActivity.this,
+                R.drawable.ic_list_check,
+                getResources().getString(R.string.alert_punctuation),
+                getResources().getString(R.string.alert_punctuation_label1, resultScore) + " " +
+                        listRadioMax + " " +
+                        getResources().getString(R.string.alert_punctuation_label2, scores.getText().toString()),
+                getResources().getString(R.string.confirm),
+                (dialogInterface, i) -> {
+                    this.handleSave();
+                },
+                getResources().getString(R.string.cancel), null, false);
     }
 
     private void alertDialogClose() {
@@ -459,6 +475,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         reportItems.setCompany(resultCompany.getText().toString());
         reportItems.setEmail(resultEmail.getText().toString());
         reportItems.setController(resultController);
+        reportItems.setScore(scores.getText().toString());
         reportItems.setDate(resultDate.getText().toString());
 
         // Convert ArrayList in Json Object
@@ -513,10 +530,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         this.clearList();
         this.isConnected();
 
-        showSnackBar(R.string.label_empty_list);
+        snackBarHelper.showSnackBar(ReportActivity.this, R.id.fab_new_item, R.string.label_empty_list);
     }
 
-    /*private float getScore() {
+    private void getScore() {
         ArrayList<String> listMax = new ArrayList<>();
         listMax.clear();
 
@@ -542,14 +559,19 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 }
             }
         }
-        int listRadioMax = listMax.size();
-        if (listRadioMax >= 0 && listRadioMax <= 20) {
-            sizeList = 10f;
+        listRadioMax = listMax.size();
+        float divList = listRadioMax / 2f;
+        float scoreList = listRadioMax - soma;
+
+        if (scoreList >= divList) {
+            resultScore = "CONFORME";
+            Log.i("LOG", "Estabelicimento conforme");
+        } else if (sizeList < divList) {
+            resultScore = "NÃO CONFORME";
+            Log.i("LOG", "Estabelicimento Não Conforme");
         }
-        float total = sizeList - soma;
-        scores.setText(Float.toString(total));
-        return total;
-    }*/
+        scores.setText(Float.toString(scoreList));
+    }
 
     @Override
     public void radioItemChecked(int itemPosition, int optNum) {
@@ -558,17 +580,17 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         switch (optNum) {
             case 1:
                 reportItems.get(itemPosition).setOpt1(true);
-                //getScore();
+                this.getScore();
                 break;
 
             case 2:
                 reportItems.get(itemPosition).setOpt2(true);
-                //getScore();
+                this.getScore();
                 break;
 
             case 3:
                 reportItems.get(itemPosition).setOpt3(true);
-                //getScore();
+                this.getScore();
                 break;
         }
         mAdapter.notifyDataSetChanged();
@@ -598,7 +620,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         Log.d("TestFrag", items.getTitle() + items.getDescription());
         nFrag.setArguments(bundle);
         nFrag.show((ReportActivity.this).getSupportFragmentManager(), "new_item");
-
     }
 
     // Remove Item List FireBase
@@ -624,7 +645,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_error_update_list), Toast.LENGTH_SHORT).show();
                         }
                     });
-
                 },
                 getResources().getString(R.string.cancel), null, false);
     }
@@ -641,7 +661,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         fragNote.setArguments(bundle);
         Log.d("NoteFrag ", items.getNote() + position);
         fragNote.show((ReportActivity.this).getSupportFragmentManager(), "insert_note");
-
     }
 
     // Show Photo Full
@@ -742,7 +761,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 this.dialog.dismiss();
                 takePicture.openCamera(ReportActivity.this);
             } else {
-                showSnackBar(R.string.label_permission_camera);
+                snackBarHelper.showSnackBar(this, R.id.fab_new_item, R.string.label_permission_camera);
             }
         }
 
@@ -752,7 +771,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     && grantResults[REQUEST_PERMISSIONS_GRANTED] == PackageManager.PERMISSION_GRANTED) {
                 this.handleSave();
             } else {
-                showSnackBar(R.string.label_permission_read);
+                snackBarHelper.showSnackBar(this, R.id.fab_new_item, R.string.label_permission_read);
             }
         }
     }
@@ -772,14 +791,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         super.onRestoreInstanceState(savedInstanceState);
     }*/
 
-    private void showSnackBar(int label) {
-        Snackbar snackbar = Snackbar
-                .make(ReportActivity.this.findViewById(R.id.fab_new_item),
-                        ReportActivity.this.getString(label), Snackbar.LENGTH_LONG);
-        SnackBarHelper.configSnackBar(ReportActivity.this, snackbar);
-        snackbar.show();
-    }
-
     private static void delete(File fileDirectory) {
         if (fileDirectory == null) {
             return;
@@ -787,6 +798,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             for (File child : Objects.requireNonNull(fileDirectory.listFiles()))
                 delete(child);
         boolean delete = fileDirectory.delete();
+    }
+
+    private void closeMethods() {
+        if (mReportBusiness != null) {
+            mReportBusiness.close();
+        }
+        databaseReference = LibraryClass.closeFireBase();
     }
 
     @Override
@@ -800,13 +818,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         this.closeMethods();
         File file = path.getStorageDir();
         delete(file);
-    }
-
-    private void closeMethods() {
-        if (mReportBusiness != null) {
-            mReportBusiness.close();
-        }
-        databaseReference = LibraryClass.closeFireBase();
     }
 }
 

@@ -171,6 +171,9 @@
     <string name="alert_empty_report_text">To save your report, you must have at least one item checked.</string>
     <string name="alert_leave_the_report">Leave report?</string>
     <string name="alert_leave_the_report_text">Do you really want to leave the report? You will lose all your progress!</string>
+    <string name="alert_punctuation">Punctuation</string>
+    <string name="alert_punctuation_label1">Company is %1$s, were selected</string>
+    <string name="alert_punctuation_label2">items, the sum of the items generated the NOTE %1$s, clicking CONFIRM will save your report and generate a PDF with all the information!</string>
     <string name="error">Error</string>
     <string name="edit">To edit</string>
     <string name="summary">Summary</string>

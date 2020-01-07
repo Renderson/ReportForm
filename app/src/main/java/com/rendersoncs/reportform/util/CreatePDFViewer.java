@@ -133,6 +133,14 @@ public class CreatePDFViewer {
         paragraph.setAlignment(0);
         document.add(paragraph);
 
+        // New paragraph Score
+        paragraph = new Paragraph(new Chunk("Nota de avaliação:", baseFontBold));
+        paragraph.setSpacingAfter(lineSpaceSmall);
+        paragraph.setSpacingBefore(lineSpaceSmall);
+        paragraph.add(new Chunk(paramRepo.getScore(), baseFont));
+        paragraph.setAlignment(0);
+        document.add(paragraph);
+
         // Create Table Check-List
         paragraph = new Paragraph(context.getResources().getString(R.string.label_paragraph_pdf_report), baseFontBoldList);
         paragraph.setAlignment(1);
