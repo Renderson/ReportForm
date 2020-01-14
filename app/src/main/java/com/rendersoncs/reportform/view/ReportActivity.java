@@ -476,6 +476,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         reportItems.setEmail(resultEmail.getText().toString());
         reportItems.setController(resultController);
         reportItems.setScore(scores.getText().toString());
+        reportItems.setResult(resultScore);
         reportItems.setDate(resultDate.getText().toString());
 
         // Convert ArrayList in Json Object

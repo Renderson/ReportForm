@@ -195,4 +195,7 @@
     <string name="label_paragraph_pdf_note">NOTA</string>
     <string name="label_paragraph_pdf_photo">FOTOS</string>
     <string name="label_name_archive">Report-%s-%s.pdf</string>
+    <string name="sanitarist_signature">Assinatura da Sanitarista</string>
+    <string name="label_paragraph_pdf_result">Resultado :</string>
+    <string name="label_paragraph_pdf_score">Nota de avaliação:</string>
 </resources>
