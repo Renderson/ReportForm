@@ -41,7 +41,7 @@ public class CreatePDFViewer {
     private static final Font baseFont = FontFactory.getFont("Helvetica", 12.0F);
     private static final Font baseFontBold = FontFactory.getFont("Helvetica-Bold", 12.0F);
     private static final Font baseFontBoldList = FontFactory.getFont("Helvetica-Bold", 18.0F);
-    private static final Font baseFontBoldResult = FontFactory.getFont("Helvetica-Bold", 16.0F);
+    private static final Font baseFontBoldResult = FontFactory.getFont("Helvetica-Bold", 14.0F);
     private static final LineSeparator UNDERLINE;
     private static final Float lineSpace;
     private static final Float lineSpaceSmall;

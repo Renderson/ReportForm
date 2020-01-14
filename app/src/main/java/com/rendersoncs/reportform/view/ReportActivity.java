@@ -453,7 +453,9 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 (dialogInterface, i) -> {
                     this.handleSave();
                 },
-                getResources().getString(R.string.cancel), null, false);
+                getResources().getString(R.string.cancel), (dialogInterface, i) ->{
+                    this.clearList();
+                }, false);
     }
 
     private void alertDialogClose() {
