@@ -168,17 +168,17 @@ public abstract class ReportRecyclerView extends RecyclerView.Adapter<ReportRecy
             mRadioButtonNotConform.setChecked(repo.isOpt3());
 
             if (mRadioButtonConform.isChecked()) {
-                resultPhoto.setBackgroundResource(R.color.colorRadioC);
+                /*resultPhoto.setBackgroundResource(R.color.colorRadioC);*/
                 check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioC));
                 resetItem.clearColorFilter();
 
             }
             if (mRadioButtonNotApplicable.isChecked()) {
-                /*reportViewHolder.resultPhoto.setBackgroundResource(R.color.colorRadioNA);*/
+                /*resultPhoto.setBackgroundResource(R.color.colorRadioNA);*/
                 check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioNA));
                 resetItem.clearColorFilter();
             } else if (mRadioButtonNotConform.isChecked()) {
-                resultPhoto.setBackgroundResource(R.color.colorRadioNC);
+                /*resultPhoto.setBackgroundResource(R.color.colorRadioNC);*/
                 check.setBackgroundColor(ContextCompat.getColor(context, R.color.colorRadioNC));
                 resetItem.clearColorFilter();
             }

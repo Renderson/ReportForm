@@ -75,7 +75,8 @@ public class CheckAnswerList {
 
         Bitmap bitmapPhoto = reportItems.get(i).getPhotoId();
         if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM1 && bitmapPhoto == null
-                || reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2) {
+                || reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2 && bitmapPhoto == null
+                || reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM3 && bitmapPhoto == null) {
 
             Drawable d = activity.getResources().getDrawable(R.drawable.walpaper_not_photo);
 
@@ -87,9 +88,9 @@ public class CheckAnswerList {
             String encodeImage = resizeImage.getEncoded64Image(b);
             listPhoto.add(encodeImage);
 
-        } else if (bitmapPhoto == null) {
+        } /*else if (bitmapPhoto == null) {
             return true;
-        } else {
+        }*/ else {
             String encodeImage = resizeImage.getEncoded64Image(bitmapPhoto);
             listPhoto.add(encodeImage);
             Log.i("List ", "List Photo " + listPhoto.size() + " item");
