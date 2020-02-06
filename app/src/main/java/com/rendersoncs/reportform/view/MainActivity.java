@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         emptyButton.setOnClickListener(v -> startReportFormDialog());
 
         // Animated FAB
-        animated.animatedFab(viewHolder.recyclerView, fab);
+        //animated.animatedFab(viewHolder.recyclerView, fab);
     }
 
     // Create Drawer Layout

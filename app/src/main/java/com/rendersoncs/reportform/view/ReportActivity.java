@@ -202,7 +202,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         emptyButton.setOnClickListener(v -> startNewItemListFireBase());
 
         // Animated FloatingButton
-        animated.animatedFab(recyclerView, fab);
+        //animated.animatedFab(recyclerView, fab);
     }
 
     private void loadListFire() {

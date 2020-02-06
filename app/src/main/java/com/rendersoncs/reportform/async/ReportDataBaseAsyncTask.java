@@ -58,9 +58,9 @@ public class ReportDataBaseAsyncTask extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
         if (mReportId == 0) {
-            Bundle bundle = new Bundle();
+            /*Bundle bundle = new Bundle();
             bundle.putString("report_generated", "report_pdf");
-            mFireBaseAnalytics.logEvent("relatorios_gerados_renderson", bundle);
+            mFireBaseAnalytics.logEvent("relatorios_gerados_renderson", bundle);*/
 
             mReportBusiness.insert(reportItems);
         } else {
