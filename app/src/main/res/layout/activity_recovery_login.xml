@@ -40,7 +40,7 @@
                 style="@style/FormField"
                 android:hint="@string/mail"
                 android:imeOptions="actionNext"
-                android:inputType="textEmailAddress|textAutoComplete|textCapSentences" />
+                android:inputType="textEmailAddress|textAutoComplete" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

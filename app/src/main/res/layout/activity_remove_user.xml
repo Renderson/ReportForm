@@ -42,7 +42,7 @@
                 style="@style/FormField"
                 android:hint="@string/password"
                 android:imeOptions="actionGo"
-                android:inputType="textPassword|textCapSentences"
+                android:inputType="textPassword"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
