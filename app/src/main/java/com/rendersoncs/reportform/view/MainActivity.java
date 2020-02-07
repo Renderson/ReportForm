@@ -43,6 +43,7 @@ import com.rendersoncs.reportform.service.AccessDocument;
 import com.rendersoncs.reportform.service.NetworkConnectedService;
 import com.rendersoncs.reportform.util.GetInfoUserFireBase;
 import com.rendersoncs.reportform.util.RVEmptyObserver;
+import com.rendersoncs.reportform.util.SharePrefInfoUser;
 import com.rendersoncs.reportform.util.SnackBarHelper;
 
 import java.util.List;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private View emptyLayout;
     private FloatingActionButton fab;
     private TextView profileName;
+    private SharePrefInfoUser sharePref = new SharePrefInfoUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_logout: {
                 FirebaseAuth.getInstance().signOut();
                 finish();
+                sharePref.clearSharePref(this);
                 break;
             }
         }

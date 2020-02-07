@@ -1,6 +1,7 @@
 package com.rendersoncs.reportform.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +17,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.constants.ReportConstants;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class GetInfoUserFireBase {
+
+    private SharePrefInfoUser sharePref = new SharePrefInfoUser();
 
     public void getInfoUserFireBase
             (Context context,
@@ -25,8 +30,13 @@ public class GetInfoUserFireBase {
              TextView profileName, TextView profileEmail,
              ImageView profileView) {
 
-        if (user != null) {
+        SharedPreferences pref = context.getSharedPreferences(ReportConstants.FIRE_BASE.FIRE_USERS, MODE_PRIVATE);
 
+        if (pref.contains(ReportConstants.FIRE_BASE.FIRE_NAME)
+                && pref.contains(ReportConstants.FIRE_BASE.FIRE_PHOTO)) {
+            sharePref.getUserSharePref(context, profileName, profileView);
+
+        } else {
             for (UserInfo profile : user.getProviderData()) {
                 String name = profile.getDisplayName();
                 Uri photoUri = profile.getPhotoUrl();
@@ -42,6 +52,7 @@ public class GetInfoUserFireBase {
                                     .child(ReportConstants.FIRE_BASE.FIRE_NAME)
                                     .getValue();
                             profileName.setText(nameCurrentUser);
+                            sharePref.saveUserSharePref(context, nameCurrentUser);
                         }
 
                         @Override
@@ -59,6 +70,7 @@ public class GetInfoUserFireBase {
                                     .getValue();
 
                             Glide.with(context).load(currentPhoto).into(profileView);
+                            sharePref.savePhotoSharePref(context, currentPhoto);
                         }
 
                         @Override
@@ -74,6 +86,6 @@ public class GetInfoUserFireBase {
             profileEmail.setText(user.getEmail());
             Glide.with(context).load(user.getPhotoUrl()).into(profileView);
         }
-    }
 
+    }
 }
