@@ -633,7 +633,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 getResources().getString(R.string.label_remove_item_list),
                 getResources().getString(R.string.confirm),
                 (dialogInterface, i) -> {
-                    Query query = databaseReference.orderByChild("title").equalTo(items.getTitle());
+                    /*Query query = databaseReference.orderByChild("title").equalTo(items.getTitle());
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -646,7 +646,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_error_update_list), Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    });*/
                 },
                 getResources().getString(R.string.cancel), null, false);
     }

@@ -181,7 +181,7 @@ public class CreatePDFViewer {
         Image signature = Image.getInstance(outputStream.toByteArray());
         signature.scaleAbsolute(75f, 75f);
         document.add(signature);
-        document.add(new Paragraph(context.getResources().getString(R.string.sanitarist_signature)));*/
+        document.add(new Paragraph(context.getResources().getString(R.string.sanitary_signature)));*/
 
         document.close();
         return localFile2;
