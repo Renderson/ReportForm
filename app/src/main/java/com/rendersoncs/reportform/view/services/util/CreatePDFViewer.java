@@ -182,6 +182,11 @@ public class CreatePDFViewer {
         signature.scaleAbsolute(75f, 75f);
         document.add(signature);
         document.add(new Paragraph(context.getResources().getString(R.string.sanitary_signature)));*/
+        // Implementation Signature automatic
+        /*Image signature = Image.getInstance(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/Report-Images/Signature.jpg");
+        signature.scaleAbsolute(75f, 75f);
+        document.add(signature);
+        document.add(new Paragraph(context.getResources().getString(R.string.sanitary_signature)));*/
 
         document.close();
         return localFile2;

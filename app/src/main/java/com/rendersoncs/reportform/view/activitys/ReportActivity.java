@@ -463,6 +463,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 getResources().getString(R.string.alert_leave_the_report_text),
                 getResources().getString(R.string.confirm),
                 (dialogInterface, i) -> {
+                    /*Intent intent = new Intent(this, SignatureActivityMain.class);
+                    startActivity(intent);*/
                     this.closeMethods();
                     finish();
                 },

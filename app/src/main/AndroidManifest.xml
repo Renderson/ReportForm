@@ -68,6 +68,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.activitys.MainActivity" />
         </activity>
+        <activity android:name=".view.activitys.SignatureActivityMain" />
 
         <service
             android:name=".repository.net.NotificationFireBase"
