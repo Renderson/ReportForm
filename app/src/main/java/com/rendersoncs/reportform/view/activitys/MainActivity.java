@@ -31,7 +31,7 @@ import com.rendersoncs.reportform.view.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
 import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 import com.rendersoncs.reportform.view.fragment.AboutFragment;
-import com.rendersoncs.reportform.view.fragment.ReportFormDialog;
+import com.rendersoncs.reportform.view.fragment.NewReportFragment;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.view.adapter.listener.OnInteractionListener;
 import com.rendersoncs.reportform.view.activitys.login.LoginActivity;
@@ -244,14 +244,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void startReportFormDialog() {
-        ReportFormDialog reportFormDialog = new ReportFormDialog();
+        NewReportFragment newReportFragment = new NewReportFragment();
         String controller = profileName.getText().toString();
 
         Bundle bundle = new Bundle();
         bundle.putString(ReportConstants.ITEM.CONTROLLER, controller);
-        reportFormDialog.setArguments(bundle);
+        newReportFragment.setArguments(bundle);
 
-        reportFormDialog.show((MainActivity.this).getSupportFragmentManager(), "report_dialog");
+        newReportFragment.show((MainActivity.this).getSupportFragmentManager(), "report_dialog");
         Log.i("NameInfo ", controller);
     }
 

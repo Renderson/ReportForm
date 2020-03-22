@@ -9,7 +9,7 @@
         android:layout_height="100dp"
         android:background="@drawable/nav_header">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_centerInParent="true"
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -31,7 +31,7 @@
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/text_size_18" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/img_date_id"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -40,7 +40,7 @@
             android:background="@drawable/ic_action_today"
             android:padding="@dimen/padding_16" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/date_Id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_16"
             android:imeOptions="actionNext"
+            android:inputType="textCapSentences"
             android:hint="@string/company" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,6 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_16"
             android:imeOptions="actionGo"
+            android:inputType="textEmailAddress|textAutoComplete|textEmailSubject"
             android:hint="@string/mail" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_16"
-            android:imeOptions="actionGo"
+            android:imeOptions="actionDone"
+            android:inputType="text"
             android:hint="Auditor" />
     </com.google.android.material.textfield.TextInputLayout>
 
