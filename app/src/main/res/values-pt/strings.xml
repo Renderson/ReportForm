@@ -181,6 +181,7 @@
     <string name="label_create_items">CRIAR ITEMS</string>
     <string name="label_wait">Aguarde!</string>
     <string name="label_saving_report">Salvando relatório...</string>
+    <string name="Item_List">Item Lista</string>
 
     <!--Labels PDF-->
     <string name="label_paragraph_pdf_audit">Auditoria Técnica - Segurança Alimentar</string>

@@ -102,7 +102,7 @@ public class User {
     }
 
     public void saveDB(DatabaseReference.CompletionListener... completionListener){
-        DatabaseReference fireBase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
+        DatabaseReference fireBase = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIREBASE.FIRE_CREDENTIAL);
         Log.i("LOG", "Tokens: " + fireBase);
 
         if( completionListener.length == 0 ){
@@ -115,7 +115,7 @@ public class User {
 
     public void updateDB( DatabaseReference.CompletionListener... completionListener ){
 
-        DatabaseReference fireBase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
+        DatabaseReference fireBase = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIREBASE.FIRE_CREDENTIAL);
 
         Map<String, Object> map = new HashMap<>();
         setNameInMap(map);
@@ -139,7 +139,7 @@ public class User {
     }
 
     public void contextDataDB( Context context ){
-        DatabaseReference fireBase = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIRE_BASE.FIRE_CREDENTIAL);
+        DatabaseReference fireBase = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS).child( getId() ).child(ReportConstants.FIREBASE.FIRE_CREDENTIAL);
         fireBase.addListenerForSingleValueEvent( (ValueEventListener) context );
     }
 }

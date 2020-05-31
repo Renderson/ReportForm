@@ -154,8 +154,8 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
                                         String photoUri = uri.toString();
                                         Log.i("log", "Item: " + photoUri + " profileUrl");
 
-                                        DatabaseReference ref1 = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS)
-                                                .child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_PHOTO);
+                                        DatabaseReference ref1 = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS)
+                                                .child(user.getId()).child(ReportConstants.FIREBASE.FIRE_PHOTO);
                                         ref1.setValue(photoUri).addOnSuccessListener(aVoid -> {
                                         });
                                     })).addOnFailureListener(e -> {

@@ -42,7 +42,8 @@ public class AccessDocument {
         reportItems = reportBusiness.load(reportId);
 
         subject = String.format("Report-%s-%s", reportItems.getCompany(), reportItems.getDate());
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + subject + ".pdf");
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
+                "Report" + "/" + subject + ".pdf");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             uri = FileProvider.getUriForFile(context, ReportConstants.PACKAGE.FILE_PROVIDER, file);

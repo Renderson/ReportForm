@@ -37,7 +37,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
             user = new User();
             user.setId( mAuth.getCurrentUser().getUid() );
 
-            URL url = new URL(ReportConstants.FIRE_BASE.URL + "/" +user.getId() +".json");
+            URL url = new URL(ReportConstants.FIREBASE.URL + "/" +user.getId() +".json");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));

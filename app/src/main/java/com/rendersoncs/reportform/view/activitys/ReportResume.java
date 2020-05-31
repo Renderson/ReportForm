@@ -159,7 +159,7 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
     private void loadReportResume() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            mReportId = bundle.getInt(ReportConstants.CONST_BUNDLE_ID.REPORT_ID);
+            mReportId = bundle.getInt(ReportConstants.REPORT.REPORT_ID);
 
             repoEntity = this.mReportBusiness.load(mReportId);
             this.emailResume.setText(repoEntity.getEmail());

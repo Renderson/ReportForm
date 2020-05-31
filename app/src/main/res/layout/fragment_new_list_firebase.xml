@@ -6,26 +6,13 @@
     android:orientation="vertical"
     tools:context=".view.fragment.NewItemListFireBase">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_gravity="center"
-        android:background="@drawable/nav_header"
-        android:layout_height="100dp">
-
-        <ImageView
-            android:src="@drawable/ic_new_item_list_white"
-            android:layout_gravity="center"
-            android:layout_width="75dp"
-            android:layout_height="75dp" />
-    </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:weightSum="2"
-        android:orientation="vertical">
-
+    <androidx.appcompat.widget.AppCompatTextView
+        android:text="@string/Item_List"
+        android:textSize="@dimen/text_size_22"
+        android:textColor="@color/black_de"
+        android:layout_margin="@dimen/margin_16"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/TextLabel"
@@ -61,7 +48,5 @@
                 android:imeOptions="actionGo"
                 android:hint="@string/label_description_resume" />
         </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
 
 </LinearLayout>

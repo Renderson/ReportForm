@@ -40,8 +40,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.view.adapter.checkListAdapter.CheckListReportAdapter;
 import com.rendersoncs.reportform.view.adapter.checkListAdapter.EditCheckListReportAdapter;
@@ -164,7 +162,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            this.mReportId = bundle.getInt(ReportConstants.CONST_BUNDLE_ID.REPORT_ID);
+            this.mReportId = bundle.getInt(ReportConstants.REPORT.REPORT_ID);
         }
         if (mReportId == 0) {
             this.loadListFire();
@@ -218,7 +216,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            this.mReportId = bundle.getInt(ReportConstants.CONST_BUNDLE_ID.REPORT_ID);
+            this.mReportId = bundle.getInt(ReportConstants.REPORT.REPORT_ID);
 
             ReportItems repoEntity = this.mReportBusiness.load(this.mReportId);
             this.resultCompany.setText(repoEntity.getCompany());
@@ -313,8 +311,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIRE_BASE.FIRE_USERS)
-                    .child(user.getId()).child(ReportConstants.FIRE_BASE.FIRE_LIST);
+            databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS)
+                    .child(user.getId()).child(ReportConstants.FIREBASE.FIRE_LIST);
             this.addItemsFromFireBase();
 
         } else {
