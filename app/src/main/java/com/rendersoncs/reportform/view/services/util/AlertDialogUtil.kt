@@ -19,13 +19,13 @@ class AlertDialogUtil {
         alert.show()
     }
 
-    fun showDialogScore(activity: Activity?, img: Int, title: String?, msg: String?,
+    fun showDialogScore(activity: Activity?, title: String?, msg: String?,
                         positiveLabel: String?,
                         positiveOnClick: DialogInterface.OnClickListener?,
-                        negativeLabel: String?, negativeOnClick: DialogInterface.OnClickListener?,
+                        negativeLabel: String?,
+                        negativeOnClick: DialogInterface.OnClickListener?,
                         isCancelAble: Boolean) {
         val builder = AlertDialog.Builder(activity!!)
-        builder.setIcon(img)
         builder.setTitle(title)
         builder.setMessage(msg)
         builder.setCancelable(isCancelAble)

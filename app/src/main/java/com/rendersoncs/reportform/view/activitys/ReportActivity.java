@@ -41,20 +41,20 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.itens.ReportItems;
+import com.rendersoncs.reportform.repository.dao.ReportDataBaseAsyncTask;
+import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
+import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
+import com.rendersoncs.reportform.view.activitys.login.util.User;
 import com.rendersoncs.reportform.view.adapter.checkListAdapter.CheckListReportAdapter;
 import com.rendersoncs.reportform.view.adapter.checkListAdapter.EditCheckListReportAdapter;
 import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportRecyclerView;
-import com.rendersoncs.reportform.view.services.async.PDFCreateAsync;
-import com.rendersoncs.reportform.repository.dao.ReportDataBaseAsyncTask;
-import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
-import com.rendersoncs.reportform.view.services.constants.ReportConstants;
+import com.rendersoncs.reportform.view.adapter.listener.OnItemListenerClicked;
 import com.rendersoncs.reportform.view.fragment.FullPhotoFragment;
 import com.rendersoncs.reportform.view.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.view.fragment.ReportNoteFragment;
-import com.rendersoncs.reportform.itens.ReportItems;
-import com.rendersoncs.reportform.view.adapter.listener.OnItemListenerClicked;
-import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
-import com.rendersoncs.reportform.view.activitys.login.util.User;
+import com.rendersoncs.reportform.view.services.async.PDFCreateAsync;
+import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 import com.rendersoncs.reportform.view.services.photo.CameraUtil;
 import com.rendersoncs.reportform.view.services.photo.ResizeImage;
 import com.rendersoncs.reportform.view.services.photo.TakePicture;
@@ -441,7 +441,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
     private void alertDialogScore() {
         alertDialog.showDialogScore(ReportActivity.this,
-                R.drawable.ic_list_check,
                 getResources().getString(R.string.alert_punctuation),
                 getResources().getString(R.string.alert_punctuation_label1, resultScore) + " " +
                         listRadioMax + " " +
