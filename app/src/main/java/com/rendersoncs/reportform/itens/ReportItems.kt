@@ -19,6 +19,7 @@ class ReportItems {
     var description: String? = null
     var header: String? = null
         private set
+    var key: String? = null
     var photoId: Bitmap? = null
 
     var isOpt1 = false
@@ -48,10 +49,11 @@ class ReportItems {
     var selectedAnswerPosition = -1
     var isShine = false
 
-    constructor(title: String?, description: String?, header: String?) {
+    constructor(title: String?, description: String?, header: String?, key: String?) {
         this.header = header
         this.title = title
         this.description = description
+        this.key = key
     }
 
     constructor() {}

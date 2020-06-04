@@ -40,6 +40,8 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.repository.dao.ReportDataBaseAsyncTask;
@@ -239,7 +241,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     editPhoto.add(photo);
 
                     ReportItems repoJson = new ReportItems(object.getString(ReportConstants.ITEM.TITLE),
-                            object.getString(ReportConstants.ITEM.DESCRIPTION), null);
+                            object.getString(ReportConstants.ITEM.DESCRIPTION), null, object.getString("key"));
                     reportItems.add(repoJson);
                 }
 
@@ -618,7 +620,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
         bundle.putString(ReportConstants.ITEM.TITLE, items.getTitle());
         bundle.putString(ReportConstants.ITEM.DESCRIPTION, items.getDescription());
-        Log.d("TestFrag", items.getTitle() + items.getDescription());
+        bundle.putString(ReportConstants.ITEM.KEY, items.getKey());
+        Log.d("TestFrag", items.getKey());
         nFrag.setArguments(bundle);
         nFrag.show((ReportActivity.this).getSupportFragmentManager(), "new_item");
     }
@@ -632,7 +635,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 getResources().getString(R.string.label_remove_item_list),
                 getResources().getString(R.string.confirm),
                 (dialogInterface, i) -> {
-                    /*Query query = databaseReference.orderByChild("title").equalTo(items.getTitle());
+                    Query query = databaseReference.orderByChild(ReportConstants.ITEM.KEY)
+                            .equalTo(items.getKey());
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -643,9 +647,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_error_update_list), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getResources()
+                                    .getString(R.string.label_error_update_list), Toast.LENGTH_SHORT).show();
                         }
-                    });*/
+                    });
                 },
                 getResources().getString(R.string.cancel), null, false);
     }

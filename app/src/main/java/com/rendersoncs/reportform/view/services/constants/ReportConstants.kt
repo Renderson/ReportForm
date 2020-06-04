@@ -30,6 +30,7 @@ class ReportConstants {
         const val DATE = "date"
         const val TITLE = "title"
         const val DESCRIPTION = "description"
+        const val KEY = "key"
         const val CONFORMITY = "conformity"
         const val NOTE = "note"
         const val PHOTO = "photo"

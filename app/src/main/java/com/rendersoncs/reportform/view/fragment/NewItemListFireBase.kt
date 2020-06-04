@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.rendersoncs.reportform.R
+import com.rendersoncs.reportform.itens.NewItemFireBase
 import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass
 import com.rendersoncs.reportform.view.activitys.login.util.User
 import com.rendersoncs.reportform.view.services.constants.ReportConstants
@@ -24,7 +25,7 @@ import java.util.*
 class NewItemListFireBase : DialogFragment() {
     private var mTitleList: EditText? = null
     private var mDescriptionList: EditText? = null
-    private var title: String? = null
+    private var key: String? = null
     private var user: User? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -67,7 +68,8 @@ class NewItemListFireBase : DialogFragment() {
 
     private fun checkItems() {
         if (arguments != null) {
-            title = arguments!!.getString(ReportConstants.ITEM.TITLE)
+            key = arguments!!.getString(ReportConstants.ITEM.KEY)
+            val title = arguments!!.getString(ReportConstants.ITEM.TITLE)
             mTitleList!!.setText(title)
             val description = arguments!!.getString(ReportConstants.ITEM.DESCRIPTION)
             mDescriptionList!!.setText(description)
@@ -78,7 +80,7 @@ class NewItemListFireBase : DialogFragment() {
         val upTitle = mTitleList!!.text.toString()
         val upDescription = mDescriptionList!!.text.toString()
         val databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS).child(user!!.id).child(ReportConstants.FIREBASE.FIRE_LIST)
-        val query = databaseReference.orderByChild(ReportConstants.ITEM.TITLE).equalTo(title)
+        val query = databaseReference.orderByChild(ReportConstants.ITEM.KEY).equalTo(key)
 
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -97,14 +99,20 @@ class NewItemListFireBase : DialogFragment() {
     private fun insertNewItemList() {
         val mTitle = mTitleList!!.text.toString()
         val mDescription = mDescriptionList!!.text.toString()
-        val key = FirebaseDatabase.getInstance().reference.child(ReportConstants.FIREBASE.FIRE_USERS).child(user!!.id).child(ReportConstants.FIREBASE.FIRE_LIST).push().key
-        val dataMap = HashMap<String, String>()
-        val childUpdates: MutableMap<String, Any> = HashMap()
+        val key = FirebaseDatabase.getInstance()
+                .reference.child(ReportConstants.FIREBASE.FIRE_USERS)
+                .child(user!!.id).child(ReportConstants.FIREBASE.FIRE_LIST).push().key
+        val childUpdates: MutableMap<String, NewItemFireBase> = HashMap()
 
-        dataMap[ReportConstants.ITEM.TITLE] = mTitle
-        dataMap[ReportConstants.ITEM.DESCRIPTION] = mDescription
-        childUpdates["/" + ReportConstants.FIREBASE.FIRE_USERS + "/" + user!!.id + "/" + ReportConstants.FIREBASE.FIRE_LIST + "/" + key] = dataMap
-        FirebaseDatabase.getInstance().reference.updateChildren(childUpdates)
+        val newItem = NewItemFireBase(
+            title = mTitle,
+            description = mDescription,
+            key = key!!
+        )
+
+        childUpdates["/" + ReportConstants.FIREBASE.FIRE_USERS + "/" + user!!.id + "/"
+                + ReportConstants.FIREBASE.FIRE_LIST + "/" + key] = newItem
+        FirebaseDatabase.getInstance().reference.updateChildren(childUpdates as Map<String, Any>)
     }
 
     private fun initFireBase() {
