@@ -225,6 +225,14 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
             this.resultEmail.setText(repoEntity.getEmail());
             this.resultDate.setText(repoEntity.getDate());
 
+            /*EditReportActivity edit = new EditReportActivity();
+            edit.loadEditReportExt(this,
+                    mReportId,
+                    mAdapter,
+                    mReportBusiness,
+                    reportItems,
+                    recyclerView);*/
+
             try {
                 JSONArray array = new JSONArray(repoEntity.getListJson());
 
@@ -241,7 +249,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     editPhoto.add(photo);
 
                     ReportItems repoJson = new ReportItems(object.getString(ReportConstants.ITEM.TITLE),
-                            object.getString(ReportConstants.ITEM.DESCRIPTION), null, object.getString("key"));
+                            object.getString(ReportConstants.ITEM.DESCRIPTION),
+                            null, null);
                     reportItems.add(repoJson);
                 }
 

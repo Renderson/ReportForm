@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 class ReportDataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "Report.db";
 
     private static final String SQL_CREATE_TABLE_REPORT =
@@ -18,7 +18,7 @@ class ReportDataBaseHelper extends SQLiteOpenHelper {
                     + DataBaseConstants.REPORT.COLUMNS.SCORE + " text, "
                     + DataBaseConstants.REPORT.COLUMNS.DATE + " text, "
                     + DataBaseConstants.REPORT.COLUMNS.GRADES + " integer, "
-                    + DataBaseConstants.REPORT.COLUMNS.LIST + " text, "
+                    + DataBaseConstants.REPORT.COLUMNS.LIST + " blob, "
                     + DataBaseConstants.REPORT.COLUMNS.PHOTO + " blob);";
 
     private static final String DROP_TABLE_REPORT = "DROP TABLE IF EXISTS " + DataBaseConstants.REPORT.TABLE_NAME;
@@ -37,6 +37,5 @@ class ReportDataBaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DROP_TABLE_REPORT);
         db.execSQL(SQL_CREATE_TABLE_REPORT);
-
     }
 }

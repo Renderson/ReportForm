@@ -1,5 +1,5 @@
 /*
-package com.rendersoncs.reportform.view;
+package com.rendersoncs.reportform.view.activitys;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -25,17 +25,17 @@ import java.util.ArrayList;
 
 public class EditReportActivity {
 
+    private ArrayList editConformity = new ArrayList();
+    private ArrayList editNotes = new ArrayList();
+    private ArrayList editPhoto = new ArrayList();
+    private OnItemListenerClicked listenerClicked;
 
     public void loadEditReportExt(Activity activity,
                                   int mReportId,
                                   ReportRecyclerView mAdapter,
                                   ReportBusiness mReportBusiness,
                                   ArrayList<ReportItems> reportItems,
-                                  RecyclerView recyclerView,
-                                  ArrayList editConformity,
-                                  ArrayList editNotes,
-                                  ArrayList editPhoto,
-                                  OnItemListenerClicked listenerClicked) {
+                                  RecyclerView recyclerView) {
 
             ReportItems repoEntity = mReportBusiness.load(mReportId);
 
@@ -56,7 +56,7 @@ public class EditReportActivity {
                     editPhoto.add(photo);
 
                     ReportItems repoJson = new ReportItems(jo.getString(ReportConstants.ITEM.TITLE),
-                            jo.getString(ReportConstants.ITEM.DESCRIPTION), jo.getString("title"));
+                            jo.getString(ReportConstants.ITEM.DESCRIPTION), null, null);
                     reportItems.add(repoJson);
                 }
 
