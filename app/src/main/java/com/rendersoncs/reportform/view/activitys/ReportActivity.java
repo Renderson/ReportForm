@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -79,7 +80,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReportActivity extends AppCompatActivity implements OnItemListenerClicked {
+public class ReportActivity extends AppCompatActivity implements OnItemListenerClicked, SearchView.OnQueryTextListener {
 
     @BindView(R.id.recycler_view_form)
     RecyclerView recyclerView;
@@ -209,6 +210,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
         this.isConnected();
         this.getBundleReportFromDialog();
+
+        //mAdapter.registerAdapterDataObserver(new RVEmptyObserver(recyclerView, emptyLayout, fab));
     }
 
     private void loadEditReport() {
@@ -389,7 +392,26 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_report_list, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Search ");
+        searchView.setOnQueryTextListener(this);
+        searchView.setIconified(true);
         return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        mAdapter.getFilter().filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        mAdapter.getFilter().filter(query);
+        return false;
     }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -840,4 +862,3 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         delete(file);
     }
 }
-

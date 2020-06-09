@@ -7,6 +7,8 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -20,10 +22,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.view.adapter.listener.OnItemListenerClicked;
+import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,9 +34,10 @@ import butterknife.ButterKnife;
 
 import static com.android.volley.VolleyLog.TAG;
 
-public abstract class ReportRecyclerView extends RecyclerView.Adapter<ReportRecyclerView.ReportViewHolder> /*implements ItemMoveCallBack.ItemTouchHelperContract*/ {
+public abstract class ReportRecyclerView extends RecyclerView.Adapter<ReportRecyclerView.ReportViewHolder> implements Filterable /*implements ItemMoveCallBack.ItemTouchHelperContract*/ {
 
     public List<ReportItems> reportItems;
+    public List<ReportItems> reportItemsFiltered;
     public SparseBooleanArray expandState = new SparseBooleanArray();
     public Context context;
 
@@ -46,6 +50,7 @@ public abstract class ReportRecyclerView extends RecyclerView.Adapter<ReportRecy
     ReportRecyclerView(List<ReportItems> reportItems, Context context) {
         this.context = context;
         this.reportItems = reportItems;
+        this.reportItemsFiltered = reportItems;
         for (int i = 0; i < reportItems.size(); i++) {
             expandState.append(i, false);
         }
@@ -55,7 +60,7 @@ public abstract class ReportRecyclerView extends RecyclerView.Adapter<ReportRecy
     @Override
     public void onBindViewHolder(ReportRecyclerView.ReportViewHolder reportViewHolder, int i) {
         int position = reportViewHolder.getAdapterPosition();
-        final ReportItems repo = reportItems.get(position);
+        final ReportItems repo = reportItemsFiltered.get(position);
 
         reportViewHolder.itemsListViewHolder(reportViewHolder, position, repo);
 
@@ -64,7 +69,7 @@ public abstract class ReportRecyclerView extends RecyclerView.Adapter<ReportRecy
 
     @Override
     public int getItemCount() {
-        return reportItems.size();
+        return reportItemsFiltered.size();
     }
 
     public class ReportViewHolder extends RecyclerView.ViewHolder {
@@ -279,6 +284,37 @@ public abstract class ReportRecyclerView extends RecyclerView.Adapter<ReportRecy
         dataSet.setNote(note);
         Log.i("LOG", "Note " + note);
         notifyDataSetChanged();
+    }
+
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    reportItemsFiltered = reportItems;
+                } else {
+                    List<ReportItems> filteredList = new ArrayList<>();
+                    for (ReportItems row : reportItems) {
+                        if (row.getTitle().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    reportItemsFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = reportItemsFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                reportItemsFiltered = (ArrayList<ReportItems>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     // ItemMoveCallBack
