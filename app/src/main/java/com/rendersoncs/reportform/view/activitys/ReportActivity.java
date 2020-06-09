@@ -430,6 +430,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                         }
                     } else {
                         this.alertDialogScore();
+
                     }
                 }
                 break;
