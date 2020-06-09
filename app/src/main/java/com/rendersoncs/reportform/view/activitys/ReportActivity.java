@@ -205,12 +205,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     }
 
     private void loadListFire() {
-        findViewById(R.id.progressBar).setVisibility(View.GONE);
+        findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
 
         this.isConnected();
         this.getBundleReportFromDialog();
-
-        mAdapter.registerAdapterDataObserver(new RVEmptyObserver(recyclerView, emptyLayout, fab));
     }
 
     private void loadEditReport() {
@@ -376,8 +374,15 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), getString(R.string.label_failed), Toast.LENGTH_SHORT).show();
             }
         });
+        this.showLayoutEmpty();
+    }
+
+    private void showLayoutEmpty() {
+        findViewById(R.id.progressBar).setVisibility(View.GONE);
+        mAdapter.registerAdapterDataObserver(new RVEmptyObserver(recyclerView, emptyLayout, fab));
     }
 
     // Menu
