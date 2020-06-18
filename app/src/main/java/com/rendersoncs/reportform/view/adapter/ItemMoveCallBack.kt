@@ -2,7 +2,7 @@ package com.rendersoncs.reportform.view.adapter
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportRecyclerView.ReportViewHolder
+import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportAdapter
 
 class ItemMoveCallBack(private val mAdapter: ItemTouchHelperContract) : ItemTouchHelper.Callback() {
     override fun isLongPressDragEnabled(): Boolean {
@@ -26,7 +26,7 @@ class ItemMoveCallBack(private val mAdapter: ItemTouchHelperContract) : ItemTouc
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
         if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-            if (viewHolder is ReportViewHolder) {
+            if (viewHolder is ReportAdapter.ReportViewHolder) {
                 mAdapter.onRowSelected(viewHolder)
             }
         }
@@ -35,15 +35,15 @@ class ItemMoveCallBack(private val mAdapter: ItemTouchHelperContract) : ItemTouc
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
-        if (viewHolder is ReportViewHolder) {
+        if (viewHolder is ReportAdapter.ReportViewHolder) {
             mAdapter.onRowClear(viewHolder)
         }
     }
 
     interface ItemTouchHelperContract {
         fun onRowMoved(fromPosition: Int, toPosition: Int)
-        fun onRowSelected(myReportViewHolder: ReportViewHolder?)
-        fun onRowClear(myReportViewHolder: ReportViewHolder?)
+        fun onRowSelected(myReportAdapterViewHolder: ReportAdapter.ReportViewHolder?)
+        fun onRowClear(myReportAdapterViewHolder: ReportAdapter.ReportViewHolder?)
     }
 
 }

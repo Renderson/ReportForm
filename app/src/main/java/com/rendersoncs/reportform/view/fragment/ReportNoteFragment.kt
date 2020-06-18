@@ -10,11 +10,11 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.rendersoncs.reportform.R
-import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportRecyclerView
+import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportAdapter
 import com.rendersoncs.reportform.view.services.constants.ReportConstants
 import java.util.*
 
-class ReportNoteFragment(private val mAdapter: ReportRecyclerView) : DialogFragment() {
+class ReportNoteFragment(private val mAdapterAdapter: ReportAdapter) : DialogFragment() {
 
     private var note: EditText? = null
     private var getNote: String? = null
@@ -67,14 +67,14 @@ class ReportNoteFragment(private val mAdapter: ReportRecyclerView) : DialogFragm
 
     private fun insertNewNote() {
         val newNote = note!!.text.toString()
-        mAdapter.insertNote(position, newNote)
+        mAdapterAdapter.insertNote(position, newNote)
         Log.d("NoteFrag ", "InsertNote $position$newNote")
     }
 
     private fun updateNote() {
         if (arguments != null) {
             val updateNote = note!!.text.toString()
-            mAdapter.insertNote(position, updateNote)
+            mAdapterAdapter.insertNote(position, updateNote)
             Log.d("NoteFrag ", "UpdateNote $position$updateNote")
         }
     }

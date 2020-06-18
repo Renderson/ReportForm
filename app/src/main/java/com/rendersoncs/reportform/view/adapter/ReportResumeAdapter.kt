@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rendersoncs.reportform.R
 import com.rendersoncs.reportform.itens.ReportResumeItems
-import com.rendersoncs.reportform.view.adapter.listener.OnItemListenerClicked
+import com.rendersoncs.reportform.view.adapter.listener.OnItemClickResume
 import kotlinx.android.synthetic.main.activity_report_resume_list.view.*
 
 class ReportResumeAdapter(private val repoResumeList:
@@ -19,10 +19,10 @@ class ReportResumeAdapter(private val repoResumeList:
                           private val context: Context) :
         RecyclerView.Adapter<ReportResumeAdapter.ViewHolder>() {
 
-    private var onItemListenerClicked: OnItemListenerClicked? = null
+    private var onItemClickResume: OnItemClickResume? = null
 
-    fun setOnItemListenerClicked(onItemListenerClicked: OnItemListenerClicked?) {
-        this.onItemListenerClicked = onItemListenerClicked
+    fun setOnItemListenerClicked(onItemClickResume: OnItemClickResume) {
+        this.onItemClickResume = onItemClickResume
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, i: Int): ViewHolder {
@@ -41,7 +41,7 @@ class ReportResumeAdapter(private val repoResumeList:
         holder.resumeNote.text = resumeItems.note
 
         holder.resumePhoto.setOnClickListener {
-            onItemListenerClicked!!.fullPhoto(position) }
+            onItemClickResume!!.fullPhoto(resumeItems) }
 
         this.decorationItems(holder, resumeItems)
     }

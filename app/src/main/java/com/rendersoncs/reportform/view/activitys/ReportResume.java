@@ -21,14 +21,14 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.view.adapter.ReportResumeAdapter;
-import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
-import com.rendersoncs.reportform.view.services.constants.ReportConstants;
-import com.rendersoncs.reportform.view.services.extension.StringExtension;
-import com.rendersoncs.reportform.view.fragment.FullPhotoFragment;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.itens.ReportResumeItems;
-import com.rendersoncs.reportform.view.adapter.listener.OnItemListenerClicked;
+import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
+import com.rendersoncs.reportform.view.adapter.ReportResumeAdapter;
+import com.rendersoncs.reportform.view.adapter.listener.OnItemClickResume;
+import com.rendersoncs.reportform.view.fragment.FullPhotoFragment;
+import com.rendersoncs.reportform.view.services.constants.ReportConstants;
+import com.rendersoncs.reportform.view.services.extension.StringExtension;
 import com.rendersoncs.reportform.view.services.service.AccessDocument;
 import com.rendersoncs.reportform.view.services.util.MyDividerItemDecoration;
 
@@ -39,7 +39,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportResume extends AppCompatActivity implements OnItemListenerClicked {
+public class ReportResume extends AppCompatActivity implements OnItemClickResume {
 
     private ReportBusiness mReportBusiness;
     private ReportItems repoEntity;
@@ -166,7 +166,7 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
             this.dateResume.setText(repoEntity.getDate());
             this.companyResume.setText(StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.CHARACTERS.LIMITS_TEXT));
 
-            setTitle(getResources().getString(R.string.company)+ " " + StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.CHARACTERS.LIMITS_TEXT));
+            setTitle(getResources().getString(R.string.company) + " " + StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.CHARACTERS.LIMITS_TEXT));
 
             this.populateRecyclerViewResume();
             this.countRadioSelected();
@@ -239,50 +239,17 @@ public class ReportResume extends AppCompatActivity implements OnItemListenerCli
     }
 
     @Override
-    public void radioItemChecked(int itemPosition, int optNum) {
-
-    }
-
-    @Override
-    public void takePhoto(int position) {
-
-    }
-
-    @Override
-    public void fullPhoto(int position) {
-        //position = pos;
+    public void fullPhoto(ReportResumeItems reportItems) {
         FullPhotoFragment fullFragment = new FullPhotoFragment();
         Bundle bundle = new Bundle();
-        ReportResumeItems items = repoResumeList.get(position);
 
-        String image = items.getPhoto();
-        //Log.i("FullFrag1 ", " " + image);
+        String image = reportItems.getPhoto();
 
         byte[] bytes = Base64.decode(image, Base64.DEFAULT);
 
-        bundle.putInt("position", position);
         bundle.putByteArray(ReportConstants.ITEM.PHOTO, bytes);
 
         fullFragment.setArguments(bundle);
         fullFragment.show(getSupportFragmentManager(), "fullPhoto");
-        //Log.i("FullFrag ", " " + Arrays.toString(bytes));
     }
-
-    @Override
-    public void insertNote(int position) {
-
-    }
-
-    @Override
-    public void updateList(int position) {
-
-    }
-
-    @Override
-    public void removeItem(int position) {
-
-    }
-
-    @Override
-    public void resetItem(int position) {}
 }

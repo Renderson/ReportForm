@@ -49,10 +49,8 @@ import com.rendersoncs.reportform.repository.dao.ReportDataBaseAsyncTask;
 import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
 import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
-import com.rendersoncs.reportform.view.adapter.checkListAdapter.CheckListReportAdapter;
-import com.rendersoncs.reportform.view.adapter.checkListAdapter.EditCheckListReportAdapter;
-import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportRecyclerView;
-import com.rendersoncs.reportform.view.adapter.listener.OnItemListenerClicked;
+import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportAdapter;
+import com.rendersoncs.reportform.view.adapter.listener.OnItemClickedReport;
 import com.rendersoncs.reportform.view.fragment.FullPhotoFragment;
 import com.rendersoncs.reportform.view.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.view.fragment.ReportNoteFragment;
@@ -74,16 +72,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+public class ReportActivity extends AppCompatActivity implements OnItemClickedReport {
 
-public class ReportActivity extends AppCompatActivity implements OnItemListenerClicked, SearchView.OnQueryTextListener {
-
-    @BindView(R.id.recycler_view_form)
-    RecyclerView recyclerView;
+    //@BindView(R.id.recycler_view_form)
+    private RecyclerView recyclerView;
 
     private static final int REQUEST_PERMISSIONS = 0;
     private static final int REQUEST_PERMISSIONS_GRANTED = 1;
@@ -96,9 +90,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private ReportBusiness mReportBusiness;
     private ListJsonOff jsonListModeOff = new ListJsonOff();
 
-    private ArrayList<ReportItems> reportItems = new ArrayList<>();
+    private ArrayList<ReportItems> reportItems;
+    private ReportItems reportTakePhoto;
     private final ArrayList<String> mKeys = new ArrayList<>();
-    private ReportRecyclerView mAdapter;
+    private ReportAdapter mAdapter;
     private FloatingActionButton fab;
     private View emptyLayout;
 
@@ -107,7 +102,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private String resultScore = "";
     private int listRadioMax = 0;
     private PDFCreateAsync pdfCreateAsync = new PDFCreateAsync(ReportActivity.this);
-    //private AnimatedFloatingButton animated = new AnimatedFloatingButton();
 
     private ArrayList<String> listTitle = new ArrayList<>();
     private ArrayList<String> listDescription = new ArrayList<>();
@@ -132,7 +126,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     private CheckAnswerList checkAnswerList = new CheckAnswerList();
     private TakePicture takePicture = new TakePicture();
     private AlertDialog dialog;
-    private int position;
+    int position;
 
     private CameraUtil path = new CameraUtil();
     private AlertDialogUtil alertDialog = new AlertDialogUtil();
@@ -141,7 +135,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-        ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -182,11 +175,16 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         scores = findViewById(R.id.score);
         emptyLayout = findViewById(R.id.layout_report_list_empty);
         Button emptyButton = findViewById(R.id.action_add_item);
+        recyclerView = findViewById(R.id.recycler_view_form);
 
-        mAdapter = new CheckListReportAdapter(reportItems, this);
-        mAdapter.setOnItemListenerClicked(this);
-        RecyclerView.LayoutManager llm = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        reportItems = new ArrayList<>();
+        mAdapter = new ReportAdapter(reportItems);
+
+        RecyclerView.LayoutManager llm = new LinearLayoutManager(getApplicationContext(),
+                RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(llm);
+        recyclerView.hasFixedSize();
+        recyclerView.setAdapter(mAdapter);
 
         // Implementation ItemTouchHelper
         /*ItemTouchHelper.Callback callback = new ItemMoveCallBack(mAdapter);
@@ -194,7 +192,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         touchHelper.attachToRecyclerView(recyclerView);
         mAdapter.notifyDataSetChanged();*/
 
-        recyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemListenerClicked(this);
 
         fab = findViewById(R.id.fab_new_item);
         fab.setOnClickListener(v -> startNewItemListFireBase());
@@ -257,13 +255,13 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
                 for (int i = 0; i < editConformity.size(); i++) {
                     if (editConformity.get(i).equals(getResources().getString(R.string.according))) {
-                        this.radioItemChecked(i, ReportConstants.ITEM.OPT_NUM1);
+                        this.radioItemChecked(reportItems.get(i), ReportConstants.ITEM.OPT_NUM1);
                     }
                     if (editConformity.get(i).equals(getResources().getString(R.string.not_applicable))) {
-                        this.radioItemChecked(i, ReportConstants.ITEM.OPT_NUM2);
+                        this.radioItemChecked(reportItems.get(i), ReportConstants.ITEM.OPT_NUM2);
                     }
                     if (editConformity.get(i).equals(getResources().getString(R.string.not_according))) {
-                        this.radioItemChecked(i, ReportConstants.ITEM.OPT_NUM3);
+                        this.radioItemChecked(reportItems.get(i), ReportConstants.ITEM.OPT_NUM3);
                     }
                 }
 
@@ -279,10 +277,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                     byte[] decodedString = Base64.decode(photos, Base64.DEFAULT);
                     Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                    mAdapter.setImageInItem(i, bitmap);
+                    mAdapter.setImageInItem(reportItems.get(i), bitmap);
                 }
 
-                mAdapter = new EditCheckListReportAdapter(reportItems, ReportActivity.this);
+                mAdapter = new ReportAdapter(reportItems);
                 mAdapter.setOnItemListenerClicked(ReportActivity.this);
                 recyclerView.setAdapter(mAdapter);
 
@@ -380,7 +378,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 Toast.makeText(getApplicationContext(), getString(R.string.label_failed), Toast.LENGTH_SHORT).show();
             }
         });
-        this.showLayoutEmpty();
     }
 
     private void showLayoutEmpty() {
@@ -396,26 +393,29 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint("Search ");
-        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Pesquisar");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
         searchView.setIconified(true);
         return true;
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        mAdapter.getFilter().filter(query);
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String query) {
-        mAdapter.getFilter().filter(query);
-        return false;
-    }
-
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+
+            case R.id.action_search:
+                return true;
 
             // Save report
             case R.id.save:
@@ -484,12 +484,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                         listRadioMax + " " +
                         getResources().getString(R.string.alert_punctuation_label2, scores.getText().toString()),
                 getResources().getString(R.string.confirm),
-                (dialogInterface, i) -> {
-                    this.handleSave();
-                },
-                getResources().getString(R.string.cancel), (dialogInterface, i) ->{
-                    this.clearList();
-                }, false);
+                (dialogInterface, i) ->
+                        this.handleSave(),
+                getResources().getString(R.string.cancel), (dialogInterface, i) ->
+                        this.clearList(), false);
     }
 
     private void alertDialogClose() {
@@ -564,7 +562,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     // Clear every Lists and reload Adapter
     private void clearCheckList() {
 
-        mAdapter.expandState.clear();
+        //mAdapter.expandState.clear();
         reportItems.clear();
         this.clearList();
         this.isConnected();
@@ -613,22 +611,22 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     }
 
     @Override
-    public void radioItemChecked(int itemPosition, int optNum) {
-        reportItems.get(itemPosition).setSelectedAnswerPosition(optNum);
-        reportItems.get(itemPosition).setShine(false);
+    public void radioItemChecked(ReportItems reportItems, int optNum) {
+        reportItems.setSelectedAnswerPosition(optNum);
+        reportItems.setShine(false);
         switch (optNum) {
             case 1:
-                reportItems.get(itemPosition).setOpt1(true);
+                reportItems.setOpt1(true);
                 this.getScore();
                 break;
 
             case 2:
-                reportItems.get(itemPosition).setOpt2(true);
+                reportItems.setOpt2(true);
                 this.getScore();
                 break;
 
             case 3:
-                reportItems.get(itemPosition).setOpt3(true);
+                reportItems.setOpt3(true);
                 this.getScore();
                 break;
         }
@@ -649,22 +647,19 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
     // Update Item List FireBase
     @Override
-    public void updateList(int position) {
+    public void updateList(ReportItems report) {
         NewItemListFireBase nFrag = new NewItemListFireBase();
         Bundle bundle = new Bundle();
-        ReportItems items = reportItems.get(position);
 
-        bundle.putString(ReportConstants.ITEM.TITLE, items.getTitle());
-        bundle.putString(ReportConstants.ITEM.DESCRIPTION, items.getDescription());
-        bundle.putString(ReportConstants.ITEM.KEY, items.getKey());
-        Log.d("TestFrag", items.getKey());
+        bundle.putString(ReportConstants.ITEM.TITLE, report.getTitle());
+        bundle.putString(ReportConstants.ITEM.DESCRIPTION, report.getDescription());
+        bundle.putString(ReportConstants.ITEM.KEY, report.getKey());
         nFrag.setArguments(bundle);
         nFrag.show((ReportActivity.this).getSupportFragmentManager(), "new_item");
     }
 
     // Remove Item List FireBase
-    public void removeItem(int position) {
-        ReportItems items = reportItems.get(position);
+    public void removeItem(ReportItems reportItems) {
 
         alertDialog.showDialog(ReportActivity.this,
                 getResources().getString(R.string.remove),
@@ -672,7 +667,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
                 getResources().getString(R.string.confirm),
                 (dialogInterface, i) -> {
                     Query query = databaseReference.orderByChild(ReportConstants.ITEM.KEY)
-                            .equalTo(items.getKey());
+                            .equalTo(reportItems.getKey());
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -692,27 +687,22 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     }
 
     // Insert Note
-    public void insertNote(int pos) {
-        position = pos;
+    public void insertNote(ReportItems reportItems) {
         ReportNoteFragment fragNote = new ReportNoteFragment(mAdapter);
         Bundle bundle = new Bundle();
-        ReportItems items = reportItems.get(position);
 
-        bundle.putString(ReportConstants.ITEM.NOTE, items.getNote());
+        bundle.putString(ReportConstants.ITEM.NOTE, reportItems.getNote());
         bundle.putInt(ReportConstants.ITEM.POSITION, position);
         fragNote.setArguments(bundle);
-        Log.d("NoteFrag ", items.getNote() + position);
         fragNote.show((ReportActivity.this).getSupportFragmentManager(), "insert_note");
     }
 
     // Show Photo Full
-    public void fullPhoto(int pos) {
-        position = pos;
+    public void fullPhoto(ReportItems reportItems) {
         FullPhotoFragment fullFragment = new FullPhotoFragment();
         Bundle bundle = new Bundle();
-        ReportItems items = reportItems.get(position);
 
-        Bitmap bitmap = items.getPhotoId();
+        Bitmap bitmap = reportItems.getPhotoId();
 
         if (bitmap == null) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_nothing_image), Toast.LENGTH_SHORT).show();
@@ -723,31 +713,27 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] bytes = stream.toByteArray();
 
-        bundle.putInt(ReportConstants.ITEM.POSITION, position);
         bundle.putByteArray(ReportConstants.ITEM.PHOTO, bytes);
 
         fullFragment.setArguments(bundle);
         fullFragment.show(getSupportFragmentManager(), "fullPhoto");
-        Log.i("FullFrag ", " " + Arrays.toString(bytes));
     }
 
     // Reset Item Adapter
     @Override
-    public void resetItem(int pos) {
-        position = pos;
-        ReportItems items = reportItems.get(position);
+    public void resetItem(ReportItems reportItems) {
 
-        mAdapter.setImageInItem(position, null);
+        mAdapter.setImageInItem(reportItems, null);
         mAdapter.insertNote(position, null);
-        items.setOpt1(false);
-        items.setOpt2(false);
-        items.setOpt3(false);
+        reportItems.setOpt1(false);
+        reportItems.setOpt2(false);
+        reportItems.setOpt3(false);
         mAdapter.notifyDataSetChanged();
     }
 
     // OPen Camera
-    public void takePhoto(int pos) {
-        position = pos;
+    public void takePhoto(ReportItems reportItems) {
+        reportTakePhoto = reportItems;
         final String[] items = new String[]{
                 this.getString(R.string.msg_take_image),
                 this.getString(R.string.msg_select_from_gallery)
@@ -773,17 +759,17 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
 
                 Uri photoUri = takePicture.getPathUri();
 
-                ResizeImage.decodeBitmap(photoUri, mAdapter, position);
+                ResizeImage.decodeBitmap(photoUri, mAdapter, reportTakePhoto);
                 Log.i("LOG", "ImagePathCameraPath " + photoUri + " " + data.getData());
             }
-            this.radioItemChecked(position, ReportConstants.ITEM.OPT_NUM1);
+            this.radioItemChecked(reportTakePhoto, ReportConstants.ITEM.OPT_NUM1);
         }
         if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_GALLERY && resultCode == RESULT_OK && data != null) {
             Uri mSelectedUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-                mAdapter.setImageInItem(position, bitmap);
-                this.radioItemChecked(position, ReportConstants.ITEM.OPT_NUM1);
+                mAdapter.setImageInItem(reportTakePhoto, bitmap);
+                this.radioItemChecked(reportTakePhoto, ReportConstants.ITEM.OPT_NUM1);
                 Log.i("LOG", "ImagePathGallery " + bitmap);
 
             } catch (IOException e) {
@@ -852,6 +838,14 @@ public class ReportActivity extends AppCompatActivity implements OnItemListenerC
     @Override
     public void onBackPressed() {
         this.alertDialogClose();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (reportItems.isEmpty()) {
+            this.showLayoutEmpty();
+        }
     }
 
     @Override

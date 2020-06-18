@@ -11,7 +11,8 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportRecyclerView;
+import com.rendersoncs.reportform.itens.ReportItems;
+import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -44,7 +45,7 @@ public class ResizeImage {
         return output;
     }
 
-    public static void decodeBitmap(Uri photoUri, ReportRecyclerView mAdapter, int position) {
+    public static void decodeBitmap(Uri photoUri, ReportAdapter mAdapter, ReportItems reportItems) {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         ContentResolver cr = getApplicationContext().getContentResolver();
@@ -66,7 +67,7 @@ public class ResizeImage {
             input1 = cr.openInputStream(photoUri);
             Bitmap takenImage = BitmapFactory.decodeStream(input1);
             Bitmap photo = scaleBitmap(takenImage);
-            mAdapter.setImageInItem(position, photo);
+            mAdapter.setImageInItem(reportItems, photo);
             if (input1 != null) {
                 input1.close();
             }
