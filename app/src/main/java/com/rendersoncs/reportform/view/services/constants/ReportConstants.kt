@@ -43,5 +43,6 @@ class ReportConstants {
         const val REQUEST_CODE_GALLERY = 2006
         const val REQUEST_CODE_CAMERA = 2000
         const val REQUEST_PERMISSIONS_CAMERA = 0
+        const val NOT_PHOTO = "notPhoto"
     }
 }

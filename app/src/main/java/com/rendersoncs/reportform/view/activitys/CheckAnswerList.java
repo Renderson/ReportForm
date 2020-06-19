@@ -2,13 +2,11 @@ package com.rendersoncs.reportform.view.activitys;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.ReportItems;
+import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 import com.rendersoncs.reportform.view.services.photo.ResizeImage;
 
 import java.util.ArrayList;
@@ -78,19 +76,8 @@ class CheckAnswerList {
                 || reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2 && bitmapPhoto == null
                 || reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM3 && bitmapPhoto == null) {
 
-            Drawable d = activity.getResources().getDrawable(R.drawable.walpaper_not_photo);
-
-            Bitmap b = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(b);
-            d.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-            d.draw(canvas);
-
-            String encodeImage = resizeImage.getEncoded64Image(b);
-            listPhoto.add(encodeImage);
-
-        } /*else if (bitmapPhoto == null) {
-            return true;
-        }*/ else {
+            listPhoto.add(ReportConstants.PHOTO.NOT_PHOTO);
+        } else {
             String encodeImage = resizeImage.getEncoded64Image(bitmapPhoto);
             listPhoto.add(encodeImage);
             Log.i("List ", "List Photo " + listPhoto.size() + " item");

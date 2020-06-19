@@ -23,8 +23,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 import com.rendersoncs.reportform.itens.ReportItems;
+import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 
 import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
@@ -172,7 +172,7 @@ public class CreatePDFViewer {
         tablel.addCell(cel4);
         tablel.addCell(cel5);
 
-        addListItems(paramRepo, listTitle, tablel);
+        addListItems(context, paramRepo, listTitle, tablel);
         document.add(tablel);
 
         /*Bitmap signatureImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.signature);
@@ -192,7 +192,7 @@ public class CreatePDFViewer {
         return localFile2;
     }
 
-    private void addListItems(ReportItems paramRepo, List listTitle, PdfPTable pTable) throws BadElementException, IOException {
+    private void addListItems(Context context, ReportItems paramRepo, List listTitle, PdfPTable pTable) throws BadElementException, IOException {
         PdfPCell celTitle;
         PdfPCell celDescription;
         PdfPCell celRadio;
@@ -218,12 +218,8 @@ public class CreatePDFViewer {
                 String image = objImage.getString(ReportConstants.ITEM.PHOTO);
                 Log.d("PDFImage", image);
 
-                byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                Log.i("log", "PDFImage3: " + decodedByte + " Image");
-
-                Image image1 = Image.getInstance(decodedString);
-                Log.i("log", "PDFImage4: " + image1 + " Image");
+                Image image1;
+                image1 = setImagePDF(context, image);
 
                 listTitle.add(title);
                 celTitle = new PdfPCell(new Paragraph(title));
@@ -243,6 +239,26 @@ public class CreatePDFViewer {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private Image setImagePDF(Context context, String image) throws BadElementException, IOException {
+        Image image1;
+        if (image.equals(ReportConstants.PHOTO.NOT_PHOTO)){
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.walpaper_not_photo);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(CompressFormat.JPEG, 100, outputStream);
+            Image stream = Image.getInstance(outputStream.toByteArray());
+            stream.scaleAbsolute(75f, 75f);
+            image1 = Image.getInstance(stream);
+        } else {
+            byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Log.i("log", "PDFImage3: " + decodedByte + " Image");
+
+            image1 = Image.getInstance(decodedString);
+            Log.i("log", "PDFImage4: " + image1 + " Image");
+        }
+        return image1;
     }
 
     private static PdfPCell createImageCell(Image paramImage) {
