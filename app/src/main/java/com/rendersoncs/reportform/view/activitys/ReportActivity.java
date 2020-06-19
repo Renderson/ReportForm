@@ -1,6 +1,7 @@
 package com.rendersoncs.reportform.view.activitys;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -201,6 +203,16 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
 
         // Animated FloatingButton
         //animated.animatedFab(recyclerView, fab);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void keyboardCloseTouchListener() {
+        recyclerView.setOnTouchListener((v, event) -> {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+            return false;
+        });
     }
 
     private void loadListFire() {
@@ -843,6 +855,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     @Override
     protected void onResume() {
         super.onResume();
+        this.keyboardCloseTouchListener();
         if (reportItems.isEmpty()) {
             this.showLayoutEmpty();
         }
