@@ -49,7 +49,7 @@ import com.rendersoncs.reportform.repository.dao.ReportDataBaseAsyncTask;
 import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
 import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
-import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportAdapter;
+import com.rendersoncs.reportform.view.adapter.ReportAdapter;
 import com.rendersoncs.reportform.view.adapter.listener.OnItemClickedReport;
 import com.rendersoncs.reportform.view.fragment.FullPhotoFragment;
 import com.rendersoncs.reportform.view.fragment.NewItemListFireBase;

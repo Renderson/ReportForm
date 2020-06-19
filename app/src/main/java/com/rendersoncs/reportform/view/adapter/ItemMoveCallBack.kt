@@ -2,7 +2,6 @@ package com.rendersoncs.reportform.view.adapter
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportAdapter
 
 class ItemMoveCallBack(private val mAdapter: ItemTouchHelperContract) : ItemTouchHelper.Callback() {
     override fun isLongPressDragEnabled(): Boolean {

@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.rendersoncs.reportform.itens.ReportItems;
-import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportAdapter;
+import com.rendersoncs.reportform.view.adapter.ReportAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

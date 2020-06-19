@@ -1,4 +1,4 @@
-package com.rendersoncs.reportform.view.adapter.checkListAdapter
+package com.rendersoncs.reportform.view.adapter
 
 import android.animation.ObjectAnimator
 import android.graphics.Bitmap
@@ -89,8 +89,8 @@ class ReportAdapter(
             tvTitleList.text = reportItems.title
             tvDescription.text = reportItems.description
 
-            expandableLayout.visibility = if (isExpanded) View.VISIBLE else View.GONE
-            buttonLayoutArrow.rotation = if (expandState[position]) 180f else 0f
+            expandableLayout.visibility = if (isExpanded) View.GONE else View.VISIBLE
+            buttonLayoutArrow.rotation = if (expandState[position]) 0f else 180f
 
             buttonLayoutArrow.setOnClickListener {
                 onClickButton(expandableLayout, buttonLayoutArrow, position)
@@ -165,13 +165,13 @@ class ReportAdapter(
     private fun onClickButton(expandableLayout: LinearLayout, buttonLayout: RelativeLayout, i: Int) {
 
         //Expand CardView
-        if (expandableLayout.visibility == View.VISIBLE) {
-            createRotateAnimator(buttonLayout, 180f, 0f).start()
-            expandableLayout.visibility = View.GONE
-            expandState.put(i, false)
-        } else {
+        if (expandableLayout.visibility == View.GONE) {
             createRotateAnimator(buttonLayout, 0f, 180f).start()
             expandableLayout.visibility = View.VISIBLE
+            expandState.put(i, false)
+        } else {
+            createRotateAnimator(buttonLayout, 180f, 0f).start()
+            expandableLayout.visibility = View.GONE
             expandState.put(i, true)
         }
     }

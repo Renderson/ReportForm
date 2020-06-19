@@ -10,7 +10,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.rendersoncs.reportform.R
-import com.rendersoncs.reportform.view.adapter.checkListAdapter.ReportAdapter
+import com.rendersoncs.reportform.view.adapter.ReportAdapter
 import com.rendersoncs.reportform.view.services.constants.ReportConstants
 import java.util.*
 
