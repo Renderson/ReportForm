@@ -192,9 +192,8 @@ class ReportAdapter(
     }
 
     // Set result note
-    fun insertNote(position: Int, note: String?) {
-        val dataSet = reportItemsFiltered[position]
-        dataSet.note = note
+    fun insertNote(report: ReportItems, note: String?) {
+        report.note = note
         Log.i("LOG", "Note $note")
         notifyDataSetChanged()
     }

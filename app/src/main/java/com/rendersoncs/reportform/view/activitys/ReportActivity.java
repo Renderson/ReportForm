@@ -62,6 +62,7 @@ import com.rendersoncs.reportform.view.services.photo.CameraUtil;
 import com.rendersoncs.reportform.view.services.photo.ResizeImage;
 import com.rendersoncs.reportform.view.services.photo.TakePicture;
 import com.rendersoncs.reportform.view.services.util.AlertDialogUtil;
+import com.rendersoncs.reportform.view.services.util.InternetCheck;
 import com.rendersoncs.reportform.view.services.util.ListJsonOff;
 import com.rendersoncs.reportform.view.services.util.RVEmptyObserver;
 import com.rendersoncs.reportform.view.services.util.SnackBarHelper;
@@ -92,7 +93,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     private ReportBusiness mReportBusiness;
     private ListJsonOff jsonListModeOff = new ListJsonOff();
 
-    private ArrayList<ReportItems> reportItems;
+    private ArrayList<ReportItems> reportItems = new ArrayList<>();
     private ReportItems reportTakePhoto;
     private final ArrayList<String> mKeys = new ArrayList<>();
     private ReportAdapter mAdapter;
@@ -128,7 +129,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     private CheckAnswerList checkAnswerList = new CheckAnswerList();
     private TakePicture takePicture = new TakePicture();
     private AlertDialog dialog;
-    int position;
+    InternetCheck internetCheck;
 
     private CameraUtil path = new CameraUtil();
     private AlertDialogUtil alertDialog = new AlertDialogUtil();
@@ -141,6 +142,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_report);
+        findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -165,7 +167,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         if (mReportId == 0) {
             this.loadListFire();
         } else {
-            findViewById(R.id.progressBar).setVisibility(View.GONE);
             this.loadEditReport();
         }
     }
@@ -179,7 +180,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         Button emptyButton = findViewById(R.id.action_add_item);
         recyclerView = findViewById(R.id.recycler_view_form);
 
-        reportItems = new ArrayList<>();
         mAdapter = new ReportAdapter(reportItems);
 
         RecyclerView.LayoutManager llm = new LinearLayoutManager(getApplicationContext(),
@@ -216,8 +216,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     }
 
     private void loadListFire() {
-        findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-
         this.isConnected();
         this.getBundleReportFromDialog();
 
@@ -225,6 +223,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     }
 
     private void loadEditReport() {
+        findViewById(R.id.progressBar).setVisibility(View.GONE);
         findViewById(R.id.fab_new_item).setVisibility(View.GONE);
 
         Bundle bundle = getIntent().getExtras();
@@ -279,7 +278,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
 
                 for (int i = 0; i < editNotes.size(); i++) {
                     String notes = editNotes.get(i);
-                    mAdapter.insertNote(i, notes);
+                    mAdapter.insertNote(reportItems.get(i), notes);
                     Log.i("log", "NOTES: " + i + notes + " notes");
                 }
 
@@ -333,20 +332,29 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS)
-                    .child(user.getId()).child(ReportConstants.FIREBASE.FIRE_LIST);
-            this.addItemsFromFireBase();
-
+            internetCheck = new InternetCheck(internet -> {
+                if (internet){
+                    addItemsFromFireBase();
+                } else {
+                    addItemsFromListOFF();
+                }
+            });
         } else {
-            findViewById(R.id.progressBar).setVisibility(View.GONE);
-            findViewById(R.id.action_add_item).setVisibility(View.GONE);
-            fab.setEnabled(false);
-            jsonListModeOff.addItemsFromJsonList(reportItems);
+            addItemsFromListOFF();
         }
+    }
+
+    private void addItemsFromListOFF() {
+        findViewById(R.id.progressBar).setVisibility(View.GONE);
+        findViewById(R.id.action_add_item).setVisibility(View.GONE);
+        fab.setEnabled(false);
+        jsonListModeOff.addItemsFromJsonList(reportItems);
     }
 
     // Sync RecyclerView with FireBase
     private void addItemsFromFireBase() {
+        databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS)
+                .child(user.getId()).child(ReportConstants.FIREBASE.FIRE_LIST);
 
         databaseReference.addChildEventListener(new ChildEventListener() {
 
@@ -700,11 +708,10 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
 
     // Insert Note
     public void insertNote(ReportItems reportItems) {
-        ReportNoteFragment fragNote = new ReportNoteFragment(mAdapter);
+        ReportNoteFragment fragNote = new ReportNoteFragment(mAdapter, reportItems);
         Bundle bundle = new Bundle();
 
         bundle.putString(ReportConstants.ITEM.NOTE, reportItems.getNote());
-        bundle.putInt(ReportConstants.ITEM.POSITION, position);
         fragNote.setArguments(bundle);
         fragNote.show((ReportActivity.this).getSupportFragmentManager(), "insert_note");
     }
@@ -736,7 +743,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     public void resetItem(ReportItems reportItems) {
 
         mAdapter.setImageInItem(reportItems, null);
-        mAdapter.insertNote(position, null);
+        mAdapter.insertNote(reportItems, null);
         reportItems.setOpt1(false);
         reportItems.setOpt2(false);
         reportItems.setOpt3(false);
