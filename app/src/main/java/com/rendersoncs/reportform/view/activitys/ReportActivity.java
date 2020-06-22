@@ -660,7 +660,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
                 checkAnswerList.checkAnswerList(i, reportItems, listTitle, listDescription);
                 checkAnswerList.checkAnswerNote(ReportActivity.this, i, reportItems, listNotes);
                 checkAnswerList.checkAnswerRadiosButtons(ReportActivity.this, i, reportItems, listRadio);
-                checkAnswerList.checkAnswerPhoto(ReportActivity.this, i, reportItems, listPhoto);
+                checkAnswerList.checkAnswerPhoto(i, reportItems, listPhoto);
             }
         }
     }

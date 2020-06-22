@@ -66,8 +66,7 @@ class CheckAnswerList {
     }
 
     // check answer list with photos
-    boolean checkAnswerPhoto(Activity activity,
-                             int i,
+    boolean checkAnswerPhoto(int i,
                              ArrayList<ReportItems> reportItems,
                              ArrayList<String> listPhoto) {
 

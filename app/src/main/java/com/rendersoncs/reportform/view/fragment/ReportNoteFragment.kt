@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
@@ -13,18 +12,17 @@ import com.rendersoncs.reportform.R
 import com.rendersoncs.reportform.itens.ReportItems
 import com.rendersoncs.reportform.view.adapter.ReportAdapter
 import com.rendersoncs.reportform.view.services.constants.ReportConstants
-import java.util.*
 
 class ReportNoteFragment(private val adapter: ReportAdapter,
                          private val reportItems: ReportItems) : DialogFragment() {
 
     private var note: EditText? = null
     private var getNote: String? = null
-    private var position = 0
 
+    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = Objects.requireNonNull(activity)?.layoutInflater
-        @SuppressLint("InflateParams") val view = inflater?.inflate(R.layout.fragment_report_note, null)
+        val inflater = activity!!.layoutInflater
+        val view = inflater.inflate(R.layout.fragment_report_note, null)
 
         if (view != null) {
             note = view.findViewById(R.id.txt_note)
@@ -53,7 +51,6 @@ class ReportNoteFragment(private val adapter: ReportAdapter,
 
     private fun checkArguments() {
         if (arguments != null) {
-            position = arguments!!.getInt(ReportConstants.ITEM.POSITION)
             getNote = arguments!!.getString(ReportConstants.ITEM.NOTE)
             note!!.setText(getNote)
         }
@@ -70,14 +67,12 @@ class ReportNoteFragment(private val adapter: ReportAdapter,
     private fun insertNewNote() {
         val newNote = note!!.text.toString()
         adapter.insertNote(reportItems, newNote)
-        Log.d("NoteFrag ", "InsertNote $position$newNote")
     }
 
     private fun updateNote() {
         if (arguments != null) {
             val updateNote = note!!.text.toString()
             adapter.insertNote(reportItems, updateNote)
-            Log.d("NoteFrag ", "UpdateNote $position$updateNote")
         }
     }
 
