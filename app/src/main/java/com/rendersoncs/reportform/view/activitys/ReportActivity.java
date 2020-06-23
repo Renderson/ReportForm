@@ -596,6 +596,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         //mAdapter.expandState.clear();
         reportItems.clear();
         this.clearList();
+        this.getScore();
         this.isConnected();
 
         snackBarHelper.showSnackBar(ReportActivity.this, R.id.fab_new_item, R.string.label_empty_list);
@@ -605,40 +606,28 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         ArrayList<String> listMax = new ArrayList<>();
         listMax.clear();
 
-        float NCT = 0.7f;
-        float soma = 0f;
-        float sizeList = 0f;
+        float startingPoints = 10f;
+        float losePoints = 0.7f;
+        float average = 5.0f;
 
         for (int i = 0; i < reportItems.size(); i++) {
-            if (reportItems.get(i).isOpt1() || reportItems.get(i).isOpt2() || reportItems.get(i).isOpt3()) {
-                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM1) {
-                    String C = getResources().getString(R.string.according);
-                    listMax.add(C);
-                }
-                if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM2) {
-                    String NA = getResources().getString(R.string.not_applicable);
-                    listMax.add(NA);
-                }
+            if (reportItems.get(i).isOpt3()) {
                 if (reportItems.get(i).getSelectedAnswerPosition() == ReportConstants.ITEM.OPT_NUM3) {
                     String NC = getResources().getString(R.string.not_according);
                     listMax.add(NC);
-                    soma = NCT++;
-                    //Log.i("LOG", "Total Item S " + soma + " " + NCT);
                 }
             }
         }
         listRadioMax = listMax.size();
-        float divList = listRadioMax / 2f;
-        float scoreList = listRadioMax - soma;
+        float scoreList = listRadioMax * losePoints;
+        float score = startingPoints - scoreList;
 
-        if (scoreList >= divList) {
-            resultScore = "CONFORME";
-            Log.i("LOG", "Estabelicimento conforme");
-        } else if (sizeList < divList) {
-            resultScore = "NÃO CONFORME";
-            Log.i("LOG", "Estabelicimento Não Conforme");
+        if (score >= average) {
+            resultScore = getString(R.string.according).toUpperCase();
+        } else {
+            resultScore = getString(R.string.not_according).toUpperCase();
         }
-        scores.setText(Float.toString(scoreList));
+        scores.setText(Float.toString(score));
     }
 
     @Override
@@ -758,6 +747,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         reportItems.setOpt1(false);
         reportItems.setOpt2(false);
         reportItems.setOpt3(false);
+        this.getScore();
         mAdapter.notifyDataSetChanged();
     }
 
