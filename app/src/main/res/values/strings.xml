@@ -110,7 +110,7 @@
     <string name="label_permission_camera">We need permission to access the camera.</string>
     <string name="label_permission_read">We need permission to write data to save your report.</string>
     <string name="label_error_update_list">Error changing list item.</string>
-    <string name="label_error_return_photo_full">Something went wrong, try again!</string>
+    <string name="label_error_return">Something went wrong, try again!</string>
     <string name="label_photo_full">Full image</string>
     <string name="label_nothing_image">There is no image to display.</string>
     <string name="label_remove_item_list">Upon confirmation, the item will be removed from the list.</string>

@@ -18,7 +18,7 @@ class FullPhotoFragment : DialogFragment() {
         val imageView = view.findViewById<ImageView>(R.id.image_full)
 
         if (arguments == null) {
-            Toast.makeText(activity, resources.getString(R.string.label_error_return_photo_full), Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, resources.getString(R.string.label_error_return), Toast.LENGTH_SHORT).show()
         }
 
         val bytes = arguments!!.getByteArray(ReportConstants.ITEM.PHOTO)!!

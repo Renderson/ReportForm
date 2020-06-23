@@ -43,6 +43,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.R;
@@ -62,7 +63,6 @@ import com.rendersoncs.reportform.view.services.photo.CameraUtil;
 import com.rendersoncs.reportform.view.services.photo.ResizeImage;
 import com.rendersoncs.reportform.view.services.photo.TakePicture;
 import com.rendersoncs.reportform.view.services.util.AlertDialogUtil;
-import com.rendersoncs.reportform.view.services.util.InternetCheck;
 import com.rendersoncs.reportform.view.services.util.ListJsonOff;
 import com.rendersoncs.reportform.view.services.util.RVEmptyObserver;
 import com.rendersoncs.reportform.view.services.util.SnackBarHelper;
@@ -120,7 +120,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     private ArrayList<String> editPhoto = new ArrayList<>();
 
     //public Parcelable savedRecyclerLayoutState;
-
     private DatabaseReference databaseReference;
     private FirebaseAnalytics mFireBaseAnalytics;
     private User user = new User();
@@ -129,7 +128,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     private CheckAnswerList checkAnswerList = new CheckAnswerList();
     private TakePicture takePicture = new TakePicture();
     private AlertDialog dialog;
-    InternetCheck internetCheck;
 
     private CameraUtil path = new CameraUtil();
     private AlertDialogUtil alertDialog = new AlertDialogUtil();
@@ -332,11 +330,23 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            internetCheck = new InternetCheck(internet -> {
-                if (internet){
-                    addItemsFromFireBase();
-                } else {
-                    addItemsFromListOFF();
+
+            DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+            connectedRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean connected = snapshot.getValue(Boolean.class);
+                    if (connected) {
+                        addItemsFromFireBase();
+                    } else {
+                        addItemsFromListOFF();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.label_error_return), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -349,6 +359,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         findViewById(R.id.action_add_item).setVisibility(View.GONE);
         fab.setEnabled(false);
         jsonListModeOff.addItemsFromJsonList(reportItems);
+        mAdapter.notifyDataSetChanged();
     }
 
     // Sync RecyclerView with FireBase
