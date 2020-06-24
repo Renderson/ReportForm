@@ -43,7 +43,7 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
 
     private ReportBusiness mReportBusiness;
     private ReportItems repoEntity;
-    private TextView emailResume, dateResume, companyResume, itemsResume, openPdf;
+    private TextView controllerResume, emailResume, dateResume, companyResume, itemsResume, openPdf;
     private PieChart pieChart;
     private int mReportId;
 
@@ -79,12 +79,14 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
     private void init() {
         recyclerView = findViewById(R.id.resume_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(ReportResume.this));
-        recyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
+        recyclerView.addItemDecoration(new MyDividerItemDecoration(this,
+                LinearLayoutManager.VERTICAL, 16));
 
         pieChart = findViewById(R.id.pieChart);
 
         repoResumeList = new ArrayList<>();
 
+        controllerResume = findViewById(R.id.controller_resume);
         companyResume = findViewById(R.id.company_resume);
         emailResume = findViewById(R.id.email_resume);
         dateResume = findViewById(R.id.date_resume);
@@ -134,7 +136,9 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         dataSet.setValueTextSize(24f);
-        dataSet.setColors(getResources().getColor(R.color.colorRadioC), getResources().getColor(R.color.colorRadioNA), getResources().getColor(R.color.colorRadioNC));
+        dataSet.setColors(getResources().getColor(R.color.colorRadioC),
+                getResources().getColor(R.color.colorRadioNA),
+                getResources().getColor(R.color.colorRadioNC));
 
         // Animation
         pieChart.animateY(800, Easing.EaseInCirc);
@@ -162,11 +166,14 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
             mReportId = bundle.getInt(ReportConstants.REPORT.REPORT_ID);
 
             repoEntity = this.mReportBusiness.load(mReportId);
+            this.controllerResume.setText(getString(R.string.label_report, repoEntity.getController()));
             this.emailResume.setText(repoEntity.getEmail());
             this.dateResume.setText(repoEntity.getDate());
-            this.companyResume.setText(StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.CHARACTERS.LIMITS_TEXT));
+            this.companyResume.setText(StringExtension.limitsText(repoEntity.getCompany(),
+                    ReportConstants.CHARACTERS.LIMITS_TEXT));
 
-            setTitle(getResources().getString(R.string.company) + " " + StringExtension.limitsText(repoEntity.getCompany(), ReportConstants.CHARACTERS.LIMITS_TEXT));
+            setTitle(getResources().getString(R.string.company) + " " + StringExtension.limitsText(repoEntity.getCompany(),
+                    ReportConstants.CHARACTERS.LIMITS_TEXT));
 
             this.populateRecyclerViewResume();
             this.countRadioSelected();
@@ -241,6 +248,7 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
     public void fullPhoto(ReportResumeItems reportItems) {
 
         String image = reportItems.getPhoto();
+        String conformity = reportItems.getConformity();
 
         if (image.equals(ReportConstants.PHOTO.NOT_PHOTO)) {
             Toast.makeText(getApplicationContext(),
@@ -252,6 +260,7 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
             byte[] bytes = Base64.decode(image, Base64.DEFAULT);
 
             bundle.putByteArray(ReportConstants.ITEM.PHOTO, bytes);
+            bundle.putString(ReportConstants.ITEM.CONFORMITY, conformity);
 
             fullFragment.setArguments(bundle);
             fullFragment.show(getSupportFragmentManager(), "fullPhoto");

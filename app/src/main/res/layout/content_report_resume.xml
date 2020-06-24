@@ -29,7 +29,6 @@
                 android:background="@color/colorResume"
                 android:orientation="vertical">
 
-
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
@@ -40,6 +39,7 @@
                     android:contentDescription="@string/image_for_resume" />
 
                 <TextView
+                    android:id="@+id/controller_resume"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_16"
@@ -158,13 +158,12 @@
 
                 <ImageView
                     android:id="@+id/img_pdf"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
                     android:layout_marginTop="@dimen/margin_16"
                     android:layout_marginBottom="@dimen/margin_8"
-                    android:paddingStart="-8dp"
-                    android:paddingEnd="0dp"
-                    android:src="@drawable/ic_action_pdf"
+                    android:src="@drawable/ic_pdf"
+                    android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/lineView2"
                     app:layout_constraintTop_toBottomOf="@+id/lineView2"
@@ -175,10 +174,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_4"
-                    android:layout_marginTop="@dimen/margin_8"
                     android:text="@string/access"
                     android:textColor="@color/about_text_color"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_pdf"
                     app:layout_constraintStart_toEndOf="@+id/img_pdf"
                     app:layout_constraintTop_toTopOf="@+id/img_pdf" />
 

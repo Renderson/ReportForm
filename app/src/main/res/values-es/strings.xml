@@ -141,7 +141,7 @@
     <string name="label_create_list_for_start">Crea elementos para tu lista para comenzar a crear informes!</string>
     <string name="label_button_create_report">CREAR INFORME</string>
     <string name="label_image_empty">Imagen de diseño vacía</string>
-    <string name="label_report">Informes</string>
+    <string name="label_report">Informe firmado por: %1$s</string>
     <string name="format_date">19/02/1984</string>
     <string name="label_image_overflow">desbordamiento</string>
     <string name="label_title_resume">Título</string>

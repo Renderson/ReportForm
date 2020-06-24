@@ -141,7 +141,7 @@
     <string name="label_create_list_for_start">Create items for your list to start creating reports!</string>
     <string name="label_button_create_report">CREATE REPORT</string>
     <string name="label_image_empty">Empty layout image</string>
-    <string name="label_report">Reporting</string>
+    <string name="label_report">Reporting signed by: %1$s</string>
     <string name="format_date">19/02/1984</string>
     <string name="label_image_overflow">overflow</string>
     <string name="label_title_resume">Title</string>
