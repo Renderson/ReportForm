@@ -238,18 +238,23 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
         }
     }
 
-    @Override
     public void fullPhoto(ReportResumeItems reportItems) {
-        FullPhotoFragment fullFragment = new FullPhotoFragment();
-        Bundle bundle = new Bundle();
 
         String image = reportItems.getPhoto();
 
-        byte[] bytes = Base64.decode(image, Base64.DEFAULT);
+        if (image.equals(ReportConstants.PHOTO.NOT_PHOTO)) {
+            Toast.makeText(getApplicationContext(),
+                    getResources().getString(R.string.label_nothing_image), Toast.LENGTH_SHORT).show();
+        } else {
+            FullPhotoFragment fullFragment = new FullPhotoFragment();
+            Bundle bundle = new Bundle();
 
-        bundle.putByteArray(ReportConstants.ITEM.PHOTO, bytes);
+            byte[] bytes = Base64.decode(image, Base64.DEFAULT);
 
-        fullFragment.setArguments(bundle);
-        fullFragment.show(getSupportFragmentManager(), "fullPhoto");
+            bundle.putByteArray(ReportConstants.ITEM.PHOTO, bytes);
+
+            fullFragment.setArguments(bundle);
+            fullFragment.show(getSupportFragmentManager(), "fullPhoto");
+        }
     }
 }

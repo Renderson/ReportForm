@@ -103,7 +103,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     private TextView resultCompany, resultEmail, resultDate, scores;
     private String resultController = "";
     private String resultScore = "";
-    private int listRadioMax = 0;
     private PDFCreateAsync pdfCreateAsync = new PDFCreateAsync(ReportActivity.this);
 
     private ArrayList<String> listTitle = new ArrayList<>();
@@ -276,8 +275,12 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
 
                 for (int i = 0; i < editNotes.size(); i++) {
                     String notes = editNotes.get(i);
-                    mAdapter.insertNote(reportItems.get(i), notes);
-                    Log.i("log", "NOTES: " + i + notes + " notes");
+
+                    if (notes.equals(getString(R.string.label_not_observation))){
+                        mAdapter.insertNote(reportItems.get(i), null);
+                    } else {
+                        mAdapter.insertNote(reportItems.get(i), notes);
+                    }
                 }
 
                 for (int i = 0; i < editPhoto.size(); i++) {
@@ -424,7 +427,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint("Pesquisar");
+        searchView.setQueryHint(getString(R.string.label_search));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -512,7 +515,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         alertDialog.showDialogScore(ReportActivity.this,
                 getResources().getString(R.string.alert_punctuation),
                 getResources().getString(R.string.alert_punctuation_label1, resultScore) + " " +
-                        listRadioMax + " " +
+                        listRadio.size() + " " +
                         getResources().getString(R.string.alert_punctuation_label2, scores.getText().toString()),
                 getResources().getString(R.string.confirm),
                 (dialogInterface, i) ->
@@ -618,7 +621,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
                 }
             }
         }
-        listRadioMax = listMax.size();
+        int listRadioMax = listMax.size();
         float scoreList = listRadioMax * losePoints;
         float score = startingPoints - scoreList;
 

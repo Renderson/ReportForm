@@ -25,6 +25,7 @@
     <string name="save">Guardar</string>
     <string name="resume_date">Fecha: %1$s</string>
     <string name="item_selected">Artículos seleccionados: %1$s</string>
+    <string name="label_search">Buscar</string>
 
     <string name="hello_blank_fragment">Hola fragmento en blanco</string>
     <string name="txt_check_networking">Sin conexión a internet</string>

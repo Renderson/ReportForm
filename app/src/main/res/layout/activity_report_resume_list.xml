@@ -1,82 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_margin="@dimen/margin_8">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_resume"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="4dp"
-            android:layout_margin="@dimen/margin_16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_marginBottom="@dimen/margin_8"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/jo_photo"
+            android:layout_width="@dimen/width_48"
+            android:layout_height="@dimen/height_48"
+            android:layout_marginTop="@dimen/margin_4"
+            android:layout_marginStart="@dimen/margin_8"
+            android:background="@drawable/border_shape_image"
+            android:contentDescription="@string/image_for_resume"
+            android:padding="@dimen/padding_2"
+            android:src="@drawable/ic_broken_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/jo_photo"
-                            android:layout_width="match_parent"
-                            android:layout_height="250dp"
-                            android:background="@color/colorBlack"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:contentDescription="@string/image_for_resume" />
+        <TextView
+            android:id="@+id/jo_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:text="@string/label_list_title"
+            android:textColor="@color/com_facebook_button_background_color_focused_disabled"
+            android:textSize="@dimen/text_size_22"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/jo_photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/jo_photo"
+            app:layout_constraintTop_toTopOf="@+id/jo_photo" />
 
-                        <TextView
-                            android:id="@+id/jo_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/margin_8"
-                            android:layout_marginStart="@dimen/margin_8"
-                            android:text="@string/label_list_title"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/text_size_22"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="@+id/jo_photo"
-                            app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/jo_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:text="@string/label_description_resume"
+                android:textSize="@dimen/text_size_12"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/jo_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/jo_photo" />
 
-                        <TextView
-                            android:id="@+id/jo_description"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/label_description_resume"
-                            android:textStyle="bold"
-                            android:textSize="@dimen/text_size_12"
-                            android:layout_margin="@dimen/margin_8"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/jo_photo" />
+            <TextView
+                android:id="@+id/jo_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:text="@string/label_observation"
+                android:textSize="@dimen/text_size_12"
+                app:layout_constraintEnd_toEndOf="@+id/jo_description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/jo_description" />
 
-                        <TextView
-                            android:id="@+id/jo_note"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/label_observation"
-                            android:textSize="@dimen/text_size_12"
-                            android:layout_margin="@dimen/margin_8"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/jo_description" />
+            <TextView
+                android:id="@+id/jo_conformity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:text="@string/according"
+                android:textSize="@dimen/text_size_12"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/jo_note"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/jo_note" />
 
-                        <TextView
-                            android:id="@+id/jo_conformity"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/according"
-                            android:textStyle="bold"
-                            android:textSize="@dimen/text_size_12"
-                            android:layout_margin="@dimen/margin_8"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/jo_note" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -51,7 +51,11 @@ class ReportResumeAdapter(private val repoResumeList:
         val bytes = Base64.decode(image, Base64.DEFAULT)
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 
-        Glide.with(context).load(bitmap).centerCrop().into(holder.resumePhoto)
+        if (bitmap == null){
+            holder.resumePhoto.imageAlpha = R.drawable.ic_broken_image
+        } else {
+            Glide.with(context).load(bitmap).centerCrop().into(holder.resumePhoto)
+        }
 
         val according = context.resources.getString(R.string.according)
         val notApplicable = context.resources.getString(R.string.not_applicable)

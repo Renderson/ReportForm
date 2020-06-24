@@ -61,5 +61,4 @@ class ReportItems {
     constructor(header: String?) {
         this.header = header
     }
-
 }

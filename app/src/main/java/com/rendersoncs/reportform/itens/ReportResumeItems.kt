@@ -5,4 +5,5 @@ class ReportResumeItems(
         var description: String,
         var conformity: String,
         var note: String,
-        var photo: String)
+        var photo: String
+)
