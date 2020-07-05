@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 class ReportDataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "Report.db";
 
     private static final String SQL_CREATE_TABLE_REPORT =
@@ -17,7 +17,7 @@ class ReportDataBaseHelper extends SQLiteOpenHelper {
                     + DataBaseConstants.REPORT.COLUMNS.CONTROLLER + " text, "
                     + DataBaseConstants.REPORT.COLUMNS.SCORE + " text, "
                     + DataBaseConstants.REPORT.COLUMNS.DATE + " text, "
-                    + DataBaseConstants.REPORT.COLUMNS.GRADES + " integer, "
+                    + DataBaseConstants.REPORT.COLUMNS.RESULT + " text, "
                     + DataBaseConstants.REPORT.COLUMNS.LIST + " blob, "
                     + DataBaseConstants.REPORT.COLUMNS.PHOTO + " blob);";
 

@@ -14,7 +14,7 @@ public class DataBaseConstants {
             static final String CONTROLLER = "controller";
             static final String SCORE = "score";
             static final String DATE = "date";
-            static final String GRADES = "grades";
+            static final String RESULT = "result";
             static final String LIST = "jsonList";
             public static final String PHOTO = "photo";
         }

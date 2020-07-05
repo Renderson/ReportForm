@@ -8,6 +8,7 @@
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#222222</color>
+    <color name="cod_gray_alpha_75">#BF121212</color>
     <color name="colorResume">#FF3F58E4</color>
 
     <color name="colorRadioC">#ff99cc00</color>

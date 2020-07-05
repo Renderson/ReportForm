@@ -23,7 +23,12 @@ class FullPhotoFragment : DialogFragment() {
             Toast.makeText(activity, resources.getString(R.string.label_error_return), Toast.LENGTH_SHORT).show()
         }
 
-        conformity.text = arguments!!.getString(ReportConstants.ITEM.CONFORMITY)!!
+        if (arguments!!.getString(ReportConstants.ITEM.CONFORMITY) == null){
+            conformity.text = ""
+        } else {
+
+            conformity.text = arguments!!.getString(ReportConstants.ITEM.CONFORMITY)!!
+        }
         val bytes = arguments!!.getByteArray(ReportConstants.ITEM.PHOTO)!!
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         Glide.with(activity!!).load(bitmap).centerCrop().into(imageFull)

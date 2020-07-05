@@ -780,7 +780,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         if (resultCode != Activity.RESULT_CANCELED) {
             if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
 
-                Uri photoUri = takePicture.getPathUri();
+                Uri photoUri = (Uri) data.getExtras().get("output");
 
                 ResizeImage.decodeBitmap(photoUri, mAdapter, reportTakePhoto);
                 Log.i("LOG", "ImagePathCameraPath " + photoUri + " " + data.getData());

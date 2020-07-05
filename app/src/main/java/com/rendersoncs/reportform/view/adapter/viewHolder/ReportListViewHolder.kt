@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.rendersoncs.reportform.R
 import com.rendersoncs.reportform.itens.ReportItems
@@ -17,6 +18,8 @@ import kotlinx.android.synthetic.main.activity_main_list.view.*
 class ReportListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
     private var companyView = itemView.companyView
     private var dateView = itemView.dateView
+    private var view = itemView.viewResult
+    private var resultView = itemView.resultView
     private val overflow = itemView.overflow
     private val mContext = context
 
@@ -24,6 +27,16 @@ class ReportListViewHolder(itemView: View, context: Context) : RecyclerView.View
 
         companyView!!.text = limitsText(repoEntity.company, ReportConstants.CHARACTERS.LIMITS_TEXT)
         dateView!!.text = repoEntity.date
+        resultView.text = repoEntity.result
+
+        val getResult = repoEntity.result.toString()
+        val result = mContext.getString(R.string.according)
+
+        if (getResult == result.toUpperCase()) {
+            view.setBackgroundColor(ContextCompat.getColor(view.context, R.color.colorRadioC))
+        } else {
+            view.setBackgroundColor(ContextCompat.getColor(view.context, R.color.colorRadioNC))
+        }
 
         itemView.setOnClickListener { listener.onOpenPdf(repoEntity.id) }
         overflow.setOnClickListener {

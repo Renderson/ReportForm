@@ -67,7 +67,7 @@ internal class CheckAnswerList {
             listPhoto.add(ReportConstants.PHOTO.NOT_PHOTO)
         } else {
             assert(bitmapPhoto != null)
-            val encodeImage = resizeImage.getEncoded64Image(bitmapPhoto)
+            val encodeImage = bitmapPhoto?.let { resizeImage.getEncoded64Image(it) }
             listPhoto.add(encodeImage)
         }
     }

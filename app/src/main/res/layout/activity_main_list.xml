@@ -14,32 +14,30 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+        <View
+            android:id="@+id/viewResult"
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:background="@color/colorAccent"
+            android:contentDescription="@string/image_pdf"
             android:padding="@dimen/padding_8"
-            android:layout_marginStart="@dimen/margin_8"
-            android:src="@drawable/ic_pdf_concluded"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/image_pdf" />
+            card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/companyView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_4"
             android:layout_marginTop="@dimen/margin_8"
             android:gravity="center"
             android:padding="@dimen/padding_2"
-            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_size_18"
-            android:textStyle="normal"
-            card_view:layout_constraintStart_toEndOf="@+id/imageView"
+            android:textStyle="bold"
+            card_view:layout_constraintStart_toEndOf="@+id/viewResult"
             card_view:layout_constraintTop_toTopOf="parent"
             tools:text="@string/app_name" />
 
@@ -52,26 +50,40 @@
             android:text="@string/format_date"
             android:textSize="@dimen/text_size_12"
             android:textStyle="normal"
-            card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="@+id/companyView"
             card_view:layout_constraintTop_toBottomOf="@+id/companyView" />
+
+        <TextView
+            android:id="@+id/resultView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4"
+            android:layout_marginBottom="@dimen/margin_4"
+            android:background="@drawable/bg_result"
+            android:padding="@dimen/padding_2"
+            android:text="@string/according"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_8"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="@+id/dateView"
+            card_view:layout_constraintTop_toBottomOf="@+id/dateView" />
 
         <ImageView
             android:id="@+id/overflow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:scaleType="centerCrop"
-            android:paddingEnd="15dp"
-            android:padding="22dp"
-            android:src="@drawable/ic_action_dots"
-            android:clickable="true"
-            android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/label_image_overflow"
+            android:focusable="true"
+            android:padding="22dp"
+            android:paddingEnd="15dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_action_dots"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/label_image_overflow" />
+            card_view:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

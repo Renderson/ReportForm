@@ -42,7 +42,7 @@ public class ReportRepository {
             insertValues.put(DataBaseConstants.REPORT.COLUMNS.CONTROLLER, repo.getController());
             insertValues.put(DataBaseConstants.REPORT.COLUMNS.SCORE, repo.getScore());
             insertValues.put(DataBaseConstants.REPORT.COLUMNS.DATE, repo.getDate());
-            insertValues.put(DataBaseConstants.REPORT.COLUMNS.GRADES, repo.getConformed());
+            insertValues.put(DataBaseConstants.REPORT.COLUMNS.RESULT, repo.getResult());
             insertValues.put(DataBaseConstants.REPORT.COLUMNS.LIST, repo.getListJson());
             insertValues.put(DataBaseConstants.REPORT.COLUMNS.PHOTO, repo.getPhoto());
             Log.i("log", "Item: " + insertValues + " insertValues");
@@ -67,7 +67,7 @@ public class ReportRepository {
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.CONTROLLER, reportItems.getController());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.SCORE, reportItems.getScore());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.DATE, reportItems.getDate());
-            contentValues.put(DataBaseConstants.REPORT.COLUMNS.GRADES, reportItems.getConformed());
+            contentValues.put(DataBaseConstants.REPORT.COLUMNS.RESULT, reportItems.getConformed());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.LIST, reportItems.getListJson());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.PHOTO, reportItems.getPhoto());
 
@@ -111,6 +111,7 @@ public class ReportRepository {
                     DataBaseConstants.REPORT.COLUMNS.EMAIL,
                     DataBaseConstants.REPORT.COLUMNS.CONTROLLER,
                     DataBaseConstants.REPORT.COLUMNS.SCORE,
+                    DataBaseConstants.REPORT.COLUMNS.RESULT,
                     DataBaseConstants.REPORT.COLUMNS.LIST,
                     DataBaseConstants.REPORT.COLUMNS.DATE
 
@@ -127,6 +128,7 @@ public class ReportRepository {
                 repoEntity.setEmail(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.EMAIL)));
                 repoEntity.setController(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.CONTROLLER)));
                 repoEntity.setScore(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.SCORE)));
+                repoEntity.setResult(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.RESULT)));
                 repoEntity.setDate(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.DATE)));
                 repoEntity.setListJson(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.LIST)));
             }
@@ -160,7 +162,7 @@ public class ReportRepository {
                     repoEntity.setController(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.CONTROLLER)));
                     repoEntity.setScore(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.SCORE)));
                     repoEntity.setDate(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.DATE)));
-                    repoEntity.setConformed(cursor.getInt(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.GRADES)));
+                    repoEntity.setResult(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.RESULT)));
                     repoEntity.setListJson(cursor.getString(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.LIST)));
                     //repoEntity.setPhoto(cursor.getBlob(cursor.getColumnIndex(DataBaseConstants.REPORT.COLUMNS.PHOTO)));
 
