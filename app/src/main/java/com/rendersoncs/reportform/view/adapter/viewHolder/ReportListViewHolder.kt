@@ -3,6 +3,7 @@ package com.rendersoncs.reportform.view.adapter.viewHolder
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.drawable.GradientDrawable
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
@@ -23,6 +24,10 @@ class ReportListViewHolder(itemView: View, context: Context) : RecyclerView.View
     private val overflow = itemView.overflow
     private val mContext = context
 
+    private val result = mContext.getString(R.string.according)
+    private val colorAccording = ContextCompat.getColor(mContext, R.color.colorRadioC)
+    private val colorNotAccording = ContextCompat.getColor(mContext, R.color.colorRadioNC)
+
     fun bindData(repoEntity: ReportItems, listener: OnInteractionListener) {
 
         companyView!!.text = limitsText(repoEntity.company, ReportConstants.CHARACTERS.LIMITS_TEXT)
@@ -30,12 +35,11 @@ class ReportListViewHolder(itemView: View, context: Context) : RecyclerView.View
         resultView.text = repoEntity.result
 
         val getResult = repoEntity.result.toString()
-        val result = mContext.getString(R.string.according)
 
         if (getResult == result.toUpperCase()) {
-            view.setBackgroundColor(ContextCompat.getColor(view.context, R.color.colorRadioC))
+            changeColorShape(colorAccording)
         } else {
-            view.setBackgroundColor(ContextCompat.getColor(view.context, R.color.colorRadioNC))
+            changeColorShape(colorNotAccording)
         }
 
         itemView.setOnClickListener { listener.onOpenPdf(repoEntity.id) }
@@ -74,6 +78,11 @@ class ReportListViewHolder(itemView: View, context: Context) : RecyclerView.View
             }
             popupMenu.show()
         }
+    }
+
+    private fun changeColorShape(color: Int) {
+        val bgShape = view.background as GradientDrawable
+        bgShape.setColor(color)
     }
 
     private fun setForceShowIcon(popupMenu: PopupMenu) {

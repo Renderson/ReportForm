@@ -67,7 +67,7 @@ public class ReportRepository {
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.CONTROLLER, reportItems.getController());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.SCORE, reportItems.getScore());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.DATE, reportItems.getDate());
-            contentValues.put(DataBaseConstants.REPORT.COLUMNS.RESULT, reportItems.getConformed());
+            contentValues.put(DataBaseConstants.REPORT.COLUMNS.RESULT, reportItems.getResult());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.LIST, reportItems.getListJson());
             contentValues.put(DataBaseConstants.REPORT.COLUMNS.PHOTO, reportItems.getPhoto());
 
