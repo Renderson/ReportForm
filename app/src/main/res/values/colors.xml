@@ -5,6 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="colorAccentAlternative">#ff4061</color>
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorCardView">#FFFFFF</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#222222</color>
