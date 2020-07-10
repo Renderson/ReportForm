@@ -9,6 +9,7 @@
     android:layout_marginTop="@dimen/margin_4"
     android:layout_marginRight="@dimen/margin_8"
     android:layout_marginBottom="@dimen/margin_4"
+    card_view:cardBackgroundColor="@color/colorCardView"
     card_view:cardCornerRadius="@dimen/cornerRadius_4"
     card_view:cardElevation="@dimen/elevation_4">
 
@@ -46,6 +47,7 @@
                 android:layout_marginTop="@dimen/margin_8"
                 android:padding="@dimen/padding_4"
                 android:text="@string/label_list_title"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="@dimen/text_size_18"
                 android:textStyle="bold" />
 
@@ -57,10 +59,10 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@+id/textView_title"
-                android:src="@drawable/ic_action_reset_item"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
+                android:src="@drawable/ic_action_reset_item" />
 
             <!--            <ImageView-->
             <!--                android:id="@+id/action_check"-->
@@ -188,7 +190,7 @@
                             android:id="@+id/radio_conform"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:buttonTint="@android:color/holo_green_dark"
+                            android:buttonTint="@color/colorRadioC"
                             android:checked="false"
                             android:text="@string/radio_according" />
 
@@ -196,7 +198,7 @@
                             android:id="@+id/radio_not_applicable"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:buttonTint="@android:color/holo_blue_light"
+                            android:buttonTint="@color/colorRadioNA"
                             android:checked="false"
                             android:text="@string/radio_not_applicable" />
 
@@ -204,7 +206,7 @@
                             android:id="@+id/radio_not_conform"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:buttonTint="@android:color/holo_red_dark"
+                            android:buttonTint="@color/colorRadioNC"
                             android:checked="false"
                             android:text="@string/radio_not_according" />
 

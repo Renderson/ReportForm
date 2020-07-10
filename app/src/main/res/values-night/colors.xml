@@ -8,6 +8,8 @@
     <color name="colorBackground">#1D1E20</color>
     <color name="colorCardView">#17FFFFFF</color>
     <color name="colorFloatingButton">#000000</color>
+    <color name="colorIconNote">#9FA8DA</color>
+    <color name="colorBorderShapeImage">#FFFFFF</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#222222</color>

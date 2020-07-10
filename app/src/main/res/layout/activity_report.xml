@@ -9,8 +9,8 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="190dp"
-        android:background="@drawable/nav_header"
         app:theme="@style/AppTheme">
+        <!--android:background="@drawable/nav_header"-->
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapseActionView"
