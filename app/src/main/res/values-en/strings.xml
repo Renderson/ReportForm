@@ -201,5 +201,4 @@
     <string name="sanitary_signature">Signature of the sanitarist</string>
     <string name="label_paragraph_pdf_result">Result:</string>
     <string name="label_paragraph_pdf_score">Evaluation Note:</string>
-    <string name="controller">Auditor</string>
 </resources>
