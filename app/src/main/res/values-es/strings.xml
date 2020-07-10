@@ -148,7 +148,7 @@
     <string name="label_description_resume">Descripción</string>
     <string name="label_score_resume">nota</string>
     <string name="dev_renderson">Renderson Cerqueira</string>
-    <string name="label_date">Fecha</string>
+    <string name="label_date">Fecha:</string>
     <string name="mail_dev_renderson">renderson.cs@gmail.com</string>
     <string name="total_items">Artículos totales</string>
     <string name="label_list_selected">Artículos seleccionados</string>
