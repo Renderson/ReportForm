@@ -31,10 +31,9 @@
             android:layout_marginStart="@dimen/margin_8"
             android:layout_marginEnd="@dimen/margin_8"
             android:text="@string/label_list_title"
-            android:textColor="@color/com_facebook_button_background_color_focused_disabled"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="@dimen/text_size_22"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/jo_photo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/jo_photo"
             app:layout_constraintTop_toTopOf="@+id/jo_photo" />

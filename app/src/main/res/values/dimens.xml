@@ -42,5 +42,5 @@
 
     <dimen name="social_button">150dp</dimen>
     <dimen name="height_collapsingToolbar_resume">190dp</dimen>
-    <dimen name="overlapTop_resume">105dp</dimen>
+    <dimen name="overlapTop_resume">80dp</dimen>
 </resources>
