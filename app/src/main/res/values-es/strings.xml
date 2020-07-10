@@ -160,6 +160,7 @@
     <string name="check">VERIFICAR</string>
     <string name="label_attach_report">Adjunto el informe de la compañía %1$s completado! Celebrada en el día</string>
     <string name="label_report_update">Informe modificado!</string>
+    <string name="controller">Controlador</string>
 
     <!--Alerts Dialogs-->
     <string name="alert_clear_list">Borrar lista?</string>

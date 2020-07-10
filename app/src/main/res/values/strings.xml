@@ -160,6 +160,7 @@
     <string name="check">CHECK</string>
     <string name="label_attach_report">Attached the company report %1$s completed! Held on the day</string>
     <string name="label_report_update">Report Changed!</string>
+    <string name="controller">Controller</string>
 
     <!--Alerts Dialogs-->
     <string name="alert_clear_list">Clear list?</string>
