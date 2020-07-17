@@ -1,6 +1,7 @@
 package com.rendersoncs.reportform.view.activitys;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,31 +29,34 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.view.adapter.ReportListAdapter;
-import com.rendersoncs.reportform.view.animated.AnimatedFloatingButton;
-import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
-import com.rendersoncs.reportform.view.services.constants.ReportConstants;
-import com.rendersoncs.reportform.view.fragment.AboutFragment;
-import com.rendersoncs.reportform.view.fragment.NewReportFragment;
 import com.rendersoncs.reportform.itens.ReportItems;
-import com.rendersoncs.reportform.view.adapter.listener.OnInteractionListener;
+import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
+import com.rendersoncs.reportform.repository.net.NetworkConnectedService;
 import com.rendersoncs.reportform.view.activitys.login.LoginActivity;
 import com.rendersoncs.reportform.view.activitys.login.RemoveUserActivity;
 import com.rendersoncs.reportform.view.activitys.login.UpdatePasswordActivity;
 import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
+import com.rendersoncs.reportform.view.adapter.ReportListAdapter;
+import com.rendersoncs.reportform.view.adapter.listener.OnInteractionListener;
+import com.rendersoncs.reportform.view.animated.AnimatedFloatingButton;
+import com.rendersoncs.reportform.view.fragment.AboutFragment;
+import com.rendersoncs.reportform.view.fragment.ChooseThemeDialogFragment;
+import com.rendersoncs.reportform.view.fragment.NewReportFragment;
+import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 import com.rendersoncs.reportform.view.services.service.AccessDocument;
-import com.rendersoncs.reportform.repository.net.NetworkConnectedService;
 import com.rendersoncs.reportform.view.services.util.GetInfoUserFireBase;
 import com.rendersoncs.reportform.view.services.util.RVEmptyObserver;
 import com.rendersoncs.reportform.view.services.util.SharePrefInfoUser;
 import com.rendersoncs.reportform.view.services.util.SnackBarHelper;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ChooseThemeDialogFragment.SingleChoiceListener {
 
     private FirebaseAnalytics mFireBaseAnalytics;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -72,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton fab;
     private TextView profileName;
     private SharePrefInfoUser sharePref = new SharePrefInfoUser();
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_report_list);
+
+        preferences = getSharedPreferences(ReportConstants.THEME.MY_PREFERENCE_THEME, MODE_PRIVATE);
 
         // Check NetWorking
         this.netService.isConnected(MainActivity.this);
@@ -269,6 +278,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         reportListAdapter.registerAdapterDataObserver(new RVEmptyObserver(this.viewHolder.recyclerView, emptyLayout, fab));
     }
 
+    @Override
+    public void onPositiveButtonClicked(@NotNull String[] list, int position) {
+        if (position == 0){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            saveThemeState(position);
+            recreate();
+        } else if (position == 1){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            saveThemeState(position);
+            recreate();
+        }
+    }
+
+    private void saveThemeState(int position) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(ReportConstants.THEME.KEY_THEME, position);
+        editor.apply();
+    }
+
+    @Override
+    public void onNegativeButtonClicked() {}
+
     private static class ViewHolder {
         RecyclerView recyclerView;
     }
@@ -301,6 +332,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.menu_delete: {
                 startActivity(new Intent(this, RemoveUserActivity.class));
+                break;
+            }
+
+            case R.id.menu_dark_theme: {
+                DialogFragment singleChoiceDialog = new ChooseThemeDialogFragment();
+                singleChoiceDialog.setCancelable(false);
+                singleChoiceDialog.show(getSupportFragmentManager(), "Single Choice Dialog");
                 break;
             }
 
