@@ -45,4 +45,9 @@ class ReportConstants {
         const val REQUEST_PERMISSIONS_CAMERA = 0
         const val NOT_PHOTO = "notPhoto"
     }
+
+    object THEME {
+        const val MY_PREFERENCE_THEME = "preference_theme"
+        const val KEY_THEME = "theme"
+    }
 }

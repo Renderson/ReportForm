@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/label_menu_new_report"
-        android:textColor="@color/colorBlack"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/text_size_22"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/margin_16"
@@ -25,8 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:text="Data: "
-        android:textColor="@color/colorBlack"
+        android:text="@string/label_date"
+        android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView"
         app:layout_constraintEnd_toStartOf="@+id/date_Id"
         app:layout_constraintHorizontal_bias="1"
@@ -65,11 +65,12 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout5"
+        android:id="@+id/inputEmail"
         style="@style/TextLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_4"
+        app:errorEnabled="true"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
         tools:layout_editor_absoluteX="16dp">
 
@@ -94,14 +95,14 @@
         android:layout_marginStart="@dimen/margin_16"
         android:layout_marginEnd="@dimen/margin_16"
         android:layout_marginBottom="@dimen/margin_4"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5"
+        app:layout_constraintTop_toBottomOf="@+id/inputEmail"
         tools:layout_editor_absoluteX="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/controller_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Auditor"
+            android:hint="@string/controller"
             android:imeOptions="actionDone"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>

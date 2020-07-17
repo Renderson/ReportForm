@@ -129,7 +129,7 @@ class ReportAdapter(
             if (reportItems.note == null || reportItems.note!!.isEmpty()) {
                 note.imageAlpha = R.drawable.ic_action_note
             } else {
-                note.setColorFilter(ContextCompat.getColor(note.context, R.color.colorPrimary))
+                note.setColorFilter(ContextCompat.getColor(note.context, R.color.colorIconNote))
                 resetItem.visibility = View.VISIBLE
             }
 

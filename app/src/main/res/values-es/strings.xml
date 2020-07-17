@@ -148,7 +148,7 @@
     <string name="label_description_resume">Descripción</string>
     <string name="label_score_resume">nota</string>
     <string name="dev_renderson">Renderson Cerqueira</string>
-    <string name="label_date">Fecha</string>
+    <string name="label_date">Fecha:</string>
     <string name="mail_dev_renderson">renderson.cs@gmail.com</string>
     <string name="total_items">Artículos totales</string>
     <string name="label_list_selected">Artículos seleccionados</string>
@@ -160,6 +160,7 @@
     <string name="check">VERIFICAR</string>
     <string name="label_attach_report">Adjunto el informe de la compañía %1$s completado! Celebrada en el día</string>
     <string name="label_report_update">Informe modificado!</string>
+    <string name="controller">Controlador</string>
 
     <!--Alerts Dialogs-->
     <string name="alert_clear_list">Borrar lista?</string>
@@ -183,6 +184,9 @@
     <string name="label_wait">Espere!</string>
     <string name="label_saving_report">Guardando informe...</string>
     <string name="Item_List">Lista de articulos</string>
+    <string name="clear">Claro</string>
+    <string name="dark">Oscuro</string>
+    <string name="choice_theme">Elige un tema</string>
 
     <!--Labels PDF-->
     <string name="label_paragraph_pdf_audit">Auditoría Técnica - Seguridad Alimentaria</string>
@@ -200,4 +204,5 @@
     <string name="sanitary_signature">Firma del sanitario</string>
     <string name="label_paragraph_pdf_result">Resultado:</string>
     <string name="label_paragraph_pdf_score">Nota de evaluación:</string>
+    <string name="label_theme">Tema</string>
 </resources>

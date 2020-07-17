@@ -21,6 +21,18 @@
     </group>
 
     <item
+        android:title="@string/label_theme"
+        android:id="@+id/submenu_theme">
+
+        <menu>
+            <item
+                android:title="@string/label_theme"
+                android:id="@+id/menu_dark_theme"
+                android:icon="@drawable/ic_moon"/>
+        </menu>
+    </item>
+
+    <item
         android:title="@string/label_menu_others"
         android:id="@+id/submenu_others">
 

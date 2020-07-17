@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#272727</color>
+    <color name="colorPrimaryDark">#272727</color>
+    <color name="colorAccent">#F48FB1</color>
+
+    <color name="colorAccentAlternative">#ff4061</color>
+    <color name="colorBackground">#1D1E20</color>
+    <color name="colorCardView">#17FFFFFF</color>
+    <color name="colorFloatingButton">#000000</color>
+    <color name="colorIconNote">#9FA8DA</color>
+    <color name="colorBorderShapeImage">#FFFFFF</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#222222</color>
+    <color name="cod_gray_alpha_75">#BF121212</color>
+    <color name="colorResume">#9FA8DA</color>
+
+    <color name="colorRadioC">#A5D6A7</color>
+    <color name="colorRadioNA">#80DEEA</color>
+    <color name="colorRadioNC">#EF9A9A</color>
+
+    <color name="colorGrey">#888888</color>
+    <color name="colorWhatsAppLogo">#2BB201</color>
+    <color name="colorLinkedInLogo">#0077B5</color>
+    <color name="colorAlto">#D3D3D3</color>
+</resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
 
@@ -28,6 +29,18 @@
                 android:title="@string/label_menu_delete_account"
                 android:id="@+id/menu_delete"
                 android:icon="@drawable/ic_action_delete"/>
+        </menu>
+    </item>
+
+    <item
+        android:title="@string/label_theme"
+        android:id="@+id/submenu_theme">
+
+        <menu>
+            <item
+                android:title="@string/label_theme"
+                android:id="@+id/menu_dark_theme"
+                android:icon="@drawable/ic_moon"/>
         </menu>
     </item>
 
