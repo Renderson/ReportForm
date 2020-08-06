@@ -24,10 +24,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
-import com.rendersoncs.reportform.view.services.photo.TakePicture;
+import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -43,7 +42,7 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     private Button mBtnSelectedPhoto;
     private Uri mSelectedUri;
     private ImageView mImgPhoto;
-    private TakePicture takePicture = new TakePicture();
+    //private TakePicture takePicture = new TakePicture();
 
     private static final int ALPHA = 0;
 
@@ -167,7 +166,8 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     }
 
     private void selectPhoto() {
-        takePicture.openGallery(SignUpActivity.this);
+        Intent it = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(it, ReportConstants.PHOTO.REQUEST_CODE_GALLERY);
     }
 
     @Override

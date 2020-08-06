@@ -32,6 +32,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,10 +47,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.rendersoncs.reportform.BuildConfig;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.repository.dao.ReportDataBaseAsyncTask;
 import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
+import com.rendersoncs.reportform.view.activitys.cameraX.CameraXMainActivity;
+import com.rendersoncs.reportform.view.activitys.cameraX.utils.DirectoryFileKt;
 import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
 import com.rendersoncs.reportform.view.adapter.ReportAdapter;
@@ -59,9 +63,7 @@ import com.rendersoncs.reportform.view.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.view.fragment.ReportNoteFragment;
 import com.rendersoncs.reportform.view.services.async.PDFCreateAsync;
 import com.rendersoncs.reportform.view.services.constants.ReportConstants;
-import com.rendersoncs.reportform.view.services.photo.CameraUtil;
 import com.rendersoncs.reportform.view.services.photo.ResizeImage;
-import com.rendersoncs.reportform.view.services.photo.TakePicture;
 import com.rendersoncs.reportform.view.services.util.AlertDialogUtil;
 import com.rendersoncs.reportform.view.services.util.ListJsonOff;
 import com.rendersoncs.reportform.view.services.util.RVEmptyObserver;
@@ -125,10 +127,9 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
 
     private SnackBarHelper snackBarHelper = new SnackBarHelper();
     private CheckAnswerList checkAnswerList = new CheckAnswerList();
-    private TakePicture takePicture = new TakePicture();
+    //private TakePicture takePicture = new TakePicture();
     private AlertDialog dialog;
 
-    private CameraUtil path = new CameraUtil();
     private AlertDialogUtil alertDialog = new AlertDialogUtil();
 
     @Override
@@ -765,25 +766,37 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
         builder.setItems(items, (dialogInterface, i) -> {
             if (i == 0) {
-                takePicture.openCamera(ReportActivity.this);
+                openCamera();
             } else {
-                takePicture.openGallery(ReportActivity.this);
+                openGallery();
             }
         });
         dialog = builder.create();
         dialog.show();
     }
 
+    private void openGallery() {
+        Intent it = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(it, ReportConstants.PHOTO.REQUEST_CODE_GALLERY);
+    }
+
+    private void openCamera() {
+        Intent it = new Intent(this, CameraXMainActivity.class);
+        startActivityForResult(it, ReportConstants.PHOTO.REQUEST_CAMERA_X);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_CANCELED) {
-            if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
+            if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_CAMERA ||
+                    resultCode == ReportConstants.PHOTO.REQUEST_CAMERA_X) {
 
-                Uri photoUri = (Uri) data.getExtras().get("output");
+                File file = (File) data.getExtras().get(ReportConstants.PHOTO.RESULT_CAMERA_X);
+                Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".FileProvider", file);
+                ResizeImage.decodeBitmap(uri, mAdapter, reportTakePhoto);
 
-                ResizeImage.decodeBitmap(photoUri, mAdapter, reportTakePhoto);
-                Log.i("LOG", "ImagePathCameraPath " + photoUri + " " + data.getData());
+                Log.i("LOG", "ImagePathCameraPath " + " " + uri);
             }
             this.radioItemChecked(reportTakePhoto, ReportConstants.ITEM.OPT_NUM1);
         }
@@ -805,17 +818,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_PERMISSIONS) {
-            if (grantResults.length > REQUEST_PERMISSIONS
-                    && grantResults[REQUEST_PERMISSIONS] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[REQUEST_PERMISSIONS_GRANTED] == PackageManager.PERMISSION_GRANTED) {
-                this.dialog.dismiss();
-                takePicture.openCamera(ReportActivity.this);
-            } else {
-                snackBarHelper.showSnackBar(this, R.id.fab_new_item, R.string.label_permission_camera);
-            }
-        }
-
         if (requestCode == REQUEST_PERMISSIONS_READ_WHITE) {
             if (grantResults.length > REQUEST_PERMISSIONS
                     && grantResults[REQUEST_PERMISSIONS] == PackageManager.PERMISSION_GRANTED
@@ -842,15 +844,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         super.onRestoreInstanceState(savedInstanceState);
     }*/
 
-    private static void delete(File fileDirectory) {
-        if (fileDirectory == null) {
-            return;
-        } else if (fileDirectory.isDirectory())
-            for (File child : Objects.requireNonNull(fileDirectory.listFiles()))
-                delete(child);
-        boolean delete = fileDirectory.delete();
-    }
-
     private void closeMethods() {
         if (mReportBusiness != null) {
             mReportBusiness.close();
@@ -876,7 +869,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     protected void onDestroy() {
         super.onDestroy();
         this.closeMethods();
-        File file = path.getStorageDir();
-        delete(file);
+        DirectoryFileKt.deleteDirectory(this);
     }
 }

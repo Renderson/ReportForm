@@ -24,7 +24,7 @@ class ChooseThemeDialogFragment : DialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        preference = activity!!.getSharedPreferences(ReportConstants.THEME.MY_PREFERENCE_THEME, Context.MODE_PRIVATE)
+        preference = requireActivity().getSharedPreferences(ReportConstants.THEME.MY_PREFERENCE_THEME, Context.MODE_PRIVATE)
         mListener = try {
             context as SingleChoiceListener
         } catch (e: Exception) {
@@ -33,7 +33,7 @@ class ChooseThemeDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(activity!!)
+        val builder = AlertDialog.Builder(requireActivity())
         val items = arrayOf(
                 getString(R.string.clear),
                 getString(R.string.dark))
