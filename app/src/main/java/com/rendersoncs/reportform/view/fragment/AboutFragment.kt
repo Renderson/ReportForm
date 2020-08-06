@@ -70,7 +70,7 @@ class AboutFragment : BottomSheetDialogFragment() {
                 .setOnClickListener {
                     var i = Intent(Intent.ACTION_VIEW, Uri.parse("linkedin://profile/$LINKED_IN_ID"))
                     i.setPackage("com.linkedin.android")
-                    if (i.resolveActivity(context!!.packageManager) == null) {
+                    if (i.resolveActivity(requireContext().packageManager) == null) {
                         i = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.linkedin.com/profile/view?id=$LINKED_IN_ID"))
                     }
                     startActivity(i)
@@ -80,7 +80,7 @@ class AboutFragment : BottomSheetDialogFragment() {
         val whatsAppUri = Uri.parse("smsto:$NUMBER_WHATS")
         val i = Intent(Intent.ACTION_SENDTO, whatsAppUri)
         i.setPackage("com.whatsapp")
-        if (i.resolveActivity(context!!.packageManager) != null) {
+        if (i.resolveActivity(requireContext().packageManager) != null) {
             startActivity(i)
         } else {
             Toast.makeText(activity, resources.getString(R.string.label_not_whatsApp), Toast.LENGTH_SHORT).show()
