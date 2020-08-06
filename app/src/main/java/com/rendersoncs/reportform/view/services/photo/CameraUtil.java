@@ -1,3 +1,4 @@
+/*
 package com.rendersoncs.reportform.view.services.photo;
 
 import android.os.Environment;
@@ -28,3 +29,4 @@ public class CameraUtil {
     }
 
 }
+*/

@@ -28,7 +28,7 @@ class NewReportFragment : DialogFragment() {
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = activity!!.layoutInflater
+        val inflater = requireActivity().layoutInflater
         val view = inflater.inflate(R.layout.fragment_new_report, null)
 
         this.init(view)
@@ -53,7 +53,7 @@ class NewReportFragment : DialogFragment() {
     }
 
     private fun alertDialog(view: View?): AlertDialog.Builder {
-        val builder = AlertDialog.Builder(activity!!)
+        val builder = AlertDialog.Builder(requireActivity())
         builder.setView(view)
                 .setNegativeButton(R.string.cancel) { _, _ ->
                     //Toast.makeText(getContext(), R.string.txt_canceled, Toast.LENGTH_SHORT).show();
@@ -77,7 +77,7 @@ class NewReportFragment : DialogFragment() {
         if (arguments == null) {
             controllerTv!!.setText("")
         } else {
-            val controllerBundle = arguments!!.getString(ReportConstants.ITEM.CONTROLLER)
+            val controllerBundle = requireArguments().getString(ReportConstants.ITEM.CONTROLLER)
             controllerTv!!.setText(controllerBundle)
             controllerTv!!.addTextChangedListener(validateTextWatcher)
         }
@@ -91,7 +91,7 @@ class NewReportFragment : DialogFragment() {
             val mYear = mCalendar.get(Calendar.YEAR)
             val space = getString(R.string.space_date)
 
-            val mDatePickerDialog = DatePickerDialog(activity!!,
+            val mDatePickerDialog = DatePickerDialog(requireActivity(),
                     OnDateSetListener { _, year, month, day ->
                 dateTv!!.text = ("" + day + space
                         + (month + 1) + space

@@ -108,7 +108,8 @@
 
     <string name="msg_take_image">Tomar la foto</string>
     <string name="msg_select_from_gallery">Seleccionar de la galería</string>
-    <string name="label_permission_camera">Necesitamos permiso para acceder a la cámara.</string>
+    <string name="label_permission_camera_granted">Permission request granted.</string>
+    <string name="label_permission_camera_denied">Solicitud de permiso denegado.</string>
     <string name="label_permission_read">Necesitamos permiso para escribir datos para guardar su informe.</string>
     <string name="label_error_update_list">Error al cambiar el elemento de la lista.</string>
     <string name="label_error_return">Algo salió mal, inténtalo de nuevo!</string>

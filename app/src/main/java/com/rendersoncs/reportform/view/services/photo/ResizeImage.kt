@@ -12,6 +12,7 @@ import com.rendersoncs.reportform.view.adapter.ReportAdapter
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
+
 class ResizeImage {
     // Convert image Base64 String
     fun getEncoded64Image(bitmap: Bitmap): String {
@@ -77,8 +78,8 @@ class ResizeImage {
             try {
                 input = cr.openInputStream(photoUri)
                 val takenImage = BitmapFactory.decodeStream(input)
-                val scale = scaleBitmap(takenImage)
-                val photo = rotateBitmap(scale, 6)
+                //val scale = scaleBitmap(takenImage)
+                val photo = rotateBitmap(takenImage, 6)
                 mAdapter.setImageInItem(reportItems, photo)
                 input?.close()
             } catch (e: Exception) {
