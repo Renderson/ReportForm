@@ -7,7 +7,8 @@
     <color name="colorAccentAlternative">#ff4061</color>
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorCardView">#FFFFFF</color>
-    <color name="colorFloatingButton">#FFFFFF</color>
+    <color name="card_shadow_form_field">#10000000</color>
+    <color name="colorContentButton">#FFFFFF</color>
     <color name="colorIconNote">#3F51B5</color>
     <color name="colorBorderShapeImage">#000</color>
 

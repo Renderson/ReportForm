@@ -9,8 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite">
+        android:layout_height="wrap_content">
 
         <ProgressBar
             android:id="@+id/login_progress"
@@ -29,7 +28,7 @@
             style="@style/TextTitleFormField"
             android:layout_height="@dimen/layout_0"
             android:text="@string/label_screen_login_hello"
-            android:textColor="@color/colorBlack"
+            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintStart_toStartOf="@+id/textInputEmail"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,7 +36,7 @@
             android:id="@+id/textView5"
             style="@style/TextDescriptionFormField"
             android:text="@string/label_screen_login_lets_go"
-            android:textColor="@color/colorBlack"
+            android:textColor="?android:attr/textColorPrimary"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />

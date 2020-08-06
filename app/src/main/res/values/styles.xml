@@ -34,7 +34,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">16dp</item>
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:imeOptions">actionNext</item>
         <item name="hintEnabled">false</item>
     </style>
@@ -42,7 +42,7 @@
     <style name="FormField">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:background">@drawable/bg_shape_input_layout</item>
         <item name="android:imeOptions">actionNext</item>
     </style>
@@ -52,7 +52,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">8dp</item>
         <item name="android:layout_marginTop">150dp</item>
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">36sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -64,7 +64,7 @@
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
         <item name="android:paddingStart">8dp</item>
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -74,7 +74,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">16dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorContentButton</item>
         <!--<item name="android:background">@drawable/button_shape_rectangular</item>-->
         <item name="android:background">@drawable/button_shape_login</item>
     </style>
@@ -85,7 +85,7 @@
         <item name="android:layout_marginTop">16dp</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">normal</item>
     </style>
