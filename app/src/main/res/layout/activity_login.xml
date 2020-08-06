@@ -36,7 +36,6 @@
             android:id="@+id/textView5"
             style="@style/TextDescriptionFormField"
             android:text="@string/label_screen_login_lets_go"
-            android:textColor="?android:attr/textColorPrimary"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />

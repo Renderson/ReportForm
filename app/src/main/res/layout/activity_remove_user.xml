@@ -24,7 +24,6 @@
             android:id="@+id/txt_up2"
             style="@style/TextDescriptionFormField"
             android:text="@string/label_screen_remove_info"
-            android:textColor="?android:attr/textColorPrimary"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/txt_up"
