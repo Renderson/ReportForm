@@ -27,7 +27,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:popupTheme="@style/AppTheme"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
