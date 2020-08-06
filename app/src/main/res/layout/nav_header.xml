@@ -12,8 +12,6 @@
         android:layout_width="66dp"
         android:layout_height="66dp"
         android:layout_marginTop="@dimen/margin_8"
-        app:civ_border_width="@dimen/margin_2"
-        app:civ_border_color="@color/colorWhite"
         android:src="@drawable/ic_action_person"/>
 
     <TextView
