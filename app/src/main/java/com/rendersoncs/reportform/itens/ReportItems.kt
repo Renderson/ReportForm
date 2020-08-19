@@ -1,7 +1,5 @@
 package com.rendersoncs.reportform.itens
 
-import android.graphics.Bitmap
-
 class ReportItems {
     var id = 0
     var conformed = 0
@@ -20,7 +18,7 @@ class ReportItems {
     var header: String? = null
         private set
     var key: String? = null
-    var photoId: Bitmap? = null
+    var photoPath: String? = null
 
     var isOpt1 = false
         set(opt1) {

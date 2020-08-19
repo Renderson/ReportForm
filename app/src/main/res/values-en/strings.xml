@@ -206,4 +206,5 @@
     <string name="label_paragraph_pdf_result">Result:</string>
     <string name="label_paragraph_pdf_score">Evaluation Note:</string>
     <string name="label_theme">Theme</string>
+    <string name="report_directory_img">Report</string>
 </resources>

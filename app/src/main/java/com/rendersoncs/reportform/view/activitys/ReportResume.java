@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -257,9 +256,7 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
             FullPhotoFragment fullFragment = new FullPhotoFragment();
             Bundle bundle = new Bundle();
 
-            byte[] bytes = Base64.decode(image, Base64.DEFAULT);
-
-            bundle.putByteArray(ReportConstants.ITEM.PHOTO, bytes);
+            bundle.putString(ReportConstants.ITEM.PHOTO, image);
             bundle.putString(ReportConstants.ITEM.CONFORMITY, conformity);
 
             fullFragment.setArguments(bundle);

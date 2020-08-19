@@ -6,15 +6,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +30,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,13 +44,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.rendersoncs.reportform.BuildConfig;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.repository.dao.ReportDataBaseAsyncTask;
 import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
 import com.rendersoncs.reportform.view.activitys.cameraX.CameraXMainActivity;
-import com.rendersoncs.reportform.view.activitys.cameraX.utils.DirectoryFileKt;
 import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
 import com.rendersoncs.reportform.view.adapter.ReportAdapter;
@@ -63,7 +58,6 @@ import com.rendersoncs.reportform.view.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.view.fragment.ReportNoteFragment;
 import com.rendersoncs.reportform.view.services.async.PDFCreateAsync;
 import com.rendersoncs.reportform.view.services.constants.ReportConstants;
-import com.rendersoncs.reportform.view.services.photo.ResizeImage;
 import com.rendersoncs.reportform.view.services.util.AlertDialogUtil;
 import com.rendersoncs.reportform.view.services.util.ListJsonOff;
 import com.rendersoncs.reportform.view.services.util.RVEmptyObserver;
@@ -73,9 +67,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -287,10 +279,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
                 for (int i = 0; i < editPhoto.size(); i++) {
                     String photos = editPhoto.get(i);
 
-                    byte[] decodedString = Base64.decode(photos, Base64.DEFAULT);
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                    mAdapter.setImageInItem(reportItems.get(i), bitmap);
+                    mAdapter.setImageInItem(reportItems.get(i), photos);
                 }
 
                 mAdapter = new ReportAdapter(reportItems);
@@ -725,18 +714,14 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         FullPhotoFragment fullFragment = new FullPhotoFragment();
         Bundle bundle = new Bundle();
 
-        Bitmap bitmap = reportItems.getPhotoId();
+        String photo = reportItems.getPhotoPath();
 
-        if (bitmap == null) {
+        if (photo == null) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_nothing_image), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] bytes = stream.toByteArray();
-
-        bundle.putByteArray(ReportConstants.ITEM.PHOTO, bytes);
+        bundle.putString(ReportConstants.ITEM.PHOTO, photo);
 
         fullFragment.setArguments(bundle);
         fullFragment.show(getSupportFragmentManager(), "fullPhoto");
@@ -793,27 +778,34 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
                     resultCode == ReportConstants.PHOTO.REQUEST_CAMERA_X) {
 
                 File file = (File) data.getExtras().get(ReportConstants.PHOTO.RESULT_CAMERA_X);
-                Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".FileProvider", file);
-                ResizeImage.decodeBitmap(uri, mAdapter, reportTakePhoto);
+                mAdapter.setImageInItem(reportTakePhoto, file.getPath());
 
-                Log.i("LOG", "ImagePathCameraPath " + " " + uri);
+                Log.i("LOG", "CAMERA " + " " + file.getPath());
             }
             this.radioItemChecked(reportTakePhoto, ReportConstants.ITEM.OPT_NUM1);
         }
         if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_GALLERY && resultCode == RESULT_OK && data != null) {
-            Uri mSelectedUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-                mAdapter.setImageInItem(reportTakePhoto, bitmap);
-                this.radioItemChecked(reportTakePhoto, ReportConstants.ITEM.OPT_NUM1);
-                Log.i("LOG", "ImagePathGallery " + bitmap);
+            Uri uri = data.getData();
 
-            } catch (IOException e) {
+            try {
+                File file = new File(getRealPathFromURI(uri));
+                mAdapter.setImageInItem(reportTakePhoto, file.getPath());
+
+                Log.i("LOG", "GALLERY " + " " + file.getPath());
+
+            } catch (Exception e) {
                 Crashlytics.logException(e);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
     }
 
     @Override
@@ -869,6 +861,5 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     protected void onDestroy() {
         super.onDestroy();
         this.closeMethods();
-        DirectoryFileKt.deleteDirectory(this);
     }
 }

@@ -1,7 +1,6 @@
 package com.rendersoncs.reportform.view.adapter
 
 import android.animation.ObjectAnimator
-import android.graphics.Bitmap
 import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
@@ -116,15 +115,15 @@ class ReportAdapter(
         }
 
         private fun answersItems(reportItems: ReportItems) {
-            if (reportItems.photoId == null) {
+            if (reportItems.photoPath == null ||
+                    reportItems.photoPath.toString() == ReportConstants.PHOTO.NOT_PHOTO) {
                 resultPhoto.imageAlpha = R.drawable.image
                 check.setColorFilter(ContextCompat.getColor(check.context, R.color.colorWhite))
                 resetItem.visibility = View.GONE
             } else {
                 mRadioButtonConform.isChecked = true
                 resultPhoto.let {
-                    Glide.with(resultPhoto.context).load(reportItems.photoId).centerCrop().into(it) }
-                Log.i("LOG", "ImagePath3 " + reportItems.photoId)
+                    Glide.with(resultPhoto.context).load(reportItems.photoPath).centerCrop().into(it) }
             }
             if (reportItems.note == null || reportItems.note!!.isEmpty()) {
                 note.imageAlpha = R.drawable.ic_action_note
@@ -185,9 +184,9 @@ class ReportAdapter(
     }
 
     // Set result image
-    fun setImageInItem(report: ReportItems, imageSrc: Bitmap?) {
-        report.photoId = imageSrc
-        Log.i("LOG", "ImagePath2 $imageSrc")
+    fun setImageInItem(report: ReportItems, photoPath: String?) {
+        report.photoPath = photoPath
+        Log.i("LOG", "ImagePath2 $photoPath")
         notifyDataSetChanged()
     }
 

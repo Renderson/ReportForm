@@ -1,15 +1,20 @@
+/*
+
 package com.rendersoncs.reportform.view.services.photo
 
+import android.content.Context
 import android.graphics.*
 import android.media.ExifInterface
-import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import androidx.core.content.FileProvider
 import com.crashlytics.android.Crashlytics
 import com.facebook.FacebookSdk
+import com.rendersoncs.reportform.BuildConfig
 import com.rendersoncs.reportform.itens.ReportItems
 import com.rendersoncs.reportform.view.adapter.ReportAdapter
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.InputStream
 
 
@@ -25,6 +30,10 @@ class ResizeImage {
     }
 
     companion object {
+
+        private const val NOT_ROTATE = 0
+        private const val ROTATE_90 = 6
+        private const val ROTATE_MINUS_90 = 7
         private const val WANTED_WIDTH = 640
         private const val WANTED_HEIGHT = 480
 
@@ -70,21 +79,26 @@ class ResizeImage {
         }
 
         @JvmStatic
-        fun decodeBitmap(photoUri: Uri, mAdapter: ReportAdapter, reportItems: ReportItems) {
+        fun treatFile(context: Context, file: File, mAdapter: ReportAdapter, reportItems: ReportItems) {
+            //val orientation = getOrientationFile(file)
+            val uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".FileProvider", file)
+            //mAdapter.setImageInItem(reportItems, uri)
+
+
             val bmOptions = BitmapFactory.Options()
             bmOptions.inJustDecodeBounds = true
             val cr = FacebookSdk.getApplicationContext().contentResolver
-            var input: InputStream? = null
+            val input: InputStream?
             try {
-                input = cr.openInputStream(photoUri)
-                val takenImage = BitmapFactory.decodeStream(input)
-                //val scale = scaleBitmap(takenImage)
-                val photo = rotateBitmap(takenImage, 6)
-                mAdapter.setImageInItem(reportItems, photo)
+                input = cr.openInputStream(uri)
+                val bitmap = BitmapFactory.decodeStream(input)
+                //val photo = rotateBitmap(bitmap, orientation)
+                //mAdapter.setImageInItem(reportItems, photo)
                 input?.close()
             } catch (e: Exception) {
                 Crashlytics.logException(e)
             }
+
         }
     }
-}
+}*/

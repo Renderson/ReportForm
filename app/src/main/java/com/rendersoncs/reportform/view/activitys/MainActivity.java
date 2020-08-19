@@ -39,7 +39,6 @@ import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
 import com.rendersoncs.reportform.view.adapter.ReportListAdapter;
 import com.rendersoncs.reportform.view.adapter.listener.OnInteractionListener;
-import com.rendersoncs.reportform.view.animated.AnimatedFloatingButton;
 import com.rendersoncs.reportform.view.fragment.AboutFragment;
 import com.rendersoncs.reportform.view.fragment.ChooseThemeDialogFragment;
 import com.rendersoncs.reportform.view.fragment.NewReportFragment;
@@ -51,7 +50,11 @@ import com.rendersoncs.reportform.view.services.util.SharePrefInfoUser;
 import com.rendersoncs.reportform.view.services.util.SnackBarHelper;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -63,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth mAuth;
 
     private NetworkConnectedService netService = new NetworkConnectedService();
-    private AnimatedFloatingButton animated = new AnimatedFloatingButton();
     private SnackBarHelper snackBarHelper = new SnackBarHelper();
 
     private ViewHolder viewHolder = new ViewHolder();
@@ -236,6 +238,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDeleteClick(int reportId) {
                 // Removed report DB and File PDF
+                deleteFiles(reportId);
+
                 AccessDocument accessDocument = new AccessDocument(reportId).invoke();
                 Uri uri = accessDocument.getUri();
                 String subject = accessDocument.getSubject();
@@ -250,6 +254,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 snackBarHelper.showSnackBar(MainActivity.this, R.id.floatButton, R.string.txt_report_removed);
             }
         };
+    }
+
+    private void deleteFiles(int reportId) {
+        ReportItems reportItems = reportBusiness.load(reportId);
+
+        try {
+            JSONArray arrayL = new JSONArray(reportItems.getListJson());
+            for (int i = 0; i < arrayL.length(); i++) {
+                JSONObject obj = arrayL.getJSONObject(i);
+                String selected = obj.getString(ReportConstants.ITEM.PHOTO);
+
+                File file = new File(selected);
+                boolean b = file.delete();
+                Log.i("DELETE", String.valueOf(b));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void startReportFormDialog() {

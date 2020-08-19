@@ -1,6 +1,5 @@
 package com.rendersoncs.reportform.view.fragment
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,15 +22,14 @@ class FullPhotoFragment : DialogFragment() {
             Toast.makeText(activity, resources.getString(R.string.label_error_return), Toast.LENGTH_SHORT).show()
         }
 
-        if (arguments!!.getString(ReportConstants.ITEM.CONFORMITY) == null){
+        if (requireArguments().getString(ReportConstants.ITEM.CONFORMITY) == null){
             conformity.text = ""
         } else {
-
-            conformity.text = arguments!!.getString(ReportConstants.ITEM.CONFORMITY)!!
+            conformity.text = requireArguments().getString(ReportConstants.ITEM.CONFORMITY)!!
         }
-        val bytes = arguments!!.getByteArray(ReportConstants.ITEM.PHOTO)!!
-        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-        Glide.with(activity!!).load(bitmap).centerCrop().into(imageFull)
+
+        val photo = requireArguments().getString(ReportConstants.ITEM.PHOTO)!!
+        Glide.with(requireActivity()).load(photo).centerCrop().into(imageFull)
         return view
     }
 }

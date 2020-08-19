@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.util.Base64;
 import android.util.Log;
 
 import com.itextpdf.text.BadElementException;
@@ -251,11 +250,7 @@ public class CreatePDFViewer {
             stream.scaleAbsolute(75f, 75f);
             image1 = Image.getInstance(stream);
         } else {
-            byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            Log.i("log", "PDFImage3: " + decodedByte + " Image");
-
-            image1 = Image.getInstance(decodedString);
+            image1 = Image.getInstance(image);
             Log.i("log", "PDFImage4: " + image1 + " Image");
         }
         return image1;
