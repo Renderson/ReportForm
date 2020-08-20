@@ -162,6 +162,8 @@
     <string name="label_attach_report">Attached the company report %1$s completed! Held on the day</string>
     <string name="label_report_update">Report Changed!</string>
     <string name="controller">Controller</string>
+    <string name="label_bottom_sheet_detail">Detail</string>
+    <string name="label_loading">Loading…</string>
 
     <!--Alerts Dialogs-->
     <string name="alert_clear_list">Clear list?</string>

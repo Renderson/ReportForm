@@ -162,6 +162,8 @@
     <string name="label_attach_report">Em anexo o relatório da empresa %1$s concluído! Realizado no dia</string>
     <string name="label_report_update">Relatório Alterado!</string>
     <string name="controller">Auditor</string>
+    <string name="label_bottom_sheet_detail">Detalhes</string>
+    <string name="label_loading">Carregando…</string>
 
     <!--Alerts Dialogs-->
     <string name="alert_clear_list">Limpar lista?</string>

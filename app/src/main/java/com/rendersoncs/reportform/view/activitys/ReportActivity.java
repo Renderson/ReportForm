@@ -45,6 +45,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.itens.DetailPhoto;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.repository.dao.ReportDataBaseAsyncTask;
 import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
@@ -53,7 +54,7 @@ import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
 import com.rendersoncs.reportform.view.adapter.ReportAdapter;
 import com.rendersoncs.reportform.view.adapter.listener.OnItemClickedReport;
-import com.rendersoncs.reportform.view.fragment.FullPhotoFragment;
+import com.rendersoncs.reportform.view.fragment.BottomSheetDetailPhotoFragment;
 import com.rendersoncs.reportform.view.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.view.fragment.ReportNoteFragment;
 import com.rendersoncs.reportform.view.services.async.PDFCreateAsync;
@@ -711,20 +712,32 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
 
     // Show Photo Full
     public void fullPhoto(ReportItems reportItems) {
-        FullPhotoFragment fullFragment = new FullPhotoFragment();
+        DetailPhoto detailPhoto;
+        BottomSheetDetailPhotoFragment fragment = new BottomSheetDetailPhotoFragment();
         Bundle bundle = new Bundle();
 
         String photo = reportItems.getPhotoPath();
+        String title = reportItems.getTitle();
+        String description = reportItems.getDescription();
+        String note = reportItems.getNote();
+
+        detailPhoto = new DetailPhoto(
+                photo,
+                title,
+                description,
+                note,
+                ""
+        );
+
 
         if (photo == null) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_nothing_image), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        bundle.putString(ReportConstants.ITEM.PHOTO, photo);
-
-        fullFragment.setArguments(bundle);
-        fullFragment.show(getSupportFragmentManager(), "fullPhoto");
+        bundle.putSerializable("modelDetail", detailPhoto);
+        fragment.setArguments(bundle);
+        fragment.show(getSupportFragmentManager(), "sheet");
     }
 
     // Reset Item Adapter

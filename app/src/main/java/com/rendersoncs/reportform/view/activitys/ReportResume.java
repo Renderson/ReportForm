@@ -20,12 +20,13 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.itens.DetailPhoto;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.itens.ReportResumeItems;
 import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
 import com.rendersoncs.reportform.view.adapter.ReportResumeAdapter;
 import com.rendersoncs.reportform.view.adapter.listener.OnItemClickResume;
-import com.rendersoncs.reportform.view.fragment.FullPhotoFragment;
+import com.rendersoncs.reportform.view.fragment.BottomSheetDetailPhotoFragment;
 import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 import com.rendersoncs.reportform.view.services.extension.StringExtension;
 import com.rendersoncs.reportform.view.services.service.AccessDocument;
@@ -245,22 +246,32 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
     }
 
     public void fullPhoto(ReportResumeItems reportItems) {
+        DetailPhoto detailPhoto;
+        BottomSheetDetailPhotoFragment fragment = new BottomSheetDetailPhotoFragment();
+        Bundle bundle = new Bundle();
 
-        String image = reportItems.getPhoto();
-        String conformity = reportItems.getConformity();
+        String photo = reportItems.getPhoto();
+        String title = reportItems.getTitle();
+        String description = reportItems.getDescription();
+        String note = reportItems.getNote();
+        String conformed = reportItems.getConformity();
 
-        if (image.equals(ReportConstants.PHOTO.NOT_PHOTO)) {
-            Toast.makeText(getApplicationContext(),
-                    getResources().getString(R.string.label_nothing_image), Toast.LENGTH_SHORT).show();
-        } else {
-            FullPhotoFragment fullFragment = new FullPhotoFragment();
-            Bundle bundle = new Bundle();
+        detailPhoto = new DetailPhoto(
+                photo,
+                title,
+                description,
+                note,
+                conformed
+        );
 
-            bundle.putString(ReportConstants.ITEM.PHOTO, image);
-            bundle.putString(ReportConstants.ITEM.CONFORMITY, conformity);
 
-            fullFragment.setArguments(bundle);
-            fullFragment.show(getSupportFragmentManager(), "fullPhoto");
+        if (photo == null) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_nothing_image), Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        bundle.putSerializable("modelDetail", detailPhoto);
+        fragment.setArguments(bundle);
+        fragment.show(getSupportFragmentManager(), "sheet");
     }
 }
