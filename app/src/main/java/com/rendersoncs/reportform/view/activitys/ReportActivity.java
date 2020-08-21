@@ -729,8 +729,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
                 ""
         );
 
-
-        if (photo == null) {
+        if (photo == null || photo.equals(ReportConstants.PHOTO.NOT_PHOTO)) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_nothing_image), Toast.LENGTH_SHORT).show();
             return;
         }
