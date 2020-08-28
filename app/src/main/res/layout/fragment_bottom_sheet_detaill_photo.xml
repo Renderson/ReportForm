@@ -74,7 +74,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/progressDetail"
                 app:layout_constraintVertical_bias="0.12" />
 
-            <ImageView
+            <!--<ImageView
                 android:id="@+id/crashImage"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
@@ -84,7 +84,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/progressDetail"
                 app:layout_constraintEnd_toEndOf="@+id/progressDetail"
                 app:layout_constraintStart_toStartOf="@+id/progressDetail"
-                app:layout_constraintTop_toTopOf="@+id/progressDetail" />
+                app:layout_constraintTop_toTopOf="@+id/progressDetail" />-->
 
             <ImageView
                 android:id="@+id/imageDetail"

@@ -1,7 +1,6 @@
 package com.rendersoncs.reportform.view.fragment
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rendersoncs.reportform.R
 import com.rendersoncs.reportform.itens.DetailPhoto
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_detaill_photo.*
-import java.io.File
 
 class BottomSheetDetailPhotoFragment : BottomSheetDialogFragment() {
     private lateinit var detail: DetailPhoto
@@ -67,16 +65,16 @@ class BottomSheetDetailPhotoFragment : BottomSheetDialogFragment() {
             showProgressBar(View.VISIBLE)
         }
 
+        /*val file = File(detail.photo.toString())
         val handler = Handler()
         handler.postDelayed({
-            val file = File(imageDetail.toString())
             if (file.exists()) {
                 showProgressBar(View.GONE)
             } else {
                 crashImage.visibility = View.VISIBLE
                 showProgressBar(View.GONE)
             }
-        }, 3000)
+        }, 3000)*/
 
     }
 
