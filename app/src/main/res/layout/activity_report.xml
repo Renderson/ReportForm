@@ -107,7 +107,7 @@
                     android:id="@+id/label_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nota:"
+                    android:text="@string/label_note_report"
                     android:textColor="@color/colorWhite"
                     app:layout_constraintStart_toStartOf="@+id/txt_date"
                     app:layout_constraintTop_toTopOf="@+id/result_email" />
@@ -122,7 +122,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/label_score"
                     app:layout_constraintStart_toEndOf="@+id/label_score"
                     app:layout_constraintTop_toTopOf="@+id/label_score"
-                    android:text="10.0" />
+                    android:text="@string/label_note_value" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,8 +29,8 @@ class NewItemListFireBase : DialogFragment() {
     private var user: User? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(activity!!)
-        val view = activity!!.layoutInflater.inflate(R.layout.fragment_new_list_firebase, null)
+        val builder = AlertDialog.Builder(requireActivity())
+        val view = requireActivity().layoutInflater.inflate(R.layout.fragment_new_list_firebase, null)
 
         mTitleList = view.findViewById(R.id.txt_title_list)
         mDescriptionList = view.findViewById(R.id.txt_description_list)
@@ -68,10 +68,10 @@ class NewItemListFireBase : DialogFragment() {
 
     private fun checkItems() {
         if (arguments != null) {
-            key = arguments!!.getString(ReportConstants.ITEM.KEY)
-            val title = arguments!!.getString(ReportConstants.ITEM.TITLE)
+            key = requireArguments().getString(ReportConstants.ITEM.KEY)
+            val title = requireArguments().getString(ReportConstants.ITEM.TITLE)
             mTitleList!!.setText(title)
-            val description = arguments!!.getString(ReportConstants.ITEM.DESCRIPTION)
+            val description = requireArguments().getString(ReportConstants.ITEM.DESCRIPTION)
             mDescriptionList!!.setText(description)
         }
     }

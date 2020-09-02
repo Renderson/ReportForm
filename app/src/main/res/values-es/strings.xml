@@ -164,6 +164,9 @@
     <string name="controller">Controlador</string>
     <string name="label_bottom_sheet_detail">Details</string>
     <string name="label_loading">Cargando…</string>
+    <string name="label_note_value">10.0</string>
+    <string name="report_directory_img">Report</string>
+    <string name="label_note_report">Nota:</string>
 
     <!--Alerts Dialogs-->
     <string name="alert_clear_list">Borrar lista?</string>
@@ -190,6 +193,7 @@
     <string name="clear">Claro</string>
     <string name="dark">Oscuro</string>
     <string name="choice_theme">Elige un tema</string>
+    <string name="label_theme">Tema</string>
 
     <!--Labels PDF-->
     <string name="label_paragraph_pdf_audit">Auditoría Técnica - Seguridad Alimentaria</string>
@@ -207,6 +211,13 @@
     <string name="sanitary_signature">Firma del sanitario</string>
     <string name="label_paragraph_pdf_result">Resultado:</string>
     <string name="label_paragraph_pdf_score">Nota de evaluación:</string>
-    <string name="label_theme">Tema</string>
-    <string name="report_directory_img">Report</string>
+
+    <!--CameraX-->
+    <string name="camera_back_button_alt">botón de retroceso alt</string>
+    <string name="camera_gallery_button_alt">botón de galería alt</string>
+    <string name="camera_capture_button_alt">botón de captura alt</string>
+    <string name="camera_switch_camera_button_alt">cambiar el botón de la cámara alt</string>
+    <string name="camera_share_button_alt">compartir botón alt</string>
+    <string name="camera_check_button_alt">botón de verificación alt</string>
+    <string name="camera_delete_button_alt">eliminar botón alt</string>
 </resources>

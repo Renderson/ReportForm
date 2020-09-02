@@ -164,6 +164,9 @@
     <string name="controller">Auditor</string>
     <string name="label_bottom_sheet_detail">Detalhes</string>
     <string name="label_loading">Carregando…</string>
+    <string name="label_note_value">10.0</string>
+    <string name="report_directory_img">Report</string>
+    <string name="label_note_report">Nota:</string>
 
     <!--Alerts Dialogs-->
     <string name="alert_clear_list">Limpar lista?</string>
@@ -190,6 +193,7 @@
     <string name="clear">Claro</string>
     <string name="dark">Escuro</string>
     <string name="choice_theme">Escolha um tema</string>
+    <string name="label_theme">Tema</string>
 
     <!--Labels PDF-->
     <string name="label_paragraph_pdf_audit">Auditoria Técnica - Segurança Alimentar</string>
@@ -207,6 +211,13 @@
     <string name="sanitary_signature">Assinatura da Sanitarista</string>
     <string name="label_paragraph_pdf_result">Resultado:</string>
     <string name="label_paragraph_pdf_score">Nota de avaliação:</string>
-    <string name="label_theme">Tema</string>
-    <string name="report_directory_img">Report</string>
+
+    <!--CameraX-->
+    <string name="camera_back_button_alt">botão voltar alt</string>
+    <string name="camera_gallery_button_alt">botão da galeria alt</string>
+    <string name="camera_capture_button_alt">botão de captura alt</string>
+    <string name="camera_switch_camera_button_alt">botão alternar câmera alt</string>
+    <string name="camera_share_button_alt">botão compartilhar alt</string>
+    <string name="camera_check_button_alt">botão de verificação alt</string>
+    <string name="camera_delete_button_alt">botão delete alt</string>
 </resources>
