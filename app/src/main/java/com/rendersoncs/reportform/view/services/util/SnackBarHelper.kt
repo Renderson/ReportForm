@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.view.ViewGroup.MarginLayoutParams
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.google.android.material.snackbar.Snackbar
 import com.rendersoncs.reportform.R
@@ -37,7 +38,7 @@ class SnackBarHelper {
 
         private fun setRoundBordersBg(context: Context, snk: Snackbar) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                snk.view.background = context.getDrawable(R.drawable.bg_snackbar)
+                snk.view.background = ContextCompat.getDrawable(context, R.drawable.bg_snackbar)
             }
         }
     }
