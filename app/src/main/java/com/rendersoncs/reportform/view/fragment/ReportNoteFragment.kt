@@ -1,6 +1,5 @@
 package com.rendersoncs.reportform.view.fragment
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -19,9 +18,8 @@ class ReportNoteFragment(private val adapter: ReportAdapter,
     private var note: EditText? = null
     private var getNote: String? = null
 
-    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = activity!!.layoutInflater
+        val inflater = requireActivity().layoutInflater
         val view = inflater.inflate(R.layout.fragment_report_note, null)
 
         if (view != null) {
@@ -36,7 +34,7 @@ class ReportNoteFragment(private val adapter: ReportAdapter,
     }
 
     private fun showAlertDialog(view: View?, alertButton: String): AlertDialog {
-        val builder = AlertDialog.Builder(activity!!)
+        val builder = AlertDialog.Builder(requireActivity())
         builder.setView(view)
                 .setNegativeButton(resources.getString(R.string.cancel)) { _: DialogInterface?, _: Int -> }
                 .setPositiveButton(alertButton) { _: DialogInterface?, _: Int ->
@@ -51,7 +49,7 @@ class ReportNoteFragment(private val adapter: ReportAdapter,
 
     private fun checkArguments() {
         if (arguments != null) {
-            getNote = arguments!!.getString(ReportConstants.ITEM.NOTE)
+            getNote = requireArguments().getString(ReportConstants.ITEM.NOTE)
             note!!.setText(getNote)
         }
     }
