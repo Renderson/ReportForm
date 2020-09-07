@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_screen_login">
+    android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/textView"
@@ -25,13 +25,29 @@
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <Button
+    <ImageButton
         android:id="@+id/button"
-        style="@style/ButtonFormField"
-        android:text="@string/access"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/margin_18"
+        android:background="@drawable/shape_oval"
+        android:contentDescription="@string/camera_check_button_alt"
         android:onClick="callLogin"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        android:padding="14dp"
+        android:scaleType="fitCenter"
+        android:layout_marginStart="@dimen/margin_16"
+        app:layout_constraintStart_toStartOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:srcCompat="@drawable/ic_action_next" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/bg_bottom_home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/label_bottom_home" />
 
     <!--<TextView-->
         <!--android:id="@+id/txt1"-->

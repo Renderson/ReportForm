@@ -65,6 +65,7 @@
     <string name="label_or">o</string>
     <string name="label_sign_insert_photo">Insertar foto</string>
     <string name="label_insert_password">Por favor ingrese la contraseña.</string>
+    <string name="label_bottom_home">Imagen de la cámara baja</string>
 
     <!--Activity Login-->
     <string name="label_login_facebook_failed">Error de inicio de sesión en Facebook, inténtalo de nuevo!</string>
