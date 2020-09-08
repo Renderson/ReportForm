@@ -225,6 +225,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
             this.resultCompany.setText(repoEntity.getCompany());
             this.resultEmail.setText(repoEntity.getEmail());
             this.resultDate.setText(repoEntity.getDate());
+            resultController = repoEntity.getController();
 
             /*EditReportActivity edit = new EditReportActivity();
             edit.loadEditReportExt(this,
