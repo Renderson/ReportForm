@@ -4,11 +4,9 @@ import android.app.Activity
 import com.rendersoncs.reportform.R
 import com.rendersoncs.reportform.itens.ReportItems
 import com.rendersoncs.reportform.view.services.constants.ReportConstants
-import com.rendersoncs.reportform.view.services.photo.ResizeImage
 import java.util.*
 
 internal class CheckAnswerList {
-    private val resizeImage = ResizeImage()
 
     // get Title and Description
     fun checkAnswerList(i: Int,
@@ -58,17 +56,15 @@ internal class CheckAnswerList {
     fun checkAnswerPhoto(i: Int,
                          reportItems: ArrayList<ReportItems>,
                          listPhoto: ArrayList<String?>) {
-        val bitmapPhoto = reportItems[i].photoId
+        val photo = reportItems[i].photoPath
         if (reportItems[i].selectedAnswerPosition == ReportConstants.ITEM.OPT_NUM1 &&
-                bitmapPhoto == null ||
+                photo == null ||
                 reportItems[i].selectedAnswerPosition == ReportConstants.ITEM.OPT_NUM2 &&
-                bitmapPhoto == null ||
-                reportItems[i].selectedAnswerPosition == ReportConstants.ITEM.OPT_NUM3 && bitmapPhoto == null) {
+                photo == null ||
+                reportItems[i].selectedAnswerPosition == ReportConstants.ITEM.OPT_NUM3 && photo == null) {
             listPhoto.add(ReportConstants.PHOTO.NOT_PHOTO)
         } else {
-            assert(bitmapPhoto != null)
-            val encodeImage = bitmapPhoto?.let { resizeImage.getEncoded64Image(it) }
-            listPhoto.add(encodeImage)
+            listPhoto.add(photo.toString())
         }
     }
 }

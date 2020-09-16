@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bg_waves_01" />
+    <item android:drawable="@drawable/bg_waves_02" />
+    <item android:drawable="@drawable/bg_waves_03" />
+</layer-list>

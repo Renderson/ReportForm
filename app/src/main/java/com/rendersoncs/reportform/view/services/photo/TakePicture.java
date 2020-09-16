@@ -1,3 +1,4 @@
+/*
 package com.rendersoncs.reportform.view.services.photo;
 
 import android.Manifest;
@@ -73,3 +74,4 @@ public class TakePicture {
         return photoUri;
     }
 }
+*/

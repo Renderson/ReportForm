@@ -1,8 +1,6 @@
 package com.rendersoncs.reportform.view.adapter
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.rendersoncs.reportform.R
 import com.rendersoncs.reportform.itens.ReportResumeItems
 import com.rendersoncs.reportform.view.adapter.listener.OnItemClickResume
+import com.rendersoncs.reportform.view.services.constants.ReportConstants
 import kotlinx.android.synthetic.main.activity_report_resume_list.view.*
 
 class ReportResumeAdapter(private val repoResumeList:
@@ -47,14 +46,12 @@ class ReportResumeAdapter(private val repoResumeList:
     }
 
     private fun decorationItems(holder: ViewHolder, resumeItems: ReportResumeItems) {
-        val image = resumeItems.photo
-        val bytes = Base64.decode(image, Base64.DEFAULT)
-        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        val photo = resumeItems.photo
 
-        if (bitmap == null){
+        if (photo.isEmpty() || photo == ReportConstants.PHOTO.NOT_PHOTO){
             holder.resumePhoto.imageAlpha = R.drawable.ic_broken_image
         } else {
-            Glide.with(context).load(bitmap).centerCrop().into(holder.resumePhoto)
+            Glide.with(context).load(photo).centerCrop().into(holder.resumePhoto)
         }
 
         val according = context.resources.getString(R.string.according)

@@ -65,6 +65,7 @@
     <string name="label_or">or</string>
     <string name="label_sign_insert_photo">Insert photo</string>
     <string name="label_insert_password">Please enter password.</string>
+    <string name="label_bottom_home">Image bottom home</string>
 
     <!--Activity Login-->
     <string name="label_login_facebook_failed">Facebook login failed, try again!</string>
@@ -108,7 +109,8 @@
 
     <string name="msg_take_image">Take a picture</string>
     <string name="msg_select_from_gallery">Select from Gallery</string>
-    <string name="label_permission_camera">We need permission to access the camera.</string>
+    <string name="label_permission_camera_granted">Permission request granted.</string>
+    <string name="label_permission_camera_denied">Permission denied request.</string>
     <string name="label_permission_read">We need permission to write data to save your report.</string>
     <string name="label_error_update_list">Error changing list item.</string>
     <string name="label_error_return">Something went wrong, try again!</string>
@@ -161,6 +163,11 @@
     <string name="label_attach_report">Attached the company report %1$s completed! Held on the day</string>
     <string name="label_report_update">Report Changed!</string>
     <string name="controller">Controller</string>
+    <string name="label_bottom_sheet_detail">Detail</string>
+    <string name="label_loading">Loading…</string>
+    <string name="label_note_value">10.0</string>
+    <string name="report_directory_img">Report</string>
+    <string name="label_note_report">Nota:</string>
 
     <!--Alerts Dialogs-->
     <string name="alert_clear_list">Clear list?</string>
@@ -187,6 +194,7 @@
     <string name="clear">Clear</string>
     <string name="dark">Dark</string>
     <string name="choice_theme">Choice Theme</string>
+    <string name="label_theme">Theme</string>
 
     <!--Labels PDF-->
     <string name="label_paragraph_pdf_audit">Technical Audit - Food Safety</string>
@@ -204,5 +212,13 @@
     <string name="sanitary_signature">Signature of the sanitarist</string>
     <string name="label_paragraph_pdf_result">Result:</string>
     <string name="label_paragraph_pdf_score">Evaluation Note:</string>
-    <string name="label_theme">Theme</string>
+
+    <!--CameraX-->
+    <string name="camera_back_button_alt">back button alt</string>
+    <string name="camera_gallery_button_alt">gallery button alt</string>
+    <string name="camera_capture_button_alt">capture button alt</string>
+    <string name="camera_switch_camera_button_alt">switch camera button alt</string>
+    <string name="camera_share_button_alt">share button alt</string>
+    <string name="camera_check_button_alt">check button alt</string>
+    <string name="camera_delete_button_alt">delete button alt</string>
 </resources>

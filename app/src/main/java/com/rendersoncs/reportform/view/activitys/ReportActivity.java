@@ -6,15 +6,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,21 +45,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.rendersoncs.reportform.R;
+import com.rendersoncs.reportform.itens.DetailPhoto;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.repository.dao.ReportDataBaseAsyncTask;
 import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
+import com.rendersoncs.reportform.view.activitys.cameraX.CameraXMainActivity;
 import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
 import com.rendersoncs.reportform.view.adapter.ReportAdapter;
 import com.rendersoncs.reportform.view.adapter.listener.OnItemClickedReport;
-import com.rendersoncs.reportform.view.fragment.FullPhotoFragment;
+import com.rendersoncs.reportform.view.fragment.BottomSheetDetailPhotoFragment;
 import com.rendersoncs.reportform.view.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.view.fragment.ReportNoteFragment;
 import com.rendersoncs.reportform.view.services.async.PDFCreateAsync;
 import com.rendersoncs.reportform.view.services.constants.ReportConstants;
-import com.rendersoncs.reportform.view.services.photo.CameraUtil;
-import com.rendersoncs.reportform.view.services.photo.ResizeImage;
-import com.rendersoncs.reportform.view.services.photo.TakePicture;
 import com.rendersoncs.reportform.view.services.util.AlertDialogUtil;
 import com.rendersoncs.reportform.view.services.util.ListJsonOff;
 import com.rendersoncs.reportform.view.services.util.RVEmptyObserver;
@@ -71,9 +68,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -125,10 +120,9 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
 
     private SnackBarHelper snackBarHelper = new SnackBarHelper();
     private CheckAnswerList checkAnswerList = new CheckAnswerList();
-    private TakePicture takePicture = new TakePicture();
+    //private TakePicture takePicture = new TakePicture();
     private AlertDialog dialog;
 
-    private CameraUtil path = new CameraUtil();
     private AlertDialogUtil alertDialog = new AlertDialogUtil();
 
     @Override
@@ -231,6 +225,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
             this.resultCompany.setText(repoEntity.getCompany());
             this.resultEmail.setText(repoEntity.getEmail());
             this.resultDate.setText(repoEntity.getDate());
+            resultController = repoEntity.getController();
 
             /*EditReportActivity edit = new EditReportActivity();
             edit.loadEditReportExt(this,
@@ -286,10 +281,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
                 for (int i = 0; i < editPhoto.size(); i++) {
                     String photos = editPhoto.get(i);
 
-                    byte[] decodedString = Base64.decode(photos, Base64.DEFAULT);
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                    mAdapter.setImageInItem(reportItems.get(i), bitmap);
+                    mAdapter.setImageInItem(reportItems.get(i), photos);
                 }
 
                 mAdapter = new ReportAdapter(reportItems);
@@ -721,24 +713,31 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
 
     // Show Photo Full
     public void fullPhoto(ReportItems reportItems) {
-        FullPhotoFragment fullFragment = new FullPhotoFragment();
+        DetailPhoto detailPhoto;
+        BottomSheetDetailPhotoFragment fragment = new BottomSheetDetailPhotoFragment();
         Bundle bundle = new Bundle();
 
-        Bitmap bitmap = reportItems.getPhotoId();
+        String photo = reportItems.getPhotoPath();
+        String title = reportItems.getTitle();
+        String description = reportItems.getDescription();
+        String note = reportItems.getNote();
 
-        if (bitmap == null) {
+        detailPhoto = new DetailPhoto(
+                photo,
+                title,
+                description,
+                note,
+                ""
+        );
+
+        if (photo == null || photo.equals(ReportConstants.PHOTO.NOT_PHOTO)) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.label_nothing_image), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] bytes = stream.toByteArray();
-
-        bundle.putByteArray(ReportConstants.ITEM.PHOTO, bytes);
-
-        fullFragment.setArguments(bundle);
-        fullFragment.show(getSupportFragmentManager(), "fullPhoto");
+        bundle.putSerializable("modelDetail", detailPhoto);
+        fragment.setArguments(bundle);
+        fragment.show(getSupportFragmentManager(), "sheet");
     }
 
     // Reset Item Adapter
@@ -765,37 +764,49 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
         builder.setItems(items, (dialogInterface, i) -> {
             if (i == 0) {
-                takePicture.openCamera(ReportActivity.this);
+                openCamera();
             } else {
-                takePicture.openGallery(ReportActivity.this);
+                openGallery();
             }
         });
         dialog = builder.create();
         dialog.show();
     }
 
+    private void openGallery() {
+        Intent it = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(it, ReportConstants.PHOTO.REQUEST_CODE_GALLERY);
+    }
+
+    private void openCamera() {
+        Intent it = new Intent(this, CameraXMainActivity.class);
+        startActivityForResult(it, ReportConstants.PHOTO.REQUEST_CAMERA_X);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_CANCELED) {
-            if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
+            if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_CAMERA ||
+                    resultCode == ReportConstants.PHOTO.REQUEST_CAMERA_X) {
 
-                Uri photoUri = (Uri) data.getExtras().get("output");
+                File file = (File) data.getExtras().get(ReportConstants.PHOTO.RESULT_CAMERA_X);
+                mAdapter.setImageInItem(reportTakePhoto, file.getPath());
 
-                ResizeImage.decodeBitmap(photoUri, mAdapter, reportTakePhoto);
-                Log.i("LOG", "ImagePathCameraPath " + photoUri + " " + data.getData());
+                Log.i("LOG", "CAMERA " + " " + file.getPath());
             }
             this.radioItemChecked(reportTakePhoto, ReportConstants.ITEM.OPT_NUM1);
         }
         if (requestCode == ReportConstants.PHOTO.REQUEST_CODE_GALLERY && resultCode == RESULT_OK && data != null) {
-            Uri mSelectedUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-                mAdapter.setImageInItem(reportTakePhoto, bitmap);
-                this.radioItemChecked(reportTakePhoto, ReportConstants.ITEM.OPT_NUM1);
-                Log.i("LOG", "ImagePathGallery " + bitmap);
+            Uri uri = data.getData();
 
-            } catch (IOException e) {
+            try {
+                File file = new File(getRealPathFromURI(uri));
+                mAdapter.setImageInItem(reportTakePhoto, file.getPath());
+
+                Log.i("LOG", "GALLERY " + " " + file.getPath());
+
+            } catch (Exception e) {
                 Crashlytics.logException(e);
             }
         } else {
@@ -803,19 +814,15 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         }
     }
 
+    private String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_PERMISSIONS) {
-            if (grantResults.length > REQUEST_PERMISSIONS
-                    && grantResults[REQUEST_PERMISSIONS] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[REQUEST_PERMISSIONS_GRANTED] == PackageManager.PERMISSION_GRANTED) {
-                this.dialog.dismiss();
-                takePicture.openCamera(ReportActivity.this);
-            } else {
-                snackBarHelper.showSnackBar(this, R.id.fab_new_item, R.string.label_permission_camera);
-            }
-        }
-
         if (requestCode == REQUEST_PERMISSIONS_READ_WHITE) {
             if (grantResults.length > REQUEST_PERMISSIONS
                     && grantResults[REQUEST_PERMISSIONS] == PackageManager.PERMISSION_GRANTED
@@ -842,15 +849,6 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         super.onRestoreInstanceState(savedInstanceState);
     }*/
 
-    private static void delete(File fileDirectory) {
-        if (fileDirectory == null) {
-            return;
-        } else if (fileDirectory.isDirectory())
-            for (File child : Objects.requireNonNull(fileDirectory.listFiles()))
-                delete(child);
-        boolean delete = fileDirectory.delete();
-    }
-
     private void closeMethods() {
         if (mReportBusiness != null) {
             mReportBusiness.close();
@@ -876,7 +874,5 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     protected void onDestroy() {
         super.onDestroy();
         this.closeMethods();
-        File file = path.getStorageDir();
-        delete(file);
     }
 }

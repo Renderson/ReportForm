@@ -40,7 +40,7 @@
             <item
                 android:title="@string/label_theme"
                 android:id="@+id/menu_dark_theme"
-                android:icon="@drawable/ic_moon"/>
+                android:icon="@drawable/ic_day_night"/>
         </menu>
     </item>
 

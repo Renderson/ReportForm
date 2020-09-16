@@ -15,6 +15,7 @@ import com.rendersoncs.reportform.view.adapter.listener.OnInteractionListener
 import com.rendersoncs.reportform.view.services.constants.ReportConstants
 import com.rendersoncs.reportform.view.services.extension.StringExtension.limitsText
 import kotlinx.android.synthetic.main.activity_main_list.view.*
+import java.util.*
 
 class ReportListViewHolder(itemView: View, context: Context) : RecyclerView.ViewHolder(itemView) {
     private var companyView = itemView.companyView
@@ -36,7 +37,7 @@ class ReportListViewHolder(itemView: View, context: Context) : RecyclerView.View
 
         val getResult = repoEntity.result.toString()
 
-        if (getResult == result.toUpperCase()) {
+        if (getResult == result.toUpperCase(Locale.ROOT)) {
             changeColorShape(colorAccording)
         } else {
             changeColorShape(colorNotAccording)

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.util.Base64;
 import android.util.Log;
 
 import com.itextpdf.text.BadElementException;
@@ -243,21 +242,28 @@ public class CreatePDFViewer {
 
     private Image setImagePDF(Context context, String image) throws BadElementException, IOException {
         Image image1;
+        File file = new File(image);
         if (image.equals(ReportConstants.PHOTO.NOT_PHOTO)){
-            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.walpaper_not_photo);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bitmap.compress(CompressFormat.JPEG, 100, outputStream);
-            Image stream = Image.getInstance(outputStream.toByteArray());
-            stream.scaleAbsolute(75f, 75f);
-            image1 = Image.getInstance(stream);
-        } else {
-            byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            Log.i("log", "PDFImage3: " + decodedByte + " Image");
+            image1 = createBitmap(context);
 
-            image1 = Image.getInstance(decodedString);
-            Log.i("log", "PDFImage4: " + image1 + " Image");
+        } else if (file.exists()){
+            image1 = Image.getInstance(image);
+
+        } else {
+            image1 = createBitmap(context);
         }
+        Log.i("log", "PDFImage4: " + image1 + " Image");
+        return image1;
+    }
+
+    private Image createBitmap(Context context) throws BadElementException, IOException {
+        Image image1;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.walpaper_not_photo);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(CompressFormat.JPEG, 100, outputStream);
+        Image stream = Image.getInstance(outputStream.toByteArray());
+        stream.scaleAbsolute(75f, 75f);
+        image1 = Image.getInstance(stream);
         return image1;
     }
 

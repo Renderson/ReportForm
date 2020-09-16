@@ -65,6 +65,7 @@
     <string name="label_or">o</string>
     <string name="label_sign_insert_photo">Insertar foto</string>
     <string name="label_insert_password">Por favor ingrese la contraseña.</string>
+    <string name="label_bottom_home">Imagen de la cámara baja</string>
 
     <!--Activity Login-->
     <string name="label_login_facebook_failed">Error de inicio de sesión en Facebook, inténtalo de nuevo!</string>
@@ -108,7 +109,8 @@
 
     <string name="msg_take_image">Tomar la foto</string>
     <string name="msg_select_from_gallery">Seleccionar de la galería</string>
-    <string name="label_permission_camera">Necesitamos permiso para acceder a la cámara.</string>
+    <string name="label_permission_camera_granted">Permission request granted.</string>
+    <string name="label_permission_camera_denied">Solicitud de permiso denegado.</string>
     <string name="label_permission_read">Necesitamos permiso para escribir datos para guardar su informe.</string>
     <string name="label_error_update_list">Error al cambiar el elemento de la lista.</string>
     <string name="label_error_return">Algo salió mal, inténtalo de nuevo!</string>
@@ -161,6 +163,11 @@
     <string name="label_attach_report">Adjunto el informe de la compañía %1$s completado! Celebrada en el día</string>
     <string name="label_report_update">Informe modificado!</string>
     <string name="controller">Controlador</string>
+    <string name="label_bottom_sheet_detail">Details</string>
+    <string name="label_loading">Cargando…</string>
+    <string name="label_note_value">10.0</string>
+    <string name="report_directory_img">Report</string>
+    <string name="label_note_report">Nota:</string>
 
     <!--Alerts Dialogs-->
     <string name="alert_clear_list">Borrar lista?</string>
@@ -187,6 +194,7 @@
     <string name="clear">Claro</string>
     <string name="dark">Oscuro</string>
     <string name="choice_theme">Elige un tema</string>
+    <string name="label_theme">Tema</string>
 
     <!--Labels PDF-->
     <string name="label_paragraph_pdf_audit">Auditoría Técnica - Seguridad Alimentaria</string>
@@ -204,5 +212,13 @@
     <string name="sanitary_signature">Firma del sanitario</string>
     <string name="label_paragraph_pdf_result">Resultado:</string>
     <string name="label_paragraph_pdf_score">Nota de evaluación:</string>
-    <string name="label_theme">Tema</string>
+
+    <!--CameraX-->
+    <string name="camera_back_button_alt">botón de retroceso alt</string>
+    <string name="camera_gallery_button_alt">botón de galería alt</string>
+    <string name="camera_capture_button_alt">botón de captura alt</string>
+    <string name="camera_switch_camera_button_alt">cambiar el botón de la cámara alt</string>
+    <string name="camera_share_button_alt">compartir botón alt</string>
+    <string name="camera_check_button_alt">botón de verificación alt</string>
+    <string name="camera_delete_button_alt">eliminar botón alt</string>
 </resources>
