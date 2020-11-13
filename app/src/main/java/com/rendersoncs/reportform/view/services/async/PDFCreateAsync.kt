@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.reportform.itens.ReportItems
 import com.rendersoncs.reportform.view.services.util.CreatePDFViewer
 import java.io.File
@@ -24,6 +25,7 @@ class PDFCreateAsync(private val context: Context) : AsyncTask<ReportItems?, Voi
         try {
             pdfReport = CreatePDFViewer().write(context, report)
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
             e.printStackTrace()
         }
         return pdfReport

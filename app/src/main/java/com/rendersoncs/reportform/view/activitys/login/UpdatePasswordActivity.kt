@@ -7,17 +7,16 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.crashlytics.android.Crashlytics
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.rendersoncs.reportform.R
 import com.rendersoncs.reportform.view.activitys.login.util.User
 import com.rendersoncs.reportform.view.services.util.closeVirtualKeyBoard
-import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_update_password.*
 
 class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView.OnEditorActionListener {
@@ -27,7 +26,7 @@ class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_password)
-        Fabric.with(this, Crashlytics())
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         mAuth = FirebaseAuth.getInstance()
         password.setOnEditorActionListener(this)
     }
@@ -65,7 +64,7 @@ class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView
                     }
                 }
                 .addOnFailureListener { e: Exception ->
-                    Crashlytics.logException(e)
+                    FirebaseCrashlytics.getInstance().recordException(e)
                     Toast.makeText(
                             this@UpdatePasswordActivity,
                             e.message,
@@ -92,7 +91,7 @@ class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView
                     }
                 }
                 .addOnFailureListener(this) { e: Exception ->
-                    Crashlytics.logException(e)
+                    FirebaseCrashlytics.getInstance().recordException(e)
                     Toast.makeText(
                             this@UpdatePasswordActivity,
                             e.message,
@@ -109,7 +108,7 @@ class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView
     }
 
     override fun onCancelled(fireBaseError: DatabaseError) {
-        Crashlytics.logException(fireBaseError.toException())
+        FirebaseCrashlytics.getInstance().recordException(fireBaseError.toException())
     }
 
     override fun onEditorAction(view: TextView, actionId: Int, event: KeyEvent?): Boolean {

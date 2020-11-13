@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.reportform.R
 import com.rendersoncs.reportform.view.services.constants.ReportConstants
 
@@ -28,6 +29,7 @@ class ChooseThemeDialogFragment : DialogFragment() {
         mListener = try {
             context as SingleChoiceListener
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
             throw ClassCastException(activity.toString() + " SingleChoiceListener must implemented")
         }
     }

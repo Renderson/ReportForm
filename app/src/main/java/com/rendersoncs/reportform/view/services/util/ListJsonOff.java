@@ -2,11 +2,11 @@ package com.rendersoncs.reportform.view.services.util;
 
 import android.os.Environment;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
-import com.rendersoncs.reportform.view.services.constants.ReportConstants;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.rendersoncs.reportform.itens.ReportItems;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
+import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +41,7 @@ public class ListJsonOff {
 
             }
         } catch (JSONException | IOException e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 

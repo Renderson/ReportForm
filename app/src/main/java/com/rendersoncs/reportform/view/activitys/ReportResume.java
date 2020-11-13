@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.itens.DetailPhoto;
 import com.rendersoncs.reportform.itens.ReportItems;
@@ -202,7 +203,7 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
             recyclerView.setAdapter(adapter);
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
@@ -232,7 +233,7 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
             this.itemsResume.setText(getString(R.string.item_selected, maxList));
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 

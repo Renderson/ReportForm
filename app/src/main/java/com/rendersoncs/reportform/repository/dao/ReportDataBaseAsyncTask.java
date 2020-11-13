@@ -6,9 +6,10 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
 import com.rendersoncs.reportform.itens.ReportItems;
+import com.rendersoncs.reportform.repository.dao.business.ReportBusiness;
 import com.rendersoncs.reportform.view.services.async.PDFCreateAsync;
 
 public class ReportDataBaseAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -55,7 +56,7 @@ public class ReportDataBaseAsyncTask extends AsyncTask<Void, Void, Void> {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
         if (mReportId == 0) {
             /*Bundle bundle = new Bundle();

@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.rendersoncs.reportform.R;
 
 import java.io.File;
@@ -73,7 +74,7 @@ public class SignatureActivityMain extends AppCompatActivity {
             //scanMediaFile(photo);
             result = true;
         } catch (IOException e){
-            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
         return result;
     }

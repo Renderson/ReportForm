@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.reportform.R
 import com.rendersoncs.reportform.itens.ReportItems
 import com.rendersoncs.reportform.view.adapter.listener.OnInteractionListener
@@ -101,7 +102,7 @@ class ReportListViewHolder(itemView: View, context: Context) : RecyclerView.View
                 }
             }
         } catch (e: Throwable) {
-            e.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 }

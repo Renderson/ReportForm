@@ -27,6 +27,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DatabaseReference;
 import com.rendersoncs.reportform.R;
 import com.rendersoncs.reportform.itens.ReportItems;
@@ -270,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.i("DELETE", String.valueOf(b));
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 

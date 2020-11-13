@@ -6,7 +6,6 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -25,13 +24,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.rendersoncs.reportform.R;
-import com.rendersoncs.reportform.view.activitys.login.util.User;
 import com.rendersoncs.reportform.view.activitys.MainActivity;
+import com.rendersoncs.reportform.view.activitys.login.util.User;
 
 import java.util.Arrays;
-
-import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends CommonActivity {
 
@@ -53,7 +51,7 @@ public class LoginActivity extends CommonActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Fabric.with(this, new Crashlytics());
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
 
         // FACEBOOK SIGN IN
         //FacebookSdk.sdkInitialize(getApplicationContext());
@@ -69,7 +67,7 @@ public class LoginActivity extends CommonActivity {
 
             @Override
             public void onError(FacebookException error) {
-                Crashlytics.logException(error);
+                FirebaseCrashlytics.getInstance().recordException(error);
                 closeProgressBar();
                 showSnackBar(getResources().getString(R.string.label_login_facebook_failed));
             }
@@ -174,7 +172,7 @@ public class LoginActivity extends CommonActivity {
                             showSnackBar(getResources().getString(R.string.label_login_social_failed));
                         }
                     })
-                    .addOnFailureListener(Crashlytics::logException);
+                    .addOnFailureListener(Throwable::printStackTrace);
         } else {
             mAuth.signOut();
         }
@@ -310,7 +308,7 @@ public class LoginActivity extends CommonActivity {
                         closeProgressBar();
                     }
                 }).addOnFailureListener(e -> {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
             showSnackBar(e.getMessage());
         });
     }

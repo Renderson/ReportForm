@@ -20,7 +20,7 @@
             android:paddingStart="@dimen/margin_4"
             android:paddingEnd="@dimen/margin_4"
             android:text="@string/label_observation"
-            android:textColorHint="@color/colorBlack"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="@dimen/text_size_22"
             android:textStyle="bold" />
 

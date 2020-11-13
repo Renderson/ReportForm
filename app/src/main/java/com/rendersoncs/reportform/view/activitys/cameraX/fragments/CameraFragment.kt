@@ -51,6 +51,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.reportform.R
 import com.rendersoncs.reportform.view.activitys.cameraX.KEY_EVENT_ACTION
 import com.rendersoncs.reportform.view.activitys.cameraX.KEY_EVENT_EXTRA
@@ -327,6 +328,7 @@ class CameraFragment : Fragment() {
             // Attach the viewfinder's surface provider to preview use case
             preview?.setSurfaceProvider(viewFinder.createSurfaceProvider())
         } catch (exc: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(exc)
             Log.e(TAG, "Use case binding failed", exc)
         }
     }

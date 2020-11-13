@@ -4,10 +4,10 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
-import com.rendersoncs.reportform.view.services.constants.ReportConstants;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
+import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -56,7 +56,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
             return stringBuilder.toString().trim();
 
         } catch (IOException e) {
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
         return null;
     }
@@ -74,6 +74,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
             fos.flush();
             fos.close();
         } catch (IOException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
     }

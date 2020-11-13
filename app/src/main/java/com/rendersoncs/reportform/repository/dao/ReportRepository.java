@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.rendersoncs.reportform.itens.ReportItems;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class ReportRepository {
             return true;
 
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("Error Insert", true);
             return false;
         }
     }
@@ -79,6 +81,7 @@ public class ReportRepository {
             return true;
 
         } catch (Exception e){
+            FirebaseCrashlytics.getInstance().setCustomKey("Error update", true);
             return false;
         }
     }
@@ -94,6 +97,7 @@ public class ReportRepository {
             sqLiteDatabase.delete(DataBaseConstants.REPORT.TABLE_NAME, whereClause, whereArgs);
 
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             Log.i("TAG", "ERRORDB" + e.getMessage());
         }
     }
@@ -140,6 +144,7 @@ public class ReportRepository {
             return repoEntity;
 
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             return repoEntity;
         }
     }
@@ -175,6 +180,7 @@ public class ReportRepository {
             }
 
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             return list;
         }
 

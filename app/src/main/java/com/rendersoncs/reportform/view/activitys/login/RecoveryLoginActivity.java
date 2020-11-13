@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.rendersoncs.reportform.R;
 
@@ -67,7 +66,7 @@ public class RecoveryLoginActivity extends AppCompatActivity {
                             ).show();
                         }
                     })
-                    .addOnFailureListener(Crashlytics::logException);
+                    .addOnFailureListener(Throwable::printStackTrace);
         }
     }
 }

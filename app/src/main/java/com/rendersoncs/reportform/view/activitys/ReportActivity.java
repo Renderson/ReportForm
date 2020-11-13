@@ -33,10 +33,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,6 +54,7 @@ import com.rendersoncs.reportform.view.activitys.login.util.LibraryClass;
 import com.rendersoncs.reportform.view.activitys.login.util.User;
 import com.rendersoncs.reportform.view.adapter.ReportAdapter;
 import com.rendersoncs.reportform.view.adapter.listener.OnItemClickedReport;
+import com.rendersoncs.reportform.view.animated.AnimatedView;
 import com.rendersoncs.reportform.view.fragment.BottomSheetDetailPhotoFragment;
 import com.rendersoncs.reportform.view.fragment.NewItemListFireBase;
 import com.rendersoncs.reportform.view.fragment.ReportNoteFragment;
@@ -95,7 +96,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     private FloatingActionButton fab;
     private View emptyLayout;
 
-    private TextView resultCompany, resultEmail, resultDate, scores;
+    private TextView resultCompany, resultEmail, resultDate, scores, showScore;
     private String resultController = "";
     private String resultScore = "";
     private PDFCreateAsync pdfCreateAsync = new PDFCreateAsync(ReportActivity.this);
@@ -121,6 +122,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     private SnackBarHelper snackBarHelper = new SnackBarHelper();
     private CheckAnswerList checkAnswerList = new CheckAnswerList();
     //private TakePicture takePicture = new TakePicture();
+    private AnimatedView animated = new AnimatedView();
     private AlertDialog dialog;
 
     private AlertDialogUtil alertDialog = new AlertDialogUtil();
@@ -167,6 +169,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
         resultEmail = findViewById(R.id.result_email);
         resultDate = findViewById(R.id.result_date);
         scores = findViewById(R.id.score);
+        showScore = findViewById(R.id.showScore);
         emptyLayout = findViewById(R.id.layout_report_list_empty);
         Button emptyButton = findViewById(R.id.action_add_item);
         recyclerView = findViewById(R.id.recycler_view_form);
@@ -192,8 +195,8 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
 
         emptyButton.setOnClickListener(v -> startNewItemListFireBase());
 
-        // Animated FloatingButton
-        //animated.animatedFab(recyclerView, fab);
+        // Animated View
+        animated.animatedView(recyclerView, showScore);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -289,7 +292,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
                 recyclerView.setAdapter(mAdapter);
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
 
         } else {
@@ -352,7 +355,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
     private void addItemsFromListOFF() {
         findViewById(R.id.progressBar).setVisibility(View.GONE);
         findViewById(R.id.action_add_item).setVisibility(View.GONE);
-        fab.setEnabled(false);
+        findViewById(R.id.fab_new_item).setVisibility(View.GONE);
         jsonListModeOff.addItemsFromJsonList(reportItems);
         mAdapter.notifyDataSetChanged();
     }
@@ -557,7 +560,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
                 jsObject.put(ReportConstants.ITEM.PHOTO, listPhoto.get(i));
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
             jsArray.put(jsObject);
         }
@@ -623,6 +626,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
             resultScore = getString(R.string.not_according).toUpperCase();
         }
         scores.setText(Float.toString(score));
+        showScore.setText(getString(R.string.label_note_value_scroll, Float.toString(score)));
     }
 
     @Override
@@ -807,7 +811,7 @@ public class ReportActivity extends AppCompatActivity implements OnItemClickedRe
                 Log.i("LOG", "GALLERY " + " " + file.getPath());
 
             } catch (Exception e) {
-                Crashlytics.logException(e);
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

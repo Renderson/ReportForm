@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -236,6 +237,7 @@ public class CreatePDFViewer {
                 pTable.addCell(celImage);
             }
         } catch (JSONException e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
     }

@@ -16,9 +16,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
@@ -30,8 +30,6 @@ import com.rendersoncs.reportform.view.services.constants.ReportConstants;
 
 import java.io.IOException;
 import java.util.UUID;
-
-import io.fabric.sdk.android.Fabric;
 
 public class SignUpActivity extends CommonActivity implements DatabaseReference.CompletionListener {
 
@@ -50,7 +48,7 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        Fabric.with(this, new Crashlytics());
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -134,7 +132,7 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
                 }
             }).addOnFailureListener(this, e -> {
                 closeProgressBar();
-                Crashlytics.logException(e);
+                FirebaseCrashlytics.getInstance().recordException(e);
                 showSnackBar(e.getMessage());
             });
         }
@@ -158,10 +156,11 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
                                         ref1.setValue(photoUri).addOnSuccessListener(aVoid -> {
                                         });
                                     })).addOnFailureListener(e -> {
-                Crashlytics.logException(e);
+                FirebaseCrashlytics.getInstance().recordException(e);
                 Toast.makeText(SignUpActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
             })
-                    .addOnFailureListener(Crashlytics::logException);
+                    //.addOnFailureListener(Crashlytics::logException);
+                    .addOnFailureListener(Throwable::printStackTrace);
         }
     }
 
@@ -184,7 +183,7 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
                     mBtnSelectedPhoto.setAlpha(ALPHA);
 
                 } catch (IOException e) {
-                    Crashlytics.logException(e);
+                    FirebaseCrashlytics.getInstance().recordException(e);
                     showSnackBar(e.getMessage());
                 }
             }
