@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        this.checkUserFireBase();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.title_report_list);
@@ -97,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Check NetWorking
         this.netService.isConnected(MainActivity.this);
-
-        this.checkUserFireBase();
 
         mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
         mAuth = FirebaseAuth.getInstance();

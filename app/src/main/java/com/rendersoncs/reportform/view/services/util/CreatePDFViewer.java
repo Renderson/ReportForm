@@ -64,7 +64,9 @@ public class CreatePDFViewer {
         //arrayOfObject[1] = date;
         String str = FilenameUtils.normalize(String.format("Report-%s-%s.pdf", arrayOfObject));*/
 
-        String str = FilenameUtils.normalize(String.format(context.getResources().getString(R.string.label_name_archive), paramRepo.getCompany(), paramRepo.getDate()));
+        String str = FilenameUtils.normalize(String.format(context.getResources()
+                .getString(R.string.label_name_archive),
+                paramRepo.companyFormatter(), paramRepo.getDate()));
         Log.i("PDF", "Generate PDF!!!! " + str + " File Name");
 
         File mFilePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report");

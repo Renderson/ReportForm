@@ -169,7 +169,7 @@ public class ReportResume extends AppCompatActivity implements OnItemClickResume
             repoEntity = this.mReportBusiness.load(mReportId);
             this.controllerResume.setText(getString(R.string.label_report, repoEntity.getController()));
             this.emailResume.setText(repoEntity.getEmail());
-            this.dateResume.setText(repoEntity.getDate());
+            this.dateResume.setText(repoEntity.dateFormatter());
             this.companyResume.setText(StringExtension.limitsText(repoEntity.getCompany(),
                     ReportConstants.CHARACTERS.LIMITS_TEXT));
 

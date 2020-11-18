@@ -33,7 +33,7 @@ class ReportListViewHolder(itemView: View, context: Context) : RecyclerView.View
     fun bindData(repoEntity: ReportItems, listener: OnInteractionListener) {
 
         companyView!!.text = limitsText(repoEntity.company, ReportConstants.CHARACTERS.LIMITS_TEXT)
-        dateView!!.text = repoEntity.date
+        dateView!!.text = repoEntity.dateFormatter()
         resultView.text = repoEntity.result
 
         val getResult = repoEntity.result.toString()

@@ -1,5 +1,8 @@
 package com.rendersoncs.reportform.itens
 
+import java.text.SimpleDateFormat
+import java.util.*
+
 class ReportItems {
     var id = 0
     var conformed = 0
@@ -58,5 +61,23 @@ class ReportItems {
 
     constructor(header: String?) {
         this.header = header
+    }
+
+    fun dateFormatter(): String {
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val date = dateFormat.parse(date)
+        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return formatter.format(date!!)
+    }
+
+    fun dateFormatterPDF(): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val date = dateFormat.parse(date)
+        val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        return formatter.format(date!!)
+    }
+
+    fun companyFormatter(): String {
+        return this.company!!.replace(" ", "-")
     }
 }
