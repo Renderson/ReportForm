@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.rendersoncs.reportform">
+    package="com.rendersoncs.report">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,7 +20,7 @@
         android:required="true" />
 
     <application
-        android:name=".view.MyApplication"
+        android:name="com.rendersoncs.report.view.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -46,7 +46,7 @@
             android:label="@string/app_name"
             tools:replace="android:theme" />
 
-        <activity android:name=".view.activitys.SplashScreenActivity"
+        <activity android:name="com.rendersoncs.report.view.splashscreen.SplashScreenActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,27 +55,27 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.activitys.login.HomeActivity" />
-        <activity android:name=".view.activitys.login.LoginActivity" />
-        <activity android:name=".view.activitys.login.SignUpActivity" />
-        <activity android:name=".view.activitys.login.RecoveryLoginActivity" />
-        <activity android:name=".view.activitys.login.UpdatePasswordActivity" />
-        <activity android:name=".view.activitys.login.RemoveUserActivity" />
-        <activity android:name=".view.activitys.ReportActivity"
+        <activity android:name="com.rendersoncs.report.view.login.HomeActivity" />
+        <activity android:name="com.rendersoncs.report.view.login.LoginActivity" />
+        <activity android:name="com.rendersoncs.report.view.login.SignUpActivity" />
+        <activity android:name="com.rendersoncs.report.view.login.RecoveryLoginActivity" />
+        <activity android:name="com.rendersoncs.report.view.login.UpdatePasswordActivity" />
+        <activity android:name="com.rendersoncs.report.view.login.RemoveUserActivity" />
+        <activity android:name="com.rendersoncs.report.view.report.ReportActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.activitys.MainActivity"
+        <activity android:name="com.rendersoncs.report.view.main.MainActivity"
             android:launchMode="singleTop"/>
         <activity
-            android:name=".view.activitys.ReportResume"
-            android:parentActivityName=".view.activitys.MainActivity">
+            android:name="com.rendersoncs.report.view.resume.ReportResume"
+            android:parentActivityName="com.rendersoncs.report.view.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.activitys.MainActivity" />
+                android:value="com.rendersoncs.report.view.main.MainActivity" />
         </activity>
-        <activity android:name=".view.activitys.SignatureActivityMain" />
+        <activity android:name="com.rendersoncs.report.view.signature.SignatureActivity" />
 
         <activity
-            android:name=".view.activitys.cameraX.CameraXMainActivity"
+            android:name="com.rendersoncs.report.view.cameraX.CameraXMainActivity"
             android:clearTaskOnLaunch="true"
             android:theme="@style/CameraTheme"
             android:icon="@mipmap/ic_launcher"
@@ -100,7 +100,7 @@
         </activity>
 
         <service
-            android:name=".repository.net.NotificationFireBase"
+            android:name="com.rendersoncs.report.repository.net.NotificationFireBase"
             android:permission="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
