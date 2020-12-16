@@ -61,6 +61,8 @@
         <activity android:name="com.rendersoncs.report.view.login.RecoveryLoginActivity" />
         <activity android:name="com.rendersoncs.report.view.login.UpdatePasswordActivity" />
         <activity android:name="com.rendersoncs.report.view.login.RemoveUserActivity" />
+        <activity android:name="com.rendersoncs.report.view.reportEdit.ReportEdit"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.rendersoncs.report.view.report.ReportActivity"
             android:screenOrientation="portrait"/>
         <activity android:name="com.rendersoncs.report.view.main.MainActivity"

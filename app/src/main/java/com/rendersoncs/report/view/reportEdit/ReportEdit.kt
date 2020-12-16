@@ -1,4 +1,4 @@
-package com.rendersoncs.report.view.report
+package com.rendersoncs.report.view.reportEdit
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -26,16 +26,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.database.*
 import com.rendersoncs.report.R
 import com.rendersoncs.report.infrastructure.animated.AnimatedView
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import com.rendersoncs.report.infrastructure.pdf.AsyncCreatePDF
 import com.rendersoncs.report.infrastructure.util.AlertDialogUtil
 import com.rendersoncs.report.infrastructure.util.DownloadJson
-import com.rendersoncs.report.infrastructure.util.ReportEmptyObserve
 import com.rendersoncs.report.infrastructure.util.SnackBarHelper
 import com.rendersoncs.report.model.ReportDetailPhoto
 import com.rendersoncs.report.model.ReportItems
@@ -43,10 +40,10 @@ import com.rendersoncs.report.repository.dao.ReportDataBaseAsyncTask
 import com.rendersoncs.report.repository.dao.business.ReportBusiness
 import com.rendersoncs.report.view.cameraX.CameraXMainActivity
 import com.rendersoncs.report.view.fragment.BottomSheetDetailPhotoFragment
-import com.rendersoncs.report.view.fragment.NewItemFireBaseFragment
 import com.rendersoncs.report.view.fragment.ReportNoteFragment
-import com.rendersoncs.report.view.login.util.LibraryClass
-import com.rendersoncs.report.view.login.util.User
+import com.rendersoncs.report.view.report.ReportAdapter
+import com.rendersoncs.report.view.report.ReportCheckAnswer
+import com.rendersoncs.report.view.report.ReportListener
 import kotlinx.android.synthetic.main.activity_report.*
 import kotlinx.android.synthetic.main.activity_report_list_empty.*
 import kotlinx.android.synthetic.main.content_report.*
@@ -56,7 +53,7 @@ import org.json.JSONObject
 import java.io.File
 import java.util.*
 
-class ReportActivity : AppCompatActivity(), ReportListener {
+class ReportEdit: AppCompatActivity(), ReportListener {
 
     private lateinit var recyclerView: RecyclerView
 
@@ -64,16 +61,14 @@ class ReportActivity : AppCompatActivity(), ReportListener {
     private val jsonListModeOff = DownloadJson()
     private var reportTakePhoto: ReportItems? = null
     private var mAdapter: ReportAdapter? = null
-    private var emptyLayout: View? = null
 
     private var resultCompany: TextView? = null
     private var resultEmail: TextView? = null
     private var resultDate: TextView? = null
     private var showScore: TextView? = null
-    private val pdfCreateAsync = AsyncCreatePDF(this@ReportActivity)
+    private val pdfCreateAsync = AsyncCreatePDF(this)
 
     private val reportItems = ArrayList<ReportItems>()
-    private val mKeys = ArrayList<String?>()
 
     private val listTitle = ArrayList<String?>()
     private val listDescription = ArrayList<String?>()
@@ -82,14 +77,16 @@ class ReportActivity : AppCompatActivity(), ReportListener {
     private val listPhoto = ArrayList<String?>()
     private val jsArray = JSONArray()
 
+    private val editConformity = ArrayList<String>()
+    private val editNotes = ArrayList<String>()
+    private val editPhoto = ArrayList<String>()
+
     private var scores: TextView? = null
     private var resultScore = ""
     private var resultController: String? = ""
     private var mReportId = 0
 
-    private var databaseReference: DatabaseReference? = null
     private var mFireBaseAnalytics: FirebaseAnalytics? = null
-    private val user = User()
 
     private val snackBarHelper = SnackBarHelper()
     private val checkAnswerList = ReportCheckAnswer()
@@ -102,19 +99,20 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         setContentView(R.layout.activity_report)
 
         setSupportActionBar(toolbar)
-        setTitle(R.string.title_report)
+        title = getString(R.string.title_edit_report)
 
         progressBar.visibility = View.VISIBLE
-
-        val mAuth = FirebaseAuth.getInstance()
-        mFireBaseAnalytics = FirebaseAnalytics.getInstance(this)
-        user.id = mAuth.currentUser!!.uid
 
         mReportBusiness = ReportBusiness(this)
 
         initViews()
 
-        loadListFire()
+        val bundle = intent.extras
+        if (bundle != null) {
+            mReportId = bundle.getInt(ReportConstants.REPORT.REPORT_ID)
+        }
+
+        loadEditReport()
     }
 
     private fun initViews() {
@@ -123,7 +121,6 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         resultDate = findViewById(R.id.result_date)
         scores = findViewById(R.id.score)
         showScore = findViewById(R.id.showScore)
-        emptyLayout = findViewById(R.id.layout_report_list_empty)
 
         mAdapter = ReportAdapter(reportItems)
 
@@ -134,9 +131,6 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         }
 
         mAdapter!!.setOnItemListenerClicked(this)
-
-        fab_new_item.setOnClickListener { startNewItemListFireBase() }
-        action_add_item.setOnClickListener { startNewItemListFireBase() }
 
         // Animated View
         animated.animatedView(recyclerView, showScore!!)
@@ -151,55 +145,74 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         }
     }
 
-    private fun loadListFire() {
-        this.isConnected
-        this.bundleReportFromDialog
-    }
+    private fun loadEditReport() {
 
-    // get text from DialogFragment
-    private val bundleReportFromDialog: Unit
-        get() {
-            // get text from DialogFragment
-            val intent = intent
-            val bundle = intent.extras!!
+        progressBar.visibility = View.GONE
+        fab_new_item.visibility = View.GONE
 
-            val company = bundle.getString(ReportConstants.ITEM.COMPANY)
-            resultCompany!!.text = company
+        val bundle = intent.extras
 
-            val email = bundle.getString(ReportConstants.ITEM.EMAIL)
-            resultEmail!!.text = email
+        if (bundle != null) {
+            mReportId = bundle.getInt(ReportConstants.REPORT.REPORT_ID)
+            val repoEntity = mReportBusiness!!.load(mReportId)
+            resultCompany!!.text = repoEntity.company
+            resultEmail!!.text = repoEntity.email
+            resultDate!!.text = repoEntity.date
+            resultController = repoEntity.controller
 
-            resultController = bundle.getString(ReportConstants.ITEM.CONTROLLER)
-            val date = bundle.getString(ReportConstants.ITEM.DATE)
+            try {
+                val array = JSONArray(repoEntity.listJson)
+                for (i in 0 until array.length()) {
+                    val `object` = array.getJSONObject(i)
+                    val conformity = `object`.getString(ReportConstants.ITEM.CONFORMITY)
+                    editConformity.add(conformity)
 
-            resultDate!!.text = date
-        }
+                    val note = `object`.getString(ReportConstants.ITEM.NOTE)
+                    editNotes.add(note)
 
-    private fun startNewItemListFireBase() {
-        val newItemListFirebase = NewItemFireBaseFragment()
-        newItemListFirebase.show(supportFragmentManager, newItemListFirebase.tag)
-    }
+                    val photo = `object`.getString(ReportConstants.ITEM.PHOTO)
+                    editPhoto.add(photo)
 
-    private val isConnected: Unit
-        get() {
-            val connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected")
-            connectedRef.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val connected = snapshot.getValue(Boolean::class.java) ?: false
+                    val repoJson = ReportItems(`object`.getString(ReportConstants.ITEM.TITLE),
+                            `object`.getString(ReportConstants.ITEM.DESCRIPTION),
+                            null, null)
 
-                    if (connected) {
-                        addItemsFromFireBase()
-                    } else {
-                        addItemsFromListOFF()
+                    reportItems.add(repoJson)
+                }
+                for (i in editConformity.indices) {
+                    if (editConformity[i] == resources.getString(R.string.according)) {
+                        radioItemChecked(reportItems[i], ReportConstants.ITEM.OPT_NUM1)
+                    }
+                    if (editConformity[i] == resources.getString(R.string.not_applicable)) {
+                        radioItemChecked(reportItems[i], ReportConstants.ITEM.OPT_NUM2)
+                    }
+                    if (editConformity[i] == resources.getString(R.string.not_according)) {
+                        radioItemChecked(reportItems[i], ReportConstants.ITEM.OPT_NUM3)
                     }
                 }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(applicationContext,
-                            getString(R.string.label_error_return), Toast.LENGTH_SHORT).show()
+                for (i in editNotes.indices) {
+                    val notes = editNotes[i]
+                    if (notes == getString(R.string.label_not_observation)) {
+                        mAdapter!!.insertNote(reportItems[i], null)
+                    } else {
+                        mAdapter!!.insertNote(reportItems[i], notes)
+                    }
                 }
-            })
+                for (i in editPhoto.indices) {
+                    val photos = editPhoto[i]
+                    mAdapter!!.setImageInItem(reportItems[i], photos)
+                }
+                mAdapter = ReportAdapter(reportItems)
+                mAdapter!!.setOnItemListenerClicked(this)
+                recyclerView.adapter = mAdapter
+
+            } catch (e: JSONException) {
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
+        } else {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
         }
+    }
 
     private fun addItemsFromListOFF() {
         progressBar.visibility = View.GONE
@@ -207,56 +220,6 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         fab_new_item.visibility = View.GONE
         jsonListModeOff.addItemsFromJsonList(reportItems)
         mAdapter!!.notifyDataSetChanged()
-    }
-
-    // Sync RecyclerView with FireBase
-    private fun addItemsFromFireBase() {
-        fab_new_item.visibility = View.VISIBLE
-
-        databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS)
-                .child(user.id).child(ReportConstants.FIREBASE.FIRE_LIST)
-
-        databaseReference!!.addChildEventListener(object : ChildEventListener {
-
-            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                progressBar.visibility = View.GONE
-                dataSnapshot.getValue(ReportItems::class.java)?.let { reportItems.add(it) }
-                val key = dataSnapshot.key
-                mKeys.add(key)
-
-                mAdapter!!.notifyDataSetChanged()
-            }
-
-            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
-                val reportItems = dataSnapshot.getValue(ReportItems::class.java)
-                val key = dataSnapshot.key
-                val index = mKeys.indexOf(key)
-
-                if (reportItems != null) {
-                    this@ReportActivity.reportItems[index] = reportItems
-                }
-                mAdapter!!.notifyDataSetChanged()
-            }
-
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-                val key = dataSnapshot.key
-                val index = mKeys.indexOf(key)
-                reportItems.removeAt(index)
-                mKeys.removeAt(index)
-                mAdapter!!.notifyDataSetChanged()
-            }
-
-            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(applicationContext, getString(R.string.label_failed), Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun showLayoutEmpty() {
-        progressBar.visibility = View.GONE
-        mAdapter!!.registerAdapterDataObserver(ReportEmptyObserve(recyclerView, emptyLayout))
     }
 
     // Menu
@@ -288,7 +251,7 @@ class ReportActivity : AppCompatActivity(), ReportListener {
             R.id.save -> {
                 checkAnswers()
                 if (listPhoto.isEmpty()) {
-                    alertDialog.showDialog(this@ReportActivity,
+                    alertDialog.showDialog(this,
                             resources.getString(R.string.alert_empty_report),
                             resources.getString(R.string.alert_empty_report_text),
                             resources.getString(R.string.back),
@@ -296,7 +259,7 @@ class ReportActivity : AppCompatActivity(), ReportListener {
                             null, null, false)
                     clearList()
                 } else if (listRadio.size > listPhoto.size) {
-                    alertDialog.showDialog(this@ReportActivity,
+                    alertDialog.showDialog(this,
                             resources.getString(R.string.alert_check_list),
                             resources.getString(R.string.alert_check_list_text),
                             resources.getString(R.string.back),
@@ -305,9 +268,9 @@ class ReportActivity : AppCompatActivity(), ReportListener {
                     clearList()
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        if (ContextCompat.checkSelfPermission(this@ReportActivity,
+                        if (ContextCompat.checkSelfPermission(this,
                                         Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(this@ReportActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
+                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
                                     Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_PERMISSIONS_READ_WHITE)
                         } else {
                             alertDialogScore()
@@ -321,9 +284,9 @@ class ReportActivity : AppCompatActivity(), ReportListener {
             R.id.clear -> {
                 checkAnswers()
                 if (listRadio.isEmpty()) {
-                    snackBarHelper.showSnackBar(this@ReportActivity, R.id.fab_new_item, R.string.label_empty_list)
+                    snackBarHelper.showSnackBar(this, R.id.fab_new_item, R.string.label_empty_list)
                 } else {
-                    alertDialog.showDialog(this@ReportActivity,
+                    alertDialog.showDialog(this,
                             resources.getString(R.string.alert_clear_list),
                             resources.getString(R.string.alert_clear_list_text),
                             resources.getString(R.string.confirm),
@@ -336,7 +299,7 @@ class ReportActivity : AppCompatActivity(), ReportListener {
     }
 
     private fun alertDialogScore() {
-        alertDialog.showDialogScore(this@ReportActivity,
+        alertDialog.showDialogScore(this,
                 resources.getString(R.string.alert_punctuation),
                 resources.getString(R.string.alert_punctuation_label1, resultScore) + " " +
                         listRadio.size + " " +
@@ -347,7 +310,7 @@ class ReportActivity : AppCompatActivity(), ReportListener {
     }
 
     private fun alertDialogClose() {
-        alertDialog.showDialog(this@ReportActivity,
+        alertDialog.showDialog(this,
                 resources.getString(R.string.alert_leave_the_report),
                 resources.getString(R.string.alert_leave_the_report_text),
                 resources.getString(R.string.confirm),
@@ -395,7 +358,7 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         // Finish JsonObject
 
         // Save Report in SQLite
-        ReportDataBaseAsyncTask(this@ReportActivity,
+        ReportDataBaseAsyncTask(this,
                 pdfCreateAsync,
                 mReportId,
                 mReportBusiness,
@@ -418,8 +381,8 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         reportItems.clear()
         clearList()
         score
-        isConnected
-        snackBarHelper.showSnackBar(this@ReportActivity, R.id.fab_new_item, R.string.label_empty_list)
+        addItemsFromListOFF()
+        snackBarHelper.showSnackBar(this, R.id.fab_new_item, R.string.label_empty_list)
     }
 
     private val score: Unit
@@ -473,47 +436,11 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         for (i in reportItems.indices) {
             if (reportItems[i].isOpt1 || reportItems[i].isOpt2 || reportItems[i].isOpt3) {
                 checkAnswerList.checkAnswerList(i, reportItems, listTitle, listDescription)
-                checkAnswerList.checkAnswerNote(this@ReportActivity, i, reportItems, listNotes)
-                checkAnswerList.checkAnswerRadiosButtons(this@ReportActivity, i, reportItems, listRadio)
+                checkAnswerList.checkAnswerNote(this, i, reportItems, listNotes)
+                checkAnswerList.checkAnswerRadiosButtons(this, i, reportItems, listRadio)
                 checkAnswerList.checkAnswerPhoto(i, reportItems, listPhoto)
             }
         }
-    }
-
-    // Update Item List FireBase
-    override fun updateList(reportItems: ReportItems) {
-        val nFrag = NewItemFireBaseFragment()
-        val bundle = Bundle()
-        bundle.putString(ReportConstants.ITEM.TITLE, reportItems.title)
-        bundle.putString(ReportConstants.ITEM.DESCRIPTION, reportItems.description)
-        bundle.putString(ReportConstants.ITEM.KEY, reportItems.key)
-        nFrag.arguments = bundle
-        nFrag.show(this@ReportActivity.supportFragmentManager, nFrag.tag)
-    }
-
-    // Remove Item List FireBase
-    override fun removeItem(reportItems: ReportItems) {
-        alertDialog.showDialog(this@ReportActivity,
-                resources.getString(R.string.remove),
-                resources.getString(R.string.label_remove_item_list),
-                resources.getString(R.string.confirm),
-                { _: DialogInterface?, _: Int ->
-                    val query = databaseReference!!.orderByChild(ReportConstants.ITEM.KEY)
-                            .equalTo(reportItems.key)
-                    query.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            for (ds in dataSnapshot.children) {
-                                ds.ref.removeValue()
-                            }
-                        }
-
-                        override fun onCancelled(databaseError: DatabaseError) {
-                            Toast.makeText(applicationContext, resources
-                                    .getString(R.string.label_error_update_list), Toast.LENGTH_SHORT).show()
-                        }
-                    })
-                },
-                resources.getString(R.string.cancel), null, false)
     }
 
     // Insert Note
@@ -522,7 +449,7 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         val bundle = Bundle()
         bundle.putString(ReportConstants.ITEM.NOTE, reportItems.note)
         fragNote.arguments = bundle
-        fragNote.show(this@ReportActivity.supportFragmentManager, fragNote.tag)
+        fragNote.show(this.supportFragmentManager, fragNote.tag)
     }
 
     // Show Photo Full
@@ -561,6 +488,12 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         mAdapter!!.notifyDataSetChanged()
     }
 
+    override fun updateList(reportItems: ReportItems) {
+    }
+
+    override fun removeItem(reportItems: ReportItems) {
+    }
+
     // OPen Camera
     override fun takePhoto(reportItems: ReportItems) {
         reportTakePhoto = reportItems
@@ -568,7 +501,7 @@ class ReportActivity : AppCompatActivity(), ReportListener {
                 this.getString(R.string.msg_take_image),
                 this.getString(R.string.msg_select_from_gallery)
         )
-        val builder = AlertDialog.Builder(this@ReportActivity)
+        val builder = AlertDialog.Builder(this)
         builder.setItems(items) { _: DialogInterface?, i: Int ->
             if (i == 0) {
                 openCamera()
@@ -670,7 +603,6 @@ class ReportActivity : AppCompatActivity(), ReportListener {
         if (mReportBusiness != null) {
             mReportBusiness!!.close()
         }
-        databaseReference = LibraryClass.closeFireBase()
     }
 
     override fun onBackPressed() {
@@ -680,9 +612,6 @@ class ReportActivity : AppCompatActivity(), ReportListener {
     override fun onResume() {
         super.onResume()
         keyboardCloseTouchListener()
-        if (reportItems.isEmpty()) {
-            showLayoutEmpty()
-        }
     }
 
     override fun onDestroy() {

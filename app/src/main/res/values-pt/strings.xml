@@ -8,6 +8,7 @@
     <string name="txt_report_removed">Relatório removido com sucesso!</string>
     <string name="title_report_list">Lista Relatórios</string>
     <string name="title_report">Relatório</string>
+    <string name="title_edit_report">Editar Relatório</string>
     <string name="back">Voltar</string>
     <string name="txt_report_save">Relatório salvo!</string>
     <string name="txt_error_save">Error ao salvar!</string>

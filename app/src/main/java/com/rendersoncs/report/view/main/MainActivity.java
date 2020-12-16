@@ -47,7 +47,7 @@ import com.rendersoncs.report.view.login.RemoveUserActivity;
 import com.rendersoncs.report.view.login.UpdatePasswordActivity;
 import com.rendersoncs.report.view.login.util.LibraryClass;
 import com.rendersoncs.report.view.login.util.User;
-import com.rendersoncs.report.view.report.ReportActivity;
+import com.rendersoncs.report.view.reportEdit.ReportEdit;
 import com.rendersoncs.report.view.resume.ReportResume;
 
 import org.jetbrains.annotations.NotNull;
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Bundle bundle = new Bundle();
                 bundle.putInt(ReportConstants.REPORT.REPORT_ID, reportId);
 
-                Intent intent = new Intent(MainActivity.this, ReportActivity.class);
+                Intent intent = new Intent(MainActivity.this, ReportEdit.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

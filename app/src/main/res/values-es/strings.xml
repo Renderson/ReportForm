@@ -8,6 +8,7 @@
     <string name="txt_report_removed">Informe eliminado con éxito!</string>
     <string name="title_report_list">Lista de informes</string>
     <string name="title_report">Informe</string>
+    <string name="title_edit_report">Editar Informe</string>
     <string name="back">Volver</string>
     <string name="txt_report_save">Informe guardado!</string>
     <string name="txt_error_save">Error al guardar!</string>

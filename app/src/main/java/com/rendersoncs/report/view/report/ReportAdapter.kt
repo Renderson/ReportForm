@@ -62,9 +62,9 @@ class ReportAdapter(
         private var note: ImageView = rowView.note
         private var resetItem: ImageView = rowView.action_reset_item
         private var buttonLayoutArrow: RelativeLayout = rowView.btnArrow
-        private var mRadioButtonConform: RadioButton = itemView.radio_conform
-        private var mRadioButtonNotApplicable: RadioButton = itemView.radio_not_applicable
-        private var mRadioButtonNotConform: RadioButton = itemView.radio_not_conform
+        private var mRadioButtonConform: RadioButton = rowView.radio_conform
+        private var mRadioButtonNotApplicable: RadioButton = rowView.radio_not_applicable
+        private var mRadioButtonNotConform: RadioButton = rowView.radio_not_conform
 
         override fun onClick(v: View) {
             when (v.id) {

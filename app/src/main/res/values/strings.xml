@@ -8,6 +8,7 @@
     <string name="txt_report_removed">Report successfully removed!</string>
     <string name="title_report_list">Reports List</string>
     <string name="title_report">Report</string>
+    <string name="title_edit_report">Edit Report</string>
     <string name="back">Come Back</string>
     <string name="txt_report_save">Report saved!</string>
     <string name="txt_error_save">Error saving!</string>
