@@ -326,7 +326,7 @@ class CameraFragment : Fragment() {
                     this, cameraSelector, preview, imageCapture, imageAnalyzer)
 
             // Attach the viewfinder's surface provider to preview use case
-            preview?.setSurfaceProvider(viewFinder.createSurfaceProvider())
+            preview?.setSurfaceProvider(viewFinder.surfaceProvider)
         } catch (exc: Exception) {
             FirebaseCrashlytics.getInstance().recordException(exc)
             Log.e(TAG, "Use case binding failed", exc)

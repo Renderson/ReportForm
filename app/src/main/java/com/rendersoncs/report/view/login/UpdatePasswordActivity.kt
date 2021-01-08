@@ -15,8 +15,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.rendersoncs.report.R
-import com.rendersoncs.report.view.login.util.User
 import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
+import com.rendersoncs.report.view.login.util.User
 import kotlinx.android.synthetic.main.activity_update_password.*
 
 class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView.OnEditorActionListener {
@@ -126,5 +126,9 @@ class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView
     override fun onResume() {
         super.onResume()
         this.init()
+
+        backButtonUpdate.setOnClickListener {
+            finish()
+        }
     }
 }

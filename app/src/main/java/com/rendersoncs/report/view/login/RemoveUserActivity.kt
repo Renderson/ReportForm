@@ -16,8 +16,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.rendersoncs.report.R
-import com.rendersoncs.report.view.login.util.User
 import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
+import com.rendersoncs.report.view.login.util.User
 import kotlinx.android.synthetic.main.activity_remove_user.*
 
 class RemoveUserActivity : AppCompatActivity(), ValueEventListener,
@@ -39,6 +39,10 @@ class RemoveUserActivity : AppCompatActivity(), ValueEventListener,
     override fun onResume() {
         super.onResume()
         init()
+
+        backButtonRemove.setOnClickListener {
+            finish()
+        }
     }
 
     private fun init() {
