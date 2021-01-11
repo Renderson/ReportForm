@@ -29,7 +29,7 @@ class GetInfoUserFireBase {
                 val name = profile.displayName
                 val photoUri = profile.photoUrl
 
-                if (name != null) {
+                if (name == null || name.isEmpty()) {
                     databaseReference.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             val nameCurrentUser = dataSnapshot.child(ReportConstants.FIREBASE.FIRE_USERS)
