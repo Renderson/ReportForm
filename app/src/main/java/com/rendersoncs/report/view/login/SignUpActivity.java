@@ -7,10 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,14 +27,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.rendersoncs.report.R;
+import com.rendersoncs.report.infrastructure.constants.ReportConstants;
+import com.rendersoncs.report.infrastructure.util.CloseVirtualKeyBoardKt;
 import com.rendersoncs.report.view.login.util.LibraryClass;
 import com.rendersoncs.report.view.login.util.User;
-import com.rendersoncs.report.infrastructure.constants.ReportConstants;
 
 import java.io.IOException;
 import java.util.UUID;
 
-public class SignUpActivity extends CommonActivity implements DatabaseReference.CompletionListener {
+public class SignUpActivity extends CommonActivity implements DatabaseReference.CompletionListener, TextView.OnEditorActionListener {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -85,10 +89,12 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
     }
 
     protected void initViews() {
-        name = findViewById(R.id.name);
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
+        name = findViewById(R.id.sigInName);
+        email = findViewById(R.id.sigInEmail);
+        password = findViewById(R.id.sigInPassword);
         progressBar = findViewById(R.id.sign_up_progress);
+
+        password.setOnEditorActionListener(this);
     }
 
     protected void initUser() {
@@ -196,5 +202,14 @@ public class SignUpActivity extends CommonActivity implements DatabaseReference.
         showToast(getResources().getString(R.string.label_account_create));
         closeProgressBar();
         finish();
+    }
+
+    public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            CloseVirtualKeyBoardKt.closeVirtualKeyBoard(this, view);
+            this.saveUser();
+            return true;
+        }
+        return false;
     }
 }

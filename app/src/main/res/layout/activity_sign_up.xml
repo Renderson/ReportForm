@@ -69,7 +69,7 @@
             app:layout_constraintTop_toBottomOf="@+id/btn_select_photo">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/name"
+                android:id="@+id/sigInName"
                 style="@style/FormField"
                 android:hint="@string/name"
                 android:imeOptions="actionNext"
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputName">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email"
+                android:id="@+id/sigInEmail"
                 style="@style/FormField"
                 android:hint="@string/mail"
                 android:imeOptions="actionNext"
@@ -102,10 +102,10 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputEmail">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password"
+                android:id="@+id/sigInPassword"
                 style="@style/FormField"
                 android:hint="@string/password"
-                android:imeOptions="actionGo"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:maxLines="1" />
 

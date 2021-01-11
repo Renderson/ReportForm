@@ -2,7 +2,9 @@ package com.rendersoncs.report.view.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,8 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.rendersoncs.report.R;
+import com.rendersoncs.report.infrastructure.util.CloseVirtualKeyBoardKt;
 
-public class RecoveryLoginActivity extends AppCompatActivity {
+public class RecoveryLoginActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
 
     private EditText email;
     private FirebaseAuth firebaseAuth;
@@ -26,6 +29,7 @@ public class RecoveryLoginActivity extends AppCompatActivity {
         returnLoginActivity.setOnClickListener(view -> callLoginActivity());
 
         firebaseAuth = FirebaseAuth.getInstance();
+        init();
     }
 
     private void callLoginActivity() {
@@ -34,14 +38,9 @@ public class RecoveryLoginActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        init();
-    }
-
     private void init(){
-        email = findViewById(R.id.email);
+        email = findViewById(R.id.emailRecover);
+        email.setOnEditorActionListener(this);
     }
 
     public void reset( View view ){
@@ -68,5 +67,14 @@ public class RecoveryLoginActivity extends AppCompatActivity {
                     })
                     .addOnFailureListener(Throwable::printStackTrace);
         }
+    }
+
+    public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            CloseVirtualKeyBoardKt.closeVirtualKeyBoard(this, view);
+            this.reset(view);
+            return true;
+        }
+        return false;
     }
 }

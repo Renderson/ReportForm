@@ -2,7 +2,10 @@ package com.rendersoncs.report.view.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -26,12 +29,13 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.rendersoncs.report.R;
-import com.rendersoncs.report.view.main.MainActivity;
+import com.rendersoncs.report.infrastructure.util.CloseVirtualKeyBoardKt;
 import com.rendersoncs.report.view.login.util.User;
+import com.rendersoncs.report.view.main.MainActivity;
 
 import java.util.Arrays;
 
-public class LoginActivity extends CommonActivity {
+public class LoginActivity extends CommonActivity implements TextView.OnEditorActionListener {
 
     private static final int RC_SIGN_IN_GOOGLE = 7859;
     private static final String FACEBOOK = "facebook";
@@ -213,6 +217,8 @@ public class LoginActivity extends CommonActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         progressBar = findViewById(R.id.login_progress);
+
+        password.setOnEditorActionListener(this);
     }
 
     @Override
@@ -240,6 +246,15 @@ public class LoginActivity extends CommonActivity {
             initUser();
             verifyLogin();
         }
+    }
+
+    public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            CloseVirtualKeyBoardKt.closeVirtualKeyBoard(this, view);
+            this.sendLoginData(view);
+            return true;
+        }
+        return false;
     }
 
     // login Facebook
