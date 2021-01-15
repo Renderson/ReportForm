@@ -33,7 +33,7 @@
             style="@style/TextTitleFormField"
             android:text="@string/label_screen_remove_account"
             android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/textInputNewPassword"
+            app:layout_constraintStart_toStartOf="@+id/textInputDeleteAccount"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -46,7 +46,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_up" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputNewPassword"
+            android:id="@+id/textInputDeleteAccount"
             style="@style/TextInputPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,13 +63,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btn_signUp"
+            android:id="@+id/buttonRemoved"
             style="@style/ButtonFormField"
             android:onClick="btnRemoveUser"
             android:text="@string/remove"
             android:textAllCaps="false"
-            app:layout_constraintStart_toStartOf="@+id/textInputNewPassword"
-            app:layout_constraintTop_toBottomOf="@+id/textInputNewPassword" />
+            app:layout_constraintStart_toStartOf="@+id/textInputDeleteAccount"
+            app:layout_constraintTop_toBottomOf="@+id/textInputDeleteAccount" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

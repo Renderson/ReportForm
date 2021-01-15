@@ -39,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <Button
-            android:id="@+id/btn_select_photo"
+            android:id="@+id/btnSelectPhoto"
             android:layout_width="@dimen/width_sign"
             android:layout_height="@dimen/height_sign"
             android:layout_marginTop="@dimen/margin_16"
@@ -56,17 +56,17 @@
             android:background="@drawable/profile_hint"
             app:civ_border_color="@color/colorAccent"
             app:civ_border_width="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_select_photo"
-            app:layout_constraintEnd_toEndOf="@+id/btn_select_photo"
-            app:layout_constraintStart_toStartOf="@+id/btn_select_photo"
-            app:layout_constraintTop_toTopOf="@+id/btn_select_photo"/>
+            app:layout_constraintBottom_toBottomOf="@+id/btnSelectPhoto"
+            app:layout_constraintEnd_toEndOf="@+id/btnSelectPhoto"
+            app:layout_constraintStart_toStartOf="@+id/btnSelectPhoto"
+            app:layout_constraintTop_toTopOf="@+id/btnSelectPhoto"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputName"
             style="@style/TextInputEmailForm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_select_photo">
+            app:layout_constraintTop_toBottomOf="@+id/btnSelectPhoto">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/sigInName"
@@ -112,7 +112,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btn_signUp"
+            android:id="@+id/btnSignUp"
             style="@style/ButtonFormField"
             android:onClick="sendSignUpData"
             android:text="@string/create"
@@ -127,7 +127,7 @@
             android:text="@string/label_screen_already_register"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_signUp"
+            app:layout_constraintTop_toBottomOf="@+id/btnSignUp"
             app:layout_constraintVertical_bias="1.0" />
 
         <TextView

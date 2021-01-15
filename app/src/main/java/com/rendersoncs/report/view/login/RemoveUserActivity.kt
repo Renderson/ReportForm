@@ -1,6 +1,8 @@
 package com.rendersoncs.report.view.login
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -16,40 +18,63 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.rendersoncs.report.R
+import com.rendersoncs.report.databinding.ActivityRemoveUserBinding
 import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
 import com.rendersoncs.report.view.login.util.User
-import kotlinx.android.synthetic.main.activity_remove_user.*
 
 class RemoveUserActivity : AppCompatActivity(), ValueEventListener,
         DatabaseReference.CompletionListener,
         TextView.OnEditorActionListener {
 
     private var user: User? = null
-    //private var password: EditText? = null
     private var mAuth: FirebaseAuth? = null
+    private lateinit var binding: ActivityRemoveUserBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_remove_user)
+
+        binding = ActivityRemoveUserBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         mAuth = FirebaseAuth.getInstance()
-        password.setOnEditorActionListener(this)
+
+        binding.password.setOnEditorActionListener(this)
+        binding.password.addTextChangedListener(passwordWatcher)
     }
 
     override fun onResume() {
         super.onResume()
         init()
 
-        backButtonRemove.setOnClickListener {
+        binding.backButtonRemove.setOnClickListener {
             finish()
         }
     }
 
     private fun init() {
-        //password = findViewById(R.id.password)
         user = User()
         user!!.id = mAuth!!.currentUser!!.uid
         user!!.contextDataDB(this)
+    }
+
+    private val passwordWatcher = object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                validatePassword(s)
+            }
+    }
+
+    private fun validatePassword(s: Editable?) {
+        if (s != null && s.isNotEmpty()) {
+            binding.textInputDeleteAccount.error = null
+        } else {
+            binding.textInputDeleteAccount.error = getString(R.string.label_insert_password)
+        }
     }
 
     fun btnRemoveUser(view: View?) {
@@ -57,21 +82,25 @@ class RemoveUserActivity : AppCompatActivity(), ValueEventListener,
     }
 
     private fun removeUser() {
-        if (password!!.text.toString().isEmpty()) {
-            Toast.makeText(this, resources.getString(R.string.label_insert_password), Toast.LENGTH_SHORT).show()
+        if (binding.password.text.toString().isEmpty()) {
+            binding.textInputDeleteAccount.error = getString(R.string.label_insert_password)
         } else {
-            user!!.password = password!!.text.toString()
+            user!!.password = binding.password.text.toString()
             reAuthenticate()
         }
     }
 
     private fun reAuthenticate() {
         val firebaseUser = mAuth!!.currentUser ?: return
-        val credential = EmailAuthProvider.getCredential(
-                user!!.email,
-                user!!.password
-        )
-        firebaseUser.reauthenticate(credential)
+        val credential = user!!.email?.let {
+            user!!.password?.let { it1 ->
+                EmailAuthProvider.getCredential(
+                        it,
+                        it1
+            )
+            }
+        }
+        firebaseUser.reauthenticate(credential!!)
                 .addOnCompleteListener { task: Task<Void?> ->
                     if (task.isSuccessful) {
                         deleteUser()

@@ -1,5 +1,6 @@
 package com.rendersoncs.report.view.login;
 
+import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.rendersoncs.report.infrastructure.util.SnackBarHelper;
 
 abstract public class CommonActivity extends AppCompatActivity {
@@ -39,6 +41,14 @@ abstract public class CommonActivity extends AppCompatActivity {
 
     protected void closeProgressBar(){
         progressBar.setVisibility( View.GONE );
+    }
+
+    protected void validate(Editable s, TextInputLayout input, int message) {
+        if (s != null && !s.toString().isEmpty()) {
+            input.setError(null);
+        } else {
+            input.setError(getResources().getString(message));
+        }
     }
 
     abstract protected void initViews();

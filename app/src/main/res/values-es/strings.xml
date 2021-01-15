@@ -64,6 +64,7 @@
     <string name="insert">Insertar</string>
     <string name="label_recover_password">Recuperar contraseña?</string>
     <string name="label_or">o</string>
+    <string name="label_sign_insert_name">Introduzca su nombre</string>
     <string name="label_sign_insert_photo">Insertar foto</string>
     <string name="label_insert_password">Por favor ingrese la contraseña.</string>
     <string name="label_bottom_home">Imagen de la cámara baja</string>

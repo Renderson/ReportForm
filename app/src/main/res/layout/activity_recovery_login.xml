@@ -16,7 +16,7 @@
             android:id="@+id/textView4"
             style="@style/TextTitleFormField"
             android:text="@string/label_screen_to_recovery"
-            app:layout_constraintStart_toStartOf="@+id/textInputEmail"
+            app:layout_constraintStart_toStartOf="@+id/textInputEmailRecover"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -28,7 +28,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputEmail"
+            android:id="@+id/textInputEmailRecover"
             style="@style/TextInputEmailForm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,11 +46,11 @@
         <Button
             android:id="@+id/reset"
             style="@style/ButtonFormField"
-            android:onClick="reset"
+            android:onClick="btnRecoverAccount"
             android:text="@string/label_to_recover"
             android:textAllCaps="false"
-            app:layout_constraintStart_toStartOf="@+id/textInputEmail"
-            app:layout_constraintTop_toBottomOf="@+id/textInputEmail" />
+            app:layout_constraintStart_toStartOf="@+id/textInputEmailRecover"
+            app:layout_constraintTop_toBottomOf="@+id/textInputEmailRecover" />
 
         <TextView
             android:id="@+id/sendHome"

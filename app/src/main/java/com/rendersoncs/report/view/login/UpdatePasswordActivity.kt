@@ -1,6 +1,8 @@
 package com.rendersoncs.report.view.login
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -8,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -15,20 +18,28 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.rendersoncs.report.R
+import com.rendersoncs.report.databinding.ActivityUpdatePasswordBinding
 import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
 import com.rendersoncs.report.view.login.util.User
-import kotlinx.android.synthetic.main.activity_update_password.*
 
 class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView.OnEditorActionListener {
     private var user: User? = null
     private var mAuth: FirebaseAuth? = null
+    private lateinit var binding: ActivityUpdatePasswordBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_update_password)
+
+        binding = ActivityUpdatePasswordBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         mAuth = FirebaseAuth.getInstance()
-        password.setOnEditorActionListener(this)
+
+        binding.oldPassword.setOnEditorActionListener(this)
+        binding.oldPassword.addTextChangedListener(oldPasswordWatcher)
+        binding.newPassword.addTextChangedListener(newPasswordWatcher)
     }
 
     private fun init() {
@@ -37,17 +48,51 @@ class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView
         user!!.contextDataDB(this)
     }
 
+    private val oldPasswordWatcher = object : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            validatePassword(s, binding.textInputOldPassword)
+        }
+    }
+
+    private val newPasswordWatcher = object : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            validatePassword(s, binding.textInputNewPassword)
+        }
+    }
+
+    private fun validatePassword(s: Editable?, inputText: TextInputLayout) {
+        if (s != null && s.isNotEmpty()) {
+            inputText.error = null
+        } else {
+            inputText.error = getString(R.string.label_insert_password)
+        }
+    }
+
     fun btnUpdate(view: View?) {
         this.update()
     }
 
     private fun update() {
-        if (newPassword!!.text.toString().isEmpty() || password!!.text.toString().isEmpty()) {
-            Toast.makeText(this, resources.getString(R.string.label_insert_password), Toast.LENGTH_SHORT).show()
-        } else {
-            user!!.newPassword = newPassword!!.text.toString()
-            user!!.password = password!!.text.toString()
-            reAuthenticate()
+        when {
+            binding.newPassword.text.toString().isEmpty() -> {
+                binding.textInputNewPassword.error = getString(R.string.label_insert_password)
+            }
+            binding.oldPassword.text.toString().isEmpty() -> {
+                binding.textInputOldPassword.error = getString(R.string.label_insert_password)
+            }
+            else -> {
+                user!!.newPassword = binding.newPassword.text.toString()
+                user!!.password = binding.oldPassword.text.toString()
+                reAuthenticate()
+            }
         }
     }
 
@@ -74,15 +119,15 @@ class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView
     }
 
     private fun updateData() {
-        user!!.newPassword = newPassword!!.text.toString()
-        user!!.password = password!!.text.toString()
+        user!!.newPassword = binding.newPassword.text.toString()
+        user!!.password = binding.oldPassword.text.toString()
         val firebaseUser = mAuth!!.currentUser ?: return
         firebaseUser
                 .updatePassword(user!!.newPassword)
                 .addOnCompleteListener { task: Task<Void?> ->
                     if (task.isSuccessful) {
-                        newPassword!!.setText("")
-                        password!!.setText("")
+                        binding.newPassword.setText("")
+                        binding.oldPassword.setText("")
                         Toast.makeText(
                                 this@UpdatePasswordActivity,
                                 resources.getString(R.string.label_password_update),
@@ -127,7 +172,7 @@ class UpdatePasswordActivity : AppCompatActivity(), ValueEventListener, TextView
         super.onResume()
         this.init()
 
-        backButtonUpdate.setOnClickListener {
+        binding.backButtonUpdate.setOnClickListener {
             finish()
         }
     }

@@ -16,10 +16,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.rendersoncs.report.R
+import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import com.rendersoncs.report.model.NewItemFireBase
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import java.util.*
 
 class NewItemFireBaseFragment : DialogFragment() {
@@ -79,10 +79,15 @@ class NewItemFireBaseFragment : DialogFragment() {
     private fun updateItemList() {
         val upTitle = mTitleList!!.text.toString()
         val upDescription = mDescriptionList!!.text.toString()
-        val databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS).child(user!!.id).child(ReportConstants.FIREBASE.FIRE_LIST)
-        val query = databaseReference.orderByChild(ReportConstants.ITEM.KEY).equalTo(key)
+        val databaseReference = user!!.id?.let { id ->
+            LibraryClass.getFirebase()
+                    ?.child(ReportConstants
+                            .FIREBASE.FIRE_USERS)
+                    ?.child(id)
+                    ?.child(ReportConstants.FIREBASE.FIRE_LIST) }
+        val query = databaseReference?.orderByChild(ReportConstants.ITEM.KEY)?.equalTo(key)
 
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
+        query?.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (ds in dataSnapshot.children) {
                     ds.ref.child(ReportConstants.ITEM.TITLE).setValue(upTitle)
@@ -99,9 +104,11 @@ class NewItemFireBaseFragment : DialogFragment() {
     private fun insertNewItemList() {
         val mTitle = mTitleList!!.text.toString()
         val mDescription = mDescriptionList!!.text.toString()
-        val key = FirebaseDatabase.getInstance()
+        val key = user!!.id?.let { id ->
+            FirebaseDatabase.getInstance()
                 .reference.child(ReportConstants.FIREBASE.FIRE_USERS)
-                .child(user!!.id).child(ReportConstants.FIREBASE.FIRE_LIST).push().key
+                .child(id).child(ReportConstants.FIREBASE.FIRE_LIST).push().key
+        }
         val childUpdates: MutableMap<String, NewItemFireBase> = HashMap()
 
         val newItem = NewItemFireBase(

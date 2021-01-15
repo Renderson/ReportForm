@@ -213,8 +213,10 @@ class ReportActivity : AppCompatActivity(), ReportListener {
     private fun addItemsFromFireBase() {
         fab_new_item.visibility = View.VISIBLE
 
-        databaseReference = LibraryClass.getFirebase().child(ReportConstants.FIREBASE.FIRE_USERS)
-                .child(user.id).child(ReportConstants.FIREBASE.FIRE_LIST)
+        databaseReference = user.id?.let { id ->
+            LibraryClass.getFirebase()?.child(ReportConstants.FIREBASE.FIRE_USERS)
+                ?.child(id)?.child(ReportConstants.FIREBASE.FIRE_LIST)
+        }
 
         databaseReference!!.addChildEventListener(object : ChildEventListener {
 
