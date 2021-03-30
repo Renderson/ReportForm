@@ -36,9 +36,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager.widget.ViewPager
 import com.rendersoncs.report.BuildConfig
 import com.rendersoncs.report.R
+import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import com.rendersoncs.report.view.cameraX.utils.padWithDisplayCutout
 import com.rendersoncs.report.view.cameraX.utils.showImmersive
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import java.io.File
 import java.util.*
 
@@ -152,7 +152,7 @@ class GalleryFragment internal constructor() : Fragment() {
                         .setTitle("Confirm")
                         .setMessage("Delete Image")
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes) { _, _ ->
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
 
                             // Delete current photo
                             mediaFile.delete()
@@ -171,7 +171,7 @@ class GalleryFragment internal constructor() : Fragment() {
                             }
                         }
 
-                        .setNegativeButton(android.R.string.no, null)
+                        .setNegativeButton(android.R.string.cancel, null)
                         .create().showImmersive()
             }
         }

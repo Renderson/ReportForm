@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bundle.putString(ReportConstants.ITEM.CONTROLLER, controller);
         newReportFragment.setArguments(bundle);
 
-        newReportFragment.show((MainActivity.this).getSupportFragmentManager(), newReportFragment.getTag());
+        newReportFragment.show(getSupportFragmentManager(), newReportFragment.getTag());
         Log.i("NameInfo ", controller);
     }
 
