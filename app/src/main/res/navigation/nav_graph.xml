@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/permissions_fragment"
-        android:name="com.rendersoncs.reportform.view.activitys.cameraX.fragments.PermissionsFragment"
+        android:name="com.rendersoncs.report.view.cameraX.fragments.PermissionsFragment"
         android:label="PermissionsFragment" >
 
         <action
@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/camera_fragment"
-        android:name="com.rendersoncs.reportform.view.activitys.cameraX.fragments.CameraFragment"
+        android:name="com.rendersoncs.report.view.cameraX.fragments.CameraFragment"
         android:label="CameraFragment" >
 
         <action
@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/gallery_fragment"
-        android:name="com.rendersoncs.reportform.view.activitys.cameraX.fragments.GalleryFragment"
+        android:name="com.rendersoncs.report.view.cameraX.fragments.GalleryFragment"
         android:label="GalleryFragment" >
         <argument
             android:name="root_directory"

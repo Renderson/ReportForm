@@ -2,22 +2,38 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".view.activitys.login.RemoveUserActivity">
+    android:orientation="vertical"
+    tools:context=".view.login.RemoveUserActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/backButtonRemove"
+            android:layout_width="@dimen/width_48"
+            android:layout_height="@dimen/height_48"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_16"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/back"
+            android:focusable="true"
+            android:padding="@dimen/padding_8"
+            android:scaleType="fitCenter"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_back_universal" />
 
         <TextView
             android:id="@+id/txt_up"
             style="@style/TextTitleFormField"
             android:text="@string/label_screen_remove_account"
             android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/textInputNewPassword"
+            app:layout_constraintStart_toStartOf="@+id/textInputDeleteAccount"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -30,7 +46,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_up" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputNewPassword"
+            android:id="@+id/textInputDeleteAccount"
             style="@style/TextInputPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,12 +63,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btn_signUp"
+            android:id="@+id/buttonRemoved"
             style="@style/ButtonFormField"
             android:onClick="btnRemoveUser"
             android:text="@string/remove"
-            app:layout_constraintStart_toStartOf="@+id/textInputNewPassword"
-            app:layout_constraintTop_toBottomOf="@+id/textInputNewPassword" />
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="@+id/textInputDeleteAccount"
+            app:layout_constraintTop_toBottomOf="@+id/textInputDeleteAccount" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

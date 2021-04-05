@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<paths xmlns:android="http://schemas.android.com/apk/res/android">
+<paths>
     <external-path
         name="external_paths"
-        path="."/>
+        path="." />
 
-    <external-media-path name="media" android:path="@{string/app_name}/" />
-    <files-path name="files" path="."/>
-    <!--<external-path-->
-        <!--name="Documents"-->
-        <!--path="Documents"/>-->
+    <external-media-path
+        name="media"
+        path="@{string/app_name}/" />
 
-    <!--<external-path-->
-        <!--name="my_images"-->
-        <!--path="Android/data/com.rendersoncs.reportform/files/Pictures" />-->
-
+    <files-path
+        name="files"
+        path="." />
 </paths>
