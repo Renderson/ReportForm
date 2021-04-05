@@ -136,10 +136,11 @@ class GalleryFragment internal constructor() : Fragment() {
         view.findViewById<ImageButton>(R.id.photo_view_check).setOnClickListener {
             mediaList.getOrNull(mediaViewPager.currentItem)?.let { mediaFile ->
 
-                val returnIntent = Intent()
-                returnIntent.putExtra(ReportConstants.PHOTO.RESULT_CAMERA_X, mediaFile.absoluteFile)
-                activity?.setResult(ReportConstants.PHOTO.REQUEST_CAMERA_X, returnIntent)
-                activity?.finish()
+                Intent().apply {
+                    putExtra(ReportConstants.PHOTO.RESULT_CAMERA_X, mediaFile.absoluteFile)
+                    activity?.setResult(ReportConstants.PHOTO.REQUEST_CAMERA_X, this)
+                    activity?.finish()
+                }
             }
         }
 

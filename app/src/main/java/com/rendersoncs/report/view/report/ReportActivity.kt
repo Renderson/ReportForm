@@ -485,12 +485,13 @@ class ReportActivity : AppCompatActivity(), ReportListener {
     // Update Item List FireBase
     override fun updateList(reportItems: ReportItems) {
         val nFrag = NewItemFireBaseFragment()
-        val bundle = Bundle()
-        bundle.putString(ReportConstants.ITEM.TITLE, reportItems.title)
-        bundle.putString(ReportConstants.ITEM.DESCRIPTION, reportItems.description)
-        bundle.putString(ReportConstants.ITEM.KEY, reportItems.key)
-        nFrag.arguments = bundle
-        nFrag.show(this@ReportActivity.supportFragmentManager, nFrag.tag)
+        Bundle().apply {
+            putString(ReportConstants.ITEM.TITLE, reportItems.title)
+            putString(ReportConstants.ITEM.DESCRIPTION, reportItems.description)
+            putString(ReportConstants.ITEM.KEY, reportItems.key)
+            nFrag.arguments = this
+            nFrag.show(supportFragmentManager, nFrag.tag)
+        }
     }
 
     // Remove Item List FireBase
@@ -521,10 +522,11 @@ class ReportActivity : AppCompatActivity(), ReportListener {
     // Insert Note
     override fun insertNote(reportItems: ReportItems) {
         val fragNote = ReportNoteFragment(mAdapter!!, reportItems)
-        val bundle = Bundle()
-        bundle.putString(ReportConstants.ITEM.NOTE, reportItems.note)
-        fragNote.arguments = bundle
-        fragNote.show(this@ReportActivity.supportFragmentManager, fragNote.tag)
+        Bundle().apply {
+            putString(ReportConstants.ITEM.NOTE, reportItems.note)
+            fragNote.arguments = this
+            fragNote.show(supportFragmentManager, fragNote.tag)
+        }
     }
 
     // Show Photo Full
@@ -583,13 +585,15 @@ class ReportActivity : AppCompatActivity(), ReportListener {
     }
 
     private fun openGallery() {
-        val it = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(it, ReportConstants.PHOTO.REQUEST_CODE_GALLERY)
+        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+            startActivityForResult(this, ReportConstants.PHOTO.REQUEST_CODE_GALLERY)
+        }
     }
 
     private fun openCamera() {
-        val it = Intent(this, CameraXMainActivity::class.java)
-        startActivityForResult(it, ReportConstants.PHOTO.REQUEST_CAMERA_X)
+        Intent(applicationContext, CameraXMainActivity::class.java).apply {
+            startActivityForResult(this, ReportConstants.PHOTO.REQUEST_CAMERA_X)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

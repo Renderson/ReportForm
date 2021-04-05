@@ -367,7 +367,7 @@ class CameraFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             outputDirectory.listFiles { file ->
                 EXTENSION_WHITELIST.contains(file.extension.toUpperCase(Locale.ROOT))
-            }?.max()?.let {
+            }?.maxOrNull()?.let {
                 setGalleryThumbnail(Uri.fromFile(it))
             }
         }
@@ -428,11 +428,14 @@ class CameraFragment : Fragment() {
                                 arrayOf(savedUri.toFile().absolutePath),
                                 arrayOf(mimeType)
                         ) { _, uri ->
-
-                            if (true == outputDirectory.listFiles()?.isNotEmpty()) {
+                            Log.d(TAG, "Image capture scanned into media store: $uri")
+                        }
+                        if (true == outputDirectory.listFiles()?.isNotEmpty()) {
+                            lifecycleScope.launch {
                                 Navigation.findNavController(
                                         requireActivity(), R.id.fragment_container
-                                ).navigate(CameraFragmentDirections.actionCameraToGallery(outputDirectory.absolutePath))
+                                ).navigate(CameraFragmentDirections
+                                        .actionCameraToGallery(outputDirectory.absolutePath))
                             }
                         }
                     }
