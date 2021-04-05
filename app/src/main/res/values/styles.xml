@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -27,32 +27,43 @@
     </style>
 
     <!-- Styles Activity Home, Login, Form -->
-    <style name="TextInputPassword" parent="Widget.Design.TextInputLayout">
+    <style name="TextInputPassword" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">16dp</item>
         <item name="passwordToggleEnabled">true</item>
         <item name="passwordToggleTint">@color/colorAccent</item>
-        <item name="hintEnabled">false</item>
+        <item name="hintTextColor">@color/colorAccent</item>
+        <item name="boxStrokeColor">@color/selector_outline_box</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="hintEnabled">true</item>
+        <item name="theme">@style/EditTextThemeOverlay</item>
     </style>
 
-    <style name="TextInputEmailForm" parent="Widget.Design.TextInputLayout">
+    <style name="TextInputEmailForm" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">16dp</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:imeOptions">actionNext</item>
-        <item name="hintEnabled">false</item>
+        <item name="hintTextColor">@color/colorAccent</item>
+        <item name="boxStrokeColor">@color/selector_outline_box</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="hintEnabled">true</item>
+        <item name="theme">@style/EditTextThemeOverlay</item>
+    </style>
+
+    <style name="EditTextThemeOverlay" parent="ThemeOverlay.AppCompat">
+        <item name="colorPrimary">@color/colorAccent</item>
     </style>
 
     <style name="FormField">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="android:background">@drawable/bg_shape_input_layout</item>
         <item name="android:imeOptions">actionNext</item>
     </style>
-    
+
     <style name="TextTitleFormField">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

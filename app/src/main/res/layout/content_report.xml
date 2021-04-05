@@ -63,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/margin_16"
+            android:visibility="gone"
             android:src="@drawable/ic_new_item_list_white"
             app:layout_anchorGravity="bottom|right|end"
             app:layout_constraintBottom_toBottomOf="parent"
