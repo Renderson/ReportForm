@@ -39,8 +39,8 @@
     <string name="register">Cadastrar-se</string>
     <string name="label_screen_login_hello">Olá, Amigo!</string>
     <string name="label_screen_login_lets_go">Vamos começar! Insira seu e-mail e senha.</string>
-    <string name="mail">email</string>
-    <string name="password">senha</string>
+    <string name="mail">E-mail</string>
+    <string name="password">Senha</string>
     <string name="login">entrar</string>
     <string name="label_screen_login_forgot_password">Esqueceu sua Senha?</string>
     <string name="label_to_recover">recuperar</string>
@@ -137,7 +137,7 @@
     <string name="label_list_title">Title</string>
     <string name="image_background_check">check color</string>
     <string name="label_not_observation">Sem observações</string>
-    <string name="label_observation">Observação!</string>
+    <string name="label_observation">Observação</string>
     <string name="label_text_observation">Texto…</string>
     <string name="label_nothing_report">Nenhum relatório!</string>
     <string name="label_create_new_report">Crie relatórios para preencher sua lista.</string>
@@ -152,7 +152,7 @@
     <string name="label_description_resume">Descrição</string>
     <string name="label_score_resume">nota</string>
     <string name="dev_renderson">Renderson Cerqueira</string>
-    <string name="label_date">Data:</string>
+    <string name="label_date">Data</string>
     <string name="mail_dev_renderson">renderson.cs@gmail.com</string>
     <string name="total_items">Total Itens</string>
     <string name="label_list_selected">Items selecionados</string>
@@ -193,7 +193,7 @@
     <string name="version_beta">Não implementado para a versão de Teste</string>
     <string name="label_create_items">CRIAR ITEMS</string>
     <string name="label_wait">Aguarde!</string>
-    <string name="label_saving_report">Salvando relatório...</string>
+    <string name="label_saving_report">Salvando relatório.</string>
     <string name="Item_List">Item Lista</string>
     <string name="clear">Claro</string>
     <string name="dark">Escuro</string>

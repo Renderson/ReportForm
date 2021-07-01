@@ -8,12 +8,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rendersoncs.report.R
-import com.rendersoncs.report.model.ReportResumeItems
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import kotlinx.android.synthetic.main.activity_report_resume_list.view.*
+import com.rendersoncs.report.model.ReportResumeItems
+import kotlinx.android.synthetic.main.item_report_resume_list.view.*
 
 class ReportResumeAdapter(private val repoResumeList:
-                          List<ReportResumeItems>,
+                          ArrayList<ReportResumeItems>,
                           private val context: Context) :
         RecyclerView.Adapter<ReportResumeAdapter.ViewHolder>() {
 
@@ -24,13 +24,13 @@ class ReportResumeAdapter(private val repoResumeList:
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, i: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_report_resume_list,
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_report_resume_list,
                 parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
-        val position = holder.adapterPosition
+        val position = holder.layoutPosition
         val resumeItems = repoResumeList[position]
 
         holder.resumeTitle.text = resumeItems.title
@@ -39,7 +39,8 @@ class ReportResumeAdapter(private val repoResumeList:
         holder.resumeNote.text = resumeItems.note
 
         holder.resumePhoto.setOnClickListener {
-            onItemClickResume!!.fullPhoto(resumeItems) }
+            onItemClickResume!!.detailPhoto(resumeItems)
+        }
 
         this.decorationItems(holder, resumeItems)
     }
@@ -47,10 +48,10 @@ class ReportResumeAdapter(private val repoResumeList:
     private fun decorationItems(holder: ViewHolder, resumeItems: ReportResumeItems) {
         val photo = resumeItems.photo
 
-        if (photo.isEmpty() || photo == ReportConstants.PHOTO.NOT_PHOTO){
+        if (photo.isEmpty() || photo == ReportConstants.PHOTO.NOT_PHOTO) {
             holder.resumePhoto.imageAlpha = R.drawable.ic_broken_image
         } else {
-            Glide.with(context).load(photo).centerCrop().into(holder.resumePhoto)
+            Glide.with(holder.resumePhoto.context).load(photo).centerCrop().into(holder.resumePhoto)
         }
 
         val according = context.resources.getString(R.string.according)
@@ -58,13 +59,25 @@ class ReportResumeAdapter(private val repoResumeList:
 
         when (holder.resumeConformity.text) {
             according -> {
-                holder.resumeConformity.setTextColor(ContextCompat.getColor(context, R.color.colorRadioC))
+                holder.resumeConformity.apply {
+                    setTextColor(
+                            ContextCompat.getColor(this.context,
+                                    R.color.colorRadioC))
+                }
             }
             notApplicable -> {
-                holder.resumeConformity.setTextColor(ContextCompat.getColor(context, R.color.colorRadioNA))
+                holder.resumeConformity.apply {
+                    setTextColor(
+                            ContextCompat.getColor(this.context,
+                                    R.color.colorRadioNA))
+                }
             }
             else -> {
-                holder.resumeConformity.setTextColor(ContextCompat.getColor(context, R.color.colorRadioNC))
+                holder.resumeConformity.apply {
+                    setTextColor(
+                            ContextCompat.getColor(this.context,
+                                    R.color.colorRadioNC))
+                }
             }
         }
     }

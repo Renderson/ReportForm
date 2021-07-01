@@ -1,26 +1,22 @@
 package com.rendersoncs.report.view.fragment
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rendersoncs.report.R
+import com.rendersoncs.report.databinding.FragmentBottomSheetDetaillPhotoBinding
 import com.rendersoncs.report.model.ReportDetailPhoto
-import kotlinx.android.synthetic.main.fragment_bottom_sheet_detaill_photo.*
 
 class BottomSheetDetailPhotoFragment : BottomSheetDialogFragment() {
+    private var _binding: FragmentBottomSheetDetaillPhotoBinding? = null
+    private val binding get() = _binding!!
     private lateinit var detail: ReportDetailPhoto
-
-    private var bottomSheet: View? = null
-    //private var bottomSheetPeekHeight = 0
-
-    private fun newInstance(): BottomSheetDetailPhotoFragment? {
-        return BottomSheetDetailPhotoFragment()
-    }
+    private val args: BottomSheetDetailPhotoFragmentArgs by navArgs()
 
     override fun getTheme(): Int {
         return R.style.Theme_MaterialComponents_DayNight_BottomSheetDialog
@@ -28,31 +24,22 @@ class BottomSheetDetailPhotoFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         showProgressBar(View.VISIBLE)
     }
 
-    override
-    fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        val view: View = inflater
-                .inflate(R.layout.fragment_bottom_sheet_detaill_photo, container, false)
-        bottomSheet = view.findViewById(R.id.contentBottomSheet)
-
-        detail = arguments?.getSerializable("modelDetail") as ReportDetailPhoto
-
-        this.newInstance()
-        return view
-    }
-
-    override fun onResume() {
-        super.onResume()
-        this.setUpBottomSheet()
-        this.initView()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        _binding = FragmentBottomSheetDetaillPhotoBinding.inflate(
+                inflater,
+                container,
+                false)
+        detail = args.modelDetail
+        return binding.root
     }
 
     private fun initView() {
+
+        binding.run {
             showProgressBar(View.GONE)
 
             Glide.with(requireActivity()).load(detail.photo).centerCrop().into(imageDetail)
@@ -61,48 +48,34 @@ class BottomSheetDetailPhotoFragment : BottomSheetDialogFragment() {
             noteDetail.text = detail.note
             conformityDetail.text = detail.conformed
 
-        if (imageDetail.drawable == null) {
-            showProgressBar(View.VISIBLE)
-        }
-
-        /*val file = File(detail.photo.toString())
-        val handler = Handler()
-        handler.postDelayed({
-            if (file.exists()) {
-                showProgressBar(View.GONE)
-            } else {
-                crashImage.visibility = View.VISIBLE
-                showProgressBar(View.GONE)
+            if (imageDetail.drawable == null) {
+                showProgressBar(View.VISIBLE)
             }
-        }, 3000)*/
-
+        }
     }
 
     private fun showProgressBar(view: Int) {
-        progressDetail.visibility = view
-        progressText.visibility = view
-    }
-
-    private fun setUpBottomSheet() {
-        val bottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior
-                .from(requireView().parent as View)
-
-        //bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
-        //bottomSheetBehavior.isHideable = false
-
-        val childLayoutParams = bottomSheet?.layoutParams
-        val displayMetrics = DisplayMetrics()
-
-        requireActivity()
-                .windowManager
-                .defaultDisplay
-                .getMetrics(displayMetrics)
-
-        if (childLayoutParams != null) {
-            childLayoutParams.height = displayMetrics.heightPixels * 100 / 100
+        binding.run {
+            progressDetail.visibility = view
+            progressText.visibility = view
         }
-
-        bottomSheet?.layoutParams = childLayoutParams
     }
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        this.initView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

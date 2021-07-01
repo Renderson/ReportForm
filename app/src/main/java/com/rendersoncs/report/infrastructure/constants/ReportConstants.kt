@@ -12,6 +12,7 @@ class ReportConstants {
         const val FIRE_PHOTO = "photoUrl"
         const val FIRE_LIST = "list"
         const val FIRE_NAME = "name"
+        const val FIRE_EMAIL = "email"
     }
 
     object REPORT {
@@ -23,11 +24,6 @@ class ReportConstants {
     }
 
     object ITEM {
-        const val POSITION = "position"
-        const val COMPANY = "company"
-        const val EMAIL = "email"
-        const val CONTROLLER = "controller"
-        const val DATE = "date"
         const val TITLE = "title"
         const val DESCRIPTION = "description"
         const val KEY = "key"
@@ -42,7 +38,6 @@ class ReportConstants {
     object PHOTO {
         const val REQUEST_CODE_GALLERY = 2006
         const val REQUEST_CODE_CAMERA = 2000
-        const val REQUEST_PERMISSIONS_CAMERA = 0
         const val REQUEST_CAMERA_X = 1816
         const val RESULT_CAMERA_X = "result"
         const val NOT_PHOTO = "notPhoto"

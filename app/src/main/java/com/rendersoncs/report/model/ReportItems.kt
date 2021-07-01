@@ -1,11 +1,7 @@
 package com.rendersoncs.report.model
 
-import java.text.SimpleDateFormat
-import java.util.*
-
 class ReportItems {
     var id = 0
-    var conformed = 0
     var position = 0
     var company: String? = null
     var email: String? = null
@@ -57,24 +53,10 @@ class ReportItems {
         this.key = key
     }
 
-    constructor() {}
+    constructor()
 
     constructor(header: String?) {
         this.header = header
-    }
-
-    fun dateFormatter(): String {
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        val date = dateFormat.parse(date)
-        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return formatter.format(date!!)
-    }
-
-    fun dateFormatterPDF(): String {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val date = dateFormat.parse(date)
-        val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        return formatter.format(date!!)
     }
 
     fun companyFormatter(): String {

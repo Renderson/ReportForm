@@ -1,5 +1,6 @@
 package com.rendersoncs.report.view.fragment
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,11 +25,13 @@ import com.rendersoncs.report.view.login.util.User
 import java.util.*
 
 class NewItemFireBaseFragment : DialogFragment() {
+    private val args: NewItemFireBaseFragmentArgs by navArgs()
     private var mTitleList: EditText? = null
     private var mDescriptionList: EditText? = null
     private var key: String? = null
     private var user: User? = null
 
+    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireActivity())
         val view = requireActivity().layoutInflater.inflate(R.layout.fragment_new_list_firebase, null)
@@ -49,7 +53,7 @@ class NewItemFireBaseFragment : DialogFragment() {
                 .setNegativeButton(resources.getString(R.string.cancel)) { _: DialogInterface?, _: Int ->
                     dismiss() }
                 .setPositiveButton(alertButton) { _: DialogInterface?, _: Int ->
-                    if (arguments != null) {
+                    if (args.title != "") {
                         updateItemList()
                     } else {
                         insertNewItemList()
@@ -59,7 +63,7 @@ class NewItemFireBaseFragment : DialogFragment() {
     }
 
     private fun changeTextButtonDialog(): String {
-        return if (arguments != null) {
+        return if (args.title != "") {
             resources.getString(R.string.change)
         } else {
             resources.getString(R.string.insert)
@@ -67,13 +71,11 @@ class NewItemFireBaseFragment : DialogFragment() {
     }
 
     private fun checkItems() {
-        if (arguments != null) {
-            key = requireArguments().getString(ReportConstants.ITEM.KEY)
-            val title = requireArguments().getString(ReportConstants.ITEM.TITLE)
-            mTitleList!!.setText(title)
-            val description = requireArguments().getString(ReportConstants.ITEM.DESCRIPTION)
-            mDescriptionList!!.setText(description)
-        }
+        key = args.key
+        val title = args.title
+        mTitleList!!.setText(title)
+        val description = args.description
+        mDescriptionList!!.setText(description)
     }
 
     private fun updateItemList() {
@@ -152,10 +154,5 @@ class NewItemFireBaseFragment : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         dismiss()
-    }
-
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-        //Toast.makeText(getActivity(), R.string.canceled, Toast.LENGTH_SHORT).show();
     }
 }

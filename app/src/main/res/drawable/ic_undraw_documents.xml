@@ -116,5 +116,5 @@
       android:fillColor="#ccc"/>
   <path
       android:pathData="M463.959,540.5h-212a16.519,16.519 0,0 1,-16.5 -16.5v-84a16.519,16.519 0,0 1,16.5 -16.5h212a16.519,16.519 0,0 1,16.5 16.5v84A16.519,16.519 0,0 1,463.959 540.5Z"
-      android:fillColor="@color/colorAccent"/>
+      android:fillColor="@color/colorPrimary"/>
 </vector>

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#1E56A0</color>
-    <color name="colorPrimaryDark">#163172</color>
-    <color name="colorAccent">#FF4081</color>
 
-    <color name="colorAccentAlternative">#ff4061</color>
-    <color name="colorBackground">#FFFFFF</color>
-    <color name="colorCardView">#F6F6F6</color>
+    <color name="colorCardView">#FFFFFFFF</color>
     <color name="card_shadow_form_field">#10000000</color>
     <color name="colorContentButton">#FFFFFF</color>
     <color name="colorIconNote">#1E56A0</color>
     <color name="colorBorderShapeImage">#000</color>
 
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="colorBlack">#222222</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="background">#f9f9f9</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#FF000000</color>
+
     <color name="cod_gray_alpha_75">#BF121212</color>
     <color name="colorResume">#FF3F58E4</color>
 

@@ -1,0 +1,30 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_8"
+    app:cardBackgroundColor="@color/colorCardView"
+    app:cardCornerRadius="@dimen/cornerRadius_4"
+    app:elevation="@dimen/elevation_2"
+    app:layout_constraintTop_toBottomOf="@+id/cardViewResume"
+    tools:layout_editor_absoluteX="8dp">
+
+    <TextView
+        android:id="@+id/items_resume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_8"
+        android:layout_marginBottom="@dimen/margin_8"
+        android:text="@string/total_items"
+        android:textColor="?android:attr/textColorPrimary" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart"
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+
+    </com.github.mikephil.charting.charts.PieChart>
+
+</androidx.cardview.widget.CardView>

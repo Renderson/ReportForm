@@ -24,7 +24,7 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.R
-import com.rendersoncs.report.databinding.ActivityLoginBinding
+import com.rendersoncs.report.databinding.FragmentLoginBinding
 import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
 import com.rendersoncs.report.view.login.util.User
 import com.rendersoncs.report.view.main.MainActivity
@@ -36,21 +36,18 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
     private var user: User? = null
     private var callbackManager: CallbackManager? = null
     private var mGoogleApiClient: GoogleSignInClient? = null
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: FragmentLoginBinding
 
-    /*private GoogleApiClient mGoogleApiClient;
-    private TwitterAuthClient twitterAuthClient;*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = FragmentLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
         // FACEBOOK SIGN IN
-        //FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create()
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
@@ -65,19 +62,12 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
             }
         })
 
-        // GOOGLE SIGN IN
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(GOOGLE_TOKEN)
                 .requestEmail()
                 .build()
         mGoogleApiClient = GoogleSignIn.getClient(this, gso)
-        /*mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();*/
-
-        // TWITTER
-        /*twitterAuthClient = new TwitterAuthClient();*/mAuth = FirebaseAuth.getInstance()
+        mAuth = FirebaseAuth.getInstance()
         mAuthListener = firebaseAuthResultHandler
         initViews()
         initUser()
@@ -94,7 +84,6 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
             }
             accessGoogleLoginData(account.idToken)
         } else {
-            //twitterAuthClient.onActivityResult(requestCode, resultCode, data);
             callbackManager!!.onActivityResult(requestCode, resultCode, data)
         }
     }
@@ -111,7 +100,6 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         }
     }
 
-    // ACCESS FACEBOOK
     private fun accessFacebookLoginData(accessToken: AccessToken?) {
         accessLoginData(
                 FACEBOOK,
@@ -119,7 +107,6 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         )
     }
 
-    // ACCESS GOOGLE
     private fun accessGoogleLoginData(accessToken: String?) {
         accessLoginData(
                 GOOGLE,
@@ -127,20 +114,12 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         )
     }
 
-    // ACCESS TWITTER
-    /*private void accessTwitterLoginData(String token, String secret, String id) {
-        accessLoginData(
-                "twitter",
-                token,
-                secret
-        );
-    }*/
     private fun accessLoginData(provider: String, vararg tokens: String?) {
-        if (tokens != null && tokens.size > 0 && tokens[0] != null) {
+        if (tokens.isNotEmpty() && tokens[0] != null) {
             var credential: AuthCredential? = FacebookAuthProvider.getCredential(tokens[0]!!)
             credential = if (provider.equals(GOOGLE, ignoreCase = true)) GoogleAuthProvider.getCredential(tokens[0], null) else credential
             credential = if (provider.equals("twitter", ignoreCase = true)) TwitterAuthProvider.getCredential(tokens[0]!!, tokens[1]!!) else credential
-            //credential = provider.equalsIgnoreCase("github") ? GithubAuthProvider.getCredential( tokens[0] ) : credential;
+
             user!!.saveProviderSP(this@LoginActivity, provider)
             mAuth!!.signInWithCredential(credential!!)
                     .addOnCompleteListener { task: Task<AuthResult?> ->
@@ -241,46 +220,16 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         return false
     }
 
-    // login Facebook
     fun sendLoginFacebookData(view: View?) {
-        /*Toast.makeText(getApplicationContext(), getResources().getString(R.string.version_beta), Toast.LENGTH_SHORT).show();*/
         LoginManager
                 .getInstance()
                 .logInWithReadPermissions(
                         this,
-                        Arrays.asList("public_profile", "user_friends", "email")
+                        listOf("public_profile", "user_friends", "email")
                 )
     }
 
-    // login Twitter
-    /*public void sendLoginTwitterData(View view) {
-        FirebaseCrash.log("LoginActivity:clickListener:button:sendLoginTwitterData()");
-        twitterAuthClient.authorize(
-                this,
-                new Callback<TwitterSession>() {
-                    @Override
-                    public void success(Result<TwitterSession> result) {
-
-                        TwitterSession session = result.data;
-
-                        accessTwitterLoginData(
-                                session.getAuthToken().token,
-                                session.getAuthToken().secret,
-                                String.valueOf( session.getUserId() )
-                        );
-                    }
-                    @Override
-                    public void failure(TwitterException exception) {
-                        FirebaseCrash.report( exception );
-                        showSnackBar( exception.getMessage() );
-                    }
-                }
-        );
-    }*/
-    // Google
     fun sendLoginGoogleData(view: View?) {
-        /*Toast.makeText(getApplicationContext(), getResources().getString(R.string.version_beta), Toast.LENGTH_SHORT).show();
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);*/
         val signInIntent = mGoogleApiClient!!.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN_GOOGLE)
     }
@@ -313,13 +262,8 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
-    } // Google
+    }
 
-    /*@Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Crashlytics.logException(new Exception(connectionResult.getErrorCode() + ": " + connectionResult.getErrorMessage()));
-        showSnackBar(connectionResult.getErrorMessage());
-    }*/
     companion object {
         private const val RC_SIGN_IN_GOOGLE = 7859
         private const val FACEBOOK = "facebook"

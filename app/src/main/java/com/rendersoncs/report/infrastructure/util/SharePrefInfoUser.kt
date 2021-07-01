@@ -1,40 +1,41 @@
 package com.rendersoncs.report.infrastructure.util
 
-import android.content.Context
-import android.widget.ImageView
-import android.widget.TextView
-import com.bumptech.glide.Glide
+import android.content.SharedPreferences
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class SharePrefInfoUser {
-    fun saveUserSharePref(context: Context, user: String?) {
-        val sharedPreferences = context.getSharedPreferences(ReportConstants.FIREBASE.FIRE_USERS,
-                Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString(ReportConstants.FIREBASE.FIRE_NAME, user)
-        editor.apply()
-    }
-
-    fun savePhotoSharePref(context: Context, photo: String?) {
-        val sharedPreferences = context.getSharedPreferences(ReportConstants.FIREBASE.FIRE_USERS,
-                Context.MODE_PRIVATE)
+    fun savePhotoSharePref(sharedPreferences: SharedPreferences, photo: String?) {
         val editor = sharedPreferences.edit()
         editor.putString(ReportConstants.FIREBASE.FIRE_PHOTO, photo)
         editor.apply()
     }
 
-    fun getUserSharePref(context: Context, profileName: TextView, profileView: ImageView?) {
-        val sharedPreferences = context.getSharedPreferences(ReportConstants.FIREBASE.FIRE_USERS,
-                Context.MODE_PRIVATE)
-        val name = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_NAME, "")
-        val photo = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_PHOTO, "")
-        profileName.text = name
-        Glide.with(context).load(photo).into(profileView!!)
+    fun saveUserSharePref(sharedPreferences: SharedPreferences, user: String?) {
+        val editor = sharedPreferences.edit()
+        editor.putString(ReportConstants.FIREBASE.FIRE_NAME, user)
+        editor.apply()
     }
 
-    fun clearSharePref(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(ReportConstants.FIREBASE.FIRE_USERS,
-                Context.MODE_PRIVATE)
+    fun saveEmailSharePref(sharedPreferences: SharedPreferences, email: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString(ReportConstants.FIREBASE.FIRE_EMAIL, email)
+        editor.apply()
+    }
+
+    fun getUserSharePref(sharedPreferences: SharedPreferences,
+                         profileName: MutableStateFlow<String>,
+                         profileView: MutableStateFlow<String>,
+                         profileEmail: MutableStateFlow<String>) {
+        val name = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_NAME, "")
+        val photo = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_PHOTO, "")
+        val email = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_EMAIL, "")
+        profileName.value = name.toString()
+        profileView.value = photo.toString()
+        profileEmail.value = email.toString()
+    }
+
+    fun deleteSharePref(sharedPreferences: SharedPreferences) {
         val editor = sharedPreferences.edit().clear()
         editor.apply()
     }

@@ -55,26 +55,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.rendersoncs.report.view.login.HomeActivity" />
-        <activity android:name="com.rendersoncs.report.view.login.LoginActivity" />
-        <activity android:name="com.rendersoncs.report.view.login.SignUpActivity" />
-        <activity android:name="com.rendersoncs.report.view.login.RecoveryLoginActivity" />
-        <activity android:name="com.rendersoncs.report.view.login.UpdatePasswordActivity" />
-        <activity android:name="com.rendersoncs.report.view.login.RemoveUserActivity" />
-        <activity android:name="com.rendersoncs.report.view.reportEdit.ReportEdit"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.rendersoncs.report.view.report.ReportActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name="com.rendersoncs.report.view.main.MainActivity"
             android:launchMode="singleTop"/>
-        <activity
-            android:name="com.rendersoncs.report.view.resume.ReportResume"
-            android:parentActivityName="com.rendersoncs.report.view.main.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rendersoncs.report.view.main.MainActivity" />
-        </activity>
-        <activity android:name="com.rendersoncs.report.view.signature.SignatureActivity" />
+        <activity android:name="com.rendersoncs.report.view.login.loginV2.LoginMainActivity" />
+        <activity android:name="com.rendersoncs.report.view.login.SignUpActivity" />
+        <activity android:name="com.rendersoncs.report.view.login.RecoveryLoginActivity" />
 
         <activity
             android:name="com.rendersoncs.report.view.cameraX.CameraXMainActivity"
@@ -102,7 +87,7 @@
         </activity>
 
         <service
-            android:name="com.rendersoncs.report.repository.net.NotificationFireBase"
+            android:name=".data.net.NotificationFireBase"
             android:permission="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

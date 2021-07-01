@@ -1,110 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/appCompatTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/label_menu_new_report"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="@dimen/text_size_22"
-        android:textStyle="bold"
-        android:layout_marginTop="@dimen/margin_16"
-        android:layout_marginStart="@dimen/margin_16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/img_date_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
-        android:text="@string/label_date"
-        android:textColor="?android:attr/textColorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView"
-        app:layout_constraintEnd_toStartOf="@+id/date_Id"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toEndOf="@+id/appCompatTextView" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/date_Id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
-        android:text="@string/format_date"
-        app:layout_constraintBottom_toBottomOf="@+id/img_date_id"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout4"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout4"
-        style="@style/TextLabel"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_16"
-        android:layout_marginEnd="@dimen/margin_16"
-        android:layout_marginTop="@dimen/margin_16"
-        app:counterEnabled="true"
-        app:counterMaxLength="20"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/company_id"
+        <include
+            android:id="@+id/addNewReport"
+            layout="@layout/content_new_report_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_new_report"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/company"
-            android:imeOptions="actionNext"
-            android:inputType="textCapSentences"
-            android:maxLength="20" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputEmail"
-        style="@style/TextLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_4"
-        app:errorEnabled="true"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
-        tools:layout_editor_absoluteX="16dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_4"
             android:layout_marginStart="@dimen/margin_16"
             android:layout_marginEnd="@dimen/margin_16"
             android:layout_marginBottom="@dimen/margin_8"
-            android:hint="@string/mail"
-            android:imeOptions="actionGo"
-            android:inputType="textEmailAddress|textAutoComplete|textEmailSubject" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:backgroundTint="@color/colorPrimary"
+            android:padding="@dimen/padding_10"
+            android:text="@string/start"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addNewReport"
+            app:layout_constraintVertical_bias="1.0"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_4"
-        android:layout_marginStart="@dimen/margin_16"
-        android:layout_marginEnd="@dimen/margin_16"
-        android:layout_marginBottom="@dimen/margin_4"
-        app:layout_constraintTop_toBottomOf="@+id/inputEmail"
-        tools:layout_editor_absoluteX="16dp">
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/controller_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/controller"
-            android:imeOptions="actionDone"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
