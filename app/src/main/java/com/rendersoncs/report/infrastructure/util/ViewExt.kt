@@ -2,8 +2,16 @@ package com.rendersoncs.report.infrastructure.util
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Patterns
 import android.view.View
+import android.view.ViewStub
+import android.widget.Button
+import android.widget.EditText
+import androidx.databinding.ViewStubProxy
 import com.google.android.material.textfield.TextInputEditText
+import com.rendersoncs.report.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,4 +55,37 @@ fun TextInputEditText.transformIntoDatePicker(
             show()
         }
     }
+}
+
+fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+    addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) = afterTextChanged(s.toString())
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    })
+}
+
+fun EditText.onTextChanged(onTextChanged: (String) -> Unit) {
+    addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = onTextChanged(s.toString())
+    })
+}
+
+fun Button.enable() {
+    this.isEnabled = true
+    this.background.alpha = 255
+}
+
+fun Button.disable() {
+    this.isEnabled = false
+    this.background.alpha = 128
+}
+
+fun isValidateEmail(s: String): Boolean {
+    var validEmail = true
+    val email = s.trim { it <= ' ' }
+    validEmail = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    return validEmail
 }

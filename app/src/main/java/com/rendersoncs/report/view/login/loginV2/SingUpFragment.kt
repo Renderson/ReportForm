@@ -31,7 +31,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentSignUpBinding
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
+import com.rendersoncs.report.infrastructure.util.*
 import com.rendersoncs.report.view.base.BaseFragment
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
@@ -79,9 +79,21 @@ class SingUpFragment: BaseFragment<FragmentSignUpBinding, LoginViewModel>(), Dat
     }
 
     private fun initViews() = with(binding) {
-        sigInName.addTextChangedListener(nameTextWatcher)
-        sigInEmail.addTextChangedListener(emailTextWatcher)
-        sigInPassword.addTextChangedListener(passwordTextWatcher)
+        sigInName.afterTextChanged {
+            validate(it, binding.textInputName, R.string.label_sign_insert_name)
+        }
+
+        sigInEmail.afterTextChanged {
+            if (isValidateEmail(sigInEmail.text.toString())) {
+                textInputEmail.error = null
+            } else {
+                textInputEmail.error = resources.getString(R.string.txt_email)
+            }
+        }
+
+        sigInPassword.afterTextChanged {
+            validate(it, binding.textInputPassword, R.string.label_insert_password)
+        }
 
         sigInPassword.setOnEditorActionListener(this@SingUpFragment)
 
@@ -101,38 +113,8 @@ class SingUpFragment: BaseFragment<FragmentSignUpBinding, LoginViewModel>(), Dat
         }
     }
 
-    private var nameTextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun afterTextChanged(s: Editable?) {
-            validate(s, binding.textInputName, R.string.label_sign_insert_name)
-        }
-    }
-
-    private var emailTextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun afterTextChanged(s: Editable?) {
-            validate(s, binding.textInputEmail, R.string.txt_email)
-        }
-    }
-
-    private var passwordTextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun afterTextChanged(s: Editable?) {
-            validate(s, binding.textInputPassword, R.string.label_insert_password)
-        }
-    }
-
-    private fun validate(s: Editable?, input: TextInputLayout, message: Int) {
-        if (s != null && !s.toString().isEmpty()) {
+    private fun validate(s: String, input: TextInputLayout, message: Int) {
+        if (s.isNotEmpty()) {
             input.error = null
         } else {
             input.error = resources.getString(message)
@@ -262,11 +244,11 @@ class SingUpFragment: BaseFragment<FragmentSignUpBinding, LoginViewModel>(), Dat
     }
 
     private fun openProgressBar() = with(binding) {
-        signUpProgress.visibility = View.VISIBLE
+        signUpProgress.show()
     }
 
     private fun closeProgressBar() = with(binding) {
-        signUpProgress.visibility = View.GONE
+        signUpProgress.hide()
     }
 
     override fun getViewBinding(

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
@@ -115,6 +116,16 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
                     supportActionBar!!.setDisplayShowTitleEnabled(true)
                     supportActionBar!!.setDisplayHomeAsUpEnabled(false)
                     binding.homeMain.toolbar.title = getString(R.string.label_menu_new_report)
+                }
+                R.id.addNewReport -> {
+                    binding.homeMain.toolbar.navigationIcon =
+                        ContextCompat.getDrawable(this, R.drawable.ic_back_black)
+                    supportActionBar!!.setDisplayShowTitleEnabled(true)
+                }
+                R.id.resumeReport -> {
+                    binding.homeMain.toolbar.navigationIcon =
+                        ContextCompat.getDrawable(this, R.drawable.ic_back_black)
+                    supportActionBar!!.setDisplayShowTitleEnabled(true)
                 }
                 R.id.updatePassword -> {
                     supportActionBar!!.setDisplayShowTitleEnabled(false)

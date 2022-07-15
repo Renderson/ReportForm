@@ -35,6 +35,10 @@ class SharePrefInfoUser {
         profileEmail.value = email.toString()
     }
 
+    fun getUser(pref: SharedPreferences): String {
+        return pref.getString(ReportConstants.FIREBASE.FIRE_NAME, "").toString()
+    }
+
     fun deleteSharePref(sharedPreferences: SharedPreferences) {
         val editor = sharedPreferences.edit().clear()
         editor.apply()

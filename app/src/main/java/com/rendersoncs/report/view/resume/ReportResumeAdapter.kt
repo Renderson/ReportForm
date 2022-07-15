@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rendersoncs.report.R
+import com.rendersoncs.report.databinding.ItemReportResumeListBinding
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import com.rendersoncs.report.model.ReportResumeItems
 import kotlinx.android.synthetic.main.item_report_resume_list.view.*
@@ -24,9 +25,8 @@ class ReportResumeAdapter(private val repoResumeList:
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, i: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_report_resume_list,
-                parent, false)
-        return ViewHolder(view)
+        val binding = ItemReportResumeListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
@@ -86,11 +86,11 @@ class ReportResumeAdapter(private val repoResumeList:
         return repoResumeList.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val resumeTitle = itemView.jo_title!!
-        val resumeDescription = itemView.jo_description!!
-        val resumeConformity = itemView.jo_conformity!!
-        val resumeNote = itemView.jo_note!!
-        val resumePhoto = itemView.jo_photo!!
+    class ViewHolder(val binding: ItemReportResumeListBinding) : RecyclerView.ViewHolder(binding.root) {
+        val resumeTitle = binding.joTitle
+        val resumeDescription = binding.joDescription
+        val resumeConformity = binding.joConformity
+        val resumeNote = binding.joNote
+        val resumePhoto = binding.joPhoto
     }
 }

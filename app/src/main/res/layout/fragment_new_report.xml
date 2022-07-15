@@ -24,7 +24,7 @@
             android:layout_marginStart="@dimen/margin_16"
             android:layout_marginEnd="@dimen/margin_16"
             android:layout_marginBottom="@dimen/margin_8"
-            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTint="@color/button_disability_state"
             android:padding="@dimen/padding_10"
             android:text="@string/start"
             android:textColor="@color/white"

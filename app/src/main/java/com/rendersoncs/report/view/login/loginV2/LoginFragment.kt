@@ -1,8 +1,6 @@
 package com.rendersoncs.report.view.login.loginV2
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +26,10 @@ import com.google.firebase.auth.*
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentLoginBinding
+import com.rendersoncs.report.infrastructure.util.afterTextChanged
 import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
+import com.rendersoncs.report.infrastructure.util.isValidateEmail
+import com.rendersoncs.report.view.base.BaseBindingFragment
 import com.rendersoncs.report.view.base.BaseFragment
 import com.rendersoncs.report.view.login.util.User
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,6 +47,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(),
     private var callbackManager: CallbackManager? = null
     private var mGoogleApiClient: GoogleSignInClient? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        mAuth = FirebaseAuth.getInstance()
+        mAuthListener = firebaseAuthResultHandler
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -56,9 +64,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(),
                 }
             })
 
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        /*FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         mAuth = FirebaseAuth.getInstance()
-        mAuthListener = firebaseAuthResultHandler
+        mAuthListener = firebaseAuthResultHandler*/
 
         facebookSignIn()
         googleSignIn()
@@ -151,9 +159,19 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(),
     }
 
     private fun initViews() = with(binding) {
-        email.addTextChangedListener(emailWatcher)
-        password.addTextChangedListener(passwordWatcher)
         password.setOnEditorActionListener(this@LoginFragment)
+
+        email.afterTextChanged {
+            if(isValidateEmail(email.text.toString())) {
+                textInputEmail.error = null
+            } else {
+                textInputEmail.error = getString(R.string.label_insert_email)
+            }
+        }
+
+        password.afterTextChanged {
+            validate(password.text.toString(), binding.textInputPassword, R.string.label_insert_password)
+        }
 
         singIn.setOnClickListener {
             sendLoginData()
@@ -172,28 +190,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(),
         }
     }
 
-    private val emailWatcher = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun afterTextChanged(s: Editable?) {
-            validate(s, binding.textInputEmail, R.string.label_insert_email)
-        }
-    }
-
-    private val passwordWatcher = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun afterTextChanged(s: Editable?) {
-            validate(s, binding.textInputPassword, R.string.label_insert_password)
-        }
-    }
-
-    private fun validate(s: Editable?, input: TextInputLayout, message: Int) {
-        if (s != null && s.toString().isNotEmpty()) {
+    private fun validate(s: String, input: TextInputLayout, message: Int) {
+        if (s.isNotEmpty()) {
             input.error = null
         } else {
             input.error = resources.getString(message)

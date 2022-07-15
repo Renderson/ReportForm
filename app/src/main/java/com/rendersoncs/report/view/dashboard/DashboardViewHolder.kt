@@ -17,19 +17,14 @@ import com.rendersoncs.report.model.Report
 import kotlinx.android.synthetic.main.item_main_list.view.*
 import java.util.*
 
-class DashboardViewHolder(binding: ItemMainListBinding, context: Context) : RecyclerView.ViewHolder(binding.root) {
-    private var companyView = binding.companyView
-    private var dateView = binding.dateView
-    private var view = binding.viewResult
-    private var resultView = binding.resultView
-    private val overflow = binding.overflow
-    private val mContext = context
+class DashboardViewHolder(val binding: ItemMainListBinding, context: Context) : RecyclerView.ViewHolder(binding.root) {
 
+    private val mContext = context
     private val result = mContext.getString(R.string.according)
     private val colorAccording = ContextCompat.getColor(mContext, R.color.colorRadioC)
     private val colorNotAccording = ContextCompat.getColor(mContext, R.color.colorRadioNC)
 
-    fun bindData(report: Report, listener: DashboardListener) {
+    fun bindData(report: Report, listener: DashboardListener) = with(binding) {
 
         companyView.text = limitsText(report.company, ReportConstants.CHARACTERS.LIMITS_TEXT)
         dateView.text = report.date
@@ -82,7 +77,7 @@ class DashboardViewHolder(binding: ItemMainListBinding, context: Context) : Recy
     }
 
     private fun changeColorShape(color: Int) {
-        val bgShape = view.background as GradientDrawable
+        val bgShape = binding.viewResult.background as GradientDrawable
         bgShape.setColor(color)
     }
 

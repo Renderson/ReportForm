@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#4F9BFF</color>
 
+    <color name="colorPrimarySplash">#1E56A0</color>
     <color name="colorCardView">#1A191E</color>
     <color name="card_shadow_form_field">#17FFFFFF</color>
     <color name="colorContentButton">#000000</color>
@@ -12,6 +13,7 @@
     <color name="background">#121212</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#FFFFFFFF</color>
+    <color name="blue_disabled">#A9C4CE</color>
 
     <color name="cod_gray_alpha_75">#BF121212</color>
     <color name="colorResume">#9FA8DA</color>

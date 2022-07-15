@@ -212,6 +212,10 @@ class ReportViewModel @Inject constructor(
         }
     }
 
+    fun getNameShared(pref: SharedPreferences) {
+        _name.value = sharePref.getUser(pref)
+    }
+
     fun deletePreference(pref: SharedPreferences) = viewModelScope.launch {
         sharePref.deleteSharePref(pref)
     }

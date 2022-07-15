@@ -6,22 +6,13 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rendersoncs.report.databinding.ItemMainListBinding
+import com.rendersoncs.report.infrastructure.util.ItemCallBack
 import com.rendersoncs.report.model.Report
 
 class DashboardAdapter(private var listener: DashboardListener) :
         RecyclerView.Adapter<DashboardViewHolder>() {
 
-    private val differCallback = object : DiffUtil.ItemCallback<Report>() {
-        override fun areItemsTheSame(oldItem: Report, newItem: Report): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Report, newItem: Report): Boolean {
-            return oldItem == newItem
-        }
-    }
-
-    val differ = AsyncListDiffer(this, differCallback)
+    val differ = AsyncListDiffer(this, ItemCallBack<Report>())
 
     override fun onCreateViewHolder(parent: ViewGroup, i: Int): DashboardViewHolder {
         val binding = ItemMainListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
