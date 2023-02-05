@@ -200,8 +200,8 @@ class ReportCheckListAdapter(
         return object : Filter() {
             override fun performFiltering(charSequence: CharSequence): FilterResults {
                 val charString = charSequence.toString()
-                if (charString.isEmpty()) {
-                    reportItemsFiltered = reportItems
+                reportItemsFiltered = if (charString.isEmpty()) {
+                    reportItems
                 } else {
                     val filteredList: MutableList<ReportItems> = ArrayList()
                     for (row in reportItems) {
@@ -209,7 +209,7 @@ class ReportCheckListAdapter(
                             filteredList.add(row)
                         }
                     }
-                    reportItemsFiltered = filteredList
+                    filteredList
                 }
                 val filterResults = FilterResults()
                 filterResults.values = reportItemsFiltered
