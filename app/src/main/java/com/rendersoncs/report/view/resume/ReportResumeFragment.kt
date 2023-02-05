@@ -42,11 +42,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
-class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportViewModel>(), ReportResumeListener {
+class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportViewModel>() {
     override val viewModel: ReportViewModel by activityViewModels()
     private val args: ReportResumeFragmentArgs by navArgs()
 
-    private lateinit var resumeAdapter: ReportResumeAdapter
+    private val resumeAdapter by lazy { ReportResumeAdapter(this::detailPhoto) }
 
     private var uiState: Job? = null
 
@@ -183,7 +183,8 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
                     is ResumeState.Loading -> {
                     }
                     is ResumeState.Success -> {
-                        initRv(list.report)
+                        resumeAdapter.differ.submitList(list.report)
+                        initRv()
                     }
                     is ResumeState.Error -> {
                         toast("Error")
@@ -193,9 +194,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         }
     }
 
-    private fun initRv(report: ArrayList<ReportResumeItems>) = with(binding) {
-        resumeAdapter = ReportResumeAdapter(report, requireContext())
-        resumeAdapter.setOnItemListenerClicked(this@ReportResumeFragment)
+    private fun initRv() = with(binding) {
         contentResume.resumeRv.apply {
             adapter = resumeAdapter
             layoutManager = LinearLayoutManager(activity)
@@ -281,7 +280,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         }
     }
 
-    override fun detailPhoto(reportResume: ReportResumeItems) {
+    private fun detailPhoto(reportResume: ReportResumeItems) {
         val detailPhoto = ReportDetailPhoto(
                 reportResume.photo,
                 reportResume.title,
