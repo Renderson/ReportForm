@@ -3,7 +3,6 @@ package com.rendersoncs.report.view.dashboard
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rendersoncs.report.databinding.ItemMainListBinding
 import com.rendersoncs.report.infrastructure.util.ItemCallBack

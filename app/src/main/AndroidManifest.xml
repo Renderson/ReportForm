@@ -47,7 +47,8 @@
             tools:replace="android:theme" />
 
         <activity android:name="com.rendersoncs.report.view.splashscreen.SplashScreenActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,7 +69,8 @@
             android:icon="@mipmap/ic_launcher"
             android:screenOrientation="fullUser"
             android:rotationAnimation="seamless"
-            tools:targetApi="O">
+            tools:targetApi="O"
+            android:exported="true">
 
             <!-- App links for http/s -->
             <intent-filter android:autoVerify="true">
@@ -88,7 +90,8 @@
 
         <service
             android:name=".data.net.NotificationFireBase"
-            android:permission="true">
+            android:permission="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
