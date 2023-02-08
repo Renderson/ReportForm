@@ -8,6 +8,7 @@ import android.os.Environment
 import android.util.Pair
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -17,21 +18,13 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.rendersoncs.report.R
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import com.rendersoncs.report.infrastructure.util.DetailState
-import com.rendersoncs.report.infrastructure.util.ResumeState
-import com.rendersoncs.report.infrastructure.util.SharePrefInfoUser
-import com.rendersoncs.report.infrastructure.util.ViewState
-import com.rendersoncs.report.model.Report
-import com.rendersoncs.report.model.ReportItems
-import com.rendersoncs.report.model.ReportResumeItems
+import com.rendersoncs.report.infrastructure.util.*
+import com.rendersoncs.report.model.*
 import com.rendersoncs.report.repository.ReportRepository
+import com.rendersoncs.report.view.base.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.json.JSONArray
-import org.json.JSONException
 import java.io.File
 import javax.inject.Inject
 
@@ -63,18 +56,34 @@ class ReportViewModel @Inject constructor(
     private var _photo = MutableStateFlow("")
     val photo: StateFlow<String> = _photo
 
+    var userUid = MutableLiveData("")
+
+    var id = MutableLiveData<Long>()
+
+    var reportResumeItems = SingleLiveEvent<ArrayList<ReportResumeItems>>()
+
+    fun getUserUid(user: FirebaseUser?) {
+        userUid.value = user?.uid
+    }
+
     fun getAllReports() = viewModelScope.launch {
-        repository.getAllReports().collect { result ->
-            if (result.isNullOrEmpty()) {
+        repository.getUserWithReport(userUid.value ?: "").collect { result ->
+            if (result.isEmpty()) {
                 _uiState.value = ViewState.Empty
             } else {
-                _uiState.value = ViewState.Success(result)
+                result.forEach { data ->
+                    _uiState.value = ViewState.Success(data.reports)
+                }
             }
         }
     }
 
     fun insertReport(report: Report) = viewModelScope.launch {
-        repository.insertReport(report)
+        id.value = repository.insertReport(report)
+    }
+
+    fun insertCheckList(reportCheckList: ReportCheckList) = viewModelScope.launch {
+        repository.insertCheckList(reportCheckList)
     }
 
     fun deleteReportByID(id: Int) = viewModelScope.launch {
@@ -143,16 +152,17 @@ class ReportViewModel @Inject constructor(
     }
 
     fun deletePhotosDirectory(item: Report) = viewModelScope.launch {
-        try {
-            val arrayL = JSONArray(item.listJson)
-            for (i in 0 until arrayL.length()) {
-                val obj = arrayL.getJSONObject(i)
-                val selected = obj.getString(ReportConstants.ITEM.PHOTO)
-                val file = File(selected)
-                file.delete()
+        repository.getReportWithChecklist(item.id.toString()).collect { list ->
+            try {
+                list.forEach { resume ->
+                    resume.checkList.forEach { table ->
+                        val file = File(table.photo)
+                        file.delete()
+                    }
+                }
+            } catch (e: Exception) {
+                FirebaseCrashlytics.getInstance().recordException(e)
             }
-        } catch (e: JSONException) {
-            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 
@@ -203,11 +213,8 @@ class ReportViewModel @Inject constructor(
                         override fun onCancelled(databaseError: DatabaseError) {}
                     })
                 }
-                //_name.value = name.toString()
             }
-            //_name.value = user.displayName.toString()
             _email.value = user.email.toString()
-            //_photo.value = user.photoUrl.toString()
             sharePref.saveEmailSharePref(pref, user.email.toString())
         }
     }
@@ -222,16 +229,21 @@ class ReportViewModel @Inject constructor(
 
     fun getListReportResume(report: Report) = viewModelScope.launch {
         val repo = ArrayList<ReportResumeItems>()
-        val array = JSONArray(report.listJson)
-        for (i in 0 until array.length()) {
-            val jo = array.getJSONObject(i)
-            val repoJson = ReportResumeItems(jo.getString(ReportConstants.ITEM.TITLE),
-                    jo.getString(ReportConstants.ITEM.DESCRIPTION),
-                    jo.getString(ReportConstants.ITEM.CONFORMITY),
-                    jo.getString(ReportConstants.ITEM.NOTE),
-                    jo.getString(ReportConstants.ITEM.PHOTO))
-            repo.add(repoJson)
+        repository.getReportWithChecklist(report.id.toString()).collect {
+            it.forEach { list ->
+                list.checkList.forEach { resume ->
+                    val repoJson = ReportResumeItems(
+                        title = resume.title,
+                        description = resume.description,
+                        conformity = resume.conformity,
+                        note = resume.note,
+                        photo = resume.photo
+                    )
+                    repo.add(repoJson)
+                }
+            }
+            _resumeList.value = ResumeState.Success(repo)
+            reportResumeItems.value = repo
         }
-        _resumeList.value = ResumeState.Success(repo)
     }
 }
