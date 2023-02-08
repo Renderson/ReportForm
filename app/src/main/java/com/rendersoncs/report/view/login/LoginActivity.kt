@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
+import androidx.activity.viewModels
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -24,11 +25,14 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.R
+import com.rendersoncs.report.data.local.AppDatabase
 import com.rendersoncs.report.databinding.FragmentLoginBinding
 import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
+import com.rendersoncs.report.infrastructure.util.viewModelFactory
+import com.rendersoncs.report.repository.ReportRepository
 import com.rendersoncs.report.view.login.util.User
+import com.rendersoncs.report.view.login.viewmodel.LoginViewModel
 import com.rendersoncs.report.view.main.MainActivity
-import java.util.*
 
 class LoginActivity : CommonActivity(), OnEditorActionListener {
     private var mAuth: FirebaseAuth? = null
@@ -37,6 +41,11 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
     private var callbackManager: CallbackManager? = null
     private var mGoogleApiClient: GoogleSignInClient? = null
     private lateinit var binding: FragmentLoginBinding
+
+    private val repo by lazy { ReportRepository(AppDatabase(this)) }
+    private val viewModel: LoginViewModel by viewModels {
+        viewModelFactory { LoginViewModel(this.application, repo) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,6 +150,7 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
                 user!!.id = userFirebase.uid
                 user!!.setNameIfNull(userFirebase.displayName)
                 user!!.setEmailIfNull(userFirebase.email)
+                user!!.setUrlImgIfNull(userFirebase.photoUrl)
                 user!!.saveDB()
             }
             callMainActivity()
@@ -251,6 +261,14 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
                 .addOnCompleteListener { task: Task<AuthResult?> ->
                     if (!task.isSuccessful) {
                         closeProgressBar()
+                    }
+                    if (task.isComplete) {
+                        mAuth?.currentUser?.let { currentUser ->
+                            val user = com.rendersoncs.report.model.User(
+                                userId = currentUser.uid
+                            )
+                            viewModel.insertUserBD(user)
+                        }
                     }
                 }.addOnFailureListener { e: Exception ->
                     FirebaseCrashlytics.getInstance().recordException(e)
