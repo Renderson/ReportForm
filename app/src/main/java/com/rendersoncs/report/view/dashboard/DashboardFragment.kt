@@ -16,7 +16,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rendersoncs.report.R
+import com.rendersoncs.report.data.net.NetworkConnectedService
 import com.rendersoncs.report.databinding.FragmentDashboardBinding
+import com.rendersoncs.report.infrastructure.util.SnackBarHelper
 import com.rendersoncs.report.infrastructure.util.ViewState
 import com.rendersoncs.report.infrastructure.util.hide
 import com.rendersoncs.report.infrastructure.util.show
@@ -24,7 +26,6 @@ import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.view.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class DashboardFragment : BaseFragment<FragmentDashboardBinding, ReportViewModel>() {
@@ -34,6 +35,8 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, ReportViewModel
     private lateinit var reportListAdapter: DashboardAdapter
     private lateinit var listener: DashboardListener
     private lateinit var report: Report
+
+    private val snackBarHelper = SnackBarHelper()
 
     private val requestLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -47,6 +50,11 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, ReportViewModel
         listenerItems()
         setupRV()
         initViews()
+
+        // check connection netWorking
+        NetworkConnectedService().isConnected(requireActivity()) {
+            snackBarHelper.showSnackBar(requireActivity(), binding.btnCreateReport)
+        }
     }
 
     override fun getViewBinding(
