@@ -5,11 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.rendersoncs.report.model.Report
+import com.rendersoncs.report.model.ReportCheckList
+import com.rendersoncs.report.model.User
 
 @Database(
-        entities = [Report::class],
-        version = 1,
-        exportSchema = false
+    entities = [
+        User::class,
+        Report::class,
+        ReportCheckList::class
+    ],
+    version = 1,
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
