@@ -26,6 +26,8 @@ data class Report(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "id")
         var id: Int = 0,
+        @ColumnInfo(name = "userId")
+        val userId: String
 ): Serializable {
         fun dateFormatter(): String {
                 val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
