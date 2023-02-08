@@ -21,7 +21,6 @@ import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentReportResumeBinding
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
@@ -35,9 +34,6 @@ import com.rendersoncs.report.view.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import org.json.JSONArray
-import org.json.JSONException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -49,8 +45,6 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     private val resumeAdapter by lazy { ReportResumeAdapter(this::detailPhoto) }
 
     private var uiState: Job? = null
-
-    private val listSelected = ArrayList<String>()
     private val listRadioC = ArrayList<String>()
     private val listRadioNA = ArrayList<String>()
     private val listRadioNC = ArrayList<String>()
@@ -72,7 +66,8 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         report = args.reportResume
         getReport(report.id)
         observeReport()
-        countRadioSelected(report)
+        observerListResume()
+        countRadioSelected()
         createPieChart()
     }
 
@@ -128,12 +123,10 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     private fun observeReport() = lifecycleScope.launchWhenCreated {
         viewModel.detailState.collect { detailState ->
             when (detailState) {
-                DetailState.Loading -> {
-                }
+                DetailState.Loading -> {}
                 is DetailState.Success -> {
                     onDetailLoaded(detailState.report)
                     viewModel.getListReportResume(report)
-                    observerListResume()
                 }
                 is DetailState.Error -> {
                     toast("Error")
@@ -147,7 +140,9 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
 
     private fun onDetailLoaded(report: Report) = with(binding) {
         this.contentResume.apply {
-            controllerResume.text = getString(R.string.label_report, report.controller.toUpperCase(Locale.ROOT))
+            controllerResume.text = getString(R.string.label_report,
+                report.controller.uppercase(Locale.ROOT)
+            )
             emailResume.text = report.email
             dateResume.text = report.date
             companyResume.text = StringExtension.limitsText(report.company,
@@ -254,29 +249,27 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     }*/
 
     @SuppressLint("StringFormatMatches")
-    private fun countRadioSelected(report: Report) {
-        try {
-            val arrayL = JSONArray(report.listJson)
-            for (i in 0 until arrayL.length()) {
-                val obj = arrayL.getJSONObject(i)
-                val selected = obj.getString(ReportConstants.ITEM.CONFORMITY)
-                listSelected.add(selected)
-            }
-            for (i in listSelected.indices) {
-                if (listSelected[i] == resources.getString(R.string.according)) {
+    private fun countRadioSelected() = lifecycleScope.launchWhenResumed {
+        viewModel.reportResumeItems.observe(viewLifecycleOwner) { report ->
+            println("CHECK LIST ${report.toList()}")
+            report.forEach {
+                if (it.conformity == resources.getString(R.string.according)) {
                     listRadioC.add(resources.getString(R.string.according))
+                    println(it.conformity)
                 }
-                if (listSelected[i] == resources.getString(R.string.not_applicable)) {
+                if (it.conformity == resources.getString(R.string.not_applicable)) {
                     listRadioNA.add(resources.getString(R.string.not_applicable))
+                    println(it.conformity)
                 }
-                if (listSelected[i] == resources.getString(R.string.not_according)) {
+                if (it.conformity == resources.getString(R.string.not_according)) {
                     listRadioNC.add(resources.getString(R.string.not_according))
+                    println(it.conformity)
                 }
             }
-            val maxList = arrayL.length()
-            binding.contentResume.resumeGraph.itemsResume.text = getString(R.string.item_selected, maxList)
-        } catch (e: JSONException) {
-            FirebaseCrashlytics.getInstance().recordException(e)
+            val maxList = report.size
+            binding.contentResume.resumeGraph.itemsResume.text =
+                getString(R.string.item_selected, maxList)
+            createPieChart()
         }
     }
 
@@ -307,7 +300,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     ) == PackageManager.PERMISSION_GRANTED
 
     override fun onDetach() {
-        super.onDetach()
         uiState?.cancel()
+        super.onDetach()
     }
 }
