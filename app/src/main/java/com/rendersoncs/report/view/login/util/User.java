@@ -1,6 +1,7 @@
 package com.rendersoncs.report.view.login.util;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
@@ -17,6 +18,8 @@ public class User {
     private String id;
     private String name;
     private String email;
+
+    private Uri photo;
     private String password;
     private String newPassword;
 
@@ -60,6 +63,8 @@ public class User {
         return email;
     }
 
+    public Uri getPhoto() { return photo; }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -73,6 +78,12 @@ public class User {
     public void setEmailIfNull(String email) {
         if( this.email == null ){
             this.email = email;
+        }
+    }
+
+    public void setUrlImgIfNull(Uri photoUrl) {
+        if(this.photo == null) {
+            this.photo = photoUrl;
         }
     }
 
