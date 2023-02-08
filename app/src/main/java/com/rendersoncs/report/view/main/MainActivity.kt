@@ -25,20 +25,17 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.rendersoncs.report.R
 import com.rendersoncs.report.data.local.AppDatabase
-import com.rendersoncs.report.data.net.NetworkConnectedService
 import com.rendersoncs.report.databinding.ActivityMainBinding
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import com.rendersoncs.report.infrastructure.util.viewModelFactory
 import com.rendersoncs.report.repository.ReportRepository
 import com.rendersoncs.report.view.ReportViewModel
-import com.rendersoncs.report.view.dashboard.DashboardFragmentDirections
 import com.rendersoncs.report.view.fragment.ChooseThemeDialogFragment.SingleChoiceListener
-import com.rendersoncs.report.view.login.loginV2.LoginMainActivity
+import com.rendersoncs.report.view.login.LoginActivity
 import com.rendersoncs.report.view.login.util.LibraryClass
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), SingleChoiceListener {
@@ -70,17 +67,18 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
         checkLoggedUser()
 
         val user = initFireBaseUser()
+        viewModel.getUserUid(user)
 
         prefTheme = getSharedPreferences(ReportConstants.THEME.MY_PREFERENCE_THEME, MODE_PRIVATE)
         prefUser = getSharedPreferences(ReportConstants.FIREBASE.FIRE_USERS, MODE_PRIVATE)
 
-        viewModel.getInfoUserFireBase(user!!, databaseReference, prefUser)
+        user?.let {
+            viewModel.getInfoUserFireBase(it, databaseReference, prefUser)
+        }
+
         initViews(binding)
         getInfoUser(binding)
         observeNavElements(binding, navHostFragment.navController)
-
-        // Check NetWorking
-        NetworkConnectedService().isConnected(this)
     }
 
     private fun checkLoggedUser() {
@@ -89,7 +87,7 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
                 /*navHostFragment.navController.navigate(
                     R.id.action_loginFragment_to_dashboard
                 )*/
-                Intent(this, LoginMainActivity::class.java).apply {
+                Intent(this, LoginActivity::class.java).apply {
                     startActivity(this)
                     finish()
                 }
@@ -162,9 +160,10 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
         binding.navView.menu.findItem(R.id.login).setOnMenuItemClickListener {
             FirebaseAuth.getInstance().signOut()
             viewModel.deletePreference(prefUser)
-            navHostFragment.navController.navigate(
+            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+            /*navHostFragment.navController.navigate(
                     DashboardFragmentDirections.actionDrawerCloseToLogin()
-            )
+            )*/
             finish()
             true
         }
