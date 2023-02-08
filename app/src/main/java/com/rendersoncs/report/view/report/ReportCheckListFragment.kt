@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +31,7 @@ import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import com.rendersoncs.report.infrastructure.pdf.CreateReportInPDF
 import com.rendersoncs.report.infrastructure.util.*
 import com.rendersoncs.report.model.Report
+import com.rendersoncs.report.model.ReportCheckList
 import com.rendersoncs.report.model.ReportDetailPhoto
 import com.rendersoncs.report.model.ReportItems
 import com.rendersoncs.report.view.ReportViewModel
@@ -40,13 +40,8 @@ import com.rendersoncs.report.view.cameraX.CameraXMainActivity
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_report_list_empty.*
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
 import java.io.File
 import java.util.*
 
@@ -55,6 +50,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     override val viewModel: ReportViewModel by activityViewModels()
     private val args: ReportCheckListFragmentArgs by navArgs()
     private var uiStateJobScore: Job? = null
+    private var idStateJob: Job? = null
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var resultScore: String
@@ -349,8 +345,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     private fun saveReport() = with(binding) {
-        checkList()
-
         val report = Report(
                 company = resultCompany.text.toString(),
                 email = resultEmail.text.toString(),
@@ -358,35 +352,48 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 controller = resultController,
                 score = this.contentReport.showScore.text.toString(),
                 result = resultScore,
-                listJson = checkList.toString()
+                listJson = checkList.toString(),
+                userId = viewModel.userUid.value ?: ""
         )
         viewModel.insertReport(report)
+        saveCheckList()
         CreateReportInPDF()
             .write(requireContext(), report)
         findNavController().navigateUp()
     }
 
-    private fun checkList() = lifecycleScope.launch {
-        var i = 0
-        while (i < listRadio.size
-                && i < listTitle.size
-                && i < listDescription.size
-                && i < listNotes.size
-                && i < listPhoto.size) {
-            val jsObject = JSONObject()
-            try {
-                jsObject.put(ReportConstants.ITEM.TITLE, listTitle[i])
-                jsObject.put(ReportConstants.ITEM.DESCRIPTION, listDescription[i])
-                jsObject.put(ReportConstants.ITEM.CONFORMITY, listRadio[i])
-                jsObject.put(ReportConstants.ITEM.NOTE, listNotes[i])
-                jsObject.put(ReportConstants.ITEM.PHOTO, listPhoto[i])
-            } catch (e: JSONException) {
-                FirebaseCrashlytics.getInstance().recordException(e)
+    private fun saveCheckList() {
+        idStateJob = lifecycleScope.launchWhenResumed {
+            viewModel.id.observe(viewLifecycleOwner) { id ->
+                if (id != null) {
+                    reportItems.forEach {
+                        if (it.isOpt1 || it.isOpt2 || it.isOpt3) {
+                            val conformity = when (it.selectedAnswerPosition) {
+                                ReportConstants.ITEM.OPT_NUM1 -> {
+                                    getString(R.string.according)
+                                }
+                                ReportConstants.ITEM.OPT_NUM2 -> {
+                                    getString(R.string.not_applicable)
+                                }
+                                else -> {
+                                    getString(R.string.not_according)
+                                }
+                            }
+
+                            val reportCheckList = ReportCheckList(
+                                id = id.toInt(),
+                                title = it.title ?: "",
+                                description = it.description ?: "",
+                                note = it.note ?: getString(R.string.label_not_observation),
+                                conformity = conformity,
+                                photo = it.photoPath ?: ReportConstants.PHOTO.NOT_PHOTO
+                            )
+                            viewModel.insertCheckList(reportCheckList)
+                        }
+                    }
+                }
             }
-            checkList.put(jsObject)
-            i++
         }
-        Log.i("log", "Item: $checkList checkList")
     }
 
     private fun closeReport() {
@@ -587,10 +594,12 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     override fun onDetach() {
         uiStateJobScore?.cancel()
+        idStateJob?.cancel()
 
         activity?.apply {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
+        viewModel.id.postValue(null)
         super.onDetach()
     }
 
