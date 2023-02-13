@@ -192,6 +192,7 @@
     <string name="summary">Resumo</string>
     <string name="version_beta">Não implementado para a versão de Teste</string>
     <string name="label_create_items">CRIAR ITEMS</string>
+    <string name="label_create_items_no_caps">criar items</string>
     <string name="label_wait">Aguarde!</string>
     <string name="label_saving_report">Salvando relatório.</string>
     <string name="Item_List">Item Lista</string>

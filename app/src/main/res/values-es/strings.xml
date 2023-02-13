@@ -192,6 +192,7 @@
     <string name="summary">Resumen</string>
     <string name="version_beta">No implementado para prueba</string>
     <string name="label_create_items">CREAR ARTÍCULOS</string>
+    <string name="label_create_items_no_caps">crear artículos</string>
     <string name="label_wait">Espere!</string>
     <string name="label_saving_report">Guardando informe.</string>
     <string name="Item_List">Lista de articulos</string>

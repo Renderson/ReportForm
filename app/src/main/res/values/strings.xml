@@ -192,6 +192,7 @@
     <string name="summary">Summary</string>
     <string name="version_beta">Not implemented for Trial</string>
     <string name="label_create_items">CREATE ITEMS</string>
+    <string name="label_create_items_no_caps">create items</string>
     <string name="label_wait">Wait!</string>
     <string name="label_saving_report">Saving report.</string>
     <string name="Item_List">Item List</string>
