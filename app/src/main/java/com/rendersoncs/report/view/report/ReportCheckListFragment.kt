@@ -1,6 +1,7 @@
 package com.rendersoncs.report.view.report
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -122,15 +123,50 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             container: ViewGroup?
     ) = FragmentReportCheckListBinding.inflate(inflater, container, false)
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initViews() = with(binding) {
         this.resultCompany.text = args.reportNew.company
         this.resultEmail.text = args.reportNew.email
         this.resultDate.text = args.reportNew.date
         resultController = args.reportNew.controller
 
-        this.contentReport.fabNewItem.setOnClickListener {
+        this.contentReport.coordinator.isEnabled = false
+
+        this.contentReport.contentFloating.fabNewItem.setOnClickListener {
+            stateNormalFloatingButtons()
             createItemCheckList()
         }
+
+        this.contentReport.contentFloating.fabSave.setOnClickListener {
+            stateNormalFloatingButtons()
+            checkListToSave()
+        }
+
+        this.contentReport.contentFloating.fabMenu.setOnClickListener {
+            if (this.contentReport.contentFloating.fabNewItem.isExtended) {
+                this.contentReport.contentFloating.fabNewItem.shrink()
+            }
+            this.contentReport.contentFloating.fabNewItem.shrink()
+            this.contentReport.contentFloating.fabSave.show()
+            this.contentReport.contentFloating.fabMenu.visibility = View.GONE
+            this.contentReport.contentFloating.txtSave.show()
+            this.contentReport.contentFloating.txtCreateItem.show()
+            this.contentReport.contentFloating.viewLine.hide()
+            this.contentReport.showScore.hide()
+            this.contentReport.coordinator.isEnabled = true
+
+            this.contentReport.coordinator.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.opacity90))
+        }
+
+        this.contentReport.coordinator.setOnTouchListener { _, event ->
+            when(event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    stateNormalFloatingButtons()
+                }
+            }
+            true
+        }
+
         this.contentReport.progressBar.visibility = View.GONE
     }
 
@@ -151,7 +187,23 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             layoutManager = LinearLayoutManager(requireContext())
         }
         mAdapter.setOnItemListenerClicked(this@ReportCheckListFragment)
-        animatedView(recyclerView, this.contentReport.showScore)
+        animatedView(recyclerView, this.contentReport.showScore, contentReport.contentFloating.fabNewItem)
+    }
+
+    private fun FragmentReportCheckListBinding.stateNormalFloatingButtons() {
+        this.contentReport.contentFloating.fabSave.hide()
+        this.contentReport.contentFloating.fabMenu.visibility = View.VISIBLE
+        this.contentReport.contentFloating.txtSave.hide()
+        this.contentReport.contentFloating.txtCreateItem.hide()
+        this.contentReport.contentFloating.viewLine.show()
+        this.contentReport.coordinator.isEnabled = false
+
+        this.contentReport.coordinator.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.transparent
+            )
+        )
     }
 
     private fun loadCheckList() {
@@ -259,30 +311,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         when (item.itemId) {
             R.id.action_search -> return true
             R.id.save -> {
-                checkAnswers()
-                when {
-                    listPhoto.isEmpty() -> {
-                        alertDialog.showDialog(requireActivity(),
-                                resources.getString(R.string.alert_empty_report),
-                                resources.getString(R.string.alert_empty_report_text),
-                                resources.getString(R.string.back),
-                                { _: DialogInterface?, _: Int -> },
-                                null, null, false)
-                        clearList()
-                    }
-                    listRadio.size > listPhoto.size -> {
-                        alertDialog.showDialog(requireActivity(),
-                                resources.getString(R.string.alert_check_list),
-                                resources.getString(R.string.alert_check_list_text),
-                                resources.getString(R.string.back),
-                                { _: DialogInterface?, _: Int -> },
-                                null, null, false)
-                        clearList()
-                    }
-                    else -> {
-                        checkPermission(REQUEST_SAVE)
-                    }
-                }
+                checkListToSave()
             }
             R.id.close -> closeReport()
             R.id.clear -> {
@@ -300,6 +329,37 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun checkListToSave() {
+        checkAnswers()
+        when {
+            listPhoto.isEmpty() -> {
+                alertDialog.showDialog(
+                    requireActivity(),
+                    resources.getString(R.string.alert_empty_report),
+                    resources.getString(R.string.alert_empty_report_text),
+                    resources.getString(R.string.back),
+                    { _: DialogInterface?, _: Int -> },
+                    null, null, false
+                )
+                clearList()
+            }
+            listRadio.size > listPhoto.size -> {
+                alertDialog.showDialog(
+                    requireActivity(),
+                    resources.getString(R.string.alert_check_list),
+                    resources.getString(R.string.alert_check_list_text),
+                    resources.getString(R.string.back),
+                    { _: DialogInterface?, _: Int -> },
+                    null, null, false
+                )
+                clearList()
+            }
+            else -> {
+                checkPermission(REQUEST_SAVE)
+            }
+        }
     }
 
     private fun checkPermission(request: Int) {
