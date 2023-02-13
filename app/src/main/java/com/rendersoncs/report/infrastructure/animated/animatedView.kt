@@ -6,9 +6,9 @@ import android.view.Gravity
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_SETTLING
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
-
-fun animatedView(recyclerView: RecyclerView, view: View) {
+fun animatedView(recyclerView: RecyclerView, view: View, fabNewItem: ExtendedFloatingActionButton) {
     recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             if (dy > 0) {
@@ -16,8 +16,10 @@ fun animatedView(recyclerView: RecyclerView, view: View) {
                 val transition: Transition = Slide(Gravity.BOTTOM)
                 transition.duration = 500
                 transition.addTarget(view)
+                fabNewItem.shrink()
             } else if (dy < 0) {
                 view.visibility = View.VISIBLE
+                fabNewItem.extend()
             }
         }
 
