@@ -59,17 +59,14 @@
             android:textStyle="bold"
             android:visibility="gone" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_new_item"
+        <include
+            android:id="@+id/contentFloating"
+            layout="@layout/content_floating_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/margin_16"
-            android:src="@drawable/ic_new_item_list_white"
-            android:visibility="visible"
-            app:layout_anchorGravity="bottom|right|end"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:elevation="@dimen/margin_8" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
