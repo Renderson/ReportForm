@@ -29,7 +29,7 @@ import com.rendersoncs.report.databinding.ActivityMainBinding
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import com.rendersoncs.report.infrastructure.util.viewModelFactory
 import com.rendersoncs.report.repository.ReportRepository
-import com.rendersoncs.report.view.ReportViewModel
+import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.fragment.ChooseThemeDialogFragment.SingleChoiceListener
 import com.rendersoncs.report.view.login.LoginActivity
 import com.rendersoncs.report.view.login.util.LibraryClass

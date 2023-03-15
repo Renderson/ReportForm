@@ -3,7 +3,6 @@ package com.rendersoncs.report.view.newReport
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,11 +14,10 @@ import com.rendersoncs.report.databinding.FragmentNewReportBinding
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import com.rendersoncs.report.infrastructure.util.*
 import com.rendersoncs.report.model.ReportNew
-import com.rendersoncs.report.view.ReportViewModel
+import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import java.text.SimpleDateFormat
 import java.util.*
 

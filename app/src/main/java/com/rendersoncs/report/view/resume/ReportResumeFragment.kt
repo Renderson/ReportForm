@@ -30,7 +30,7 @@ import com.rendersoncs.report.infrastructure.util.ResumeState
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportDetailPhoto
 import com.rendersoncs.report.model.ReportResumeItems
-import com.rendersoncs.report.view.ReportViewModel
+import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job

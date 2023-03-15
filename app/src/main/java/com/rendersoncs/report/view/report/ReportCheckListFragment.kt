@@ -34,7 +34,7 @@ import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
 import com.rendersoncs.report.model.ReportDetailPhoto
 import com.rendersoncs.report.model.ReportItems
-import com.rendersoncs.report.view.ReportViewModel
+import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import com.rendersoncs.report.view.cameraX.CameraXMainActivity
 import com.rendersoncs.report.view.login.util.LibraryClass

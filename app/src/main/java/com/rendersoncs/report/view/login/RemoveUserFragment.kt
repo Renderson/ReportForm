@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseReference
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentRemoveUserBinding
 import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
-import com.rendersoncs.report.view.ReportViewModel
+import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import com.rendersoncs.report.view.login.util.User
 

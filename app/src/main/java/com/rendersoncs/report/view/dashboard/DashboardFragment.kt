@@ -23,7 +23,7 @@ import com.rendersoncs.report.infrastructure.util.ViewState
 import com.rendersoncs.report.infrastructure.util.hide
 import com.rendersoncs.report.infrastructure.util.show
 import com.rendersoncs.report.model.Report
-import com.rendersoncs.report.view.ReportViewModel
+import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
