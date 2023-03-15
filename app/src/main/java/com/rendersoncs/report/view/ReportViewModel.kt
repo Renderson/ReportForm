@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.rendersoncs.report.R
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import com.rendersoncs.report.infrastructure.pdf.PDFGenerator
 import com.rendersoncs.report.infrastructure.util.*
 import com.rendersoncs.report.model.*
 import com.rendersoncs.report.repository.ReportRepository
@@ -58,7 +59,9 @@ class ReportViewModel @Inject constructor(
 
     var userUid = MutableLiveData("")
 
-    var id = MutableLiveData<Long>()
+    var savedReport = MutableLiveData<Long>()
+    var savedCheckList = MutableLiveData<Long>()
+    val pdfCreated = MutableLiveData<Boolean>()
 
     var reportResumeItems = SingleLiveEvent<ArrayList<ReportResumeItems>>()
 
@@ -79,11 +82,11 @@ class ReportViewModel @Inject constructor(
     }
 
     fun insertReport(report: Report) = viewModelScope.launch {
-        id.value = repository.insertReport(report)
+        savedReport.value = repository.insertReport(report)
     }
 
     fun insertCheckList(reportCheckList: ReportCheckList) = viewModelScope.launch {
-        repository.insertCheckList(reportCheckList)
+        savedCheckList.value = repository.insertCheckList(reportCheckList)
     }
 
     fun deleteReportByID(id: Int) = viewModelScope.launch {
@@ -139,9 +142,6 @@ class ReportViewModel @Inject constructor(
         val subject = String.format("Report-%s-%s", item.companyFormatter(), item.dateFormatter())
         val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
                 "Report/$subject.pdf")
-
-        /*val file = File(activity?.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS),
-                "Report/$subject.pdf")*/
 
         val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             FileProvider.getUriForFile(getApplication(), ReportConstants.PACKAGE.FILE_PROVIDER, file)
@@ -229,21 +229,40 @@ class ReportViewModel @Inject constructor(
 
     fun getListReportResume(report: Report) = viewModelScope.launch {
         val repo = ArrayList<ReportResumeItems>()
-        repository.getReportWithChecklist(report.id.toString()).collect {
-            it.forEach { list ->
-                list.checkList.forEach { resume ->
-                    val repoJson = ReportResumeItems(
-                        title = resume.title,
-                        description = resume.description,
-                        conformity = resume.conformity,
-                        note = resume.note,
-                        photo = resume.photo
-                    )
-                    repo.add(repoJson)
+        repository.getReportWithChecklist(report.id.toString()).collect { result ->
+            result.forEach { items ->
+                items.checkList.forEach { resume ->
+                    repo.add(createdReportItems(resume))
                 }
             }
             _resumeList.value = ResumeState.Success(repo)
             reportResumeItems.value = repo
         }
+    }
+
+    fun generatePDF(id: Long) = viewModelScope.launch {
+        val checkList = ArrayList<ReportResumeItems>()
+        repository.getReportById(id.toInt()).collect { result: Report? ->
+            if (result != null) {
+                repository.getReportWithChecklist(id.toString()).collect { report ->
+                    report.forEach { items ->
+                        items.checkList.forEach { resume ->
+                            checkList.add(createdReportItems(resume))
+                        }
+                    }
+                    pdfCreated.value = PDFGenerator().generatePDF(result, checkList)
+                }
+            }
+        }
+    }
+
+    private fun createdReportItems(resume: ReportCheckList): ReportResumeItems {
+        return ReportResumeItems(
+            title = resume.title,
+            description = resume.description,
+            conformity = resume.conformity,
+            note = resume.note,
+            photo = resume.photo
+        )
     }
 }

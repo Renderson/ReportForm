@@ -29,7 +29,6 @@ import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentReportCheckListBinding
 import com.rendersoncs.report.infrastructure.animated.animatedView
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import com.rendersoncs.report.infrastructure.pdf.CreateReportInPDF
 import com.rendersoncs.report.infrastructure.util.*
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
@@ -116,6 +115,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         super.onViewCreated(view, savedInstanceState)
         initViews()
         setupRV()
+        setObservers()
     }
 
     override fun getViewBinding(
@@ -416,15 +416,12 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 userId = viewModel.userUid.value ?: ""
         )
         viewModel.insertReport(report)
-        saveCheckList()
-        CreateReportInPDF()
-            .write(requireContext(), report)
-        findNavController().navigateUp()
     }
 
-    private fun saveCheckList() {
+    private fun setObservers() {
+        var reportCheckList: ReportCheckList
         idStateJob = lifecycleScope.launchWhenResumed {
-            viewModel.id.observe(viewLifecycleOwner) { id ->
+            viewModel.savedReport.observe(viewLifecycleOwner) { id ->
                 if (id != null) {
                     reportItems.forEach {
                         if (it.isOpt1 || it.isOpt2 || it.isOpt3) {
@@ -440,7 +437,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                                 }
                             }
 
-                            val reportCheckList = ReportCheckList(
+                            reportCheckList = ReportCheckList(
                                 id = id.toInt(),
                                 title = it.title ?: "",
                                 description = it.description ?: "",
@@ -449,8 +446,20 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                                 photo = it.photoPath ?: ReportConstants.PHOTO.NOT_PHOTO
                             )
                             viewModel.insertCheckList(reportCheckList)
-                        }
+                         }
                     }
+                }
+            }
+            viewModel.savedCheckList.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    viewModel.savedReport.value?.let { reportId ->
+                        viewModel.generatePDF(reportId)
+                    }
+                }
+            }
+            viewModel.pdfCreated.observe(viewLifecycleOwner) { result ->
+                if (result) {
+                    findNavController().navigateUp()
                 }
             }
         }
@@ -637,9 +646,9 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     private fun showScore(score: Float)  = with(binding) {
         resultScore = if (score >= 5.0) {
-            getString(R.string.according).toUpperCase(Locale.ROOT)
+            getString(R.string.according).uppercase(Locale.ROOT)
         } else {
-            getString(R.string.not_according).toUpperCase(Locale.ROOT)
+            getString(R.string.not_according).uppercase(Locale.ROOT)
         }
         this.score.text = score.toString()
         this.contentReport.showScore.text = getString(R.string.label_note_value_scroll, score.toString())
@@ -659,7 +668,9 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         activity?.apply {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-        viewModel.id.postValue(null)
+        viewModel.savedReport.postValue(null)
+        viewModel.savedCheckList.postValue(null)
+        viewModel.pdfCreated.postValue(false)
         super.onDetach()
     }
 
