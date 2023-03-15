@@ -26,7 +26,9 @@ class ReportRepository @Inject constructor(private val db: AppDatabase) {
     }
 
     // insert new check list
-    suspend fun insertCheckList(checkList: ReportCheckList) = db.getReportDao().insertCheckList(checkList)
+    suspend fun insertCheckList(checkList: ReportCheckList): Long {
+        return db.getReportDao().insertCheckList(checkList)
+    }
 
     // get report to id
     fun getReportById(id: Int) = db.getReportDao().getReportByID(id)

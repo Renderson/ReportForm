@@ -20,7 +20,7 @@ interface ReportDao {
 
     // used to insert check list
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCheckList(report: ReportCheckList)
+    suspend fun insertCheckList(report: ReportCheckList): Long
 
     // used to update report
     @Update(onConflict = OnConflictStrategy.REPLACE)
