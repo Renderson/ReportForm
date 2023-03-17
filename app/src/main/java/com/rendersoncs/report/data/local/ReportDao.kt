@@ -52,4 +52,7 @@ interface ReportDao {
     @Transaction
     @Query("SELECT * FROM all_reports WHERE id = :id")
     fun getReportWithCheckList(id: String): Flow<List<ReportWithCheckList>>
+
+    @Query("UPDATE all_reports SET concluded = :newConcluded WHERE id = :id")
+    suspend fun updateConcluded(id: Int, newConcluded: Boolean)
 }

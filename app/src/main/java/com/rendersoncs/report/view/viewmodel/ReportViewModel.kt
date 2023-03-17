@@ -102,6 +102,12 @@ class ReportViewModel @Inject constructor(
         }
     }
 
+    fun updateConcluded(concluded: Boolean) = viewModelScope.launch {
+        savedReport.value?.let { id ->
+            repository.updateConcluded(id = id.toInt(), concluded = concluded)
+        }
+    }
+
     fun removeItem(reportItems: ReportItems, databaseReference: DatabaseReference?) = viewModelScope.launch {
         val query = databaseReference!!.orderByChild(ReportConstants.ITEM.KEY)
                 .equalTo(reportItems.key)

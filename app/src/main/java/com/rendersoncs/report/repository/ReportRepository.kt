@@ -38,4 +38,6 @@ class ReportRepository @Inject constructor(private val db: AppDatabase) {
         db.getReportDao().deleteReportByID(id)
         db.getReportDao().deleteCheckListByID(id)
     }
+
+    suspend fun updateConcluded(id: Int, concluded: Boolean) = db.getReportDao().updateConcluded(id, concluded)
 }
