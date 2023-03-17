@@ -9,6 +9,9 @@ import java.util.*
 
 @Entity(tableName = "all_reports")
 data class Report(
+        @PrimaryKey(autoGenerate = true)
+        @ColumnInfo(name = "id")
+        var id: Int = 0,
         @ColumnInfo(name = "company")
         var company: String,
         @ColumnInfo(name = "email")
@@ -21,11 +24,8 @@ data class Report(
         var score: String,
         @ColumnInfo(name = "result")
         var result: String,
-        @ColumnInfo(name = "jsonList")
-        var listJson: String,
-        @PrimaryKey(autoGenerate = true)
-        @ColumnInfo(name = "id")
-        var id: Int = 0,
+        @ColumnInfo(name = "concluded")
+        var concluded: Boolean? = false,
         @ColumnInfo(name = "userId")
         val userId: String
 ): Serializable {

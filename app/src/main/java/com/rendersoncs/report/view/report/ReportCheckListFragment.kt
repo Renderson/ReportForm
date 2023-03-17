@@ -412,7 +412,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 controller = resultController,
                 score = this.contentReport.showScore.text.toString(),
                 result = resultScore,
-                listJson = checkList.toString(),
+                concluded = true,
                 userId = viewModel.userUid.value ?: ""
         )
         viewModel.insertReport(report)

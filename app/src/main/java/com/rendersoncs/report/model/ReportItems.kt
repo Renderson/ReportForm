@@ -11,7 +11,6 @@ class ReportItems {
     var note: String? = null
     var score: String? = null
     var result: String? = null
-    var listJson: String? = null
     var title: String? = null
     var description: String? = null
     var header: String? = null
