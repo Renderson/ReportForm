@@ -44,7 +44,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
 
     private val resumeAdapter by lazy { ReportResumeAdapter(this::detailPhoto) }
 
-    private var uiState: Job? = null
+    //private var uiState: Job? = null
     private val listRadioC = ArrayList<String>()
     private val listRadioNA = ArrayList<String>()
     private val listRadioNC = ArrayList<String>()
@@ -120,8 +120,8 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         viewModel.getReportByID(id)
     }
 
-    private fun observeReport() = lifecycleScope.launchWhenCreated {
-        viewModel.detailState.collect { detailState ->
+    private fun observeReport() {
+        viewModel.detailState.observe(viewLifecycleOwner) { detailState ->
             when (detailState) {
                 DetailState.Loading -> {}
                 is DetailState.Success -> {
@@ -152,7 +152,10 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
             }
         }
         this.editReport.setOnClickListener {
-            toast("Navegar para Edição")
+            val bundle = Bundle().apply {
+                putInt("reportEdit", report.id)
+            }
+            findNavController().navigate(R.id.action_reportResume_to_editReport, bundle)
         }
     }
 
@@ -172,8 +175,8 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     }
 
     private fun observerListResume() {
-        uiState = lifecycleScope.launchWhenCreated {
-            viewModel.resumeList.collect { list ->
+        //uiState = lifecycleScope.launchWhenCreated {
+            viewModel.resumeList.observe(viewLifecycleOwner) { list ->
                 when (list) {
                     is ResumeState.Loading -> {
                     }
@@ -186,7 +189,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
                     }
                 }
             }
-        }
+        //}
     }
 
     private fun initRv() = with(binding) {
@@ -251,7 +254,6 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     @SuppressLint("StringFormatMatches")
     private fun countRadioSelected() = lifecycleScope.launchWhenResumed {
         viewModel.reportResumeItems.observe(viewLifecycleOwner) { report ->
-            println("CHECK LIST ${report.toList()}")
             report.forEach {
                 if (it.conformity == resources.getString(R.string.according)) {
                     listRadioC.add(resources.getString(R.string.according))
@@ -300,7 +302,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     ) == PackageManager.PERMISSION_GRANTED
 
     override fun onDetach() {
-        uiState?.cancel()
+        //uiState?.cancel()
         super.onDetach()
     }
 }

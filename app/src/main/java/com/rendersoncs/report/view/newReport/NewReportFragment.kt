@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentNewReportBinding
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
@@ -24,7 +25,9 @@ import java.util.*
 @AndroidEntryPoint
 class NewReportFragment :
     BaseFragment<FragmentNewReportBinding, ReportViewModel>() {
+
     override val viewModel: ReportViewModel by activityViewModels()
+    private val args: NewReportFragmentArgs by navArgs()
 
     private lateinit var pref: SharedPreferences
     private var uiStateJobName: Job? = null
@@ -38,12 +41,17 @@ class NewReportFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (args.reportEdit != -1) {
+            viewModel.getReportByID(args.reportEdit)
+        }
+
         pref = requireActivity().getSharedPreferences(
             ReportConstants.FIREBASE.FIRE_USERS,
             MODE_PRIVATE
         )
         viewModel.getNameShared(pref)
 
+        setObservers()
         initViews()
         setListener()
     }
@@ -52,6 +60,24 @@ class NewReportFragment :
         inflater: LayoutInflater,
         container: ViewGroup?
     ) = FragmentNewReportBinding.inflate(inflater, container, false)
+
+    private fun setObservers() {
+        viewModel.detailState.observe(viewLifecycleOwner) { detailState ->
+            when (detailState) {
+                DetailState.Loading -> {}
+                is DetailState.Success -> {
+                    binding.addNewReport.companyId.setText(detailState.report.company)
+                    binding.addNewReport.emailId.setText(detailState.report.email)
+                }
+                is DetailState.Error -> {
+                    toast("Error")
+                }
+                DetailState.Empty -> {
+                    findNavController().navigateUp()
+                }
+            }
+        }
+    }
 
     private fun initViews() {
         with(binding.addNewReport) {
@@ -118,15 +144,16 @@ class NewReportFragment :
     private fun setListener() = with(binding) {
         btnNewReport.setOnClickListener {
             binding.addNewReport.apply {
-                val (company, email, date, controller) = getReportContent()
+                val (id, company, email, date, controller) = getReportContent()
                 val reportNew = ReportNew(
+                    id,
                     company,
                     email,
                     date,
                     controller
                 )
                 val bundle = Bundle().apply {
-                    putSerializable("reportNew", reportNew)
+                    putSerializable("report", reportNew)
                 }
                 findNavController().navigate(
                     R.id.action_addNewReportFragment_to_reportActivity, bundle
@@ -136,12 +163,13 @@ class NewReportFragment :
     }
 
     private fun getReportContent(): ReportNew = binding.addNewReport.let {
+        val id = if (args.reportEdit == -1) null else args.reportEdit
         val company = it.companyId.text.toString()
         val email = it.emailId.text.toString()
         val date = it.dateId.text.toString()
         val controller = it.controllerId.text.toString()
 
-        return ReportNew(company, email, date, controller)
+        return ReportNew(id, company, email, date, controller)
     }
 
     override fun onResume() {

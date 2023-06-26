@@ -8,6 +8,7 @@ import android.os.Environment
 import android.util.Pair
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
@@ -36,14 +37,14 @@ class ReportViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
     private val sharePref = SharePrefInfoUser()
 
-    private val _uiState = MutableStateFlow<ViewState>(ViewState.Loading)
-    val uiState: StateFlow<ViewState> = _uiState
+    private val _uiState = SingleLiveEvent<ViewState>()
+    val uiState: LiveData<ViewState> = _uiState
 
-    private val _detailState = MutableStateFlow<DetailState>(DetailState.Loading)
-    val detailState: StateFlow<DetailState> = _detailState
+    private val _detailState = SingleLiveEvent<DetailState>()
+    val detailState: LiveData<DetailState> = _detailState
 
-    private val _resumeList = MutableStateFlow<ResumeState>(ResumeState.Loading)
-    val resumeList: StateFlow<ResumeState> = _resumeList
+    private val _resumeList = SingleLiveEvent<ResumeState>()
+    val resumeList: LiveData<ResumeState> = _resumeList
 
     private var _uiStateScore = MutableStateFlow(10.0F)
     val uiStateScore: StateFlow<Float> = _uiStateScore
@@ -64,19 +65,20 @@ class ReportViewModel @Inject constructor(
     val pdfCreated = MutableLiveData<Boolean>()
 
     var reportResumeItems = SingleLiveEvent<ArrayList<ReportResumeItems>>()
+    var reportItems = SingleLiveEvent<ArrayList<ReportItems>>()
 
     fun getUserUid(user: FirebaseUser?) {
         userUid.value = user?.uid
     }
 
     fun getAllReports() = viewModelScope.launch {
-        repository.getUserWithReport(userUid.value ?: "").collect { result ->
-            if (result.isEmpty()) {
-                _uiState.value = ViewState.Empty
-            } else {
-                result.forEach { data ->
-                    _uiState.value = ViewState.Success(data.reports)
-                }
+        _uiState.value = ViewState.Loading
+        val result = repository.getUserWithReport(userUid.value ?: "")
+        if (result.isEmpty()) {
+            _uiState.value = ViewState.Empty
+        } else {
+            result.forEach { data ->
+                _uiState.value = ViewState.Success(data.reports)
             }
         }
     }
@@ -91,15 +93,12 @@ class ReportViewModel @Inject constructor(
 
     fun deleteReportByID(id: Int) = viewModelScope.launch {
         repository.deleteReportByID(id)
+        getAllReports()
     }
 
     fun getReportByID(id: Int) = viewModelScope.launch {
         _detailState.value = DetailState.Loading
-        repository.getReportById(id).collect { result: Report? ->
-            if (result != null) {
-                _detailState.value = DetailState.Success(result)
-            }
-        }
+        _detailState.value = DetailState.Success(repository.getReportById(id))
     }
 
     fun updateConcluded(concluded: Boolean) = viewModelScope.launch {
@@ -158,17 +157,16 @@ class ReportViewModel @Inject constructor(
     }
 
     fun deletePhotosDirectory(item: Report) = viewModelScope.launch {
-        repository.getReportWithChecklist(item.id.toString()).collect { list ->
-            try {
-                list.forEach { resume ->
-                    resume.checkList.forEach { table ->
-                        val file = File(table.photo)
-                        file.delete()
-                    }
+        val list = repository.getReportWithChecklist(item.id.toString())
+        try {
+            list.forEach { resume ->
+                resume.checkList.forEach { table ->
+                    val file = File(table.photo)
+                    file.delete()
                 }
-            } catch (e: Exception) {
-                FirebaseCrashlytics.getInstance().recordException(e)
             }
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 
@@ -190,7 +188,7 @@ class ReportViewModel @Inject constructor(
                 val name = profile.displayName
                 val photoUri = profile.photoUrl
 
-                if (name == null || name.isEmpty()) {
+                if (name.isNullOrEmpty()) {
                     databaseReference.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             val nameCurrentUser = dataSnapshot.child(ReportConstants.FIREBASE.FIRE_USERS)
@@ -234,36 +232,52 @@ class ReportViewModel @Inject constructor(
     }
 
     fun getListReportResume(report: Report) = viewModelScope.launch {
+        _resumeList.value = ResumeState.Loading
         val repo = ArrayList<ReportResumeItems>()
-        repository.getReportWithChecklist(report.id.toString()).collect { result ->
-            result.forEach { items ->
-                items.checkList.forEach { resume ->
-                    repo.add(createdReportItems(resume))
-                }
+        val result = repository.getReportWithChecklist(report.id.toString())
+        result.forEach { items ->
+            items.checkList.forEach { resume ->
+                repo.add(createdReportItems(resume))
             }
-            _resumeList.value = ResumeState.Success(repo)
-            reportResumeItems.value = repo
         }
+        _resumeList.value = ResumeState.Success(repo)
+        reportResumeItems.value = repo
+    }
+
+    fun getCheckListForEdit(id: Int) = viewModelScope.launch {
+        val checkList = ArrayList<ReportItems>()
+        val result = repository.getReportWithChecklist(id.toString())
+        result.forEach { items ->
+            items.checkList.forEach { resume ->
+                val reportItems = ReportItems()
+                reportItems.key = resume.key
+                reportItems.note = resume.note
+                reportItems.photo = resume.photo
+                reportItems.isOpt1 = resume.conformity == "Conforme"
+                reportItems.isOpt2 = resume.conformity == "Não Aplicável"
+                reportItems.isOpt3 = resume.conformity == "Não Conforme"
+                checkList.add(reportItems)
+            }
+        }
+        reportItems.value = checkList
     }
 
     fun generatePDF(id: Long) = viewModelScope.launch {
         val checkList = ArrayList<ReportResumeItems>()
-        repository.getReportById(id.toInt()).collect { result: Report? ->
-            if (result != null) {
-                repository.getReportWithChecklist(id.toString()).collect { report ->
-                    report.forEach { items ->
-                        items.checkList.forEach { resume ->
-                            checkList.add(createdReportItems(resume))
-                        }
-                    }
-                    pdfCreated.value = PDFGenerator().generatePDF(result, checkList)
-                }
+        val report = repository.getReportById(id.toInt())
+        val result = repository.getReportWithChecklist(id.toString())
+        result.forEach { items ->
+            items.checkList.forEach { resume ->
+                checkList.add(createdReportItems(resume))
             }
         }
+        pdfCreated.value = PDFGenerator().generatePDF(report, checkList)
+
     }
 
     private fun createdReportItems(resume: ReportCheckList): ReportResumeItems {
         return ReportResumeItems(
+            key = resume.key,
             title = resume.title,
             description = resume.description,
             conformity = resume.conformity,

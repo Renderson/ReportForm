@@ -84,6 +84,17 @@
         <action
             android:id="@+id/action_reportResume_to_detailPhotoFragment"
             app:destination="@id/detailPhotoFragment" />
+
+        <action
+            android:id="@+id/action_reportResume_to_editReport"
+            app:destination="@id/addNewReport"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/resumeReport"
+            app:popUpToInclusive="true"/>
+
         <argument
             android:name="reportResume"
             app:argType="com.rendersoncs.report.model.Report"/>
@@ -104,9 +115,13 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/addNewReport"
             app:popUpToInclusive="true" />
-        <argument
+        <!--<argument
             android:name="reportNew"
-            app:argType="com.rendersoncs.report.model.ReportNew" />
+            app:argType="com.rendersoncs.report.model.ReportNew" />-->
+
+        <argument
+            android:name="reportEdit"
+            app:argType="integer" />
     </fragment>
 
     <fragment
@@ -115,7 +130,7 @@
         android:label="@string/label_menu_new_report"
         tools:layout="@layout/fragment_report_check_list">
         <argument
-            android:name="reportNew"
+            android:name="report"
             app:argType="com.rendersoncs.report.model.ReportNew" />
         <action
             android:id="@+id/action_reportActivity_to_dashboardFragment"

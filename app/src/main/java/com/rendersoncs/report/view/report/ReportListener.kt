@@ -1,6 +1,7 @@
 package com.rendersoncs.report.view.report
 
 import com.rendersoncs.report.model.ReportItems
+import java.text.FieldPosition
 
 interface ReportListener {
     /* Click choice radio button*/
@@ -22,5 +23,5 @@ interface ReportListener {
     fun removeItem(reportItems: ReportItems)
 
     /* Click for reset list*/
-    fun resetItem(reportItems: ReportItems)
+    fun resetItem(reportItems: ReportItems, position: Int)
 }

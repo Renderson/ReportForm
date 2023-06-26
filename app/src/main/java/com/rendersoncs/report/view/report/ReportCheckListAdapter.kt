@@ -93,11 +93,11 @@ class ReportCheckListAdapter(
             buttonLayoutArrow.setOnClickListener {
                 onClickButton(expandableLayout, buttonLayoutArrow, position)
             }
-            clickItemsListener(reportItems)
+            clickItemsListener(reportItems, position)
             answersItems(reportItems)
         }
 
-        private fun clickItemsListener(reportItems: ReportItems) {
+        private fun clickItemsListener(reportItems: ReportItems, position: Int) {
             tvTitleList.setOnClickListener {
                 onItemClickedReport!!.updateList(reportItems)
             }
@@ -110,7 +110,7 @@ class ReportCheckListAdapter(
             note.setOnClickListener { onItemClickedReport!!.insertNote(reportItems) }
             takePhoto.setOnClickListener { onItemClickedReport!!.takePhoto(reportItems) }
             resultPhoto.setOnClickListener { onItemClickedReport!!.fullPhoto(reportItems) }
-            resetItem.setOnClickListener { onItemClickedReport!!.resetItem(reportItems) }
+            resetItem.setOnClickListener { onItemClickedReport!!.resetItem(reportItems, position) }
         }
 
         private fun answersItems(reportItems: ReportItems) {

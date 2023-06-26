@@ -7,10 +7,12 @@ import androidx.room.PrimaryKey
 @Entity
 data class ReportCheckList(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "key")
-    var key: Int = 0,
     @ColumnInfo(name = "id")
-    var id: Int,
+    var id: Int = 0,
+    @ColumnInfo(name = "reportId")
+    var reportId: Int,
+    @ColumnInfo(name = "key")
+    var key: String,
     @ColumnInfo(name = "title")
     var title: String = "",
     @ColumnInfo(name = "description")

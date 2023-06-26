@@ -41,14 +41,16 @@ import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
-import org.json.JSONArray
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, ReportViewModel>(), ReportListener {
+
     override val viewModel: ReportViewModel by activityViewModels()
     private val args: ReportCheckListFragmentArgs by navArgs()
+
     private var uiStateJobScore: Job? = null
     private var idStateJob: Job? = null
 
@@ -65,7 +67,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private val listRadio = ArrayList<String?>()
     private val listNotes = ArrayList<String?>()
     private val listPhoto = ArrayList<String?>()
-    private val checkList = JSONArray()
 
     private var mAdapter = ReportCheckListAdapter(reportItems)
     private val jsonListModeOff = DownloadJson()
@@ -90,6 +91,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         NetworkChecker(ContextCompat.getSystemService(requireContext(), ConnectivityManager::class.java))
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activity?.apply {
@@ -125,10 +127,10 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initViews() = with(binding) {
-        this.resultCompany.text = args.reportNew.company
-        this.resultEmail.text = args.reportNew.email
-        this.resultDate.text = args.reportNew.date
-        resultController = args.reportNew.controller
+        this.resultCompany.text = args.report.company
+        this.resultEmail.text = args.report.email
+        this.resultDate.text = args.report.date
+        resultController = args.report.controller
 
         this.contentReport.coordinator.isEnabled = false
 
@@ -167,6 +169,9 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             true
         }
 
+        args.report.id?.let { id ->
+            if (id != -1) viewModel.getCheckListForEdit(id)
+        }
         this.contentReport.progressBar.visibility = View.GONE
     }
 
@@ -247,7 +252,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 dataSnapshot.getValue(ReportItems::class.java)?.let { reportItems.add(it) }
                 val key = dataSnapshot.key
                 mKeys.add(key)
-                mAdapter.notifyDataSetChanged()
+                mAdapter.notifyItemRangeChanged(0, mAdapter.itemCount)
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
@@ -415,53 +420,76 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 concluded = true,
                 userId = viewModel.userUid.value ?: ""
         )
-        viewModel.insertReport(report)
+        if (args.report.id == null) {
+            viewModel.insertReport(report)
+        } else {
+            args.report.id?.let { id ->
+                viewModel.deleteReportByID(id)
+                viewModel.insertReport(report)
+            }
+        }
     }
 
     private fun setObservers() {
         var reportCheckList: ReportCheckList
-        idStateJob = lifecycleScope.launchWhenResumed {
-            viewModel.savedReport.observe(viewLifecycleOwner) { id ->
-                if (id != null) {
-                    reportItems.forEach {
-                        if (it.isOpt1 || it.isOpt2 || it.isOpt3) {
-                            val conformity = when (it.selectedAnswerPosition) {
-                                ReportConstants.ITEM.OPT_NUM1 -> {
-                                    getString(R.string.according)
-                                }
-                                ReportConstants.ITEM.OPT_NUM2 -> {
-                                    getString(R.string.not_applicable)
-                                }
-                                else -> {
-                                    getString(R.string.not_according)
-                                }
+        viewModel.savedReport.observe(viewLifecycleOwner) { reportId ->
+            if (reportId != null) {
+                reportItems.forEach {
+                    if (it.isOpt1 || it.isOpt2 || it.isOpt3) {
+                        val conformity = when (it.selectedAnswerPosition) {
+                            ReportConstants.ITEM.OPT_NUM1 -> {
+                                getString(R.string.according)
                             }
 
-                            reportCheckList = ReportCheckList(
-                                id = id.toInt(),
-                                title = it.title ?: "",
-                                description = it.description ?: "",
-                                note = it.note ?: getString(R.string.label_not_observation),
-                                conformity = conformity,
-                                photo = it.photoPath ?: ReportConstants.PHOTO.NOT_PHOTO
-                            )
-                            viewModel.insertCheckList(reportCheckList)
-                         }
+                            ReportConstants.ITEM.OPT_NUM2 -> {
+                                getString(R.string.not_applicable)
+                            }
+
+                            else -> {
+                                getString(R.string.not_according)
+                            }
+                        }
+
+                        reportCheckList = ReportCheckList(
+                            reportId = reportId.toInt(),
+                            key = it.key ?: "",
+                            title = it.title ?: "",
+                            description = it.description ?: "",
+                            note = it.note ?: getString(R.string.label_not_observation),
+                            conformity = conformity,
+                            photo = it.photoPath ?: ReportConstants.PHOTO.NOT_PHOTO
+                        )
+                        viewModel.insertCheckList(reportCheckList)
                     }
                 }
             }
-            viewModel.savedCheckList.observe(viewLifecycleOwner) {
-                if (it != null) {
-                    viewModel.savedReport.value?.let { reportId ->
-                        viewModel.generatePDF(reportId)
+        }
+        viewModel.savedCheckList.observe(viewLifecycleOwner) {
+            if (it != null) {
+                viewModel.savedReport.value?.let { reportId ->
+                    viewModel.generatePDF(reportId)
+                }
+            }
+        }
+        viewModel.pdfCreated.observe(viewLifecycleOwner) { result ->
+            if (result) {
+                findNavController().navigateUp()
+            }
+        }
+
+        viewModel.reportItems.observe(viewLifecycleOwner) { report ->
+            reportItems.forEach {
+                report.forEach { items ->
+                    if (items.key == it.key) {
+                        it.photoPath = items.photo
+                        it.note = items.note
+                        it.isOpt1 = items.isOpt1
+                        it.isOpt2 = items.isOpt2
+                        it.isOpt3 = items.isOpt3
                     }
                 }
             }
-            viewModel.pdfCreated.observe(viewLifecycleOwner) { result ->
-                if (result) {
-                    findNavController().navigateUp()
-                }
-            }
+            mAdapter.notifyDataSetChanged()
         }
     }
 
@@ -586,14 +614,14 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     }
 
-    override fun resetItem(reportItems: ReportItems) {
+    override fun resetItem(reportItems: ReportItems, position: Int) {
         mAdapter.setImageInItem(reportItems, null)
         mAdapter.insertNote(reportItems, null)
         reportItems.isOpt1 = false
         reportItems.isOpt2 = false
         reportItems.isOpt3 = false
         viewModel.calculateScore(this.reportItems)
-        mAdapter.notifyDataSetChanged()
+        mAdapter.notifyItemChanged(position)
     }
 
     private fun openCamera() {
@@ -654,6 +682,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         this.contentReport.showScore.text = getString(R.string.label_note_value_scroll, score.toString())
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun getReturnNote() =
             findNavController().currentBackStackEntry?.savedStateHandle
                     ?.getLiveData<String>("noteTest")?.observe(viewLifecycleOwner) { result ->

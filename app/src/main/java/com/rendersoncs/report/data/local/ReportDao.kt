@@ -6,7 +6,6 @@ import com.rendersoncs.report.data.local.relations.UserWithReport
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
 import com.rendersoncs.report.model.User
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReportDao {
@@ -30,28 +29,24 @@ interface ReportDao {
     @Delete
     suspend fun deleteReport(report: Report)
 
-    // get all saved report list
-    @Query("SELECT * FROM all_reports ORDER by id DESC")
-    fun getAllReports(): Flow<List<Report>>
-
     // get single report by id
     @Query("SELECT * FROM all_reports WHERE id = :id")
-    fun getReportByID(id: Int): Flow<Report>
+    suspend fun getReportByID(id: Int): Report
 
     // delete report by id
     @Query("DELETE FROM all_reports WHERE id = :id")
     suspend fun deleteReportByID(id: Int)
 
-    @Query("DELETE FROM ReportCheckList WHERE id = :id")
+    @Query("DELETE FROM ReportCheckList WHERE reportId = :id")
     suspend fun deleteCheckListByID(id: Int)
 
     @Transaction
     @Query("SELECT * FROM all_reports WHERE userId = :userId")
-    fun getUserWithReports(userId: String): Flow<List<UserWithReport>>
+    suspend fun getUserWithReports(userId: String): List<UserWithReport>
 
     @Transaction
     @Query("SELECT * FROM all_reports WHERE id = :id")
-    fun getReportWithCheckList(id: String): Flow<List<ReportWithCheckList>>
+    suspend fun getReportWithCheckList(id: String): List<ReportWithCheckList>
 
     @Query("UPDATE all_reports SET concluded = :newConcluded WHERE id = :id")
     suspend fun updateConcluded(id: Int, newConcluded: Boolean)

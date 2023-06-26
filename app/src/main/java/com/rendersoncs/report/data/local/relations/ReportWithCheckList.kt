@@ -9,7 +9,7 @@ data class ReportWithCheckList(
     @Embedded val report: Report,
     @Relation(
         parentColumn = "id",
-        entityColumn = "id"
+        entityColumn = "reportId"
     )
     val checkList: List<ReportCheckList>
 )

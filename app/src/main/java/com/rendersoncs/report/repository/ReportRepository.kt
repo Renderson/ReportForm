@@ -12,13 +12,10 @@ class ReportRepository @Inject constructor(private val db: AppDatabase) {
     suspend fun insertUser(user: User) = db.getReportDao().insertUser(user)
 
     // get all report for userUid
-    fun getUserWithReport(userId: String) = db.getReportDao().getUserWithReports(userId)
+    suspend fun getUserWithReport(userId: String) = db.getReportDao().getUserWithReports(userId)
 
     // get reports with checklist
-    fun getReportWithChecklist(id: String) = db.getReportDao().getReportWithCheckList(id)
-
-    // get all reports
-    fun getAllReports() = db.getReportDao().getAllReports()
+    suspend fun getReportWithChecklist(id: String) = db.getReportDao().getReportWithCheckList(id)
 
     // insert new report
     suspend fun insertReport(report: Report): Long {
@@ -31,7 +28,7 @@ class ReportRepository @Inject constructor(private val db: AppDatabase) {
     }
 
     // get report to id
-    fun getReportById(id: Int) = db.getReportDao().getReportByID(id)
+    suspend fun getReportById(id: Int) = db.getReportDao().getReportByID(id)
 
     // delete report to id
     suspend fun deleteReportByID(id: Int) {

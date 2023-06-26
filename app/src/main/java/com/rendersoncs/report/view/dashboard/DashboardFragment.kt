@@ -72,12 +72,15 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, ReportViewModel
 
     private fun initViews() = with(binding) {
         btnCreateReport.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboardFragment_to_newReportFragment)
+            val bundle = Bundle().apply {
+                putInt("reportEdit", -1)
+            }
+            findNavController().navigate(R.id.action_dashboardFragment_to_newReportFragment, bundle)
         }
     }
 
-    private fun onObserveReport() = lifecycleScope.launchWhenStarted {
-        viewModel.uiState.collect { uiState ->
+    private fun onObserveReport() {
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
                 is ViewState.Loading -> {
                 }
