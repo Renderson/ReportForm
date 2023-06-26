@@ -4,6 +4,7 @@ import android.os.Environment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.database.core.Repo;
 import com.rendersoncs.report.model.ReportItems;
 import com.rendersoncs.report.view.login.util.User;
 import com.rendersoncs.report.infrastructure.constants.ReportConstants;
@@ -31,10 +32,12 @@ public class DownloadJson {
                 String dynamicKey = iterator.next();
                 JSONObject jsKeys = js.getJSONObject(dynamicKey);
 
+                String itemKey = jsKeys.getString(ReportConstants.ITEM.KEY);
                 String itemTitle = jsKeys.getString(ReportConstants.ITEM.TITLE);
                 String itemDescription = jsKeys.getString(ReportConstants.ITEM.DESCRIPTION);
 
                 ReportItems reportItems = new ReportItems();
+                reportItems.setKey(itemKey);
                 reportItems.setTitle(itemTitle);
                 reportItems.setDescription(itemDescription);
                 reportItemsList.add(reportItems);

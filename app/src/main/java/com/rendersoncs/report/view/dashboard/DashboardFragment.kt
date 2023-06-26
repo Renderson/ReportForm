@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.component1
 import androidx.core.util.component2
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rendersoncs.report.R

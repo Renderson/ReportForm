@@ -52,7 +52,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private val args: ReportCheckListFragmentArgs by navArgs()
 
     private var uiStateJobScore: Job? = null
-    private var idStateJob: Job? = null
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var resultScore: String
@@ -169,9 +168,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             true
         }
 
-        args.report.id?.let { id ->
-            if (id != -1) viewModel.getCheckListForEdit(id)
-        }
         this.contentReport.progressBar.visibility = View.GONE
     }
 
@@ -253,6 +249,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 val key = dataSnapshot.key
                 mKeys.add(key)
                 mAdapter.notifyItemRangeChanged(0, mAdapter.itemCount)
+                checkIfUpdateReport()
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
@@ -282,12 +279,19 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         })
     }
 
+    private fun checkIfUpdateReport() {
+        args.report.id?.let { id ->
+            if (id != -1) viewModel.getCheckListForEdit(id)
+        }
+    }
+
     private fun checkListLocal() {
         //this.contentReport.progressBar.visibility = View.GONE
         //this.contentReport.fabNewItem.visibility = View.GONE
         //action_add_item.visibility = View.GONE
         jsonListModeOff.addItemsFromJsonList(reportItems)
-        mAdapter.notifyDataSetChanged()
+        mAdapter.notifyItemRangeChanged(0, mAdapter.itemCount)
+        checkIfUpdateReport()
     }
 
     // Menu
@@ -692,14 +696,10 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     override fun onDetach() {
         uiStateJobScore?.cancel()
-        idStateJob?.cancel()
 
         activity?.apply {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-        viewModel.savedReport.postValue(null)
-        viewModel.savedCheckList.postValue(null)
-        viewModel.pdfCreated.postValue(false)
         super.onDetach()
     }
 

@@ -33,18 +33,17 @@ import com.rendersoncs.report.model.ReportResumeItems
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
 import java.util.*
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportViewModel>() {
+
     override val viewModel: ReportViewModel by activityViewModels()
     private val args: ReportResumeFragmentArgs by navArgs()
 
     private val resumeAdapter by lazy { ReportResumeAdapter(this::detailPhoto) }
 
-    //private var uiState: Job? = null
     private val listRadioC = ArrayList<String>()
     private val listRadioNA = ArrayList<String>()
     private val listRadioNC = ArrayList<String>()
@@ -175,21 +174,21 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     }
 
     private fun observerListResume() {
-        //uiState = lifecycleScope.launchWhenCreated {
-            viewModel.resumeList.observe(viewLifecycleOwner) { list ->
-                when (list) {
-                    is ResumeState.Loading -> {
-                    }
-                    is ResumeState.Success -> {
-                        resumeAdapter.differ.submitList(list.report)
-                        initRv()
-                    }
-                    is ResumeState.Error -> {
-                        toast("Error")
-                    }
+        viewModel.resumeList.observe(viewLifecycleOwner) { list ->
+            when (list) {
+                is ResumeState.Loading -> {
+                }
+
+                is ResumeState.Success -> {
+                    resumeAdapter.differ.submitList(list.report)
+                    initRv()
+                }
+
+                is ResumeState.Error -> {
+                    toast("Error")
                 }
             }
-        //}
+        }
     }
 
     private fun initRv() = with(binding) {
@@ -300,9 +299,4 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
             requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE
     ) == PackageManager.PERMISSION_GRANTED
-
-    override fun onDetach() {
-        //uiState?.cancel()
-        super.onDetach()
-    }
 }

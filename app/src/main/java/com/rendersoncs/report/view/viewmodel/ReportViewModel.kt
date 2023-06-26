@@ -60,9 +60,9 @@ class ReportViewModel @Inject constructor(
 
     var userUid = MutableLiveData("")
 
-    var savedReport = MutableLiveData<Long>()
-    var savedCheckList = MutableLiveData<Long>()
-    val pdfCreated = MutableLiveData<Boolean>()
+    var savedReport = SingleLiveEvent<Long>()
+    var savedCheckList = SingleLiveEvent<Long>()
+    val pdfCreated = SingleLiveEvent<Boolean>()
 
     var reportResumeItems = SingleLiveEvent<ArrayList<ReportResumeItems>>()
     var reportItems = SingleLiveEvent<ArrayList<ReportItems>>()
