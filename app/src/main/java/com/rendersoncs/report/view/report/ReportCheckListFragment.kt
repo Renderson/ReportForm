@@ -441,25 +441,16 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 reportItems.forEach {
                     if (it.isOpt1 || it.isOpt2 || it.isOpt3) {
                         val conformity = when (it.selectedAnswerPosition) {
-                            ReportConstants.ITEM.OPT_NUM1 -> {
-                                getString(R.string.according)
-                            }
-
-                            ReportConstants.ITEM.OPT_NUM2 -> {
-                                getString(R.string.not_applicable)
-                            }
-
-                            else -> {
-                                getString(R.string.not_according)
-                            }
+                            ReportConstants.ITEM.OPT_NUM1 -> { ReportConstants.ITEM.OPT_NUM1 }
+                            ReportConstants.ITEM.OPT_NUM2 -> { ReportConstants.ITEM.OPT_NUM2 }
+                            else -> { ReportConstants.ITEM.OPT_NUM3 }
                         }
-
                         reportCheckList = ReportCheckList(
                             reportId = reportId.toInt(),
                             key = it.key ?: "",
                             title = it.title ?: "",
                             description = it.description ?: "",
-                            note = it.note ?: getString(R.string.label_not_observation),
+                            note = it.note ?: "",
                             conformity = conformity,
                             photo = it.photoPath ?: ReportConstants.PHOTO.NOT_PHOTO
                         )
@@ -481,15 +472,17 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             }
         }
 
-        viewModel.reportItems.observe(viewLifecycleOwner) { report ->
-            reportItems.forEach {
+        viewModel.reportItemsUpdate.observe(viewLifecycleOwner) { report ->
+            reportItems.forEach { reportItems ->
                 report.forEach { items ->
-                    if (items.key == it.key) {
-                        it.photoPath = items.photo
-                        it.note = items.note
-                        it.isOpt1 = items.isOpt1
-                        it.isOpt2 = items.isOpt2
-                        it.isOpt3 = items.isOpt3
+                    if (items.key == reportItems.key) {
+                        reportItems.photoPath = items.photo
+                        reportItems.note = items.note
+                        when (items.selectedAnswerPosition) {
+                            1 -> radioItemChecked(reportItems, 1)
+                            2 -> radioItemChecked(reportItems, 2)
+                            3 -> radioItemChecked(reportItems, 3)
+                        }
                     }
                 }
             }

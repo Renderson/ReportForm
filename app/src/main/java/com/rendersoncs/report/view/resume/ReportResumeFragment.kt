@@ -254,17 +254,14 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     private fun countRadioSelected() = lifecycleScope.launchWhenResumed {
         viewModel.reportResumeItems.observe(viewLifecycleOwner) { report ->
             report.forEach {
-                if (it.conformity == resources.getString(R.string.according)) {
+                if (it.conformity == 1) {
                     listRadioC.add(resources.getString(R.string.according))
-                    println(it.conformity)
                 }
-                if (it.conformity == resources.getString(R.string.not_applicable)) {
+                if (it.conformity == 2) {
                     listRadioNA.add(resources.getString(R.string.not_applicable))
-                    println(it.conformity)
                 }
-                if (it.conformity == resources.getString(R.string.not_according)) {
+                if (it.conformity == 3) {
                     listRadioNC.add(resources.getString(R.string.not_according))
-                    println(it.conformity)
                 }
             }
             val maxList = report.size

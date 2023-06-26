@@ -46,6 +46,12 @@ class ReportViewModel @Inject constructor(
     private val _resumeList = SingleLiveEvent<ResumeState>()
     val resumeList: LiveData<ResumeState> = _resumeList
 
+    private var _reportResumeItems = SingleLiveEvent<ArrayList<ReportResumeItems>>()
+    var reportResumeItems: LiveData<ArrayList<ReportResumeItems>> = _reportResumeItems
+
+    private var _reportItemsUpdate = SingleLiveEvent<ArrayList<ReportItems>>()
+    var reportItemsUpdate: LiveData<ArrayList<ReportItems>> = _reportItemsUpdate
+
     private var _uiStateScore = MutableStateFlow(10.0F)
     val uiStateScore: StateFlow<Float> = _uiStateScore
 
@@ -63,9 +69,6 @@ class ReportViewModel @Inject constructor(
     var savedReport = SingleLiveEvent<Long>()
     var savedCheckList = SingleLiveEvent<Long>()
     val pdfCreated = SingleLiveEvent<Boolean>()
-
-    var reportResumeItems = SingleLiveEvent<ArrayList<ReportResumeItems>>()
-    var reportItems = SingleLiveEvent<ArrayList<ReportItems>>()
 
     fun getUserUid(user: FirebaseUser?) {
         userUid.value = user?.uid
@@ -241,7 +244,7 @@ class ReportViewModel @Inject constructor(
             }
         }
         _resumeList.value = ResumeState.Success(repo)
-        reportResumeItems.value = repo
+        _reportResumeItems.value = repo
     }
 
     fun getCheckListForEdit(id: Int) = viewModelScope.launch {
@@ -253,13 +256,11 @@ class ReportViewModel @Inject constructor(
                 reportItems.key = resume.key
                 reportItems.note = resume.note
                 reportItems.photo = resume.photo
-                reportItems.isOpt1 = resume.conformity == "Conforme"
-                reportItems.isOpt2 = resume.conformity == "Não Aplicável"
-                reportItems.isOpt3 = resume.conformity == "Não Conforme"
+                reportItems.selectedAnswerPosition = resume.conformity
                 checkList.add(reportItems)
             }
         }
-        reportItems.value = checkList
+        _reportItemsUpdate.value = checkList
     }
 
     fun generatePDF(id: Long) = viewModelScope.launch {

@@ -22,5 +22,5 @@ data class ReportCheckList(
     @ColumnInfo(name = "photo")
     var photo: String = "",
     @ColumnInfo(name = "conformity")
-    var conformity: String = ""
+    var conformity: Int = 0
 )

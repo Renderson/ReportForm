@@ -270,8 +270,12 @@ class PDFGenerator {
             data.forEach { report ->
                 title = report.title
                 description = report.description
-                notes = report.note
-                radio = report.conformity
+                notes = report.note.ifEmpty { context.getString(R.string.label_not_observation) }
+                radio = when (report.conformity) {
+                    1 -> { context.getString(R.string.according) }
+                    2 -> { context.getString(R.string.not_applicable) }
+                    else -> context.getString(R.string.not_according)
+                }
                 photo = report.photo
 
                 val image: Image = setImagePDF(context, photo)

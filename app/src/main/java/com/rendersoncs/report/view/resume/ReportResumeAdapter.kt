@@ -29,8 +29,14 @@ class ReportResumeAdapter(private val onClickItem: (ReportResumeItems) -> Unit) 
 
         holder.resumeTitle.text = resumeItems.title
         holder.resumeDescription.text = resumeItems.description
-        holder.resumeConformity.text = resumeItems.conformity
-        holder.resumeNote.text = resumeItems.note
+        holder.resumeConformity.text = when (resumeItems.conformity) {
+            1 -> { holder.resumeConformity.context.getString(R.string.according) }
+            2 -> { holder.resumeConformity.context.getString(R.string.not_applicable) }
+            else -> holder.resumeConformity.context.getString(R.string.not_according)
+        }
+        holder.resumeNote.text = resumeItems.note.ifEmpty {
+            holder.resumeNote.context.getString(R.string.label_not_observation)
+        }
 
         holder.resumePhoto.setOnClickListener {
             onClickItem.invoke(resumeItems)
