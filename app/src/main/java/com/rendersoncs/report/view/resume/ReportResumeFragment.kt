@@ -25,6 +25,7 @@ import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentReportResumeBinding
 import com.rendersoncs.report.infrastructure.constants.ReportConstants
 import com.rendersoncs.report.infrastructure.extension.StringExtension
+import com.rendersoncs.report.infrastructure.util.CommonDialog
 import com.rendersoncs.report.infrastructure.util.DetailState
 import com.rendersoncs.report.infrastructure.util.ResumeState
 import com.rendersoncs.report.model.Report
@@ -106,12 +107,24 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     }
 
     private fun deleteReport() {
-        viewModel.deletePhotosDirectory(report)
+        CommonDialog(requireContext()).showDialog(
+            title = getString(R.string.alert_remove_report),
+            description = getString(R.string.alert_remove_report_text),
+            buttonConfirm = getString(R.string.confirm),
+            buttonCancel = getString(R.string.cancel),
+            confirmListener = {
+                viewModel.deletePhotosDirectory(report)
 
-        val (subject, uri) = viewModel.getDocument(report)
-        activity?.contentResolver?.delete(uri, subject, null)
+                val (subject, uri) = viewModel.getDocument(report)
+                activity?.contentResolver?.delete(uri, subject, null)
 
-        viewModel.deleteReportByID(report.id)
+                viewModel.deleteReportByID(report.id)
+                navigateUp()
+            }
+        )
+    }
+
+    private fun navigateUp() {
         findNavController().navigateUp()
     }
 

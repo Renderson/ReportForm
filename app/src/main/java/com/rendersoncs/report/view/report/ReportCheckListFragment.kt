@@ -73,7 +73,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private val snackBarHelper = SnackBarHelper()
     private val checkAnswerList = ReportCheckAnswer()
     private var dialog: AlertDialog? = null
-    private val alertDialog = AlertDialogUtil()
+    private var clear = false
 
     private var databaseReference: DatabaseReference? = null
     private val user = User()
@@ -248,7 +248,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 dataSnapshot.getValue(ReportItems::class.java)?.let { reportItems.add(it) }
                 val key = dataSnapshot.key
                 mKeys.add(key)
-                mAdapter.notifyItemRangeChanged(0, mAdapter.itemCount)
+                mAdapter.notifyDataSetChanged()
                 checkIfUpdateReport()
             }
 
@@ -281,7 +281,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     private fun checkIfUpdateReport() {
         args.report.id?.let { id ->
-            if (id != -1) viewModel.getCheckListForEdit(id)
+            if (id != -1 && clear.not()) viewModel.getCheckListForEdit(id)
         }
     }
 
@@ -290,7 +290,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         //this.contentReport.fabNewItem.visibility = View.GONE
         //action_add_item.visibility = View.GONE
         jsonListModeOff.addItemsFromJsonList(reportItems)
-        mAdapter.notifyItemRangeChanged(0, mAdapter.itemCount)
+        mAdapter.notifyDataSetChanged()
         checkIfUpdateReport()
     }
 
@@ -319,21 +319,22 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_search -> return true
-            R.id.save -> {
-                checkListToSave()
-            }
+            R.id.save -> { checkListToSave() }
             R.id.close -> closeReport()
             R.id.clear -> {
                 checkAnswers()
                 if (listRadio.isEmpty()) {
                     snackBarHelper.showSnackBar(requireActivity(), R.id.fab_new_item, R.string.label_empty_list)
                 } else {
-                    alertDialog.showDialog(requireActivity(),
-                            resources.getString(R.string.alert_clear_list),
-                            resources.getString(R.string.alert_clear_list_text),
-                            resources.getString(R.string.confirm),
-                            { _: DialogInterface?, _: Int -> clearCheckList() },
-                            resources.getString(R.string.cancel), null, false)
+                    CommonDialog(requireContext()).showDialog(
+                        title = getString(R.string.alert_clear_list),
+                        description = getString(R.string.alert_clear_list_text),
+                        buttonConfirm = getString(R.string.confirm),
+                        buttonCancel = getString(R.string.cancel),
+                        confirmListener = {
+                            clearCheckList()
+                        }
+                    )
                 }
             }
         }
@@ -344,26 +345,24 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         checkAnswers()
         when {
             listPhoto.isEmpty() -> {
-                alertDialog.showDialog(
-                    requireActivity(),
-                    resources.getString(R.string.alert_empty_report),
-                    resources.getString(R.string.alert_empty_report_text),
-                    resources.getString(R.string.back),
-                    { _: DialogInterface?, _: Int -> },
-                    null, null, false
+                CommonDialog(requireContext()).showDialog(
+                    title = getString(R.string.alert_empty_report),
+                    description = getString(R.string.alert_empty_report_text),
+                    buttonConfirm = getString(R.string.back),
+                    confirmListener = {
+                        clearList()
+                    }
                 )
-                clearList()
             }
             listRadio.size > listPhoto.size -> {
-                alertDialog.showDialog(
-                    requireActivity(),
-                    resources.getString(R.string.alert_check_list),
-                    resources.getString(R.string.alert_check_list_text),
-                    resources.getString(R.string.back),
-                    { _: DialogInterface?, _: Int -> },
-                    null, null, false
+                CommonDialog(requireContext()).showDialog(
+                    title = getString(R.string.alert_check_list),
+                    description = getString(R.string.alert_check_list_text),
+                    buttonConfirm = getString(R.string.back),
+                    confirmListener = {
+                        clearList()
+                    }
                 )
-                clearList()
             }
             else -> {
                 checkPermission(REQUEST_SAVE)
@@ -403,18 +402,21 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     private fun showScoreAndSave() = with(binding) {
-        alertDialog.showDialogScore(requireActivity(),
-                resources.getString(R.string.alert_punctuation),
-                resources.getString(R.string.alert_punctuation_label1, resultScore) + " " +
-                        listRadio.size + " " +
-                        resources.getString(R.string.alert_punctuation_label2, this.score.text.toString()),
-                resources.getString(R.string.confirm),
-                { _: DialogInterface?, _: Int -> saveReport() },
-                resources.getString(R.string.cancel), { _: DialogInterface?, _: Int -> clearList() }, false)
+        CommonDialog(requireContext()).showDialog(
+            title = getString(R.string.alert_punctuation),
+            description = getString(R.string.alert_punctuation_label1, resultScore) + " " +
+                    listRadio.size + " " + getString(R.string.alert_punctuation_label2, this.score.text.toString()),
+            buttonConfirm = getString(R.string.confirm),
+            buttonCancel = getString(R.string.cancel),
+            confirmListener = {
+                saveReport()
+            }
+        )
     }
 
-    private fun saveReport() = with(binding) {
-        val report = Report(
+    private fun saveReport() {
+        binding.apply {
+            val report = Report(
                 company = resultCompany.text.toString(),
                 email = resultEmail.text.toString(),
                 date = resultDate.text.toString(),
@@ -423,13 +425,14 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 result = resultScore,
                 concluded = true,
                 userId = viewModel.userUid.value ?: ""
-        )
-        if (args.report.id == null) {
-            viewModel.insertReport(report)
-        } else {
-            args.report.id?.let { id ->
-                viewModel.deleteReportByID(id)
+            )
+            if (args.report.id == null) {
                 viewModel.insertReport(report)
+            } else {
+                args.report.id?.let { id ->
+                    viewModel.deleteReportByID(id)
+                    viewModel.insertReport(report)
+                }
             }
         }
     }
@@ -491,15 +494,16 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     private fun closeReport() {
-        alertDialog.showDialog(requireActivity(),
-                resources.getString(R.string.alert_leave_the_report),
-                resources.getString(R.string.alert_leave_the_report_text),
-                resources.getString(R.string.confirm),
-                { _: DialogInterface?, _: Int ->
-                    closeMethods()
-                    findNavController().navigateUp()
-                },
-                resources.getString(R.string.cancel), null, false)
+        CommonDialog(requireContext()).showDialog(
+            title = getString(R.string.alert_leave_the_report),
+            description = getString(R.string.alert_leave_the_report_text),
+            buttonConfirm = getString(R.string.confirm),
+            buttonCancel = getString(R.string.cancel),
+            confirmListener = {
+                closeMethods()
+                navigateUp()
+            }
+        )
     }
 
     private fun closeMethods() {
@@ -507,10 +511,15 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             databaseReference = LibraryClass.closeFireBase()
     }
 
+    private fun navigateUp() {
+        findNavController().navigateUp()
+    }
+
     // Clear every Lists and reload Adapter
     private fun clearCheckList() = with(binding) {
         reportItems.clear()
         viewModel.calculateScore(reportItems)
+        clear = true
         clearList()
         loadCheckList()
         snackBarHelper.showSnackBar(requireActivity(), R.id.fab_new_item, R.string.label_empty_list)
@@ -600,15 +609,19 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     override fun removeItem(reportItems: ReportItems) {
-        alertDialog.showDialog(requireActivity(),
-                resources.getString(R.string.remove),
-                resources.getString(R.string.label_remove_item_list),
-                resources.getString(R.string.confirm),
-                { _: DialogInterface?, _: Int ->
-                    viewModel.removeItem(reportItems, databaseReference)
-                },
-                resources.getString(R.string.cancel), null, false)
+        CommonDialog(requireContext()).showDialog(
+            title = getString(R.string.alert_remove_report),
+            description = getString(R.string.label_remove_item_list),
+            buttonConfirm = getString(R.string.confirm),
+            buttonCancel = getString(R.string.cancel),
+            confirmListener = {
+                postRemoveItem(reportItems)
+            }
+        )
+    }
 
+    private fun postRemoveItem(reportItems: ReportItems) {
+        viewModel.removeItem(reportItems, databaseReference)
     }
 
     override fun resetItem(reportItems: ReportItems, position: Int) {
@@ -647,28 +660,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         }
     }
 
-    private fun isStoragePermissionGranted(): Boolean = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED
-
-    override fun onResume() {
-        super.onResume()
-        getResultScore()
-        keyboardCloseTouchListener(recyclerView)
-
-        getReturnNote()
-        findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("noteTest")
-    }
-
-    private fun getResultScore() {
-        uiStateJobScore = lifecycleScope.launchWhenResumed {
-            viewModel.uiStateScore.collect { score ->
-                showScore(score)
-            }
-        }
-    }
-
     private fun showScore(score: Float)  = with(binding) {
         resultScore = if (score >= 5.0) {
             getString(R.string.according).uppercase(Locale.ROOT)
@@ -686,6 +677,28 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                         reportPosition.note = result
                         mAdapter.notifyDataSetChanged()
                     }
+
+    private fun getResultScore() {
+        uiStateJobScore = lifecycleScope.launchWhenResumed {
+            viewModel.uiStateScore.collect { score ->
+                showScore(score)
+            }
+        }
+    }
+
+    private fun isStoragePermissionGranted(): Boolean = ContextCompat.checkSelfPermission(
+        requireContext(),
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    ) == PackageManager.PERMISSION_GRANTED
+
+    override fun onResume() {
+        super.onResume()
+        getResultScore()
+        keyboardCloseTouchListener(recyclerView)
+
+        getReturnNote()
+        findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("noteTest")
+    }
 
     override fun onDetach() {
         uiStateJobScore?.cancel()
