@@ -8,6 +8,7 @@
     <dimen name="margin_16">16dp</dimen>
     <dimen name="margin_18">18dp</dimen>
     <dimen name="margin_32">32dp</dimen>
+    <dimen name="margin_36">32dp</dimen>
 
     <dimen name="cornerRadius_4">4dp</dimen>
     <dimen name="cornerRadius_2">2dp</dimen>
