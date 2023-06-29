@@ -143,6 +143,7 @@ class NewReportFragment :
 
     private fun setListener() = with(binding) {
         btnNewReport.setOnClickListener {
+            hideKeyboard()
             binding.addNewReport.apply {
                 val (id, company, email, date, controller) = getReportContent()
                 val reportNew = ReportNew(
