@@ -179,6 +179,7 @@
     <string name="alert_check_list">Check List!</string>
     <string name="alert_check_list_text">No Compliant item that does not contain photo, check before saving! Item marked as Compliant and Not Applicable, does not fit this rule!</string>
     <string name="alert_remove_report">Remove report!</string>
+    <string name="alert_remove_item_title">Remove item!</string>
     <string name="alert_remove_report_text">DDo you really want to remove the report?</string>
     <string name="alert_empty_report">Empty report!</string>
     <string name="alert_empty_report_text">To save your report, you must have at least one item checked.</string>

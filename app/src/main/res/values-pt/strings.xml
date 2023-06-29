@@ -179,6 +179,7 @@
     <string name="alert_check_list">Verificar Lista!</string>
     <string name="alert_check_list_text">Há item Não Conforme que não contém a foto, verifique antes de salvar! Item marcado como Conforme e Não Aplicavél, não entra nessa regra!</string>
     <string name="alert_remove_report">Remover relatório!</string>
+    <string name="alert_remove_item_title">Remover item!</string>
     <string name="alert_remove_report_text">Deseja realmente remover o relatório?</string>
     <string name="alert_empty_report">Relátorio vazio!</string>
     <string name="alert_empty_report_text">Para salvar seu relatório, você deve ter pelo menos um item marcado.</string>

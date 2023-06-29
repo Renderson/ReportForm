@@ -179,6 +179,7 @@
     <string name="alert_check_list">Lista de verificación!</string>
     <string name="alert_check_list_text">Ningún artículo compatible que no contenga foto, verifique antes de guardar! El artículo marcado como Cumple y No Aplicable no cumple con esta regla!</string>
     <string name="alert_remove_report">Eliminar informe!</string>
+    <string name="alert_remove_item_title">Remover el artículo!</string>
     <string name="alert_remove_report_text">Realmente quieres eliminar el informe?</string>
     <string name="alert_empty_report">Informe vacío!</string>
     <string name="alert_empty_report_text">Para guardar su informe, debe tener al menos un elemento marcado.</string>
