@@ -1,5 +1,6 @@
 package com.rendersoncs.report.infrastructure.util
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.text.Editable
@@ -7,9 +8,11 @@ import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
 import android.view.ViewStub
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import androidx.databinding.ViewStubProxy
+import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputEditText
 import com.rendersoncs.report.R
 import java.text.SimpleDateFormat
@@ -88,4 +91,13 @@ fun isValidateEmail(s: String): Boolean {
     val email = s.trim { it <= ' ' }
     validEmail = Patterns.EMAIL_ADDRESS.matcher(email).matches()
     return validEmail
+}
+
+fun Fragment.hideKeyboard() {
+    view?.let { activity?.hideKeyboard(it) }
+}
+
+fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
