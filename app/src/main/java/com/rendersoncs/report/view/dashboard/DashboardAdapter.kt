@@ -8,14 +8,14 @@ import com.rendersoncs.report.databinding.ItemMainListBinding
 import com.rendersoncs.report.infrastructure.util.ItemCallBack
 import com.rendersoncs.report.model.Report
 
-class DashboardAdapter(private var listener: DashboardListener) :
+class DashboardAdapter(private var listener: (Report) -> Unit) :
         RecyclerView.Adapter<DashboardViewHolder>() {
 
     val differ = AsyncListDiffer(this, ItemCallBack<Report>())
 
     override fun onCreateViewHolder(parent: ViewGroup, i: Int): DashboardViewHolder {
         val binding = ItemMainListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DashboardViewHolder(binding, parent.context)
+        return DashboardViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: DashboardViewHolder, position: Int) {

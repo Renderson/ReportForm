@@ -76,7 +76,7 @@
             card_view:layout_constraintStart_toStartOf="@+id/dateView"
             card_view:layout_constraintTop_toBottomOf="@+id/dateView" />
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/overflow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             android:src="@drawable/ic_action_dots"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent" />
+            card_view:layout_constraintTop_toTopOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
