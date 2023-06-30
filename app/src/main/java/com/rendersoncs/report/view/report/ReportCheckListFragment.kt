@@ -3,7 +3,6 @@ package com.rendersoncs.report.view.report
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -12,7 +11,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -72,7 +70,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     private val snackBarHelper = SnackBarHelper()
     private val checkAnswerList = ReportCheckAnswer()
-    private var dialog: AlertDialog? = null
     private var clear = false
 
     private var databaseReference: DatabaseReference? = null
@@ -547,23 +544,14 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     override fun takePhoto(reportItems: ReportItems) {
         reportPosition = reportItems
-        val items = arrayOf(
-                getString(R.string.msg_take_image),
-                getString(R.string.msg_select_from_gallery)
-        )
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setItems(items) { _: DialogInterface?, i: Int ->
-            if (i == 0) {
+        CommonBottomSheet(requireContext()).showBottomSheet(
+            cameraListener = {
                 openCamera()
-                dialog!!.dismiss()
-            } else {
+            },
+            galleryListener = {
                 checkPermission(REQUEST_GALLERY)
-                //openGallery.launch("image/*")
-                dialog!!.dismiss()
             }
-        }
-        dialog = builder.create()
-        dialog!!.show()
+        )
     }
 
     override fun fullPhoto(reportItems: ReportItems) {
