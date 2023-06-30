@@ -194,7 +194,7 @@
             app:argType="string" />
     </fragment>
 
-    <include app:graph="@navigation/nav_graph"/>
+    <include app:graph="@navigation/navigation_camera_graph"/>
 
     <fragment
         android:id="@+id/updatePassword"

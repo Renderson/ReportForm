@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2020 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +13,16 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/permissions_fragment">
 
     <fragment
         android:id="@+id/permissions_fragment"
         android:name="com.rendersoncs.report.view.cameraX.fragments.PermissionsFragment"
-        android:label="PermissionsFragment" >
+        android:label="PermissionsFragment">
 
         <action
             android:id="@+id/action_permissions_to_camera"
@@ -36,7 +35,8 @@
     <fragment
         android:id="@+id/camera_fragment"
         android:name="com.rendersoncs.report.view.cameraX.fragments.CameraFragment"
-        android:label="CameraFragment" >
+        android:label="CameraFragment"
+        tools:layout="@layout/fragment_camera">
 
         <action
             android:id="@+id/action_camera_to_gallery"
@@ -46,14 +46,15 @@
             android:id="@+id/action_camera_to_permissions"
             app:destination="@id/permissions_fragment"
             app:popUpTo="@id/camera_fragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
 
     </fragment>
 
     <fragment
         android:id="@+id/gallery_fragment"
         android:name="com.rendersoncs.report.view.cameraX.fragments.GalleryFragment"
-        android:label="GalleryFragment" >
+        android:label="GalleryFragment"
+        tools:layout="@layout/fragment_gallery">
         <argument
             android:name="root_directory"
             app:argType="string" />
