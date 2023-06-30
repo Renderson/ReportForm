@@ -7,8 +7,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -30,8 +28,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.FirebaseStorage
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentSignUpBinding
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import com.rendersoncs.report.infrastructure.util.*
+import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.*
 import com.rendersoncs.report.view.base.BaseFragment
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User

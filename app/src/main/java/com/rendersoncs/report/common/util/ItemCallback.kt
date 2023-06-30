@@ -1,4 +1,4 @@
-package com.rendersoncs.report.infrastructure.util
+package com.rendersoncs.report.common.util
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil

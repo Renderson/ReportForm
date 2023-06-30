@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-import com.rendersoncs.report.infrastructure.util.SnackBarHelper;
+import com.rendersoncs.report.common.util.SnackBarHelper;
 
 abstract public class CommonActivity extends AppCompatActivity {
 

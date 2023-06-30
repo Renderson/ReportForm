@@ -27,9 +27,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.*
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentReportCheckListBinding
-import com.rendersoncs.report.infrastructure.animated.animatedView
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import com.rendersoncs.report.infrastructure.util.*
+import com.rendersoncs.report.common.animated.animatedView
+import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.*
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
 import com.rendersoncs.report.model.ReportDetailPhoto

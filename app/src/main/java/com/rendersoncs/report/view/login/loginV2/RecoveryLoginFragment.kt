@@ -15,7 +15,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentRecoveryLoginBinding
-import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
+import com.rendersoncs.report.common.util.closeVirtualKeyBoard
 import com.rendersoncs.report.view.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 

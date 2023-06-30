@@ -1,4 +1,4 @@
-package com.rendersoncs.report.infrastructure.util
+package com.rendersoncs.report.common.util
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -7,14 +7,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
-import android.view.ViewStub
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputEditText
-import com.rendersoncs.report.R
 import java.text.SimpleDateFormat
 import java.util.*
 

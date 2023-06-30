@@ -1,13 +1,12 @@
-package com.rendersoncs.report.infrastructure.util;
+package com.rendersoncs.report.common.util;
 
 import android.os.Environment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.google.firebase.database.core.Repo;
 import com.rendersoncs.report.model.ReportItems;
 import com.rendersoncs.report.view.login.util.User;
-import com.rendersoncs.report.infrastructure.constants.ReportConstants;
+import com.rendersoncs.report.common.constants.ReportConstants;
 
 import org.json.JSONException;
 import org.json.JSONObject;

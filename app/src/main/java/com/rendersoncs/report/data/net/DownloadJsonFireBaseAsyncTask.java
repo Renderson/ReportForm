@@ -7,7 +7,7 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.rendersoncs.report.view.login.util.User;
-import com.rendersoncs.report.infrastructure.constants.ReportConstants;
+import com.rendersoncs.report.common.constants.ReportConstants;
 
 import java.io.BufferedReader;
 import java.io.File;

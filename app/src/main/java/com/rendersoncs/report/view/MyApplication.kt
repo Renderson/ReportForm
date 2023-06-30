@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import com.rendersoncs.report.common.constants.ReportConstants
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

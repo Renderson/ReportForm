@@ -26,8 +26,8 @@ import com.google.firebase.database.DatabaseReference
 import com.rendersoncs.report.R
 import com.rendersoncs.report.data.local.AppDatabase
 import com.rendersoncs.report.databinding.ActivityMainBinding
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import com.rendersoncs.report.infrastructure.util.viewModelFactory
+import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.viewModelFactory
 import com.rendersoncs.report.repository.ReportRepository
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.fragment.ChooseThemeDialogFragment.SingleChoiceListener

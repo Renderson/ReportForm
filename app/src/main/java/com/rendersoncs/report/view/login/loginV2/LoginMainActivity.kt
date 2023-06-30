@@ -10,7 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.ActivityMainLoginBinding
-import com.rendersoncs.report.infrastructure.util.viewModelFactory
+import com.rendersoncs.report.common.util.viewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

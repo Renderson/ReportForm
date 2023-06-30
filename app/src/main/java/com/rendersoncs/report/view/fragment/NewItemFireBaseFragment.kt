@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.rendersoncs.report.R
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.NewItemFireBase
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User

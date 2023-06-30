@@ -1,4 +1,4 @@
-package com.rendersoncs.report.infrastructure.util
+package com.rendersoncs.report.common.util
 
 import android.app.Dialog
 import android.content.Context

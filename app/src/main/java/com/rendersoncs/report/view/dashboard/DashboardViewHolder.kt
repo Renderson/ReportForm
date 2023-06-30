@@ -5,8 +5,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.ItemMainListBinding
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import com.rendersoncs.report.infrastructure.extension.StringExtension.limitsText
+import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.extension.StringExtension.limitsText
 import com.rendersoncs.report.model.Report
 import java.util.Locale
 

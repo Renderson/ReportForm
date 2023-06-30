@@ -1,4 +1,4 @@
-package com.rendersoncs.report.infrastructure.util
+package com.rendersoncs.report.common.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

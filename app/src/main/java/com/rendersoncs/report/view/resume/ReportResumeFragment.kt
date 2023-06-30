@@ -23,11 +23,11 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentReportResumeBinding
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import com.rendersoncs.report.infrastructure.extension.StringExtension
-import com.rendersoncs.report.infrastructure.util.CommonDialog
-import com.rendersoncs.report.infrastructure.util.DetailState
-import com.rendersoncs.report.infrastructure.util.ResumeState
+import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.extension.StringExtension
+import com.rendersoncs.report.common.util.CommonDialog
+import com.rendersoncs.report.common.util.DetailState
+import com.rendersoncs.report.common.util.ResumeState
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportDetailPhoto
 import com.rendersoncs.report.model.ReportResumeItems

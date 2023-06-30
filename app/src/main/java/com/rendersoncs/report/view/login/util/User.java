@@ -7,7 +7,7 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ValueEventListener;
-import com.rendersoncs.report.infrastructure.constants.ReportConstants;
+import com.rendersoncs.report.common.constants.ReportConstants;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.rendersoncs.report.infrastructure.animated
+package com.rendersoncs.report.common.animated
 
 import android.transition.Slide
 import android.transition.Transition

@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rendersoncs.report.R
 import com.rendersoncs.report.data.net.NetworkConnectedService
 import com.rendersoncs.report.databinding.FragmentDashboardBinding
-import com.rendersoncs.report.infrastructure.util.SnackBarHelper
-import com.rendersoncs.report.infrastructure.util.ViewState
-import com.rendersoncs.report.infrastructure.util.hide
-import com.rendersoncs.report.infrastructure.util.show
+import com.rendersoncs.report.common.util.SnackBarHelper
+import com.rendersoncs.report.common.util.ViewState
+import com.rendersoncs.report.common.util.hide
+import com.rendersoncs.report.common.util.show
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.view.base.BaseFragment
 import com.rendersoncs.report.view.viewmodel.ReportViewModel

@@ -1,4 +1,4 @@
-package com.rendersoncs.report.infrastructure.extension
+package com.rendersoncs.report.common.extension
 
 object StringExtension {
     @JvmStatic

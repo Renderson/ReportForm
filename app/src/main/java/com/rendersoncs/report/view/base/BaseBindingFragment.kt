@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
-import com.rendersoncs.report.infrastructure.util.SnackBarHelper
+import com.rendersoncs.report.common.util.SnackBarHelper
 
 abstract class BaseBindingFragment<T : ViewBinding, VM : ViewModel>(private val layoutRes: Int) : Fragment() {
 

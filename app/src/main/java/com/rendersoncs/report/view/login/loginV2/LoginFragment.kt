@@ -26,14 +26,12 @@ import com.google.firebase.auth.*
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentLoginBinding
-import com.rendersoncs.report.infrastructure.util.afterTextChanged
-import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
-import com.rendersoncs.report.infrastructure.util.isValidateEmail
-import com.rendersoncs.report.view.base.BaseBindingFragment
+import com.rendersoncs.report.common.util.afterTextChanged
+import com.rendersoncs.report.common.util.closeVirtualKeyBoard
+import com.rendersoncs.report.common.util.isValidateEmail
 import com.rendersoncs.report.view.base.BaseFragment
 import com.rendersoncs.report.view.login.util.User
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_login.*
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(),

@@ -27,8 +27,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.R
 import com.rendersoncs.report.data.local.AppDatabase
 import com.rendersoncs.report.databinding.FragmentLoginBinding
-import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
-import com.rendersoncs.report.infrastructure.util.viewModelFactory
+import com.rendersoncs.report.common.util.closeVirtualKeyBoard
+import com.rendersoncs.report.common.util.viewModelFactory
 import com.rendersoncs.report.repository.ReportRepository
 import com.rendersoncs.report.view.login.util.User
 import com.rendersoncs.report.view.login.viewmodel.LoginViewModel

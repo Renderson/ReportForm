@@ -1,16 +1,15 @@
 package com.rendersoncs.report.view.resume
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
-import com.rendersoncs.report.infrastructure.util.ItemCallBack
+import com.rendersoncs.report.common.util.ItemCallBack
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.ItemReportResumeListBinding
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.ReportResumeItems
 
 class ReportResumeAdapter(private val onClickItem: (ReportResumeItems) -> Unit) :

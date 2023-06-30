@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rendersoncs.report.R
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.ReportItems
 import kotlinx.android.synthetic.main.item_report_check_list.view.*
 import java.util.*

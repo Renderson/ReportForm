@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
-import com.rendersoncs.report.infrastructure.util.SnackBarHelper.Companion.configSnackBar
+import com.rendersoncs.report.common.util.SnackBarHelper.Companion.configSnackBar
 
 abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
 

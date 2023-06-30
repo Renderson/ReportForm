@@ -1,4 +1,4 @@
-package com.rendersoncs.report.infrastructure.constants
+package com.rendersoncs.report.common.constants
 
 class ReportConstants {
     object PACKAGE {

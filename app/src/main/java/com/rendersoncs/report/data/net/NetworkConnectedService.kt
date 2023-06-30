@@ -3,7 +3,7 @@ package com.rendersoncs.report.data.net
 import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
-import com.rendersoncs.report.infrastructure.util.InternetCheck
+import com.rendersoncs.report.common.util.InternetCheck
 
 class NetworkConnectedService {
     var internetCheck: InternetCheck? = null

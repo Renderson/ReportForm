@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
 import com.rendersoncs.report.databinding.ItemMainListBinding
-import com.rendersoncs.report.infrastructure.util.ItemCallBack
+import com.rendersoncs.report.common.util.ItemCallBack
 import com.rendersoncs.report.model.Report
 
 class DashboardAdapter(private var listener: (Report) -> Unit) :

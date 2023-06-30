@@ -1,7 +1,7 @@
-package com.rendersoncs.report.infrastructure.util
+package com.rendersoncs.report.common.util
 
 import android.content.SharedPreferences
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import com.rendersoncs.report.common.constants.ReportConstants
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SharePrefInfoUser {

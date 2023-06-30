@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentNewReportBinding
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import com.rendersoncs.report.infrastructure.util.*
+import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.*
 import com.rendersoncs.report.model.ReportNew
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment

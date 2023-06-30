@@ -2,7 +2,7 @@ package com.rendersoncs.report.view.report
 
 import android.app.Activity
 import com.rendersoncs.report.R
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.ReportItems
 import java.util.*
 

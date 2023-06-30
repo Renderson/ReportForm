@@ -1,4 +1,4 @@
-package com.rendersoncs.report.infrastructure.pdf
+package com.rendersoncs.report.common.pdf
 
 import android.content.Context
 import android.graphics.Bitmap.CompressFormat
@@ -11,7 +11,7 @@ import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.PdfWriter
 import com.itextpdf.text.pdf.draw.LineSeparator
 import com.rendersoncs.report.R
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportResumeItems
 import com.rendersoncs.report.view.MyApplication
