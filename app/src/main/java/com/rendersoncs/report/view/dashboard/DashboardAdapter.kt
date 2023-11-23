@@ -8,8 +8,9 @@ import com.rendersoncs.report.databinding.ItemMainListBinding
 import com.rendersoncs.report.common.util.ItemCallBack
 import com.rendersoncs.report.model.Report
 
-class DashboardAdapter(private var listener: (Report) -> Unit) :
-        RecyclerView.Adapter<DashboardViewHolder>() {
+class DashboardAdapter(
+    private var listener: (Report) -> Unit
+): RecyclerView.Adapter<DashboardViewHolder>() {
 
     val differ = AsyncListDiffer(this, ItemCallBack<Report>())
 

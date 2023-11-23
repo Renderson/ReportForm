@@ -18,11 +18,11 @@ android {
         multiDexEnabled true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = JavaVersion.VERSION_11
     }
 
     buildTypes {
@@ -34,9 +34,15 @@ android {
 
     buildFeatures {
         viewBinding true
+        compose = true
     }
 
     buildToolsVersion = '30.0.3'
+
+    composeOptions {
+        kotlinCompilerVersion "1.6.21"
+        kotlinCompilerExtensionVersion = "1.2.0-beta01"
+    }
 }
 
 // Graphic
@@ -68,9 +74,22 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
 
-    // Header RecyclerView Top
-    implementation "com.jakewharton:butterknife:$versions.butterknife"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$versions.butterknife"
+    // Compose
+    implementation "androidx.activity:activity-compose:$versions.composeVersion"
+
+    // Compose HorizontalPager
+    implementation "com.google.accompanist:accompanist-pager:$versions.composePage"
+
+    implementation "androidx.compose.runtime:runtime:$versions.composeVersion"
+    // or Material Design 2
+    implementation "androidx.compose.material:material:$versions.composeVersion"
+    // or skip Material Design and build directly on top of foundational components
+    implementation "androidx.compose.foundation:foundation:$versions.composeVersion"
+    // such as input and measurement/layout
+    implementation "androidx.compose.ui:ui:$versions.composeVersion"
+    // Android Studio Preview support
+    implementation "androidx.compose.ui:ui-tooling-preview:$versions.composeVersion"
+    implementation "androidx.compose.ui:ui-tooling:$versions.composeVersion"
 
     // volley http library
     implementation "com.android.volley:volley:$versions.volley"
@@ -117,7 +136,7 @@ dependencies {
     // About api
     implementation "com.github.medyo:android-about-page:$versions.aboutPage"
 
-    // LeakCanary
+    // Leak Canary - Detect memory leaks in code
     //debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary"
     //releaseImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$versions.leakcanary"
 
@@ -165,5 +184,8 @@ dependencies {
 
     // Shimmer
     implementation "com.facebook.shimmer:shimmer:$versions.shimmer"
+
+    // Lottie
+    implementation 'com.airbnb.android:lottie-compose:5.2.0'
 }
 apply plugin: 'com.google.gms.google-services'
