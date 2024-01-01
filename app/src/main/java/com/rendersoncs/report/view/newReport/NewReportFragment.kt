@@ -1,7 +1,5 @@
 package com.rendersoncs.report.view.newReport
 
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentNewReportBinding
-import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.common.util.*
 import com.rendersoncs.report.model.ReportNew
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
@@ -24,12 +21,12 @@ import java.util.*
 
 @AndroidEntryPoint
 class NewReportFragment :
-    BaseFragment<FragmentNewReportBinding, ReportViewModel>() {
+    BaseFragment<FragmentNewReportBinding, ReportViewModel>()
+{
 
     override val viewModel: ReportViewModel by activityViewModels()
     private val args: NewReportFragmentArgs by navArgs()
 
-    private lateinit var pref: SharedPreferences
     private var uiStateJobName: Job? = null
     private val date = Calendar.getInstance().time
     private val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -44,12 +41,7 @@ class NewReportFragment :
         if (args.reportEdit != -1) {
             viewModel.getReportByID(args.reportEdit)
         }
-
-        pref = requireActivity().getSharedPreferences(
-            ReportConstants.FIREBASE.FIRE_USERS,
-            MODE_PRIVATE
-        )
-        viewModel.getNameShared(pref)
+        viewModel.getNameShared()
 
         setObservers()
         initViews()

@@ -3,30 +3,32 @@ package com.rendersoncs.report.common.util
 import android.content.SharedPreferences
 import com.rendersoncs.report.common.constants.ReportConstants
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
-class SharePrefInfoUser {
-    fun savePhotoSharePref(sharedPreferences: SharedPreferences, photo: String?) {
+class SharePrefInfoUser @Inject constructor(private var sharedPreferences: SharedPreferences){
+    fun savePhotoSharePref(photo: String?) {
         val editor = sharedPreferences.edit()
         editor.putString(ReportConstants.FIREBASE.FIRE_PHOTO, photo)
         editor.apply()
     }
 
-    fun saveUserSharePref(sharedPreferences: SharedPreferences, user: String?) {
+    fun saveUserSharePref(user: String?) {
         val editor = sharedPreferences.edit()
         editor.putString(ReportConstants.FIREBASE.FIRE_NAME, user)
         editor.apply()
     }
 
-    fun saveEmailSharePref(sharedPreferences: SharedPreferences, email: String) {
+    fun saveEmailSharePref(email: String) {
         val editor = sharedPreferences.edit()
         editor.putString(ReportConstants.FIREBASE.FIRE_EMAIL, email)
         editor.apply()
     }
 
-    fun getUserSharePref(sharedPreferences: SharedPreferences,
-                         profileName: MutableStateFlow<String>,
-                         profileView: MutableStateFlow<String>,
-                         profileEmail: MutableStateFlow<String>) {
+    fun getUserSharePref(
+        profileName: MutableStateFlow<String>,
+        profileView: MutableStateFlow<String>,
+        profileEmail: MutableStateFlow<String>
+    ) {
         val name = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_NAME, "")
         val photo = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_PHOTO, "")
         val email = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_EMAIL, "")
@@ -35,12 +37,16 @@ class SharePrefInfoUser {
         profileEmail.value = email.toString()
     }
 
-    fun getUser(pref: SharedPreferences): String {
-        return pref.getString(ReportConstants.FIREBASE.FIRE_NAME, "").toString()
+    fun getUser(): String {
+        return sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_NAME, "").toString()
     }
 
-    fun deleteSharePref(sharedPreferences: SharedPreferences) {
+    fun deleteSharePref() {
         val editor = sharedPreferences.edit().clear()
         editor.apply()
+    }
+
+    fun getKey(key: String): Boolean {
+        return sharedPreferences.contains(key)
     }
 }

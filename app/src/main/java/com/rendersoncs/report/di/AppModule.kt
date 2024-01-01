@@ -9,7 +9,7 @@ import dagger.hilt.android.components.ActivityComponent
 import javax.inject.Singleton
 
 @InstallIn(ActivityComponent::class)
-@Module
+@Module(includes = [SharedPreferencesModule::class])
 class AppModule {
 
     @Singleton

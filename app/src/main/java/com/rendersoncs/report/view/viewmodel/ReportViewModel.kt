@@ -33,9 +33,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ReportViewModel @Inject constructor(
         application: Application,
-        private val repository: ReportRepository
+        private val repository: ReportRepository,
+        private val sharePref: SharePrefInfoUser
 ) : AndroidViewModel(application) {
-    private val sharePref = SharePrefInfoUser()
 
     private val _uiState = SingleLiveEvent<ViewState>()
     val uiState: LiveData<ViewState> = _uiState
@@ -179,13 +179,14 @@ class ReportViewModel @Inject constructor(
         editor.apply()
     }
 
-    fun getInfoUserFireBase(user: FirebaseUser,
-                            databaseReference: DatabaseReference,
-                            pref: SharedPreferences) = viewModelScope.launch {
+    fun getInfoUserFireBase(
+        user: FirebaseUser,
+        databaseReference: DatabaseReference
+    ) = viewModelScope.launch {
 
-        if (pref.contains(ReportConstants.FIREBASE.FIRE_NAME)
-                && pref.contains(ReportConstants.FIREBASE.FIRE_PHOTO)) {
-            sharePref.getUserSharePref(pref, _name, _photo, _email)
+        if (sharePref.getKey(ReportConstants.FIREBASE.FIRE_NAME)
+                && sharePref.getKey(ReportConstants.FIREBASE.FIRE_PHOTO)) {
+            sharePref.getUserSharePref(_name, _photo, _email)
         } else {
             for (profile in user.providerData) {
                 val name = profile.displayName
@@ -200,7 +201,7 @@ class ReportViewModel @Inject constructor(
                                     .child(ReportConstants.FIREBASE.FIRE_NAME)
                                     .value as String?
                             _name.value = nameCurrentUser.toString()
-                            sharePref.saveUserSharePref(pref, nameCurrentUser)
+                            sharePref.saveUserSharePref(nameCurrentUser)
                         }
 
                         override fun onCancelled(databaseError: DatabaseError) {}
@@ -214,7 +215,7 @@ class ReportViewModel @Inject constructor(
                                     .child(ReportConstants.FIREBASE.FIRE_PHOTO)
                                     .value as String?
                             _photo.value = currentPhoto.toString()
-                            sharePref.savePhotoSharePref(pref, currentPhoto)
+                            sharePref.savePhotoSharePref(currentPhoto)
                         }
 
                         override fun onCancelled(databaseError: DatabaseError) {}
@@ -222,16 +223,16 @@ class ReportViewModel @Inject constructor(
                 }
             }
             _email.value = user.email.toString()
-            sharePref.saveEmailSharePref(pref, user.email.toString())
+            sharePref.saveEmailSharePref(user.email.toString())
         }
     }
 
-    fun getNameShared(pref: SharedPreferences) {
-        _name.value = sharePref.getUser(pref)
+    fun getNameShared() {
+        _name.value = sharePref.getUser()
     }
 
-    fun deletePreference(pref: SharedPreferences) = viewModelScope.launch {
-        sharePref.deleteSharePref(pref)
+    fun deletePreference() = viewModelScope.launch {
+        sharePref.deleteSharePref()
     }
 
     fun getListReportResume(report: Report) = viewModelScope.launch {

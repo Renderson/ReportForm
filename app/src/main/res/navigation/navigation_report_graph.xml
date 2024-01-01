@@ -121,6 +121,7 @@
 
         <argument
             android:name="reportEdit"
+            android:defaultValue="-1"
             app:argType="integer" />
     </fragment>
 
@@ -175,12 +176,15 @@
         tools:layout="@layout/fragment_new_list_firebase">
         <argument
             android:name="title"
+            android:defaultValue=""
             app:argType="string" />
         <argument
             android:name="description"
+            android:defaultValue=""
             app:argType="string" />
         <argument
             android:name="key"
+            android:defaultValue=""
             app:argType="string" />
     </dialog>
 
@@ -191,6 +195,7 @@
         tools:layout="@layout/fragment_report_note">
         <argument
             android:name="note"
+            android:defaultValue=""
             app:argType="string" />
     </fragment>
 

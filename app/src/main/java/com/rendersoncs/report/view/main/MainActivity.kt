@@ -27,6 +27,7 @@ import com.rendersoncs.report.R
 import com.rendersoncs.report.data.local.AppDatabase
 import com.rendersoncs.report.databinding.ActivityMainBinding
 import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.SharePrefInfoUser
 import com.rendersoncs.report.common.util.viewModelFactory
 import com.rendersoncs.report.repository.ReportRepository
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
@@ -47,7 +48,6 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var prefTheme: SharedPreferences
-    private lateinit var prefUser: SharedPreferences
 
     private lateinit var mFireBaseAnalytics: FirebaseAnalytics
     private var authStateListener: FirebaseAuth.AuthStateListener? = null
@@ -55,8 +55,9 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
     private lateinit var databaseReference: DatabaseReference
 
     private val repo by lazy { ReportRepository(AppDatabase(this)) }
+    private val sharedPreferences by lazy { SharePrefInfoUser(getSharedPreferences()) }
     private val viewModel: ReportViewModel by viewModels {
-        viewModelFactory { ReportViewModel(this.application, repo) }
+        viewModelFactory { ReportViewModel(this.application, repo, sharedPreferences) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,19 +67,21 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
 
         checkLoggedUser()
 
-        val user = initFireBaseUser()
-        viewModel.getUserUid(user)
-
         prefTheme = getSharedPreferences(ReportConstants.THEME.MY_PREFERENCE_THEME, MODE_PRIVATE)
-        prefUser = getSharedPreferences(ReportConstants.FIREBASE.FIRE_USERS, MODE_PRIVATE)
 
+        val user = initFireBaseUser()
         user?.let {
-            viewModel.getInfoUserFireBase(it, databaseReference, prefUser)
+            viewModel.getUserUid(it)
+            viewModel.getInfoUserFireBase(it, databaseReference)
         }
 
         initViews(binding)
         getInfoUser(binding)
         observeNavElements(binding, navHostFragment.navController)
+    }
+
+    private fun getSharedPreferences(): SharedPreferences {
+        return getSharedPreferences(ReportConstants.FIREBASE.FIRE_USERS, MODE_PRIVATE)
     }
 
     private fun checkLoggedUser() {
@@ -96,11 +99,14 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
     }
 
     private fun initFireBaseUser(): FirebaseUser? {
-        mFireBaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseAuth.addAuthStateListener(authStateListener!!)
-        databaseReference = LibraryClass.getFirebase()
-        return firebaseAuth.currentUser
+        authStateListener?.let { auth ->
+            mFireBaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
+            firebaseAuth = FirebaseAuth.getInstance()
+            firebaseAuth.addAuthStateListener(auth)
+            databaseReference = LibraryClass.getFirebase()
+            return firebaseAuth.currentUser
+        }
+        return null
     }
 
     private fun observeNavElements(
@@ -111,32 +117,32 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
             binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             when (destination.id) {
                 R.id.reportActivity -> {
-                    supportActionBar!!.setDisplayShowTitleEnabled(true)
-                    supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+                    supportActionBar?.setDisplayShowTitleEnabled(true)
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     binding.homeMain.toolbar.title = getString(R.string.label_menu_new_report)
                 }
                 R.id.addNewReport -> {
                     binding.homeMain.toolbar.navigationIcon =
                         ContextCompat.getDrawable(this, R.drawable.ic_back_black)
-                    supportActionBar!!.setDisplayShowTitleEnabled(true)
+                    supportActionBar?.setDisplayShowTitleEnabled(true)
                 }
                 R.id.resumeReport -> {
                     binding.homeMain.toolbar.navigationIcon =
                         ContextCompat.getDrawable(this, R.drawable.ic_back_black)
-                    supportActionBar!!.setDisplayShowTitleEnabled(true)
+                    supportActionBar?.setDisplayShowTitleEnabled(true)
                 }
                 R.id.updatePassword -> {
-                    supportActionBar!!.setDisplayShowTitleEnabled(false)
+                    supportActionBar?.setDisplayShowTitleEnabled(false)
                 }
                 R.id.removeUser -> {
-                    supportActionBar!!.setDisplayShowTitleEnabled(false)
+                    supportActionBar?.setDisplayShowTitleEnabled(false)
                 }
                 R.id.about -> {
-                    supportActionBar!!.setDisplayShowTitleEnabled(false)
-                    supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+                    supportActionBar?.setDisplayShowTitleEnabled(false)
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
                 else -> {
-                    supportActionBar!!.setDisplayShowTitleEnabled(true)
+                    supportActionBar?.setDisplayShowTitleEnabled(true)
                 }
             }
         }
@@ -144,7 +150,7 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
 
     private fun initViews(binding: ActivityMainBinding) {
         setSupportActionBar(binding.homeMain.toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         navHostFragment = supportFragmentManager
                 .findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
@@ -159,7 +165,7 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
 
         binding.navView.menu.findItem(R.id.login).setOnMenuItemClickListener {
             FirebaseAuth.getInstance().signOut()
-            viewModel.deletePreference(prefUser)
+            viewModel.deletePreference()
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             /*navHostFragment.navController.navigate(
                     DashboardFragmentDirections.actionDrawerCloseToLogin()
