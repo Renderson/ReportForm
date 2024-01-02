@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
@@ -169,14 +170,23 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     private fun createItemCheckList() {
-        val bundle = Bundle().apply {
-            putString(ReportConstants.ITEM.TITLE, "")
-            putString(ReportConstants.ITEM.DESCRIPTION, "")
-            putString(ReportConstants.ITEM.KEY, "")
-        }
-        findNavController().navigate(
-                R.id.action_reportActivity_to_newItemFireBaseFragment, bundle
-        )
+        CommonEditDialog(requireContext())
+            .showEditTextDialog(
+                msg = {
+                    Toast.makeText(
+                        requireContext(),
+                        "Novo item inserido!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
+                error = {
+                    Toast.makeText(
+                        requireContext(),
+                        resources.getString(R.string.label_error_update_list),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
+            )
     }
 
     private fun setupRV() = with(binding) {
@@ -212,23 +222,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         networkChecker.performActionNoConnected {
             checkListLocal()
         }
-            /*val connect = FirebaseDatabase.getInstance().getReference(".info/connected")
-            connect.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val connected = snapshot.getValue(Boolean::class.java) ?: false
-
-                    if (connected) {
-                        checkListFireBase()
-                    } else {
-                        checkListLocal()
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    toast(getString(R.string.label_error_return))
-                }
-            })*/
-        }
+    }
 
     private fun checkListFireBase() {
         //this.contentReport.fabNewItem.visibility = View.VISIBLE
@@ -586,14 +580,13 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     override fun updateList(reportItems: ReportItems) {
-        val bundle = Bundle().apply {
-            putString(ReportConstants.ITEM.TITLE, reportItems.title)
-            putString(ReportConstants.ITEM.DESCRIPTION, reportItems.description)
-            putString(ReportConstants.ITEM.KEY, reportItems.key.toString())
-        }
-        findNavController().navigate(
-                R.id.action_reportActivity_to_newItemFireBaseFragment, bundle
-        )
+        CommonEditDialog(requireContext())
+            .showEditTextDialog(
+                title = reportItems.title ?: "",
+                description = reportItems.description ?: "",
+                key = reportItems.key ?: "",
+                msg = { Toast.makeText(requireContext(), "Item atualizado!", Toast.LENGTH_LONG).show() },
+            )
     }
 
     override fun removeItem(reportItems: ReportItems) {

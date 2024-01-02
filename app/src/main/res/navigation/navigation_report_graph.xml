@@ -148,9 +148,6 @@
             android:id="@+id/action_reportActivity_to_detailPhotoFragment"
             app:destination="@id/detailPhotoFragment" />
         <action
-            android:id="@+id/action_reportActivity_to_newItemFireBaseFragment"
-            app:destination="@+id/newItemFireBaseFragment" />
-        <action
             android:id="@+id/action_reportActivity_to_camera"
             app:destination="@id/nav_graph"
             app:enterAnim="@anim/slide_in_right"
@@ -167,25 +164,6 @@
         <argument
             android:name="modelDetail"
             app:argType="com.rendersoncs.report.model.ReportDetailPhoto" />
-    </dialog>
-
-    <dialog
-        android:id="@+id/newItemFireBaseFragment"
-        android:name="com.rendersoncs.report.view.fragment.NewItemFireBaseFragment"
-        android:label="NewItemFireBaseFragment"
-        tools:layout="@layout/fragment_new_list_firebase">
-        <argument
-            android:name="title"
-            android:defaultValue=""
-            app:argType="string" />
-        <argument
-            android:name="description"
-            android:defaultValue=""
-            app:argType="string" />
-        <argument
-            android:name="key"
-            android:defaultValue=""
-            app:argType="string" />
     </dialog>
 
     <fragment
