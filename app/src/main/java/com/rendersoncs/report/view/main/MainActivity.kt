@@ -138,8 +138,9 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
                     supportActionBar?.setDisplayShowTitleEnabled(false)
                 }
                 R.id.about -> {
-                    supportActionBar?.setDisplayShowTitleEnabled(false)
-                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    supportActionBar?.setDisplayShowTitleEnabled(true)
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    binding.homeMain.toolbar.title = getString(R.string.label_menu_about)
                 }
                 else -> {
                     supportActionBar?.setDisplayShowTitleEnabled(true)
