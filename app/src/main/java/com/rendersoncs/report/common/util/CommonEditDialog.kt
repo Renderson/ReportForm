@@ -44,14 +44,10 @@ class CommonEditDialog(private val context: Context) {
 
         with(binding) {
             txtTitleList.onTextChanged {
-                val titleValidate = binding.txtTitleList.text.toString().trim { it <= ' ' }
-                val descriptionValidate = binding.txtDescriptionList.text.toString().trim { it <= ' ' }
-                binding.confirm.isEnabled = titleValidate.isNotEmpty() && descriptionValidate.isNotEmpty()
+                validateInput()
             }
             txtDescriptionList.onTextChanged {
-                val titleValidate = binding.txtTitleList.text.toString().trim { it <= ' ' }
-                val descriptionValidate = binding.txtDescriptionList.text.toString().trim { it <= ' ' }
-                binding.confirm.isEnabled = titleValidate.isNotEmpty() && descriptionValidate.isNotEmpty()
+                validateInput()
             }
             confirm.setOnClickListener {
                 if (title != "") {
@@ -64,6 +60,12 @@ class CommonEditDialog(private val context: Context) {
         }
         checkItems(title, description, key)
         avoidException()
+    }
+
+    private fun validateInput() {
+        val titleValidate = binding.txtTitleList.text.toString().trim { it <= ' ' }
+        val descriptionValidate = binding.txtDescriptionList.text.toString().trim { it <= ' ' }
+        binding.confirm.isEnabled = titleValidate.isNotEmpty() && descriptionValidate.isNotEmpty()
     }
 
     private fun initFireBase() {
