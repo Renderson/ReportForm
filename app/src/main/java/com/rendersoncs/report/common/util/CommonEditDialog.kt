@@ -4,7 +4,9 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.view.Window
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -56,7 +58,6 @@ class CommonEditDialog(private val context: Context) {
                     insertNewItemList()
                 }
             }
-            cancel.setOnClickListener { dialog.dismiss() }
         }
         checkItems(title, description, key)
         avoidException()
@@ -99,7 +100,6 @@ class CommonEditDialog(private val context: Context) {
             override fun onCancelled(databaseError: DatabaseError) {
                 error?.invoke()
                 dialog.dismiss()
-                //Toast.makeText(activity, resources.getString(R.string.label_error_update_list), Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -143,7 +143,9 @@ class CommonEditDialog(private val context: Context) {
 
 fun Dialog.setupCommonEditDialog(binding: CustomEditTextDialogBinding) {
     this.requestWindowFeature(Window.FEATURE_NO_TITLE)
-    this.setCancelable(false)
     this.setContentView(binding.root)
+    this.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    this.window?.attributes?.windowAnimations = R.style.DialogAnimation
+    this.window?.setGravity(Gravity.BOTTOM)
 }
