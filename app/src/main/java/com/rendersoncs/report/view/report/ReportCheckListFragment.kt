@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
@@ -173,18 +172,10 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         CommonEditDialog(requireContext())
             .showEditTextDialog(
                 msg = {
-                    Toast.makeText(
-                        requireContext(),
-                        "Novo item inserido!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toast("Novo item inserido!")
                 },
                 error = {
-                    Toast.makeText(
-                        requireContext(),
-                        resources.getString(R.string.label_error_update_list),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toast(resources.getString(R.string.label_error_update_list))
                 },
             )
     }
@@ -585,7 +576,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 title = reportItems.title ?: "",
                 description = reportItems.description ?: "",
                 key = reportItems.key ?: "",
-                msg = { Toast.makeText(requireContext(), "Item atualizado!", Toast.LENGTH_LONG).show() },
+                msg = { toast("Item atualizado!") },
             )
     }
 

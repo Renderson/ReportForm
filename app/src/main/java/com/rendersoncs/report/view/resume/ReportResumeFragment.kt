@@ -28,13 +28,13 @@ import com.rendersoncs.report.common.extension.StringExtension
 import com.rendersoncs.report.common.util.CommonDialog
 import com.rendersoncs.report.common.util.DetailState
 import com.rendersoncs.report.common.util.ResumeState
+import com.rendersoncs.report.common.util.show
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportDetailPhoto
 import com.rendersoncs.report.model.ReportResumeItems
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
@@ -49,10 +49,11 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     private val listRadioNA = ArrayList<String>()
     private val listRadioNC = ArrayList<String>()
     private lateinit var report: Report
+    private lateinit var reportDetail: Report
 
     private val requestLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) toast(getString(R.string.txt_permission)) else toast(getString(R.string.label_permission_camera_denied))
+                if (isGranted) openPdf(reportDetail) else toast(getString(R.string.label_permission_camera_denied))
             }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -137,6 +138,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
             when (detailState) {
                 DetailState.Loading -> {}
                 is DetailState.Success -> {
+                    reportDetail = detailState.report
                     onDetailLoaded(detailState.report)
                     viewModel.getListReportResume(report)
                 }
@@ -152,9 +154,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
 
     private fun onDetailLoaded(report: Report) = with(binding) {
         this.contentResume.apply {
-            controllerResume.text = getString(R.string.label_report,
-                report.controller.uppercase(Locale.ROOT)
-            )
+            controllerResume.text = getString(R.string.label_report, report.controller)
             emailResume.text = report.email
             dateResume.text = report.date
             companyResume.text = StringExtension.limitsText(report.company,
@@ -214,17 +214,19 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
 
     private fun createPieChart() = with(binding) {
         this.contentResume.resumeGraph.pieChart.apply {
-            this.setUsePercentValues(false)
-            this.description.isEnabled = false
             this.setExtraOffsets(5f, 10f, 5f, 5f)
+            this.setUsePercentValues(false)
+            this.setHoleColor(Color.TRANSPARENT)
 
             // Rotation graphic
             this.dragDecelerationFrictionCoef = 0.95f
 
             // Design graphic
-            this.isDrawHoleEnabled = false
-            this.setHoleColor(Color.WHITE)
+            this.isDrawHoleEnabled = true
+            this.description.isEnabled = false
             this.transparentCircleRadius = 61f
+            this.holeRadius = 75f
+            this.legend.isEnabled = false
         }
 
         val yValues = ArrayList<PieEntry>()
@@ -232,10 +234,18 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         val mxNA = listRadioNA.size
         val mxNC = listRadioNC.size
 
-        yValues.add(PieEntry(mxC.toFloat(), resources.getString(R.string.according)))
-        yValues.add(PieEntry(mxNA.toFloat(), resources.getString(R.string.not_applicable)))
-        yValues.add(PieEntry(mxNC.toFloat(), resources.getString(R.string.not_according)))
+        if (mxC.toFloat() != 0f) {
+            yValues.add(PieEntry(mxC.toFloat(), ""))
+        }
+        if (mxNA.toFloat() != 0f) {
+            yValues.add(PieEntry(mxNA.toFloat(), ""))
+        }
+        if (mxNC.toFloat() != 0f) {
+            yValues.add(PieEntry(mxNC.toFloat(), ""))
+        }
         val dataSet = PieDataSet(yValues, "")
+        dataSet.setAutomaticallyDisableSliceSpacing(true)
+        dataSet.setDrawValues(false)
 
         dataSet.sliceSpace = 3f
         dataSet.selectionShift = 5f
@@ -252,18 +262,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         binding.contentResume.resumeGraph.pieChart.data = data
     }
 
-    /*@ExperimentalStdlibApi
-    private fun integerFormatter(dataSet: PieDataSet): PieData {
-        val data = PieData(dataSet)
-        data.setValueFormatter(object : ValueFormatter() {
-            override fun getFormattedValue(value: Float): String? {
-                return floor(value.toDouble()) as Int.toString()
-            }
-        })
-        return data
-    }*/
-
-    @SuppressLint("StringFormatMatches")
+    @SuppressLint("StringFormatMatches", "SetTextI18n")
     private fun countRadioSelected() = lifecycleScope.launchWhenResumed {
         viewModel.reportResumeItems.observe(viewLifecycleOwner) { report ->
             report.forEach {
@@ -281,7 +280,29 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
             binding.contentResume.resumeGraph.itemsResume.text =
                 getString(R.string.item_selected, maxList)
             createPieChart()
+
+            if (listRadioC.size > 0) {
+                binding.contentResume.resumeGraph.textAccording.show()
+                binding.contentResume.resumeGraph.circleAccording.show()
+                val text = resources.getString(R.string.according)
+                binding.contentResume.resumeGraph.textAccording.text = "$text: ${listRadioC.size}"
+            }
+
+            if (listRadioNA.size > 0) {
+                binding.contentResume.resumeGraph.textNotApplicable.show()
+                binding.contentResume.resumeGraph.circleNotApplicable.show()
+                val text = resources.getString(R.string.not_applicable)
+                binding.contentResume.resumeGraph.textNotApplicable.text = "$text: ${listRadioNA.size}"
+            }
+
+            if (listRadioNC.size > 0) {
+                binding.contentResume.resumeGraph.textNotAccording.show()
+                binding.contentResume.resumeGraph.circleNotAccording.show()
+                val text = resources.getString(R.string.not_according)
+                binding.contentResume.resumeGraph.textNotAccording.text = "$text: ${listRadioNC.size}"
+            }
         }
+
     }
 
     private fun detailPhoto(reportResume: ReportResumeItems) {

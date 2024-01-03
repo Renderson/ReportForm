@@ -25,7 +25,7 @@
     <string name="leave">Sair</string>
     <string name="save">Salvar</string>
     <string name="resume_date">Data: %1$s</string>
-    <string name="item_selected">Items selecionados: %1$s</string>
+    <string name="item_selected">Items\nselecionados\n%1$s</string>
     <string name="label_search">Pesquisar</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
