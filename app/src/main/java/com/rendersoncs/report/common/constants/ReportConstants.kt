@@ -1,12 +1,24 @@
 package com.rendersoncs.report.common.constants
 
+import java.util.Properties
+
 class ReportConstants {
     object PACKAGE {
         const val FILE_PROVIDER = "com.rendersoncs.report.FileProvider"
     }
 
     object FIREBASE {
-        const val URL = "https://reportform-20b2a.firebaseio.com/users"
+        val URL: String by lazy {
+            val properties = Properties()
+            try {
+                val inputStream = javaClass.classLoader?.getResourceAsStream("secrets.properties")
+                properties.load(inputStream)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            properties.getProperty("FIREBASE_URL")
+        }
+
         const val FIRE_USERS = "users"
         const val FIRE_CREDENTIAL = "credential"
         const val FIRE_PHOTO = "photoUrl"
