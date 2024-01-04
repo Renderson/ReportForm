@@ -11,4 +11,4 @@
 /build
 /captures
 .externalNativeBuild
-app/src/main/resources/secrets.properties
+/app/src/main/resources/secrets.properties
