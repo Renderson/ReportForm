@@ -67,15 +67,17 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
 
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + user.getId() + ".json");
 
-        FileWriter fos = null;
-        try {
-            fos = new FileWriter(file);
-            fos.write(result);
-            fos.flush();
-            fos.close();
-        } catch (IOException e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
-            e.printStackTrace();
+        if (result != null) {
+            FileWriter fos = null;
+            try {
+                fos = new FileWriter(file);
+                fos.write(result);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+                e.printStackTrace();
+            }
         }
     }
 }
