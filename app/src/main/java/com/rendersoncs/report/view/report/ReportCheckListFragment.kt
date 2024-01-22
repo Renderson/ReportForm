@@ -7,11 +7,13 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,24 +26,23 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.*
 import com.rendersoncs.report.R
-import com.rendersoncs.report.databinding.FragmentReportCheckListBinding
 import com.rendersoncs.report.common.animated.animatedView
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.common.util.*
+import com.rendersoncs.report.databinding.FragmentReportCheckListBinding
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
 import com.rendersoncs.report.model.ReportDetailPhoto
 import com.rendersoncs.report.model.ReportItems
-import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import com.rendersoncs.report.view.cameraX.CameraXMainActivity
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
+import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import java.io.File
 import java.util.*
-import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, ReportViewModel>(), ReportListener {
@@ -75,12 +76,26 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private var databaseReference: DatabaseReference? = null
     private val user = User()
 
+    private val multiplePermissionNameList = if (Build.VERSION.SDK_INT >= 33) {
+        arrayListOf(
+            //Manifest.permission.READ_MEDIA_AUDIO,
+            Manifest.permission.READ_MEDIA_VIDEO,
+            Manifest.permission.READ_MEDIA_IMAGES
+        )
+    } else {
+        arrayListOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
+
     private val requestLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted)
+                if (isGranted) {
                     toast(getString(R.string.label_permission_camera_granted))
-                else
+                } else {
                     toast(getString(R.string.label_permission_camera_denied))
+                }
             }
 
     private val networkChecker by lazy {
@@ -354,7 +369,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     private fun checkPermission(request: Int) {
         if (!isStoragePermissionGranted()) {
-            requestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            requestLauncher.launch(multiplePermissionNameList.toString())
             return
         } else if (request == REQUEST_SAVE) {
             showScoreAndSave()
@@ -658,10 +673,27 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         }
     }
 
-    private fun isStoragePermissionGranted(): Boolean = ContextCompat.checkSelfPermission(
-        requireContext(),
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED
+    private fun isStoragePermissionGranted(): Boolean {
+        val listPermissionNeeded = arrayListOf<String>()
+        for (permission in multiplePermissionNameList) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                listPermissionNeeded.add(permission)
+            }
+        }
+        if (listPermissionNeeded.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                listPermissionNeeded.toTypedArray(),
+                Build.VERSION_CODES.TIRAMISU
+            )
+            return false
+        }
+        return true
+    }
 
     override fun onResume() {
         super.onResume()
