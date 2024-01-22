@@ -24,18 +24,18 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.rendersoncs.report.R
-import com.rendersoncs.report.data.local.AppDatabase
-import com.rendersoncs.report.databinding.ActivityMainBinding
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.common.util.SharePrefInfoUser
 import com.rendersoncs.report.common.util.viewModelFactory
+import com.rendersoncs.report.data.local.AppDatabase
+import com.rendersoncs.report.databinding.ActivityMainBinding
 import com.rendersoncs.report.repository.ReportRepository
-import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.fragment.ChooseThemeDialogFragment.SingleChoiceListener
 import com.rendersoncs.report.view.login.LoginActivity
 import com.rendersoncs.report.view.login.util.LibraryClass
+import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.coroutines.Job
 
 @AndroidEntryPoint
@@ -87,9 +87,6 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
     private fun checkLoggedUser() {
         authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
             if (firebaseAuth.currentUser == null) {
-                /*navHostFragment.navController.navigate(
-                    R.id.action_loginFragment_to_dashboard
-                )*/
                 Intent(this, LoginActivity::class.java).apply {
                     startActivity(this)
                     finish()
@@ -167,11 +164,6 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
         binding.navView.menu.findItem(R.id.login).setOnMenuItemClickListener {
             FirebaseAuth.getInstance().signOut()
             viewModel.deletePreference()
-            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-            /*navHostFragment.navController.navigate(
-                    DashboardFragmentDirections.actionDrawerCloseToLogin()
-            )*/
-            finish()
             true
         }
     }
@@ -202,15 +194,15 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navHostFragment.navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
+        return navHostFragment.navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     override fun onBackPressed() {
         if (this.drawerLayout.isDrawerOpen(GravityCompat.START))
             this.drawerLayout.closeDrawer(GravityCompat.START)
-        else
+        else {
             super.onBackPressed()
+        }
     }
 
     override fun onPositiveButtonClicked(list: Array<String>, position: Int) {
