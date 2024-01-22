@@ -72,7 +72,7 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         })
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(GOOGLE_TOKEN)
+                .requestIdToken("GOOGLE_TOKEN")
                 .requestEmail()
                 .build()
         mGoogleApiClient = GoogleSignIn.getClient(this, gso)
@@ -104,8 +104,8 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
 
     override fun onStop() {
         super.onStop()
-        if (mAuthListener != null) {
-            mAuth!!.removeAuthStateListener(mAuthListener!!)
+        mAuthListener?.let {
+            mAuth?.removeAuthStateListener(it)
         }
     }
 
@@ -125,40 +125,38 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
 
     private fun accessLoginData(provider: String, vararg tokens: String?) {
         if (tokens.isNotEmpty() && tokens[0] != null) {
-            var credential: AuthCredential? = FacebookAuthProvider.getCredential(tokens[0]!!)
+            var credential: AuthCredential? = FacebookAuthProvider.getCredential(tokens[0] ?: "")
             credential = if (provider.equals(GOOGLE, ignoreCase = true)) GoogleAuthProvider.getCredential(tokens[0], null) else credential
-            credential = if (provider.equals("twitter", ignoreCase = true)) TwitterAuthProvider.getCredential(tokens[0]!!, tokens[1]!!) else credential
+            credential = if (provider.equals("twitter", ignoreCase = true)) TwitterAuthProvider.getCredential(tokens[0] ?: "", tokens[1] ?: "") else credential
 
-            user!!.saveProviderSP(this@LoginActivity, provider)
-            mAuth!!.signInWithCredential(credential!!)
-                    .addOnCompleteListener { task: Task<AuthResult?> ->
+            user?.saveProviderSP(this@LoginActivity, provider)
+            mAuth?.signInWithCredential(credential!!)
+                    ?.addOnCompleteListener { task: Task<AuthResult?> ->
                         if (!task.isSuccessful) {
                             showSnackBar(resources.getString(R.string.label_login_social_failed))
                         }
                     }
-                    .addOnFailureListener { obj: Exception -> obj.printStackTrace() }
+                    ?.addOnFailureListener { obj: Exception -> obj.printStackTrace() }
         } else {
-            mAuth!!.signOut()
+            mAuth?.signOut()
         }
     }
 
     private val firebaseAuthResultHandler: AuthStateListener
         get() = AuthStateListener { firebaseAuth: FirebaseAuth ->
             val userFirebase = firebaseAuth.currentUser ?: return@AuthStateListener
-            if (user!!.id == null
-                    && isNameOk(user, userFirebase)) {
-                user!!.id = userFirebase.uid
-                user!!.setNameIfNull(userFirebase.displayName)
-                user!!.setEmailIfNull(userFirebase.email)
-                user!!.setUrlImgIfNull(userFirebase.photoUrl)
-                user!!.saveDB()
+            if (user?.id == null && isNameOk(user, userFirebase)) {
+                user?.id = userFirebase.uid
+                user?.setNameIfNull(userFirebase.displayName)
+                user?.setEmailIfNull(userFirebase.email)
+                user?.setUrlImgIfNull(userFirebase.photoUrl)
+                user?.saveDB()
             }
             callMainActivity()
         }
 
     private fun isNameOk(user: User?, firebaseUser: FirebaseUser): Boolean {
-        return (user!!.name != null
-                || firebaseUser.displayName != null)
+        return (user?.name != null || firebaseUser.displayName != null)
     }
 
     override fun initViews() {
@@ -191,8 +189,8 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
 
     override fun initUser() {
         user = User()
-        user!!.email = binding.email.text.toString()
-        user!!.password = binding.password.text.toString()
+        user?.email = binding.email.text.toString()
+        user?.password = binding.password.text.toString()
     }
 
     fun callSignUp(view: View?) {
@@ -245,35 +243,32 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
     }
 
     private fun verifyLogged() {
-        if (mAuth!!.currentUser != null) {
+        if (mAuth?.currentUser != null) {
             callMainActivity()
         } else {
-            mAuth!!.addAuthStateListener(mAuthListener!!)
+            mAuth?.addAuthStateListener(mAuthListener!!)
         }
     }
 
     private fun verifyLogin() {
-        user!!.saveProviderSP(this@LoginActivity, "")
-        mAuth!!.signInWithEmailAndPassword(
-                user!!.email,
-                user!!.password
-        )
-                .addOnCompleteListener { task: Task<AuthResult?> ->
-                    if (!task.isSuccessful) {
-                        closeProgressBar()
-                    }
-                    if (task.isComplete) {
-                        mAuth?.currentUser?.let { currentUser ->
-                            val user = com.rendersoncs.report.model.User(
-                                userId = currentUser.uid
-                            )
-                            viewModel.insertUserBD(user)
-                        }
-                    }
-                }.addOnFailureListener { e: Exception ->
-                    FirebaseCrashlytics.getInstance().recordException(e)
-                    showSnackBar(e.message)
+        user?.saveProviderSP(this@LoginActivity, "")
+        mAuth?.signInWithEmailAndPassword(user?.email ?: "", user?.password ?: "")
+            ?.addOnCompleteListener { task: Task<AuthResult?> ->
+                if (!task.isSuccessful) {
+                    closeProgressBar()
                 }
+                if (task.isComplete) {
+                    mAuth?.currentUser?.let { currentUser ->
+                        val user = com.rendersoncs.report.model.User(
+                            userId = currentUser.uid
+                        )
+                        viewModel.insertUserBD(user)
+                    }
+                }
+            }?.addOnFailureListener { e: Exception ->
+                FirebaseCrashlytics.getInstance().recordException(e)
+                showSnackBar(e.message)
+            }
     }
 
     private fun callMainActivity() {
@@ -282,10 +277,14 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         finish()
     }
 
+    override fun onBackPressed() {
+        finish()
+        super.onBackPressed()
+    }
+
     companion object {
         private const val RC_SIGN_IN_GOOGLE = 7859
         private const val FACEBOOK = "facebook"
         private const val GOOGLE = "google"
-        private const val GOOGLE_TOKEN = "940299608698-s73ntnnnlbauh7lm0pb8ouis82d279m7.apps.googleusercontent.com"
     }
 }
