@@ -32,10 +32,11 @@
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/margin_8"
         android:layout_marginTop="@dimen/margin_8"
-        app:layout_constraintBottom_toBottomOf="@+id/recycler_view_form"
-        app:layout_constraintEnd_toEndOf="@+id/recycler_view_form"
-        app:layout_constraintStart_toStartOf="@+id/recycler_view_form"
-        app:layout_constraintTop_toTopOf="@+id/recycler_view_form" />
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
