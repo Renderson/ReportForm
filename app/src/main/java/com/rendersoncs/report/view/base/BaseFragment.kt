@@ -35,13 +35,13 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
     protected abstract fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): VB?
 
     fun toast(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 
     fun showSnackBar(message: String?, processBar: ProgressBar) {
         val snackbar = Snackbar.make(
             processBar,
-            message!!,
+            message ?: "",
             Snackbar.LENGTH_LONG
         )
             .setAction("Action", null)
