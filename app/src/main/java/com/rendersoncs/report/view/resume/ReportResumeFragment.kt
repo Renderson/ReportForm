@@ -214,6 +214,8 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
 
     private fun createPieChart() = with(binding) {
         this.contentResume.resumeGraph.pieChart.apply {
+            this.clear()
+
             this.setExtraOffsets(5f, 10f, 5f, 5f)
             this.setUsePercentValues(false)
             this.setHoleColor(Color.TRANSPARENT)
@@ -233,15 +235,19 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         val mxC = listRadioC.size
         val mxNA = listRadioNA.size
         val mxNC = listRadioNC.size
+        val dynamicColors = ArrayList<Int>()
 
         if (mxC.toFloat() != 0f) {
             yValues.add(PieEntry(mxC.toFloat(), ""))
+            dynamicColors.add(ContextCompat.getColor(requireContext(), R.color.colorRadioC))
         }
         if (mxNA.toFloat() != 0f) {
             yValues.add(PieEntry(mxNA.toFloat(), ""))
+            dynamicColors.add(ContextCompat.getColor(requireContext(), R.color.colorRadioNA))
         }
         if (mxNC.toFloat() != 0f) {
             yValues.add(PieEntry(mxNC.toFloat(), ""))
+            dynamicColors.add(ContextCompat.getColor(requireContext(), R.color.colorRadioNC))
         }
         val dataSet = PieDataSet(yValues, "")
         dataSet.setAutomaticallyDisableSliceSpacing(true)
@@ -250,9 +256,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         dataSet.sliceSpace = 3f
         dataSet.selectionShift = 5f
         dataSet.valueTextSize = 24f
-        dataSet.setColors(ContextCompat.getColor(requireContext(), R.color.colorRadioC),
-                ContextCompat.getColor(requireContext(), R.color.colorRadioNA),
-                ContextCompat.getColor(requireContext(), R.color.colorRadioNC))
+        dataSet.colors = dynamicColors
 
         // Animation
         binding.contentResume.resumeGraph.pieChart.animateY(800, Easing.EaseInCirc)
@@ -260,6 +264,8 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         data.setValueTextSize(10f)
         data.setValueTextColor(Color.WHITE)
         binding.contentResume.resumeGraph.pieChart.data = data
+
+        this.contentResume.resumeGraph.pieChart.invalidate()
     }
 
     @SuppressLint("StringFormatMatches", "SetTextI18n")
