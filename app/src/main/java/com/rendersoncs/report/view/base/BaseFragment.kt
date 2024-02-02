@@ -39,14 +39,14 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
     }
 
     fun showSnackBar(message: String?, processBar: ProgressBar) {
-        val snackbar = Snackbar.make(
+        Snackbar.make(
             processBar,
             message ?: "",
             Snackbar.LENGTH_LONG
-        )
-            .setAction("Action", null)
-        configSnackBar(requireContext(), snackbar)
-        snackbar.show()
+        ).setAction("Action", null).apply {
+            configSnackBar(requireContext(), this)
+            this.show()
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
