@@ -5,9 +5,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.util.component1
 import androidx.core.util.component2
@@ -50,6 +52,18 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     private val listRadioNC = ArrayList<String>()
     private lateinit var report: Report
     private lateinit var reportDetail: Report
+
+    private val multiplePermissionNameList = if (Build.VERSION.SDK_INT >= 33) {
+        arrayListOf(
+            Manifest.permission.READ_MEDIA_VIDEO,
+            Manifest.permission.READ_MEDIA_IMAGES
+        )
+    } else {
+        arrayListOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
 
     private val requestLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -332,8 +346,25 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         )
     }
 
-    private fun isStoragePermissionGranted(): Boolean = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED
+    private fun isStoragePermissionGranted(): Boolean {
+        val listPermissionNeeded = arrayListOf<String>()
+        for (permission in multiplePermissionNameList) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                listPermissionNeeded.add(permission)
+            }
+        }
+        if (listPermissionNeeded.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                listPermissionNeeded.toTypedArray(),
+                Build.VERSION_CODES.TIRAMISU
+            )
+            return false
+        }
+        return true
+    }
 }
