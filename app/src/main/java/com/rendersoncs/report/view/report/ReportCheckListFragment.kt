@@ -40,6 +40,7 @@ import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_report_list_empty.view.action_add_item
 import kotlinx.coroutines.Job
 import java.io.File
 import java.util.*
@@ -78,7 +79,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     private val multiplePermissionNameList = if (Build.VERSION.SDK_INT >= 33) {
         arrayListOf(
-            //Manifest.permission.READ_MEDIA_AUDIO,
             Manifest.permission.READ_MEDIA_VIDEO,
             Manifest.permission.READ_MEDIA_IMAGES
         )
@@ -120,12 +120,14 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                         closeReport()
                     }
                 })
-        user.id = FirebaseAuth.getInstance().currentUser!!.uid
+        user.id = FirebaseAuth.getInstance().currentUser?.uid
+        viewModel.checkReportItems.value = reportItems
         loadCheckList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.contentReport.progressBar.show()
         initViews()
         setupRV()
         setObservers()
@@ -180,6 +182,10 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             true
         }
 
+        binding.contentReport.emptyViewReport.layoutReportListEmpty.action_add_item.setOnClickListener {
+            createItemCheckList()
+        }
+
         this.contentReport.progressBar.visibility = View.GONE
     }
 
@@ -231,20 +237,18 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     private fun checkListFireBase() {
-        //this.contentReport.fabNewItem.visibility = View.VISIBLE
-        //this.contentReport.progressBar.visibility = View.GONE
-
         databaseReference = user.id?.let { id ->
             LibraryClass.getFirebase()?.child(ReportConstants.FIREBASE.FIRE_USERS)
                     ?.child(id)?.child(ReportConstants.FIREBASE.FIRE_LIST)
         }
 
-        databaseReference!!.addChildEventListener(object : ChildEventListener {
+        databaseReference?.addChildEventListener(object : ChildEventListener {
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 dataSnapshot.getValue(ReportItems::class.java)?.let { reportItems.add(it) }
                 val key = dataSnapshot.key
                 mKeys.add(key)
+                viewModel.checkReportItems.value = reportItems
                 mAdapter.notifyDataSetChanged()
                 checkIfUpdateReport()
             }
@@ -257,6 +261,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 if (reportItems != null) {
                     this@ReportCheckListFragment.reportItems[index] = reportItems
                 }
+                viewModel.checkReportItems.value = arrayListOf(reportItems!!)
                 mAdapter.notifyDataSetChanged()
             }
 
@@ -265,13 +270,14 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 val index = mKeys.indexOf(key)
                 reportItems.removeAt(index)
                 mKeys.removeAt(index)
+                viewModel.checkReportItems.value = reportItems
                 mAdapter.notifyDataSetChanged()
             }
 
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
 
             override fun onCancelled(databaseError: DatabaseError) {
-                toast(getString(R.string.label_failed))
+                //toast(getString(R.string.label_failed))
             }
         })
     }
@@ -283,10 +289,9 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     private fun checkListLocal() {
-        //this.contentReport.progressBar.visibility = View.GONE
-        //this.contentReport.fabNewItem.visibility = View.GONE
-        //action_add_item.visibility = View.GONE
-        jsonListModeOff.addItemsFromJsonList(reportItems)
+        jsonListModeOff.addItemsFromJsonList(reportItems) {
+            viewModel.checkReportItems.value = it
+        }
         mAdapter.notifyDataSetChanged()
         checkIfUpdateReport()
     }
@@ -487,6 +492,17 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 }
             }
             mAdapter.notifyDataSetChanged()
+        }
+
+        viewModel.checkReportItems.observe(viewLifecycleOwner) {
+            binding.contentReport.progressBar.hide()
+            if (it.isEmpty()) {
+                binding.contentReport.emptyViewReport.layoutReportListEmpty.show()
+                binding.contentReport.recyclerViewForm.hide()
+            } else {
+                binding.contentReport.emptyViewReport.layoutReportListEmpty.hide()
+                binding.contentReport.recyclerViewForm.show()
+            }
         }
     }
 

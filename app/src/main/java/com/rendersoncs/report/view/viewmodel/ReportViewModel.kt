@@ -52,6 +52,8 @@ class ReportViewModel @Inject constructor(
     private var _reportItemsUpdate = SingleLiveEvent<ArrayList<ReportItems>>()
     var reportItemsUpdate: LiveData<ArrayList<ReportItems>> = _reportItemsUpdate
 
+    var checkReportItems = MutableLiveData<ArrayList<ReportItems>>()
+
     private var _uiStateScore = MutableStateFlow(10.0F)
     val uiStateScore: StateFlow<Float> = _uiStateScore
 
