@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 public class DownloadJson {
 
-    public void addItemsFromJsonList(ArrayList<ReportItems> reportItemsList) {
+    public void addItemsFromJsonList(ArrayList<ReportItems> reportItemsList, MyCallback callback) {
         try {
             JSONObject js = new JSONObject(readJsonDataFromFile()).getJSONObject("list");
 
@@ -40,8 +40,8 @@ public class DownloadJson {
                 reportItems.setTitle(itemTitle);
                 reportItems.setDescription(itemDescription);
                 reportItemsList.add(reportItems);
-
             }
+            callback.onComplete(reportItemsList);
         } catch (JSONException | IOException e) {
             FirebaseCrashlytics.getInstance().recordException(e);
         }
@@ -52,7 +52,7 @@ public class DownloadJson {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         User user = new User();
-        user.setId( mAuth.getCurrentUser().getUid() );
+        user.setId(mAuth.getCurrentUser().getUid());
 
         String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + "Report" + "/" + user.getId() + ".json";
 
@@ -73,5 +73,9 @@ public class DownloadJson {
             }
         }
         return new String(builder);
+    }
+
+    public interface MyCallback {
+        void onComplete(ArrayList<ReportItems> reportItemsList);
     }
 }
