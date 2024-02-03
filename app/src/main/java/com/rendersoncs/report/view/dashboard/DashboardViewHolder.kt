@@ -7,6 +7,7 @@ import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.ItemMainListBinding
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.common.extension.StringExtension.limitsText
+import com.rendersoncs.report.common.util.show
 import com.rendersoncs.report.model.Report
 import java.util.Locale
 
@@ -26,6 +27,10 @@ class DashboardViewHolder(val binding: ItemMainListBinding) : RecyclerView.ViewH
         } else {
             val colorNotAccording = ContextCompat.getColor(binding.viewResult.context, R.color.colorRadioNC)
             changeColorShape(colorNotAccording)
+        }
+
+        if (report.concluded == false) {
+            iconWarning.show()
         }
 
         itemView.setOnClickListener {
