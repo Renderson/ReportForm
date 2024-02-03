@@ -30,6 +30,7 @@ import com.rendersoncs.report.common.extension.StringExtension
 import com.rendersoncs.report.common.util.CommonDialog
 import com.rendersoncs.report.common.util.DetailState
 import com.rendersoncs.report.common.util.ResumeState
+import com.rendersoncs.report.common.util.disable
 import com.rendersoncs.report.common.util.show
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportDetailPhoto
@@ -168,6 +169,10 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
 
     private fun onDetailLoaded(report: Report) = with(binding) {
         this.contentResume.apply {
+            if (report.concluded == false) {
+                openPdf.disable()
+            }
+
             controllerResume.text = getString(R.string.label_report, report.controller)
             emailResume.text = report.email
             dateResume.text = report.date
