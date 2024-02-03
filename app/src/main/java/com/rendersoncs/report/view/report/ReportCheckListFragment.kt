@@ -84,8 +84,8 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private var clear = false
     private var concluded = false
     private var canFinish = false
-    private var reportId = -1
     private var startSaveAutomatic = false
+    private var reportId = -1
 
     private var databaseReference: DatabaseReference? = null
     private val user = User()
@@ -95,7 +95,10 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private val automaticSave = object : Runnable {
         override fun run() {
             concluded = false
-            saveReport()
+            if (startSaveAutomatic) {
+                saveReport()
+            }
+            startSaveAutomatic = true
             mainHandler?.postDelayed(this, (1 * 60 * 1000))
         }
     }
@@ -457,13 +460,13 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             if (reportId != -1) {
                 viewModel.deleteReportByID(reportId)
                 viewModel.insertReport(report)
-            } else if (args.report.id == null) {
-                viewModel.insertReport(report)
-            } else {
+            } else if (args.report.id != null) {
                 args.report.id?.let { id ->
                     viewModel.deleteReportByID(id)
                     viewModel.insertReport(report)
                 }
+            } else {
+                viewModel.insertReport(report)
             }
         }
     }
@@ -752,7 +755,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private fun getResultScore() {
         uiStateJobScore = lifecycleScope.launchWhenResumed {
             viewModel.uiStateScore.collect { score ->
-                startSaveAutomatic = true
                 showScore(score)
             }
         }
@@ -786,10 +788,8 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     override fun onResume() {
-        if (startSaveAutomatic) {
-            mainHandler = Handler(Looper.getMainLooper())
-            mainHandler?.post(automaticSave)
-        }
+        mainHandler = Handler(Looper.getMainLooper())
+        mainHandler?.post(automaticSave)
 
         getResultScore()
         keyboardCloseTouchListener(recyclerView)
