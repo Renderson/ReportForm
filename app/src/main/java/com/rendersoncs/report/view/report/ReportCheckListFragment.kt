@@ -9,6 +9,8 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,9 +24,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.database.*
+import com.rendersoncs.report.BuildConfig
 import com.rendersoncs.report.R
 import com.rendersoncs.report.common.animated.animatedView
 import com.rendersoncs.report.common.constants.ReportConstants
@@ -58,6 +66,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private lateinit var resultController: String
     private lateinit var reportPosition: ReportItems
 
+    private var mInterstitialAd: InterstitialAd? = null
     private val reportItems = ArrayList<ReportItems>()
     private val mKeys = ArrayList<String?>()
 
@@ -73,9 +82,23 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private val snackBarHelper = SnackBarHelper()
     private val checkAnswerList = ReportCheckAnswer()
     private var clear = false
+    private var concluded = false
+    private var canFinish = false
+    private var reportId = -1
+    private var startSaveAutomatic = false
 
     private var databaseReference: DatabaseReference? = null
     private val user = User()
+
+    private var mainHandler: Handler? = null
+
+    private val automaticSave = object : Runnable {
+        override fun run() {
+            concluded = false
+            saveReport()
+            mainHandler?.postDelayed(this, (1 * 60 * 1000))
+        }
+    }
 
     private val multiplePermissionNameList = if (Build.VERSION.SDK_INT >= 33) {
         arrayListOf(
@@ -131,6 +154,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         initViews()
         setupRV()
         setObservers()
+        showAdMob()
     }
 
     override fun getViewBinding(
@@ -411,6 +435,8 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             buttonConfirm = getString(R.string.confirm),
             buttonCancel = getString(R.string.cancel),
             confirmListener = {
+                concluded = true
+                canFinish = true
                 saveReport()
             }
         )
@@ -425,10 +451,13 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 controller = resultController,
                 score = this.contentReport.showScore.text.toString(),
                 result = resultScore,
-                concluded = true,
+                concluded = concluded,
                 userId = viewModel.userUid.value ?: ""
             )
-            if (args.report.id == null) {
+            if (reportId != -1) {
+                viewModel.deleteReportByID(reportId)
+                viewModel.insertReport(report)
+            } else if (args.report.id == null) {
                 viewModel.insertReport(report)
             } else {
                 args.report.id?.let { id ->
@@ -443,6 +472,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         var reportCheckList: ReportCheckList
         viewModel.savedReport.observe(viewLifecycleOwner) { reportId ->
             if (reportId != null) {
+                this.reportId = reportId.toInt()
                 reportItems.forEach {
                     if (it.isOpt1 || it.isOpt2 || it.isOpt3) {
                         val conformity = when (it.selectedAnswerPosition) {
@@ -465,15 +495,21 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             }
         }
         viewModel.savedCheckList.observe(viewLifecycleOwner) {
-            if (it != null) {
+            if (it != null && concluded) {
                 viewModel.savedReport.value?.let { reportId ->
                     viewModel.generatePDF(reportId)
                 }
+            } else if (canFinish) {
+                navigateUp()
             }
         }
         viewModel.pdfCreated.observe(viewLifecycleOwner) { result ->
             if (result) {
-                findNavController().navigateUp()
+                if (mInterstitialAd != null) {
+                    mInterstitialAd?.show(requireActivity())
+                } else {
+                    navigateUp()
+                }
             }
         }
 
@@ -504,6 +540,38 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 binding.contentReport.recyclerViewForm.show()
             }
         }
+    }
+
+    private fun showAdMob() {
+        val admobId = if (BuildConfig.BUILD_TYPE != "release") {
+            ReportConstants.ADMOB.ADMOB_HLG
+        } else {
+            ReportConstants.ADMOB.ADMOB_PROD
+        }
+
+        val adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(
+            requireContext(),
+            admobId,
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mInterstitialAd = null
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    mInterstitialAd = interstitialAd
+
+                    mInterstitialAd?.fullScreenContentCallback =
+                        object : FullScreenContentCallback() {
+                            override fun onAdDismissedFullScreenContent() {
+                                findNavController().navigateUp()
+                            }
+                        }
+                }
+            }
+        )
     }
 
     private fun closeReport() {
@@ -684,6 +752,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private fun getResultScore() {
         uiStateJobScore = lifecycleScope.launchWhenResumed {
             viewModel.uiStateScore.collect { score ->
+                startSaveAutomatic = true
                 showScore(score)
             }
         }
@@ -711,13 +780,23 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         return true
     }
 
+    override fun onPause() {
+        super.onPause()
+        mainHandler?.removeCallbacks(automaticSave)
+    }
+
     override fun onResume() {
-        super.onResume()
+        if (startSaveAutomatic) {
+            mainHandler = Handler(Looper.getMainLooper())
+            mainHandler?.post(automaticSave)
+        }
+
         getResultScore()
         keyboardCloseTouchListener(recyclerView)
 
         getReturnNote()
         findNavController().currentBackStackEntry?.savedStateHandle?.remove<String>("noteTest")
+        super.onResume()
     }
 
     override fun onDetach() {
