@@ -76,23 +76,18 @@
             card_view:layout_constraintStart_toStartOf="@+id/dateView"
             card_view:layout_constraintTop_toBottomOf="@+id/dateView" />
 
-        <!--<ImageView
-            android:id="@+id/overflow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="@string/label_image_overflow"
-            android:focusable="true"
-            android:padding="22dp"
-            android:paddingStart="@dimen/padding_16"
-            android:paddingEnd="@dimen/padding_16"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_action_dots"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/iconWarning"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent" />-->
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:lottie_autoPlay="true"
+            card_view:lottie_loop="true"
+            card_view:lottie_rawRes="@raw/warning"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
