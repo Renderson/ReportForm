@@ -21,7 +21,7 @@ ext.versions = [
         firestorageui: '4.1.0',
         firedatabaseui: '5.0.0',
         facebookAuth: '4.42.0',
-        googleAuth: '19.0.0',
+        googleAuth: '20.7.0',
         aboutPage: '1.2.5',
         leakcanary: '2.12',
         signature: '1.2.1',

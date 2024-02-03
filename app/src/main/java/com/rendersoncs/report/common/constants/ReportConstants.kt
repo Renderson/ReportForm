@@ -27,8 +27,41 @@ class ReportConstants {
         const val FIRE_EMAIL = "email"
     }
 
-    object REPORT {
-        const val REPORT_ID = "reportId"
+    object ADMOB {
+        val ADMOB_HLG: String by lazy {
+            val properties = Properties()
+            try {
+                val inputStream = javaClass.classLoader?.getResourceAsStream("secrets.properties")
+                properties.load(inputStream)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            properties.getProperty("ADMOB_HLG_PUB")
+        }
+
+        val ADMOB_PROD: String by lazy {
+            val properties = Properties()
+            try {
+                val inputStream = javaClass.classLoader?.getResourceAsStream("secrets.properties")
+                properties.load(inputStream)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            properties.getProperty("ADMOB_PROD_PUB")
+        }
+    }
+
+    object GOOGLE {
+        val GOOGLE_TOKEN: String by lazy {
+            val properties = Properties()
+            try {
+                val inputStream = javaClass.classLoader?.getResourceAsStream("secrets.properties")
+                properties.load(inputStream)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            properties.getProperty("GOOGLE_TOKEN")
+        }
     }
 
     object CHARACTERS {
