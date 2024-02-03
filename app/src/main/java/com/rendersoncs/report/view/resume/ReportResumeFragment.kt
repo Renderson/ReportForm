@@ -171,6 +171,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         this.contentResume.apply {
             if (report.concluded == false) {
                 openPdf.disable()
+                infoWarning.show()
             }
 
             controllerResume.text = getString(R.string.label_report, report.controller)

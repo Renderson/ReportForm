@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/resume_constraint"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewResume"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/colorCardView"
-        app:elevation="@dimen/elevation_4"
-        app:layout_constraintTop_toTopOf="parent">
+        app:elevation="@dimen/elevation_4">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,7 +48,6 @@
                     android:textSize="@dimen/text_size_12"
                     app:layout_constraintStart_toEndOf="@+id/txt1"
                     app:layout_constraintTop_toTopOf="@+id/txt1" />
-
 
                 <TextView
                     android:id="@+id/txt2"
@@ -167,6 +166,40 @@
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/infoWarning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_8"
+        android:backgroundTint="@color/tertiaryContainer"
+        android:visibility="gone"
+        app:cardCornerRadius="@dimen/margin_8"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewResume"
+        tools:visibility="visible">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/margin_22"
+                android:layout_height="@dimen/margin_22"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_info" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8"
+                android:text="Para o que botão fique liberado para visualizar o PDF, você precisar finalizar o relatório!"
+                android:textColor="@color/onTertiaryContainer" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.cardview.widget.CardView>
+
     <include
         android:id="@+id/resumeGraph"
         layout="@layout/content_report_resume_graph" />
@@ -176,8 +209,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_8"
         app:cardBackgroundColor="@color/colorCardView"
-        app:elevation="@dimen/elevation_4"
-        app:layout_constraintTop_toBottomOf="@+id/resumeGraph">
+        app:elevation="@dimen/elevation_4">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -199,6 +231,7 @@
                 android:id="@+id/resume_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                tools:itemCount="5"
                 tools:listitem="@layout/item_report_resume_list">
 
             </androidx.recyclerview.widget.RecyclerView>
@@ -207,4 +240,4 @@
 
     </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -8,6 +8,8 @@
     <color name="colorContentButton">#000000</color>
     <color name="colorIconNote">#4F9BFF</color>
     <color name="colorBorderShapeImage">#FFFFFF</color>
+    <color name="tertiaryContainer">#573e5c</color>
+    <color name="onTertiaryContainer">#fad8fd</color>
 
     <color name="surface">#1A191E</color>
     <color name="background">#121212</color>
