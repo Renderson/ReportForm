@@ -25,6 +25,7 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.R
+import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.data.local.AppDatabase
 import com.rendersoncs.report.databinding.FragmentLoginBinding
 import com.rendersoncs.report.common.util.closeVirtualKeyBoard
@@ -72,7 +73,7 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         })
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("GOOGLE_TOKEN")
+                .requestIdToken(ReportConstants.GOOGLE.GOOGLE_TOKEN)
                 .requestEmail()
                 .build()
         mGoogleApiClient = GoogleSignIn.getClient(this, gso)
@@ -84,7 +85,7 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN_GOOGLE) {
+        if (requestCode == RC_SIGN_IN_GOOGLE && data != null) {
             val googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             val account = googleSignInResult!!.signInAccount
             if (account == null) {
