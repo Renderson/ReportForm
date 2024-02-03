@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.gms.ads.MobileAds
 import com.rendersoncs.report.common.constants.ReportConstants
 import dagger.hilt.android.HiltAndroidApp
 
@@ -25,6 +26,8 @@ class MyApplication : Application() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
 
+        // AdMob
+        MobileAds.initialize(applicationContext)
     }
 
     companion object {
