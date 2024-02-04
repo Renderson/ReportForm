@@ -30,10 +30,7 @@ class NewReportFragment :
     private var uiStateJobName: Job? = null
     private val date = Calendar.getInstance().time
     private val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
-    private var company: Boolean = false
     private var email: Boolean = false
-    private var controller: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -89,11 +86,9 @@ class NewReportFragment :
 
             companyId.afterTextChanged {
                 if (it.isEmpty()) {
-                    company = false
                     enableButton()
-                    textInputCompany.error = "Company must note be empty"
+                    textInputCompany.error = getString(R.string.txt_enter_name_company)
                 } else {
-                    company = true
                     enableButton()
                     textInputCompany.error = null
                 }
@@ -113,11 +108,9 @@ class NewReportFragment :
 
             controllerId.afterTextChanged {
                 if (it.isEmpty()) {
-                    controller = false
                     enableButton()
-                    textInputController.error = "Controller must not be empty"
+                    textInputController.error = getString(R.string.txt_enter_name_controller)
                 } else {
-                    controller = true
                     enableButton()
                     textInputController.error = null
                 }
@@ -126,24 +119,21 @@ class NewReportFragment :
     }
 
     private fun enableButton() = with(binding) {
-        if (company && controller && email) {
-            btnNewReport.enable()
-        } else {
-            btnNewReport.disable()
-        }
+        btnNewReport.isEnabled = addNewReport.companyId.text?.isNotEmpty() == true
+                && email
+                && addNewReport.controllerId.text?.isNotEmpty() == true
     }
 
     private fun setListener() = with(binding) {
         btnNewReport.setOnClickListener {
             hideKeyboard()
             binding.addNewReport.apply {
-                val (id, company, email, date, controller) = getReportContent()
                 val reportNew = ReportNew(
-                    id,
-                    company,
-                    email,
-                    date,
-                    controller
+                    id = if (args.reportEdit == -1) null else args.reportEdit,
+                    company = companyId.text.toString(),
+                    email = emailId.text.toString(),
+                    date =dateId.text.toString(),
+                    controller = controllerId.text.toString()
                 )
                 val bundle = Bundle().apply {
                     putSerializable("report", reportNew)
@@ -153,16 +143,6 @@ class NewReportFragment :
                 )
             }
         }
-    }
-
-    private fun getReportContent(): ReportNew = binding.addNewReport.let {
-        val id = if (args.reportEdit == -1) null else args.reportEdit
-        val company = it.companyId.text.toString()
-        val email = it.emailId.text.toString()
-        val date = it.dateId.text.toString()
-        val controller = it.controllerId.text.toString()
-
-        return ReportNew(id, company, email, date, controller)
     }
 
     override fun onResume() {
