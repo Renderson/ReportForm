@@ -97,6 +97,14 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val shareItem = menu.findItem(R.id.action_detail_share)
+        if (args.reportResume.concluded == false) {
+            shareItem.isVisible = false
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_detail_share -> shareDocument()
