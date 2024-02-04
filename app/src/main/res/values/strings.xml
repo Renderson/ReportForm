@@ -20,6 +20,8 @@
     <string name="date">dd-MM-yyyy</string>
     <string name="txt_new_report">New report started!</string>
     <string name="txt_email">Provide a valid email address.</string>
+    <string name="txt_enter_name_company">Enter the company name.</string>
+    <string name="txt_enter_name_controller">Enter the name of the person responsible.</string>
     <string name="space_date">-</string>
     <string name="txt_to_clean">To clean</string>
     <string name="leave">Get out</string>

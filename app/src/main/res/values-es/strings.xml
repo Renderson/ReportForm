@@ -19,7 +19,9 @@
     <string name="start">Empezar</string>
     <string name="date">dd-MM-yyyy</string>
     <string name="txt_new_report">Nuevo informe comenzado!</string>
-    <string name="txt_email">Proporcione una dirección de correo electrónico válida.</string>
+    <string name="txt_email">Introduzca el nombre de la empresa.</string>
+    <string name="txt_enter_name_company">Digite o nome da empresa.</string>
+    <string name="txt_enter_name_controller">Introduzca el nombre del responsable.</string>
     <string name="space_date">-</string>
     <string name="txt_to_clean">Aclarar</string>
     <string name="leave">Dejar</string>
