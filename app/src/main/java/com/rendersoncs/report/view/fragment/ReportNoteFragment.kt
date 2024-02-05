@@ -1,81 +1,65 @@
 package com.rendersoncs.report.view.fragment
 
-import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.DialogFragment
-import com.rendersoncs.report.R
-import com.rendersoncs.report.model.ReportItems
-import com.rendersoncs.report.view.report.ReportAdapter
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.rendersoncs.report.databinding.FragmentReportNoteBinding
+import com.rendersoncs.report.common.util.closeVirtualKeyBoard
+import com.rendersoncs.report.view.viewmodel.ReportViewModel
+import com.rendersoncs.report.view.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-class ReportNoteFragment(private val adapter: ReportAdapter,
-                         private val reportItems: ReportItems) : DialogFragment() {
+@AndroidEntryPoint
+class ReportNoteFragment : BaseFragment<FragmentReportNoteBinding, ReportViewModel>(),
+    TextView.OnEditorActionListener {
+    override val viewModel: ReportViewModel by activityViewModels()
+    private val args: ReportNoteFragmentArgs by navArgs()
 
-    private var note: EditText? = null
-    private var getNote: String? = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = requireActivity().layoutInflater
-        val view = inflater.inflate(R.layout.fragment_report_note, null)
-
-        if (view != null) {
-            note = view.findViewById(R.id.txt_note)
-        }
-
-        this.checkArguments()
-
-        val alertButton: String = changeTextButtonDialog()
-
-        return showAlertDialog(view, alertButton)
+        initView()
     }
 
-    private fun showAlertDialog(view: View?, alertButton: String): AlertDialog {
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setView(view)
-                .setNegativeButton(resources.getString(R.string.cancel)) { _: DialogInterface?, _: Int -> }
-                .setPositiveButton(alertButton) { _: DialogInterface?, _: Int ->
-                    if (getNote == null) {
-                        insertNewNote()
-                    } else {
-                        updateNote()
-                    }
-                }
-        return builder.create()
-    }
+    private fun initView() = with(binding) {
+        if (args.note == "null") txtNote.setText("") else txtNote.setText(args.note)
 
-    private fun checkArguments() {
-        if (arguments != null) {
-            getNote = requireArguments().getString(ReportConstants.ITEM.NOTE)
-            note!!.setText(getNote)
+        txtNote.setOnEditorActionListener(this@ReportNoteFragment)
+        btnAddNote.setOnClickListener {
+            insertNote()
         }
     }
 
-    private fun changeTextButtonDialog(): String {
-        return if (getNote != null) {
-            resources.getString(R.string.change)
-        } else {
-            resources.getString(R.string.insert)
+    private fun insertNote() = with(binding) {
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(
+            "noteTest",
+            txtNote.text.toString()
+        )
+        findNavController().navigateUp()
+    }
+
+    override fun getViewBinding(
+            inflater: LayoutInflater,
+            container: ViewGroup?
+    ) = FragmentReportNoteBinding.inflate(
+            inflater,
+            container,
+            false
+    )
+
+    override fun onEditorAction(view: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            closeVirtualKeyBoard(requireContext(), requireView())
+            insertNote()
+            return true
         }
-    }
-
-    private fun insertNewNote() {
-        val newNote = note!!.text.toString()
-        adapter.insertNote(reportItems, newNote)
-    }
-
-    private fun updateNote() {
-        if (arguments != null) {
-            val updateNote = note!!.text.toString()
-            adapter.insertNote(reportItems, updateNote)
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        dismiss()
+        return false
     }
 }

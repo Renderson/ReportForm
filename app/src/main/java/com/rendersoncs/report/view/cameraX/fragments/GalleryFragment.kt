@@ -36,7 +36,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager.widget.ViewPager
 import com.rendersoncs.report.BuildConfig
 import com.rendersoncs.report.R
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.view.cameraX.utils.padWithDisplayCutout
 import com.rendersoncs.report.view.cameraX.utils.showImmersive
 import java.io.File

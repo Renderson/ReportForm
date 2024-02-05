@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#1E56A0</color>
-    <color name="colorPrimaryDark">#163172</color>
-    <color name="colorAccent">#FF4081</color>
 
-    <color name="colorAccentAlternative">#ff4061</color>
-    <color name="colorBackground">#FFFFFF</color>
-    <color name="colorCardView">#F6F6F6</color>
+    <color name="colorPrimarySplash">#1E56A0</color>
+    <color name="colorCardView">#FFFFFFFF</color>
     <color name="card_shadow_form_field">#10000000</color>
     <color name="colorContentButton">#FFFFFF</color>
     <color name="colorIconNote">#1E56A0</color>
     <color name="colorBorderShapeImage">#000</color>
+    <color name="tertiaryContainer">#fad8fd</color>
+    <color name="onTertiaryContainer">#28132e</color>
 
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="colorBlack">#222222</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="background">#f9f9f9</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="blue_disabled">#A9C4CE</color>
+
     <color name="cod_gray_alpha_75">#BF121212</color>
     <color name="colorResume">#FF3F58E4</color>
 
@@ -25,10 +28,14 @@
     <color name="colorWhatsAppLogo">#2BB201</color>
     <color name="colorLinkedInLogo">#0077B5</color>
     <color name="colorAlto">#D3D3D3</color>
+    <color name="color_gray">#E6E6E6</color>
     <!--<color name="colorRowSelected">#3F51B599</color>-->
 
     <!--Color camera x-->
     <color name="icActive">#FFFFFFFF</color>
     <color name="icFocused">#DDFFFFFF</color>
     <color name="icPressed">#AAFFFFFF</color>
+
+    <color name="opacity90">#EBFFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <include layout="@layout/activity_main_empty"/>
+    <include layout="@layout/content_empty_state_layout"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/activity_main_list" />
+        tools:listitem="@layout/item_main_list" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatButton"

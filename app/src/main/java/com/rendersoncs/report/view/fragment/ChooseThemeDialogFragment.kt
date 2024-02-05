@@ -9,7 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.R
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
+import com.rendersoncs.report.common.constants.ReportConstants
 
 class ChooseThemeDialogFragment : DialogFragment() {
     private lateinit var preference: SharedPreferences

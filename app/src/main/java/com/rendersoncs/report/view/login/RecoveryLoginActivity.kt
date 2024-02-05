@@ -13,17 +13,17 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.rendersoncs.report.R
-import com.rendersoncs.report.databinding.ActivityRecoveryLoginBinding
-import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
+import com.rendersoncs.report.databinding.FragmentRecoveryLoginBinding
+import com.rendersoncs.report.common.util.closeVirtualKeyBoard
 
 class RecoveryLoginActivity : AppCompatActivity(), TextView.OnEditorActionListener {
     private var firebaseAuth: FirebaseAuth? = null
-    private lateinit var binding: ActivityRecoveryLoginBinding
+    private lateinit var binding: FragmentRecoveryLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityRecoveryLoginBinding.inflate(layoutInflater)
+        binding = FragmentRecoveryLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 

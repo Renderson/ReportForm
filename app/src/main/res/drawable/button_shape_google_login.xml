@@ -39,7 +39,7 @@
                 <shape android:shape="rectangle">
                     <!--<corners android:radius="@dimen/com_facebook_button_login_corner_radius"/>-->
                     <corners android:radius="20dp"/>
-                    <solid android:color="@color/colorWhite"/>
+                    <solid android:color="@color/white"/>
                 </shape>
             </item>
         </selector>

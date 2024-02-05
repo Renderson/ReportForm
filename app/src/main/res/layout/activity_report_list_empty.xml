@@ -58,7 +58,7 @@
         android:background="@android:color/transparent"
         android:text="@string/label_create_items"
         android:textAllCaps="false"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
         android:textSize="@dimen/text_size_12"
         android:textStyle="bold"
         android:visibility="visible"

@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rendersoncs.report.R
 import mehdi.sakout.aboutpage.AboutPage
 import mehdi.sakout.aboutpage.Element
+import java.lang.Exception
 
 class AboutFragment : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -56,10 +57,14 @@ class AboutFragment : BottomSheetDialogFragment() {
                 .setIconDrawable(R.drawable.ic_mail_in_box_black_24dp)
                 .setIconTint(R.color.colorGrey)
                 .setOnClickListener {
-                    val i = Intent(Intent.ACTION_SENDTO)
-                    i.data = Uri.parse("mailto:")
-                    i.putExtra(Intent.EXTRA_EMAIL, arrayOf(EMAIL))
-                    startActivity(i)
+                    try {
+                        val i = Intent(Intent.ACTION_SENDTO)
+                        i.data = Uri.parse("mailto:")
+                        i.putExtra(Intent.EXTRA_EMAIL, arrayOf(EMAIL))
+                        startActivity(i)
+                    } catch (exception: Exception) {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com")))
+                    }
                 }
 
     private val itemLinkedIn: Element

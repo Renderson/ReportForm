@@ -23,9 +23,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.FirebaseStorage
 import com.rendersoncs.report.R
-import com.rendersoncs.report.databinding.ActivitySignUpBinding
-import com.rendersoncs.report.infrastructure.constants.ReportConstants
-import com.rendersoncs.report.infrastructure.util.closeVirtualKeyBoard
+import com.rendersoncs.report.databinding.FragmentSignUpBinding
+import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.closeVirtualKeyBoard
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
 import java.io.IOException
@@ -39,12 +39,12 @@ class SignUpActivity : CommonActivity(), DatabaseReference.CompletionListener, O
     private var mSelectedUri: Uri? = null
     private var mImgPhoto: ImageView? = null
 
-    private lateinit var binding : ActivitySignUpBinding
+    private lateinit var binding : FragmentSignUpBinding
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        binding = FragmentSignUpBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 

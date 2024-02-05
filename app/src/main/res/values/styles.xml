@@ -1,17 +1,4 @@
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
-        <!--<item name="android:windowDisablePreview">true</item>-->
-    </style>
-
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@drawable/background_splash</item>
@@ -21,9 +8,9 @@
         <!-- Hint color and label color in FALSE state -->
         <item name="android:textSize">20sp</item>
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorControlNormal">?android:attr/textColorPrimary</item>
-        <item name="colorControlActivated">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
 
     <!-- Styles Activity Home, Login, Form -->
@@ -32,8 +19,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">16dp</item>
         <item name="passwordToggleEnabled">true</item>
-        <item name="passwordToggleTint">@color/colorAccent</item>
-        <item name="hintTextColor">@color/colorAccent</item>
+        <item name="passwordToggleTint">@color/colorPrimary</item>
+        <item name="hintTextColor">@color/colorPrimary</item>
         <item name="boxStrokeColor">@color/selector_outline_box</item>
         <item name="boxStrokeWidth">1dp</item>
         <item name="hintEnabled">true</item>
@@ -46,7 +33,7 @@
         <item name="android:layout_margin">16dp</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:imeOptions">actionNext</item>
-        <item name="hintTextColor">@color/colorAccent</item>
+        <item name="hintTextColor">@color/colorPrimary</item>
         <item name="boxStrokeColor">@color/selector_outline_box</item>
         <item name="boxStrokeWidth">1dp</item>
         <item name="hintEnabled">true</item>
@@ -54,7 +41,7 @@
     </style>
 
     <style name="EditTextThemeOverlay" parent="ThemeOverlay.AppCompat">
-        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
     </style>
 
     <style name="FormField">
@@ -110,7 +97,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">8dp</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">normal</item>
     </style>
@@ -130,14 +117,4 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
-
-    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
-        <item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>
-        <item name="android:activityCloseEnterAnimation">@android:anim/fade_in</item>
-        <item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
-        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
-        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
-    </style>
-
 </resources>

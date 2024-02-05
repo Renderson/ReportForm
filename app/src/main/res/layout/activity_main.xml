@@ -8,7 +8,9 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <include layout="@layout/activity_main_content"/>
+    <include
+        android:id="@+id/homeMain"
+        layout="@layout/app_bar_main"/>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"
@@ -16,7 +18,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/menu_nav">
+        app:menu="@menu/menu_nav"
+        android:background="@color/colorCardView">
 
     </com.google.android.material.navigation.NavigationView>
 

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_v2"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.rendersoncs.report.view.dashboard.DashboardFragment"
+        android:label="@string/title_report"
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dashboardFragment_to_newReportFragment"
+            app:destination="@+id/addNewReport"
+            app:popUpTo="@id/addNewReport"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_dashboardFragment_to_reportResumeFragment"
+            app:destination="@+id/resumeReport"
+            app:popUpTo="@id/resumeReport"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right">
+
+            <argument
+                android:name="reportResume"
+                app:argType="com.rendersoncs.report.model.Report"/>
+
+        </action>
+
+        <action
+            android:id="@+id/action_drawer_to_upPassword"
+            app:destination="@+id/updatePassword"
+            app:popUpTo="@id/updatePassword"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_drawer_to_removeUser"
+            app:destination="@+id/removeUser"
+            app:popUpTo="@id/removeUser"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_drawer_to_about"
+            app:destination="@+id/about"/>
+
+        <action
+            android:id="@+id/action_drawer_to_theme"
+            app:destination="@+id/theme"/>
+
+        <action
+            android:id="@+id/action_drawer_close_to_login"
+            app:destination="@+id/login"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/login"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/resumeReport"
+        android:name="com.rendersoncs.report.view.resume.ReportResumeFragment"
+        android:label="@string/summary"
+        tools:layout="@layout/fragment_report_resume">
+
+        <action
+            android:id="@+id/action_reportResume_to_detailPhotoFragment"
+            app:destination="@id/detailPhotoFragment" />
+
+        <action
+            android:id="@+id/action_reportResume_to_editReport"
+            app:destination="@id/addNewReport"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/resumeReport"
+            app:popUpToInclusive="true"/>
+
+        <argument
+            android:name="reportResume"
+            app:argType="com.rendersoncs.report.model.Report"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/addNewReport"
+        android:name="com.rendersoncs.report.view.newReport.NewReportFragment"
+        android:label="@string/label_menu_new_report"
+        tools:layout="@layout/fragment_new_report">
+        <action
+            android:id="@+id/action_addNewReportFragment_to_reportActivity"
+            app:destination="@id/reportActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/addNewReport"
+            app:popUpToInclusive="true" />
+        <!--<argument
+            android:name="reportNew"
+            app:argType="com.rendersoncs.report.model.ReportNew" />-->
+
+        <argument
+            android:name="reportEdit"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reportActivity"
+        android:name="com.rendersoncs.report.view.report.ReportCheckListFragment"
+        android:label="@string/label_menu_new_report"
+        tools:layout="@layout/fragment_report_check_list">
+        <argument
+            android:name="report"
+            app:argType="com.rendersoncs.report.model.ReportNew" />
+        <action
+            android:id="@+id/action_reportActivity_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_reportActivity_to_reportNoteFragmentV2"
+            app:destination="@id/reportNoteFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_reportActivity_to_detailPhotoFragment"
+            app:destination="@id/detailPhotoFragment" />
+        <action
+            android:id="@+id/action_reportActivity_to_camera"
+            app:destination="@id/nav_graph"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <dialog
+        android:id="@+id/detailPhotoFragment"
+        android:name="com.rendersoncs.report.view.fragment.BottomSheetDetailPhotoFragment"
+        android:label="DetailPhotoFragment"
+        tools:layout="@layout/fragment_bottom_sheet_detaill_photo">
+        <argument
+            android:name="modelDetail"
+            app:argType="com.rendersoncs.report.model.ReportDetailPhoto" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/reportNoteFragment"
+        android:name="com.rendersoncs.report.view.fragment.ReportNoteFragment"
+        android:label="@string/label_observation"
+        tools:layout="@layout/fragment_report_note">
+        <argument
+            android:name="note"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
+
+    <include app:graph="@navigation/navigation_camera_graph"/>
+
+    <fragment
+        android:id="@+id/updatePassword"
+        android:name="com.rendersoncs.report.view.login.UpdatePasswordFragment"
+        tools:layout="@layout/fragment_update_password"/>
+
+    <fragment
+        android:id="@+id/removeUser"
+        android:name="com.rendersoncs.report.view.login.RemoveUserFragment"
+        tools:layout="@layout/fragment_remove_user">
+
+        <action
+            android:id="@+id/action_removeUser_to_login"
+            app:destination="@+id/login"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/about"
+        android:name="com.rendersoncs.report.view.fragment.AboutFragment"
+        tools:layout="@layout/about_page"/>
+
+    <activity
+        android:id="@+id/login"
+        android:name="com.rendersoncs.report.view.login.loginV2.LoginMainActivity"
+        tools:layout="@layout/fragment_login"/>
+
+    <dialog
+        android:id="@+id/theme"
+        android:name="com.rendersoncs.report.view.fragment.ChooseThemeDialogFragment"
+        tools:layout="@layout/layout_material_dialog"/>
+
+</navigation>

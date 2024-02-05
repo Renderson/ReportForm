@@ -8,12 +8,14 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:required="true" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:required="true" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -39,6 +41,12 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2425709217403386~7237207597"/>
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -47,7 +55,8 @@
             tools:replace="android:theme" />
 
         <activity android:name="com.rendersoncs.report.view.splashscreen.SplashScreenActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,26 +64,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.rendersoncs.report.view.login.HomeActivity" />
+        <activity android:name="com.rendersoncs.report.view.main.MainActivity"
+            android:launchMode="singleTop" />
+        <!--<activity android:name="com.rendersoncs.report.view.login.loginV2.LoginMainActivity" />-->
+        <activity android:name="com.rendersoncs.report.view.introduction.IntroductionActivity" />
         <activity android:name="com.rendersoncs.report.view.login.LoginActivity" />
         <activity android:name="com.rendersoncs.report.view.login.SignUpActivity" />
         <activity android:name="com.rendersoncs.report.view.login.RecoveryLoginActivity" />
-        <activity android:name="com.rendersoncs.report.view.login.UpdatePasswordActivity" />
-        <activity android:name="com.rendersoncs.report.view.login.RemoveUserActivity" />
-        <activity android:name="com.rendersoncs.report.view.reportEdit.ReportEdit"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.rendersoncs.report.view.report.ReportActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.rendersoncs.report.view.main.MainActivity"
-            android:launchMode="singleTop"/>
-        <activity
-            android:name="com.rendersoncs.report.view.resume.ReportResume"
-            android:parentActivityName="com.rendersoncs.report.view.main.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rendersoncs.report.view.main.MainActivity" />
-        </activity>
-        <activity android:name="com.rendersoncs.report.view.signature.SignatureActivity" />
 
         <activity
             android:name="com.rendersoncs.report.view.cameraX.CameraXMainActivity"
@@ -83,7 +79,8 @@
             android:icon="@mipmap/ic_launcher"
             android:screenOrientation="fullUser"
             android:rotationAnimation="seamless"
-            tools:targetApi="O">
+            tools:targetApi="O"
+            android:exported="true">
 
             <!-- App links for http/s -->
             <intent-filter android:autoVerify="true">
@@ -102,8 +99,9 @@
         </activity>
 
         <service
-            android:name="com.rendersoncs.report.repository.net.NotificationFireBase"
-            android:permission="true">
+            android:name=".data.net.NotificationFireBase"
+            android:permission="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
