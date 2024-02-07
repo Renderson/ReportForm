@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.rendersoncs.report.R
 import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.extension.spaceToNewLine
 import com.rendersoncs.report.common.util.SharePrefInfoUser
 import com.rendersoncs.report.common.util.viewModelFactory
 import com.rendersoncs.report.data.local.AppDatabase
@@ -181,7 +182,12 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
         uiStateJobName = lifecycleScope.launchWhenStarted {
             viewModel.name.collect {
                 val name = header.findViewById<TextView>(R.id.txt_profile_name)
-                name.text = it
+                val partName = it.split(" ")
+
+                val firstName = partName.firstOrNull()
+                val secondName = if (partName.size > 1) partName.lastOrNull() else ""
+                val fullName = "$firstName $secondName"
+                name.text = fullName.spaceToNewLine()
             }
         }
 

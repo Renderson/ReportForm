@@ -35,8 +35,6 @@ class RecoveryLoginActivity : AppCompatActivity(), TextView.OnEditorActionListen
     }
 
     private fun callLoginActivity() {
-        val i = Intent(this, LoginActivity::class.java)
-        startActivity(i)
         finish()
     }
 

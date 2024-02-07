@@ -19,7 +19,7 @@
             app:layout_constraintBottom_toTopOf="@+id/txt7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/callLogin" />
+            app:layout_constraintTop_toBottomOf="@+id/btnSignUp" />
 
         <TextView
             android:id="@+id/textView4"
@@ -45,6 +45,7 @@
             android:layout_marginTop="@dimen/margin_16"
             android:background="@drawable/bg_button_img_round"
             android:textSize="@dimen/text_size_14"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -56,6 +57,7 @@
             android:background="@drawable/profile_hint"
             app:civ_border_color="@color/colorPrimary"
             app:civ_border_width="2dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/btnSelectPhoto"
             app:layout_constraintEnd_toEndOf="@+id/btnSelectPhoto"
             app:layout_constraintStart_toStartOf="@+id/btnSelectPhoto"

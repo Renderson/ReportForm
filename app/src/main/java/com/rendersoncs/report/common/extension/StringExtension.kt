@@ -13,3 +13,14 @@ object StringExtension {
         }
     }
 }
+
+fun String.spaceToNewLine(): String {
+    return try {
+        val index = this.indexOf(' ')
+        if (index != -1 && index < this.length - 1) {
+            this.replaceFirst(" ", "\n")
+        } else { this }
+    } catch (exception: Exception) {
+        this
+    }
+}
