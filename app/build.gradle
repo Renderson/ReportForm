@@ -8,14 +8,26 @@ apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'com.google.gms.google-services'
 
+project.ext {
+    versionMajor = 1
+    versionMinor = 0
+    versionPatch = 0
+}
+
+def computerVersionName(){
+    return "${versionMajor}.${versionMinor}.${versionPatch}"
+}
+
 android {
+    def RES_VERSION_NAME_VALUE = computerVersionName()
+
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.rendersoncs.report"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 303
-        versionName "3.3"
+        versionCode 1
+        versionName RES_VERSION_NAME_VALUE
         multiDexEnabled true
     }
     compileOptions {
