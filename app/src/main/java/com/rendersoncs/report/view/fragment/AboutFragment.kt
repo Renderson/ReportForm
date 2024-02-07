@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.rendersoncs.report.BuildConfig
 import com.rendersoncs.report.R
 import mehdi.sakout.aboutpage.AboutPage
 import mehdi.sakout.aboutpage.Element
@@ -19,16 +20,16 @@ class AboutFragment : BottomSheetDialogFragment() {
         val adsElement = Element()
         adsElement.title = resources.getString(R.string.app_name)
         val versionElement = Element()
-        versionElement.title = getString(R.string.version)
+        versionElement.title = BuildConfig.VERSION_NAME
         return AboutPage(this.activity)
                 .setImage(R.mipmap.ic_launcher_round)
                 .setDescription(getString(R.string.label_about_app))
                 .addItem(versionElement)
                 .addItem(adsElement)
                 .addGroup(getString(R.string.label_entry_contact))
-                .addItem(itemPhone)
+                //.addItem(itemPhone)
                 .addItem(itemEmail)
-                .addItem(itemWhatsApp)
+                //.addItem(itemWhatsApp)
                 .addGroup(getString(R.string.label_more_work))
                 .addItem(itemLinkedIn)
                 .create()
@@ -93,8 +94,8 @@ class AboutFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        private const val NUMBER = "985700958"
-        private const val NUMBER_WHATS = "+5511985700958"
+        private const val NUMBER = ""
+        private const val NUMBER_WHATS = ""
         private const val EMAIL = "renderson.cs@gmail.com"
         private const val LINKED_IN_ID = "renderson-cerqueira-14a91a53"
     }
