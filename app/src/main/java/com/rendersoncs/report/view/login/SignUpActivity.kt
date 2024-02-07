@@ -14,6 +14,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import android.widget.TextView.OnEditorActionListener
+import androidx.activity.viewModels
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -26,12 +27,22 @@ import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentSignUpBinding
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.common.util.closeVirtualKeyBoard
+import com.rendersoncs.report.common.util.viewModelFactory
+import com.rendersoncs.report.data.local.AppDatabase
+import com.rendersoncs.report.repository.ReportRepository
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
+import com.rendersoncs.report.view.login.viewmodel.LoginViewModel
 import java.io.IOException
 import java.util.*
 
 class SignUpActivity : CommonActivity(), DatabaseReference.CompletionListener, OnEditorActionListener {
+
+    private val repo by lazy { ReportRepository(AppDatabase(this)) }
+    private val viewModel: LoginViewModel by viewModels {
+        viewModelFactory { LoginViewModel(this.application, repo) }
+    }
+
     private var mAuth: FirebaseAuth? = null
     private var mAuthStateListener: AuthStateListener? = null
     private var user: User? = null
@@ -119,9 +130,9 @@ class SignUpActivity : CommonActivity(), DatabaseReference.CompletionListener, O
 
     override fun initUser() {
         user = User()
-        user!!.name = binding.sigInName.text.toString()
-        user!!.email = binding.sigInEmail.text.toString()
-        user!!.password = binding.sigInPassword.text.toString()
+        user?.name = binding.sigInName.text.toString()
+        user?.email = binding.sigInEmail.text.toString()
+        user?.password = binding.sigInPassword.text.toString()
     }
 
     fun sendSignUpData(view: View?) {
@@ -131,8 +142,6 @@ class SignUpActivity : CommonActivity(), DatabaseReference.CompletionListener, O
     }
 
     fun callLogin(view: View?) {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
         finish()
     }
 
@@ -150,10 +159,10 @@ class SignUpActivity : CommonActivity(), DatabaseReference.CompletionListener, O
                 closeProgressBar()
                 binding.textInputPassword.error = getString(R.string.label_insert_password)
             }
-            mSelectedUri == null -> {
+            /*mSelectedUri == null -> {
                 closeProgressBar()
                 showSnackBar(resources.getString(R.string.label_sign_insert_photo))
-            }
+            }*/
             else -> {
                 mAuth!!.createUserWithEmailAndPassword(
                         user!!.email,
@@ -161,7 +170,7 @@ class SignUpActivity : CommonActivity(), DatabaseReference.CompletionListener, O
                 ).addOnCompleteListener { task: Task<AuthResult?> ->
                     if (task.isSuccessful) {
                         closeProgressBar()
-                        savePhotoFireBase()
+                        //savePhotoFireBase()
                     }
                 }.addOnFailureListener(this) { e: Exception ->
                     closeProgressBar()
@@ -220,10 +229,32 @@ class SignUpActivity : CommonActivity(), DatabaseReference.CompletionListener, O
     }
 
     override fun onComplete(databaseError: DatabaseError?, databaseReference: DatabaseReference) {
-        mAuth!!.signOut()
+        //mAuth!!.signOut()
+        verifyLogin()
         showToast(resources.getString(R.string.label_account_create))
         closeProgressBar()
         finish()
+    }
+
+    private fun verifyLogin() {
+        user?.saveProviderSP(this@SignUpActivity, "")
+        mAuth?.signInWithEmailAndPassword(user?.email ?: "", user?.password ?: "")
+            ?.addOnCompleteListener { task: Task<AuthResult?> ->
+                if (!task.isSuccessful) {
+                    closeProgressBar()
+                }
+                if (task.isComplete) {
+                    mAuth?.currentUser?.let { currentUser ->
+                        val user = com.rendersoncs.report.model.User(
+                            userId = currentUser.uid
+                        )
+                        viewModel.insertUserBD(user)
+                    }
+                }
+            }?.addOnFailureListener { e: Exception ->
+                FirebaseCrashlytics.getInstance().recordException(e)
+                showSnackBar(e.message)
+            }
     }
 
     override fun onEditorAction(view: TextView?, actionId: Int, event: KeyEvent?): Boolean {
