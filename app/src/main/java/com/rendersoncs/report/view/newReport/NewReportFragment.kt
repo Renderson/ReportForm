@@ -11,7 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentNewReportBinding
 import com.rendersoncs.report.common.util.*
-import com.rendersoncs.report.model.ReportNew
+import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,8 +35,8 @@ class NewReportFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (args.reportEdit != -1) {
-            viewModel.getReportByID(args.reportEdit)
+        args.report.id?.let { id ->
+            viewModel.getReportByID(id)
         }
         viewModel.getNameShared()
 
@@ -64,6 +64,17 @@ class NewReportFragment :
                 DetailState.Empty -> {
                     findNavController().navigateUp()
                 }
+            }
+        }
+        viewModel.savedReport.observe(viewLifecycleOwner) { id ->
+            if (id != null) {
+                val bundle = Bundle().apply {
+                    putSerializable("report", report())
+                    putInt("id", id.toInt())
+                }
+                findNavController().navigate(
+                    R.id.action_addNewReportFragment_to_reportActivity, bundle
+                )
             }
         }
     }
@@ -128,21 +139,31 @@ class NewReportFragment :
         btnNewReport.setOnClickListener {
             hideKeyboard()
             binding.addNewReport.apply {
-                val reportNew = ReportNew(
-                    id = if (args.reportEdit == -1) null else args.reportEdit,
-                    company = companyId.text.toString(),
-                    email = emailId.text.toString(),
-                    date =dateId.text.toString(),
-                    controller = controllerId.text.toString()
-                )
-                val bundle = Bundle().apply {
-                    putSerializable("report", reportNew)
+                if (args.report.id == null) {
+                    viewModel.insertReport(report = report())
+                } else {
+                    viewModel.updateReport(
+                        args.report.id ?: -1,
+                        report = report()
+                    )
+                    viewModel.savedReport.value = args.report.id?.toLong()
                 }
-                findNavController().navigate(
-                    R.id.action_addNewReportFragment_to_reportActivity, bundle
-                )
             }
         }
+    }
+
+    private fun report(): Report = with(binding.addNewReport) {
+        return Report(
+            id = if (args.report.id != null) args.report.id else null,
+            company = companyId.text.toString(),
+            email = emailId.text.toString(),
+            date = dateId.text.toString(),
+            controller = controllerId.text.toString(),
+            score = if (args.report.id != null) args.report.score else "",
+            result = if (args.report.id != null) args.report.result else "",
+            concluded = if (args.report.id != null) args.report.concluded else false,
+            userId = viewModel.userUid.value.orEmpty()
+        )
     }
 
     override fun onResume() {
