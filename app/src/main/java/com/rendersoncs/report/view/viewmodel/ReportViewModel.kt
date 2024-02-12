@@ -92,6 +92,13 @@ class ReportViewModel @Inject constructor(
         savedReport.value = repository.insertReport(report)
     }
 
+    fun updateReport(
+        id: Int,
+        report: Report
+    ) = viewModelScope.launch {
+        repository.updateReport(id = id, report = report)
+    }
+
     fun insertCheckList(reportCheckList: ReportCheckList) = viewModelScope.launch {
         savedCheckList.value = repository.insertCheckList(reportCheckList)
     }
@@ -101,15 +108,13 @@ class ReportViewModel @Inject constructor(
         getAllReports()
     }
 
+    fun deleteCheckListById(id: Int) = viewModelScope.launch {
+        repository.deleteCheckList(id)
+    }
+
     fun getReportByID(id: Int) = viewModelScope.launch {
         _detailState.value = DetailState.Loading
         _detailState.value = DetailState.Success(repository.getReportById(id))
-    }
-
-    fun updateConcluded(concluded: Boolean) = viewModelScope.launch {
-        savedReport.value?.let { id ->
-            repository.updateConcluded(id = id.toInt(), concluded = concluded)
-        }
     }
 
     fun removeItem(reportItems: ReportItems, databaseReference: DatabaseReference?) = viewModelScope.launch {

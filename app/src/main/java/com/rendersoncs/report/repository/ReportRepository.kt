@@ -36,5 +36,22 @@ class ReportRepository @Inject constructor(private val db: AppDatabase) {
         db.getReportDao().deleteCheckListByID(id)
     }
 
-    suspend fun updateConcluded(id: Int, concluded: Boolean) = db.getReportDao().updateConcluded(id, concluded)
+    // delete check list to id
+    suspend fun deleteCheckList(id: Int) {
+        db.getReportDao().deleteCheckListByID(id)
+    }
+
+    // update items report to id
+    suspend fun updateReport(id: Int, report: Report) = db.getReportDao()
+        .updateAllReport(
+            id = id,
+            newCompany = report.company.orEmpty(),
+            newEmail = report.email.orEmpty(),
+            newDate = report.date.orEmpty(),
+            newController = report.controller.orEmpty(),
+            newScore = report.score.orEmpty(),
+            newResult = report.result.orEmpty(),
+            newConcluded = report.concluded ?: false,
+            newUserId = report.userId.orEmpty()
+        )
 }
