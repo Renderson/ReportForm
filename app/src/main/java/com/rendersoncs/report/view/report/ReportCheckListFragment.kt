@@ -85,7 +85,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private var concluded = false
     private var canFinish = false
     private var startSaveAutomatic = false
-    private var reportId = -1
 
     private var databaseReference: DatabaseReference? = null
     private val user = User()
@@ -97,6 +96,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             concluded = false
             if (startSaveAutomatic) {
                 saveReport()
+                toast(getString(R.string.txt_information_saved_automatically))
             }
             startSaveAutomatic = true
             mainHandler?.postDelayed(this, (1 * 60 * 1000))
@@ -170,7 +170,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         this.resultCompany.text = args.report.company
         this.resultEmail.text = args.report.email
         this.resultDate.text = args.report.date
-        resultController = args.report.controller
+        resultController = args.report.controller.orEmpty()
 
         this.contentReport.coordinator.isEnabled = false
 
@@ -220,7 +220,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         CommonEditDialog(requireContext())
             .showEditTextDialog(
                 msg = {
-                    toast("Novo item inserido!")
+                    toast(resources.getString(R.string.txt_new_item_list))
                 },
                 error = {
                     toast(resources.getString(R.string.label_error_update_list))
@@ -276,7 +276,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 val key = dataSnapshot.key
                 mKeys.add(key)
                 viewModel.checkReportItems.value = reportItems
-                mAdapter.notifyDataSetChanged()
+                notifyDataSetChanged()
                 checkIfUpdateReport()
             }
 
@@ -289,7 +289,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                     this@ReportCheckListFragment.reportItems[index] = reportItems
                 }
                 viewModel.checkReportItems.value = arrayListOf(reportItems!!)
-                mAdapter.notifyDataSetChanged()
+                notifyDataSetChanged()
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -298,7 +298,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 reportItems.removeAt(index)
                 mKeys.removeAt(index)
                 viewModel.checkReportItems.value = reportItems
-                mAdapter.notifyDataSetChanged()
+                notifyDataSetChanged()
             }
 
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
@@ -308,6 +308,8 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             }
         })
     }
+
+    private fun notifyDataSetChanged() = mAdapter.notifyDataSetChanged()
 
     private fun checkIfUpdateReport() {
         args.report.id?.let { id ->
@@ -319,7 +321,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         jsonListModeOff.addItemsFromJsonList(reportItems) {
             viewModel.checkReportItems.value = it
         }
-        mAdapter.notifyDataSetChanged()
+        notifyDataSetChanged()
         checkIfUpdateReport()
     }
 
@@ -455,45 +457,42 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 score = this.contentReport.showScore.text.toString(),
                 result = resultScore,
                 concluded = concluded,
-                userId = viewModel.userUid.value ?: ""
+                userId = viewModel.userUid.value.orEmpty()
             )
-            if (reportId != -1) {
-                viewModel.deleteReportByID(reportId)
-                viewModel.insertReport(report)
-            } else if (args.report.id != null) {
-                args.report.id?.let { id ->
-                    viewModel.deleteReportByID(id)
-                    viewModel.insertReport(report)
-                }
-            } else {
-                viewModel.insertReport(report)
-            }
+            viewModel.updateReport(id = args.id, report = report)
+            viewModel.savedReport.value = args.id.toLong()
         }
     }
 
     private fun setObservers() {
         var reportCheckList: ReportCheckList
         viewModel.savedReport.observe(viewLifecycleOwner) { reportId ->
-            if (reportId != null) {
-                this.reportId = reportId.toInt()
-                reportItems.forEach {
-                    if (it.isOpt1 || it.isOpt2 || it.isOpt3) {
-                        val conformity = when (it.selectedAnswerPosition) {
-                            ReportConstants.ITEM.OPT_NUM1 -> { ReportConstants.ITEM.OPT_NUM1 }
-                            ReportConstants.ITEM.OPT_NUM2 -> { ReportConstants.ITEM.OPT_NUM2 }
-                            else -> { ReportConstants.ITEM.OPT_NUM3 }
+            viewModel.deleteCheckListById(reportId.toInt())
+            reportItems.forEach {
+                if (it.isOpt1 || it.isOpt2 || it.isOpt3) {
+                    val conformity = when (it.selectedAnswerPosition) {
+                        ReportConstants.ITEM.OPT_NUM1 -> {
+                            ReportConstants.ITEM.OPT_NUM1
                         }
-                        reportCheckList = ReportCheckList(
-                            reportId = reportId.toInt(),
-                            key = it.key ?: "",
-                            title = it.title ?: "",
-                            description = it.description ?: "",
-                            note = it.note ?: "",
-                            conformity = conformity,
-                            photo = it.photoPath ?: ReportConstants.PHOTO.NOT_PHOTO
-                        )
-                        viewModel.insertCheckList(reportCheckList)
+
+                        ReportConstants.ITEM.OPT_NUM2 -> {
+                            ReportConstants.ITEM.OPT_NUM2
+                        }
+
+                        else -> {
+                            ReportConstants.ITEM.OPT_NUM3
+                        }
                     }
+                    reportCheckList = ReportCheckList(
+                        reportId = reportId.toInt(),
+                        key = it.key.orEmpty(),
+                        title = it.title.orEmpty(),
+                        description = it.description.orEmpty(),
+                        note = it.note.orEmpty(),
+                        conformity = conformity,
+                        photo = it.photoPath ?: ReportConstants.PHOTO.NOT_PHOTO
+                    )
+                    viewModel.insertCheckList(reportCheckList)
                 }
             }
         }
@@ -530,7 +529,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                     }
                 }
             }
-            mAdapter.notifyDataSetChanged()
+            notifyDataSetChanged()
         }
 
         viewModel.checkReportItems.observe(viewLifecycleOwner) {
@@ -626,7 +625,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 viewModel.calculateScore(this.reportItems)
             }
         }
-        mAdapter.notifyDataSetChanged()
+        notifyDataSetChanged()
     }
 
     override fun takePhoto(reportItems: ReportItems) {
