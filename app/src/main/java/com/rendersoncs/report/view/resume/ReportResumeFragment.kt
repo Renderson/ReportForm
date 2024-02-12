@@ -11,6 +11,7 @@ import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.util.component1
 import androidx.core.util.component2
 import androidx.fragment.app.activityViewModels
@@ -80,7 +81,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         super.onViewCreated(view, savedInstanceState)
 
         report = args.reportResume
-        getReport(report.id)
+        getReport(report.id ?: 0)
         observeReport()
         observerListResume()
         countRadioSelected()
@@ -142,7 +143,7 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
                 val (subject, uri) = viewModel.getDocument(report)
                 activity?.contentResolver?.delete(uri, subject, null)
 
-                viewModel.deleteReportByID(report.id)
+                viewModel.deleteReportByID(report.id ?: 0)
                 navigateUp()
             }
         )
@@ -185,17 +186,16 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
             controllerResume.text = getString(R.string.label_report, report.controller)
             emailResume.text = report.email
             dateResume.text = report.date
-            companyResume.text = StringExtension.limitsText(report.company,
-                    ReportConstants.CHARACTERS.LIMITS_TEXT)
+            companyResume.text = StringExtension.limitsText(report.company, ReportConstants.CHARACTERS.LIMITS_TEXT)
             openPdf.setOnClickListener {
                 openPdf(report)
             }
         }
         this.editReport.setOnClickListener {
-            val bundle = Bundle().apply {
-                putInt("reportEdit", report.id)
-            }
-            findNavController().navigate(R.id.action_reportResume_to_editReport, bundle)
+            findNavController().navigate(
+                R.id.action_reportResume_to_editReport,
+                bundleOf(Pair("report", report))
+            )
         }
     }
 

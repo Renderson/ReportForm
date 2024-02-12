@@ -21,10 +21,6 @@ interface ReportDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCheckList(report: ReportCheckList): Long
 
-    // used to update report
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateReport(report: Report)
-
     // used to delete report
     @Delete
     suspend fun deleteReport(report: Report)
@@ -48,6 +44,25 @@ interface ReportDao {
     @Query("SELECT * FROM all_reports WHERE id = :id")
     suspend fun getReportWithCheckList(id: String): List<ReportWithCheckList>
 
-    @Query("UPDATE all_reports SET concluded = :newConcluded WHERE id = :id")
-    suspend fun updateConcluded(id: Int, newConcluded: Boolean)
+    @Query("UPDATE all_reports SET " +
+    "company = :newCompany, " +
+    "email = :newEmail, " +
+    "date = :newDate, " +
+    "controller = :newController, " +
+    "score = :newScore, " +
+    "result = :newResult, " +
+    "concluded = :newConcluded, " +
+    "userId = :newUserId " +
+    "WHERE id = :id")
+    suspend fun updateAllReport(
+        id: Int,
+        newCompany: String,
+        newEmail: String,
+        newDate: String,
+        newController: String,
+        newScore: String,
+        newResult: String,
+        newConcluded: Boolean,
+        newUserId: String
+    )
 }

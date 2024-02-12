@@ -10,6 +10,7 @@
         android:name="com.rendersoncs.report.view.dashboard.DashboardFragment"
         android:label="@string/title_report"
         tools:layout="@layout/fragment_dashboard">
+
         <action
             android:id="@+id/action_dashboardFragment_to_newReportFragment"
             app:destination="@+id/addNewReport"
@@ -106,6 +107,7 @@
         android:name="com.rendersoncs.report.view.newReport.NewReportFragment"
         android:label="@string/label_menu_new_report"
         tools:layout="@layout/fragment_new_report">
+
         <action
             android:id="@+id/action_addNewReportFragment_to_reportActivity"
             app:destination="@id/reportActivity"
@@ -115,14 +117,10 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/addNewReport"
             app:popUpToInclusive="true" />
-        <!--<argument
-            android:name="reportNew"
-            app:argType="com.rendersoncs.report.model.ReportNew" />-->
 
         <argument
-            android:name="reportEdit"
-            android:defaultValue="-1"
-            app:argType="integer" />
+            android:name="report"
+            app:argType="com.rendersoncs.report.model.Report" />
     </fragment>
 
     <fragment
@@ -130,13 +128,20 @@
         android:name="com.rendersoncs.report.view.report.ReportCheckListFragment"
         android:label="@string/label_menu_new_report"
         tools:layout="@layout/fragment_report_check_list">
+
         <argument
             android:name="report"
-            app:argType="com.rendersoncs.report.model.ReportNew" />
+            app:argType="com.rendersoncs.report.model.Report" />
+
+        <argument
+            android:name="id"
+            app:argType="integer" />
+
         <action
             android:id="@+id/action_reportActivity_to_dashboardFragment"
             app:destination="@id/dashboardFragment"
             app:popUpToInclusive="true" />
+
         <action
             android:id="@+id/action_reportActivity_to_reportNoteFragmentV2"
             app:destination="@id/reportNoteFragment"
@@ -144,9 +149,11 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+
         <action
             android:id="@+id/action_reportActivity_to_detailPhotoFragment"
             app:destination="@id/detailPhotoFragment" />
+
         <action
             android:id="@+id/action_reportActivity_to_camera"
             app:destination="@id/nav_graph"
@@ -161,6 +168,7 @@
         android:name="com.rendersoncs.report.view.fragment.BottomSheetDetailPhotoFragment"
         android:label="DetailPhotoFragment"
         tools:layout="@layout/fragment_bottom_sheet_detaill_photo">
+
         <argument
             android:name="modelDetail"
             app:argType="com.rendersoncs.report.model.ReportDetailPhoto" />
@@ -171,6 +179,7 @@
         android:name="com.rendersoncs.report.view.fragment.ReportNoteFragment"
         android:label="@string/label_observation"
         tools:layout="@layout/fragment_report_note">
+
         <argument
             android:name="note"
             android:defaultValue=""

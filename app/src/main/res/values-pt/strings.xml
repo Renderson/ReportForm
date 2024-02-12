@@ -3,7 +3,7 @@
     <string name="alert_dialog_permission">É preciso a permissão para salvar/acessar arquivos no seu dispositivo.</string>
     <string name="txt_to_allow">Permitir</string>
     <string name="deny">Negar</string>
-    <string name="txt_permission">Permission</string>
+    <string name="txt_permission">Permissão</string>
     <string name="txt_report_removed">Relatório removido com sucesso!</string>
     <string name="title_report_list">Lista Relatórios</string>
     <string name="title_report">Relatório</string>
@@ -28,6 +28,8 @@
     <string name="resume_date">Data: %1$s</string>
     <string name="item_selected">Items\nselecionados\n%1$s</string>
     <string name="label_search">Pesquisar</string>
+    <string name="txt_new_item_list">Novo item inserido!</string>
+    <string name="txt_information_saved_automatically">Informações salvas automaticamente!</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txt_check_networking">Sem conexão com a Internet</string>
@@ -60,7 +62,7 @@
     <string name="hint_current_password">senha atual</string>
     <string name="change">alterar</string>
     <string name="label_screen_remove_account">:( Deletar Conta</string>
-    <string name="label_screen_remove_info">Inserindo a senha, sua conta será deletada e perderá sua lista on line, mas o banco de dados local ficará intacto.</string>
+    <string name="label_screen_remove_info">Inserindo a senha, sua conta será deletada.</string>
     <string name="remove">remover</string>
     <string name="insert">Inserir</string>
     <string name="label_recover_password">Recuper Senha?</string>

@@ -28,6 +28,8 @@
     <string name="resume_date">Fecha: %1$s</string>
     <string name="item_selected">Artículos\nseleccionados\n%1$s</string>
     <string name="label_search">Buscar</string>
+    <string name="txt_new_item_list">Nuevo artículo agregado!</string>
+    <string name="txt_information_saved_automatically">Información guardada automáticamente!</string>
 
     <string name="hello_blank_fragment">Hola fragmento en blanco</string>
     <string name="txt_check_networking">Sin conexión a internet</string>
@@ -60,7 +62,7 @@
     <string name="hint_current_password">contraseña actual</string>
     <string name="change">cambio</string>
     <string name="label_screen_remove_account">:( Eliminar cuenta</string>
-    <string name="label_screen_remove_info">Al ingresar la contraseña, su cuenta será eliminada y perderá su lista en línea, pero la base de datos local estará intacta.</string>
+    <string name="label_screen_remove_info">Al ingresar la contraseña, su cuenta será eliminada.</string>
     <string name="remove">eliminar</string>
     <string name="insert">Insertar</string>
     <string name="label_recover_password">Recuperar contraseña?</string>
