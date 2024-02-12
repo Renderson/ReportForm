@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,10 +58,11 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, ReportViewModel
 
     private fun initViews() = with(binding) {
         btnCreateReport.setOnClickListener {
-            val bundle = Bundle().apply {
-                putInt("reportEdit", -1)
-            }
-            findNavController().navigate(R.id.action_dashboardFragment_to_newReportFragment, bundle)
+            findNavController().navigate(
+                R.id.action_dashboardFragment_to_newReportFragment, bundleOf(
+                    Pair("report", Report())
+                )
+            )
         }
     }
 
