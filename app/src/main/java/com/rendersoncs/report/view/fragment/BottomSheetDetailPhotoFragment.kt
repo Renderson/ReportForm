@@ -8,7 +8,6 @@ import android.view.WindowManager
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentBottomSheetDetaillPhotoBinding
 import com.rendersoncs.report.model.ReportDetailPhoto
 

@@ -496,7 +496,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             }
         }
         viewModel.savedCheckList.observe(viewLifecycleOwner) {
-            if (it != null && concluded) {
+            if (concluded) {
                 viewModel.savedReport.value?.let { reportId ->
                     viewModel.generatePDF(reportId)
                 }
