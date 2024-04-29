@@ -48,7 +48,6 @@ import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_report_list_empty.view.action_add_item
 import kotlinx.coroutines.Job
 import java.io.File
 import java.util.*
@@ -209,7 +208,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             true
         }
 
-        binding.contentReport.emptyViewReport.layoutReportListEmpty.action_add_item.setOnClickListener {
+        binding.contentReport.emptyViewReport.actionAddItem.setOnClickListener {
             createItemCheckList()
         }
 
@@ -708,10 +707,8 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     private fun openCamera() {
-        ActivityNavigator(requireContext())
-                .createDestination().intent = Intent(requireContext(), CameraXMainActivity::class.java).apply {
-            launchCamera.launch(this)
-        }
+        val intent = Intent(requireContext(), CameraXMainActivity::class.java)
+        launchCamera.launch(intent)
     }
 
     private var launchCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

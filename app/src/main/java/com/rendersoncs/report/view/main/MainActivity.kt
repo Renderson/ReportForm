@@ -26,21 +26,18 @@ import com.google.firebase.database.DatabaseReference
 import com.rendersoncs.report.R
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.common.extension.spaceToNewLine
-import com.rendersoncs.report.common.util.SharePrefInfoUser
-import com.rendersoncs.report.common.util.viewModelFactory
-import com.rendersoncs.report.data.local.AppDatabase
 import com.rendersoncs.report.databinding.ActivityMainBinding
-import com.rendersoncs.report.repository.ReportRepository
 import com.rendersoncs.report.view.fragment.ChooseThemeDialogFragment.SingleChoiceListener
 import com.rendersoncs.report.view.login.LoginActivity
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.drawerLayout
 import kotlinx.coroutines.Job
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), SingleChoiceListener {
+
+    lateinit var binding: ActivityMainBinding
 
     private var uiStateJobName: Job? = null
     private var uiStateJobEmail: Job? = null
@@ -55,15 +52,11 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var databaseReference: DatabaseReference
 
-    private val repo by lazy { ReportRepository(AppDatabase(this)) }
-    private val sharedPreferences by lazy { SharePrefInfoUser(getSharedPreferences()) }
-    private val viewModel: ReportViewModel by viewModels {
-        viewModelFactory { ReportViewModel(this.application, repo, sharedPreferences) }
-    }
+    private val viewModel: ReportViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         checkLoggedUser()
@@ -79,10 +72,6 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
         initViews(binding)
         getInfoUser(binding)
         observeNavElements(binding, navHostFragment.navController)
-    }
-
-    private fun getSharedPreferences(): SharedPreferences {
-        return getSharedPreferences(ReportConstants.FIREBASE.FIRE_USERS, MODE_PRIVATE)
     }
 
     private fun checkLoggedUser() {
@@ -204,8 +193,8 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
     }
 
     override fun onBackPressed() {
-        if (this.drawerLayout.isDrawerOpen(GravityCompat.START))
-            this.drawerLayout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START))
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         else {
             super.onBackPressed()
         }

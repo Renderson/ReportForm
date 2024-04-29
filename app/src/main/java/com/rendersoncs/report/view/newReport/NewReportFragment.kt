@@ -20,9 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class NewReportFragment :
-    BaseFragment<FragmentNewReportBinding, ReportViewModel>()
-{
+class NewReportFragment : BaseFragment<FragmentNewReportBinding, ReportViewModel>() {
 
     override val viewModel: ReportViewModel by activityViewModels()
     private val args: NewReportFragmentArgs by navArgs()

@@ -23,7 +23,8 @@ import com.rendersoncs.report.view.login.util.User
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UpdatePasswordFragment : BaseFragment<FragmentUpdatePasswordBinding, ReportViewModel>(), TextView.OnEditorActionListener {
+class
+UpdatePasswordFragment : BaseFragment<FragmentUpdatePasswordBinding, ReportViewModel>(), TextView.OnEditorActionListener {
     override val viewModel: ReportViewModel by activityViewModels()
     private lateinit var user: User
     private lateinit var mAuth: FirebaseAuth

@@ -33,15 +33,14 @@ import com.rendersoncs.report.repository.ReportRepository
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
 import com.rendersoncs.report.view.login.viewmodel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.util.*
 
+@AndroidEntryPoint
 class SignUpActivity : CommonActivity(), DatabaseReference.CompletionListener, OnEditorActionListener {
 
-    private val repo by lazy { ReportRepository(AppDatabase(this)) }
-    private val viewModel: LoginViewModel by viewModels {
-        viewModelFactory { LoginViewModel(this.application, repo) }
-    }
+    private val viewModel: LoginViewModel by viewModels()
 
     private var mAuth: FirebaseAuth? = null
     private var mAuthStateListener: AuthStateListener? = null

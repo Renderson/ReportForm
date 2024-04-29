@@ -19,7 +19,7 @@ class BottomSheetDetailPhotoFragment : BottomSheetDialogFragment() {
     private val args: BottomSheetDetailPhotoFragmentArgs by navArgs()
 
     override fun getTheme(): Int {
-        return R.style.Theme_MaterialComponents_DayNight_BottomSheetDialog
+        return com.google.android.material.R.style.Theme_MaterialComponents_DayNight_BottomSheetDialog
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

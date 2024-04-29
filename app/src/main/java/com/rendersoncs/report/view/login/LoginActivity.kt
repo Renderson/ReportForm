@@ -34,7 +34,9 @@ import com.rendersoncs.report.repository.ReportRepository
 import com.rendersoncs.report.view.login.util.User
 import com.rendersoncs.report.view.login.viewmodel.LoginViewModel
 import com.rendersoncs.report.view.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : CommonActivity(), OnEditorActionListener {
     private var mAuth: FirebaseAuth? = null
     private var mAuthListener: AuthStateListener? = null
@@ -43,10 +45,7 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
     private var mGoogleApiClient: GoogleSignInClient? = null
     private lateinit var binding: FragmentLoginBinding
 
-    private val repo by lazy { ReportRepository(AppDatabase(this)) }
-    private val viewModel: LoginViewModel by viewModels {
-        viewModelFactory { LoginViewModel(this.application, repo) }
-    }
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
