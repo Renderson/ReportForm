@@ -75,8 +75,21 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         mGoogleApiClient = GoogleSignIn.getClient(this, gso)
         mAuth = FirebaseAuth.getInstance()
         mAuthListener = firebaseAuthResultHandler
+        setListener()
         initViews()
         initUser()
+    }
+
+    private fun setListener() = with(binding) {
+        singIn.setOnClickListener {
+            sendLoginData()
+        }
+        signUp.setOnClickListener {
+            callSignUp()
+        }
+        recoveryPassword.setOnClickListener {
+            callReset()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -190,17 +203,17 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         user?.password = binding.password.text.toString()
     }
 
-    fun callSignUp(view: View?) {
+    private fun callSignUp() {
         val intent = Intent(this, SignUpActivity::class.java)
         startActivity(intent)
     }
 
-    fun callReset(view: View?) {
+    private fun callReset() {
         val intent = Intent(this, RecoveryLoginActivity::class.java)
         startActivity(intent)
     }
 
-    fun sendLoginData(view: View?) {
+    private fun sendLoginData() {
         when {
             binding.email.text.toString().isEmpty() -> {
                 binding.textInputEmail.error = resources.getString(R.string.label_insert_email)
@@ -219,7 +232,7 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
     override fun onEditorAction(view: TextView?, actionId: Int, event: KeyEvent?): Boolean {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             closeVirtualKeyBoard(this, view!!)
-            sendLoginData(view)
+            sendLoginData()
             return true
         }
         return false
