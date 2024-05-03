@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.ActivityNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -714,9 +713,13 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private var launchCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == ReportConstants.PHOTO.REQUEST_CAMERA_X) {
 
-            val file = result.data!!.extras!![ReportConstants.PHOTO.RESULT_CAMERA_X] as File?
-            reportPosition.photoPath = file!!.path
-            radioItemChecked(reportPosition, ReportConstants.ITEM.OPT_NUM1)
+            val file = result.data?.extras?.let { extras ->
+                extras.get(ReportConstants.PHOTO.RESULT_CAMERA_X) as? File?
+            }
+            file?.let {
+                reportPosition.photoPath = file.path
+                radioItemChecked(reportPosition, ReportConstants.ITEM.OPT_NUM1)
+            }
         }
     }
 
