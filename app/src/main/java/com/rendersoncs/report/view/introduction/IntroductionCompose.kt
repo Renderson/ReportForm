@@ -36,8 +36,6 @@ import com.rendersoncs.report.model.OnBoardingItems
 @Composable
 fun IntroductionScreenComposable() {
 
-    val context = LocalContext.current
-
     val onBoardingPages = remember {
         listOf(
             OnBoardingItems(
