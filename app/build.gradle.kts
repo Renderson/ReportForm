@@ -138,9 +138,6 @@ dependencies {
     //debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary"
     //releaseImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$versions.leakcanary"
 
-    // Signature Pad
-    //implementation("com.github.gcacace:signature-pad:1.2.1")
-
     // Navigation library
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
