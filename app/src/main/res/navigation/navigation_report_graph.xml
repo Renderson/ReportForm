@@ -220,7 +220,6 @@
 
     <dialog
         android:id="@+id/theme"
-        android:name="com.rendersoncs.report.view.fragment.ChooseThemeDialogFragment"
-        tools:layout="@layout/layout_material_dialog"/>
+        android:name="com.rendersoncs.report.view.fragment.ChooseThemeDialogFragment" />
 
 </navigation>

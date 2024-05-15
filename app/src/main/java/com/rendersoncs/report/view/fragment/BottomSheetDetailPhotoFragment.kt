@@ -8,7 +8,6 @@ import android.view.WindowManager
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.rendersoncs.report.R
 import com.rendersoncs.report.databinding.FragmentBottomSheetDetaillPhotoBinding
 import com.rendersoncs.report.model.ReportDetailPhoto
 
@@ -19,7 +18,7 @@ class BottomSheetDetailPhotoFragment : BottomSheetDialogFragment() {
     private val args: BottomSheetDetailPhotoFragmentArgs by navArgs()
 
     override fun getTheme(): Int {
-        return R.style.Theme_MaterialComponents_DayNight_BottomSheetDialog
+        return com.google.android.material.R.style.Theme_MaterialComponents_DayNight_BottomSheetDialog
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

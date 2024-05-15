@@ -1,9 +1,7 @@
 package com.rendersoncs.report.view.introduction
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.rendersoncs.report.databinding.ActivityIntroductionBinding
 import com.rendersoncs.report.view.login.LoginActivity
@@ -12,7 +10,6 @@ class IntroductionActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityIntroductionBinding
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityIntroductionBinding.inflate(layoutInflater)

@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.ActivityNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,7 +47,6 @@ import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.login.util.User
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_report_list_empty.view.action_add_item
 import kotlinx.coroutines.Job
 import java.io.File
 import java.util.*
@@ -209,7 +207,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             true
         }
 
-        binding.contentReport.emptyViewReport.layoutReportListEmpty.action_add_item.setOnClickListener {
+        binding.contentReport.emptyViewReport.actionAddItem.setOnClickListener {
             createItemCheckList()
         }
 
@@ -497,7 +495,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             }
         }
         viewModel.savedCheckList.observe(viewLifecycleOwner) {
-            if (it != null && concluded) {
+            if (concluded) {
                 viewModel.savedReport.value?.let { reportId ->
                     viewModel.generatePDF(reportId)
                 }
@@ -708,18 +706,20 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     private fun openCamera() {
-        ActivityNavigator(requireContext())
-                .createDestination().intent = Intent(requireContext(), CameraXMainActivity::class.java).apply {
-            launchCamera.launch(this)
-        }
+        val intent = Intent(requireContext(), CameraXMainActivity::class.java)
+        launchCamera.launch(intent)
     }
 
     private var launchCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == ReportConstants.PHOTO.REQUEST_CAMERA_X) {
 
-            val file = result.data!!.extras!![ReportConstants.PHOTO.RESULT_CAMERA_X] as File?
-            reportPosition.photoPath = file!!.path
-            radioItemChecked(reportPosition, ReportConstants.ITEM.OPT_NUM1)
+            val file = result.data?.extras?.let { extras ->
+                extras.get(ReportConstants.PHOTO.RESULT_CAMERA_X) as? File?
+            }
+            file?.let {
+                reportPosition.photoPath = file.path
+                radioItemChecked(reportPosition, ReportConstants.ITEM.OPT_NUM1)
+            }
         }
     }
 

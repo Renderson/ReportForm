@@ -27,7 +27,6 @@ import android.graphics.drawable.ColorDrawable
 import android.hardware.display.DisplayManager
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -366,7 +365,7 @@ class CameraFragment : Fragment() {
         // In the background, load latest photo taken (if any) for gallery thumbnail
         lifecycleScope.launch(Dispatchers.IO) {
             outputDirectory.listFiles { file ->
-                EXTENSION_WHITELIST.contains(file.extension.toUpperCase(Locale.ROOT))
+                EXTENSION_WHITELIST.contains(file.extension.uppercase(Locale.ROOT))
             }?.maxOrNull()?.let {
                 setGalleryThumbnail(Uri.fromFile(it))
             }
@@ -379,7 +378,7 @@ class CameraFragment : Fragment() {
             imageCapture?.let { imageCapture ->
 
                 // Create output file to hold the image
-                val photoFile = createFile(outputDirectory, FILENAME, PHOTO_EXTENSION)
+                val photoFile = createFile(outputDirectory)
 
                 // Setup image capture metadata
                 val metadata = Metadata().apply {
@@ -404,19 +403,8 @@ class CameraFragment : Fragment() {
                         val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
                         Log.d(TAG, "Photo capture succeeded: $savedUri")
 
-                        // We can only change the foreground Drawable using API level 23+ API
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            // Update the gallery thumbnail with latest picture taken
-                            setGalleryThumbnail(savedUri)
-                        }
-
-                        // Implicit broadcasts will be ignored for devices running API level >= 24
-                        // so if you only target API level 24+ you can remove this statement
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                            requireActivity().sendBroadcast(
-                                    Intent(android.hardware.Camera.ACTION_NEW_PICTURE, savedUri)
-                            )
-                        }
+                        // Update the gallery thumbnail with latest picture taken
+                        setGalleryThumbnail(savedUri)
 
                         // If the folder selected is an external media directory, this is
                         // unnecessary but otherwise other apps will not be able to access our
@@ -441,16 +429,12 @@ class CameraFragment : Fragment() {
                     }
                 })
 
-                // We can only change the foreground Drawable using API level 23+ API
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-                    // Display flash animation to indicate that photo was captured
-                    container.postDelayed({
-                        container.foreground = ColorDrawable(Color.WHITE)
-                        container.postDelayed(
-                                { container.foreground = null }, ANIMATION_FAST_MILLIS)
-                    }, ANIMATION_SLOW_MILLIS)
-                }
+                // Display flash animation to indicate that photo was captured
+                container.postDelayed({
+                    container.foreground = ColorDrawable(Color.WHITE)
+                    container.postDelayed(
+                        { container.foreground = null }, ANIMATION_FAST_MILLIS)
+                }, ANIMATION_SLOW_MILLIS)
             }
         }
 
@@ -599,8 +583,8 @@ class CameraFragment : Fragment() {
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
 
         /** Helper function used to create a timestamped file */
-        private fun createFile(baseFolder: File, format: String, extension: String) =
-                File(baseFolder, SimpleDateFormat(format, Locale.US)
-                        .format(System.currentTimeMillis()) + extension)
+        private fun createFile(baseFolder: File) =
+                File(baseFolder, SimpleDateFormat(FILENAME, Locale.US)
+                        .format(System.currentTimeMillis()) + PHOTO_EXTENSION)
     }
 }

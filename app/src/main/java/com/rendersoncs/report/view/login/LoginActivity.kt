@@ -26,15 +26,14 @@ import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.R
 import com.rendersoncs.report.common.constants.ReportConstants
-import com.rendersoncs.report.data.local.AppDatabase
 import com.rendersoncs.report.databinding.FragmentLoginBinding
 import com.rendersoncs.report.common.util.closeVirtualKeyBoard
-import com.rendersoncs.report.common.util.viewModelFactory
-import com.rendersoncs.report.repository.ReportRepository
 import com.rendersoncs.report.view.login.util.User
 import com.rendersoncs.report.view.login.viewmodel.LoginViewModel
 import com.rendersoncs.report.view.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : CommonActivity(), OnEditorActionListener {
     private var mAuth: FirebaseAuth? = null
     private var mAuthListener: AuthStateListener? = null
@@ -43,10 +42,7 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
     private var mGoogleApiClient: GoogleSignInClient? = null
     private lateinit var binding: FragmentLoginBinding
 
-    private val repo by lazy { ReportRepository(AppDatabase(this)) }
-    private val viewModel: LoginViewModel by viewModels {
-        viewModelFactory { LoginViewModel(this.application, repo) }
-    }
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +75,21 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         mGoogleApiClient = GoogleSignIn.getClient(this, gso)
         mAuth = FirebaseAuth.getInstance()
         mAuthListener = firebaseAuthResultHandler
+        setListener()
         initViews()
         initUser()
+    }
+
+    private fun setListener() = with(binding) {
+        singIn.setOnClickListener {
+            sendLoginData()
+        }
+        signUp.setOnClickListener {
+            callSignUp()
+        }
+        recoveryPassword.setOnClickListener {
+            callReset()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -194,17 +203,17 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         user?.password = binding.password.text.toString()
     }
 
-    fun callSignUp(view: View?) {
+    private fun callSignUp() {
         val intent = Intent(this, SignUpActivity::class.java)
         startActivity(intent)
     }
 
-    fun callReset(view: View?) {
+    private fun callReset() {
         val intent = Intent(this, RecoveryLoginActivity::class.java)
         startActivity(intent)
     }
 
-    fun sendLoginData(view: View?) {
+    private fun sendLoginData() {
         when {
             binding.email.text.toString().isEmpty() -> {
                 binding.textInputEmail.error = resources.getString(R.string.label_insert_email)
@@ -223,7 +232,7 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
     override fun onEditorAction(view: TextView?, actionId: Int, event: KeyEvent?): Boolean {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             closeVirtualKeyBoard(this, view!!)
-            sendLoginData(view)
+            sendLoginData()
             return true
         }
         return false

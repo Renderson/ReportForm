@@ -76,7 +76,6 @@
         <Button
             android:id="@+id/singIn"
             style="@style/ButtonFormField"
-            android:onClick="sendLoginData"
             android:text="@string/login"
             android:textAllCaps="false"
             app:layout_constraintStart_toStartOf="@+id/textInputPassword"
@@ -87,7 +86,6 @@
             style="@style/TextBottomFormField"
             android:layout_marginEnd="@dimen/margin_8"
             android:layout_marginBottom="@dimen/margin_8"
-            android:onClick="callReset"
             android:text="@string/label_recover_password"
             app:layout_constraintBottom_toBottomOf="@+id/singIn"
             app:layout_constraintEnd_toEndOf="@+id/textInputPassword"
@@ -156,7 +154,6 @@
         <TextView
             android:id="@+id/signUp"
             style="@style/TextBottomClickFormField"
-            android:onClick="callSignUp"
             android:text="@string/register"
             app:layout_constraintBottom_toBottomOf="@+id/txt3"
             app:layout_constraintStart_toEndOf="@+id/txt3"
