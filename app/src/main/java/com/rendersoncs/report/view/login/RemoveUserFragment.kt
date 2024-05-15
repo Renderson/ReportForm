@@ -22,7 +22,9 @@ import com.rendersoncs.report.common.util.closeVirtualKeyBoard
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import com.rendersoncs.report.view.base.BaseFragment
 import com.rendersoncs.report.view.login.util.User
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RemoveUserFragment : BaseFragment<FragmentRemoveUserBinding, ReportViewModel>(),
         DatabaseReference.CompletionListener,
         TextView.OnEditorActionListener {
@@ -67,7 +69,7 @@ class RemoveUserFragment : BaseFragment<FragmentRemoveUserBinding, ReportViewMod
     }
 
     private fun validatePassword(s: Editable?) {
-        if (s != null && s.isNotEmpty()) {
+        if (s.isNullOrEmpty().not()) {
             binding.textInputDeleteAccount.error = null
         } else {
             binding.textInputDeleteAccount.error = getString(R.string.label_insert_password)

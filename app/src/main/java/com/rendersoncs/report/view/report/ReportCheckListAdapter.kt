@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.rendersoncs.report.R
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.ReportItems
-import kotlinx.android.synthetic.main.item_report_check_list.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -53,18 +52,18 @@ class ReportCheckListAdapter(
     inner class ReportViewHolder(rowView: View) : RecyclerView.ViewHolder(rowView),
             View.OnClickListener {
 
-        private val expandableLayout: LinearLayout = rowView.expandableLayout
-        private var tvTitleList: TextView = rowView.textView_title
-        private var tvDescription: TextView = rowView.textView_subTitle
-        private var takePhoto: ImageView = rowView.photo
-        private var resultPhoto: ImageView = rowView.result_photo
-        private var check: ImageView = rowView.action_check
-        private var note: ImageView = rowView.note
-        private var resetItem: ImageView = rowView.action_reset_item
-        private var buttonLayoutArrow: RelativeLayout = rowView.btnArrow
-        private var mRadioButtonConform: RadioButton = rowView.radio_conform
-        private var mRadioButtonNotApplicable: RadioButton = rowView.radio_not_applicable
-        private var mRadioButtonNotConform: RadioButton = rowView.radio_not_conform
+        private val expandableLayout: LinearLayout = rowView.findViewById(R.id.expandableLayout)
+        private var tvTitleList: TextView = rowView.findViewById(R.id.textView_title)
+        private var tvDescription: TextView = rowView.findViewById(R.id.textView_subTitle)
+        private var takePhoto: ImageView = rowView.findViewById(R.id.photo)
+        private var resultPhoto: ImageView = rowView.findViewById(R.id.result_photo)
+        private var check: ImageView = rowView.findViewById(R.id.action_check)
+        private var note: ImageView = rowView.findViewById(R.id.note)
+        private var resetItem: ImageView = rowView.findViewById(R.id.action_reset_item)
+        private var buttonLayoutArrow: RelativeLayout = rowView.findViewById(R.id.btnArrow)
+        private var mRadioButtonConform: RadioButton = rowView.findViewById(R.id.radio_conform)
+        private var mRadioButtonNotApplicable: RadioButton = rowView.findViewById(R.id.radio_not_applicable)
+        private var mRadioButtonNotConform: RadioButton = rowView.findViewById(R.id.radio_not_conform)
 
         override fun onClick(v: View) {
             when (v.id) {

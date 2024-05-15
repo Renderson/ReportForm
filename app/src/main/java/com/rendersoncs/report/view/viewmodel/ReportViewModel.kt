@@ -3,7 +3,6 @@ package com.rendersoncs.report.view.viewmodel
 import android.app.Application
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.util.Pair
 import androidx.core.content.FileProvider
@@ -158,11 +157,7 @@ class ReportViewModel @Inject constructor(
         val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
                 "Report/$subject.pdf")
 
-        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            FileProvider.getUriForFile(getApplication(), ReportConstants.PACKAGE.FILE_PROVIDER, file)
-        } else {
-            Uri.fromFile(file)
-        }
+        val uri = FileProvider.getUriForFile(getApplication(), ReportConstants.PACKAGE.FILE_PROVIDER, file)
         return Pair(subject, uri)
     }
 

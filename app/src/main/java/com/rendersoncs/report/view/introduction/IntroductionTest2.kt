@@ -1,8 +1,6 @@
 package com.rendersoncs.report.view.introduction
 
-import android.os.Build
 import androidx.annotation.FloatRange
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -38,7 +36,6 @@ import com.rendersoncs.report.R
 import com.rendersoncs.report.model.LoaderIntro
 import com.rendersoncs.report.model.OnBoardingItems
 
-@RequiresApi(Build.VERSION_CODES.M)
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun IntroductionTest2(
@@ -86,7 +83,6 @@ fun IntroductionTest2(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
 @ExperimentalPagerApi
 @Composable
 fun OnBoardingPager(
@@ -170,7 +166,6 @@ fun rememberPagerState(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun PagerIndicator(
     size: Int,
@@ -186,7 +181,6 @@ fun PagerIndicator(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun Indicator(isSelected: Boolean) {
     val width = animateDpAsState(targetValue = if (isSelected) 25.dp else 10.dp)
@@ -205,7 +199,6 @@ fun Indicator(isSelected: Boolean) {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun BottomSection(
     onButtonClicked: () -> Unit,
