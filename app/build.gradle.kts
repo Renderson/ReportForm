@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     kotlin("android")
     kotlin("kapt")
@@ -15,7 +18,19 @@ val versionPatch = 0
 
 fun computeVersionName() = "$versionMajor.$versionMinor.$versionPatch"
 
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
 android {
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+        }
+    }
     namespace = "com.rendersoncs.report"
     compileSdk = 34
 
@@ -26,6 +41,7 @@ android {
         versionCode = 1
         versionName = computeVersionName()
         multiDexEnabled = true
+        signingConfig = signingConfigs.getByName("release")
     }
 
     compileOptions {
