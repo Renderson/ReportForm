@@ -505,10 +505,11 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         }
         viewModel.pdfCreated.observe(viewLifecycleOwner) { result ->
             if (result) {
-                startSaveAutomatic = false
                 if (mInterstitialAd != null) {
+                    startSaveAutomatic = false
                     mInterstitialAd?.show(requireActivity())
                 } else {
+                    startSaveAutomatic = false
                     navigateUp()
                 }
             }
