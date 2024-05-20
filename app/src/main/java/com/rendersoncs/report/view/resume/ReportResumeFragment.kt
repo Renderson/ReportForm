@@ -141,8 +141,9 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
                 viewModel.deletePhotosDirectory(report)
 
                 val (subject, uri) = viewModel.getDocument(report)
-                activity?.contentResolver?.delete(uri, subject, null)
-
+                if (uri != null && subject != null) {
+                    activity?.contentResolver?.delete(uri, subject, null)
+                }
                 viewModel.deleteReportByID(report.id ?: 0)
                 navigateUp()
             }

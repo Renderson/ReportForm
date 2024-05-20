@@ -183,7 +183,7 @@
     <string name="alert_check_list_text">No Compliant item that does not contain photo, check before saving! Item marked as Compliant and Not Applicable, does not fit this rule!</string>
     <string name="alert_remove_report">Remove report!</string>
     <string name="alert_remove_item_title">Remove item!</string>
-    <string name="alert_remove_report_text">DDo you really want to remove the report?</string>
+    <string name="alert_remove_report_text">Do you really want to remove the report?</string>
     <string name="alert_empty_report">Empty report!</string>
     <string name="alert_empty_report_text">To save your report, you must have at least one item checked.</string>
     <string name="alert_leave_the_report">Leave report?</string>
@@ -206,7 +206,7 @@
     <string name="label_theme">Theme</string>
 
     <!--Labels PDF-->
-    <string name="label_paragraph_pdf_audit">Technical Audit - Food Safety</string>
+    <string name="label_paragraph_pdf_audit">Technical Audit</string>
     <string name="label_paragraph_pdf_company">Company Name:</string>
     <string name="label_paragraph_pdf_mail_company">Company Email:</string>
     <string name="label_paragraph_pdf_audit_officer">Audit Officer:</string>
@@ -217,7 +217,7 @@
     <string name="label_paragraph_pdf_conformity">CONFORMITY</string>
     <string name="label_paragraph_pdf_note">NOTE</string>
     <string name="label_paragraph_pdf_photo">PHOTOS</string>
-    <string name="label_name_archive">Report-%s-%s.pdf</string>
+    <string name="label_name_archive">Report-%1$s-%2$s.pdf</string>
     <string name="sanitary_signature">Signature of the sanitarist</string>
     <string name="label_paragraph_pdf_result">Result:</string>
     <string name="label_paragraph_pdf_score">Evaluation Note:</string>

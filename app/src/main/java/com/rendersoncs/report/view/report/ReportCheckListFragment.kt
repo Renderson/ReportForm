@@ -11,31 +11,46 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.util.component1
+import androidx.core.util.component2
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.database.*
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.rendersoncs.report.AdManager
 import com.rendersoncs.report.BuildConfig
 import com.rendersoncs.report.R
 import com.rendersoncs.report.common.animated.animatedView
 import com.rendersoncs.report.common.constants.ReportConstants
-import com.rendersoncs.report.common.util.*
+import com.rendersoncs.report.common.util.CommonBottomSheet
+import com.rendersoncs.report.common.util.CommonDialog
+import com.rendersoncs.report.common.util.CommonEditDialog
+import com.rendersoncs.report.common.util.DownloadJson
+import com.rendersoncs.report.common.util.NetworkChecker
+import com.rendersoncs.report.common.util.SnackBarHelper
+import com.rendersoncs.report.common.util.getRealPathFromURI
+import com.rendersoncs.report.common.util.hide
+import com.rendersoncs.report.common.util.show
 import com.rendersoncs.report.databinding.FragmentReportCheckListBinding
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
@@ -49,7 +64,7 @@ import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import java.io.File
-import java.util.*
+import java.util.Locale
 
 @AndroidEntryPoint
 class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, ReportViewModel>(), ReportListener {
@@ -62,21 +77,21 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     private lateinit var recyclerView: RecyclerView
     private lateinit var resultScore: String
     private lateinit var resultController: String
+    private lateinit var adManager: AdManager
+
     private lateinit var reportPosition: ReportItems
-
-    private var mInterstitialAd: InterstitialAd? = null
     private val reportItems = ArrayList<ReportItems>()
-    private val mKeys = ArrayList<String?>()
 
+    private val mKeys = ArrayList<String?>()
     private val listTitle = ArrayList<String?>()
     private val listDescription = ArrayList<String?>()
     private val listRadio = ArrayList<String?>()
     private val listNotes = ArrayList<String?>()
+
     private val listPhoto = ArrayList<String?>()
-
     private var mAdapter = ReportCheckListAdapter(reportItems)
-    private val jsonListModeOff = DownloadJson()
 
+    private val jsonListModeOff = DownloadJson()
     private val snackBarHelper = SnackBarHelper()
     private val checkAnswerList = ReportCheckAnswer()
     private var clear = false
@@ -147,6 +162,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         user.id = FirebaseAuth.getInstance().currentUser?.uid
         viewModel.checkReportItems.value = reportItems
         loadCheckList()
+        initAdMob()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -155,7 +171,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         initViews()
         setupRV()
         setObservers()
-        showAdMob()
     }
 
     override fun getViewBinding(
@@ -505,13 +520,8 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         }
         viewModel.pdfCreated.observe(viewLifecycleOwner) { result ->
             if (result) {
-                if (mInterstitialAd != null) {
-                    startSaveAutomatic = false
-                    mInterstitialAd?.show(requireActivity())
-                } else {
-                    startSaveAutomatic = false
-                    navigateUp()
-                }
+                startSaveAutomatic = false
+                showAdMob()
             }
         }
 
@@ -544,36 +554,21 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
         }
     }
 
-    private fun showAdMob() {
-        val admobId = if (BuildConfig.BUILD_TYPE != "release") {
+    private fun initAdMob() {
+        val config  = if (BuildConfig.BUILD_TYPE != "release") {
             ReportConstants.ADMOB.ADMOB_HLG
         } else {
             ReportConstants.ADMOB.ADMOB_PROD
         }
 
-        val adRequest = AdRequest.Builder().build()
+        adManager = AdManager(requireActivity(), config)
+        adManager.loadAdMob()
+    }
 
-        InterstitialAd.load(
-            requireContext(),
-            admobId,
-            adRequest,
-            object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mInterstitialAd = null
-                }
-
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    mInterstitialAd = interstitialAd
-
-                    mInterstitialAd?.fullScreenContentCallback =
-                        object : FullScreenContentCallback() {
-                            override fun onAdDismissedFullScreenContent() {
-                                findNavController().navigateUp()
-                            }
-                        }
-                }
-            }
-        )
+    private fun showAdMob() {
+        adManager.showAdMob {
+            findNavController().navigateUp()
+        }
     }
 
     private fun closeReport() {
@@ -583,10 +578,22 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             buttonConfirm = getString(R.string.confirm),
             buttonCancel = getString(R.string.cancel),
             confirmListener = {
+                startSaveAutomatic = false
+                handleDeletionOrSave()
                 closeMethods()
                 navigateUp()
             }
         )
+    }
+
+    private fun handleDeletionOrSave() {
+        checkAnswers()
+        if (listRadio.isEmpty()) {
+            viewModel.deletePhotosDirectory(args.report)
+            viewModel.deleteReportByID(args.id)
+        } else {
+            saveReport()
+        }
     }
 
     private fun closeMethods() {
