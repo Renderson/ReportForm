@@ -83,7 +83,7 @@
             android:exported="true">
 
             <!-- App links for http/s -->
-            <intent-filter android:autoVerify="true">
+            <!--<intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -91,7 +91,7 @@
                 <data android:scheme="https" />
                 <data android:host="example.android.com" />
                 <data android:pathPattern="/camerax" />
-            </intent-filter>
+            </intent-filter>-->
 
             <!-- Declare notch support -->
             <meta-data android:name="android.notch_support" android:value="true"/>

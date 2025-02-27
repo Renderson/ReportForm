@@ -120,6 +120,8 @@
 
         <argument
             android:name="report"
+            android:defaultValue="@null"
+            app:nullable="true"
             app:argType="com.rendersoncs.report.model.Report" />
     </fragment>
 
