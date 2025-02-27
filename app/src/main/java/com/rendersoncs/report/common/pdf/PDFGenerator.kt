@@ -44,12 +44,13 @@ class PDFGenerator {
         val context = MyApplication.appContext
 
         try {
-            val str =
-                FilenameUtils.normalize(String.format(
-                    context.resources
-                        .getString(R.string.label_name_archive,
-                        report.companyFormatter(),
-                        report.dateFormatter())))
+            val str = FilenameUtils.normalize(
+                String.format(
+                    context.resources.getString(R.string.label_name_archive),
+                    report.companyFormatter(),
+                    report.dateFormatter()
+                )
+            )
 
             val filePath = File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),

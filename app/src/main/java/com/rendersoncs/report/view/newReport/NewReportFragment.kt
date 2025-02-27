@@ -65,15 +65,13 @@ class NewReportFragment : BaseFragment<FragmentNewReportBinding, ReportViewModel
             }
         }
         viewModel.savedReport.observe(viewLifecycleOwner) { id ->
-            if (id != null) {
-                val bundle = Bundle().apply {
-                    putSerializable("report", report())
-                    putInt("id", id.toInt())
-                }
-                findNavController().navigate(
-                    R.id.action_addNewReportFragment_to_reportActivity, bundle
-                )
+            val bundle = Bundle().apply {
+                putSerializable("report", report())
+                putInt("id", id.toInt())
             }
+            findNavController().navigate(
+                R.id.action_addNewReportFragment_to_reportActivity, bundle
+            )
         }
     }
 

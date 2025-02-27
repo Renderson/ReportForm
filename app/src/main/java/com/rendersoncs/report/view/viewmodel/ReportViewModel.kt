@@ -22,6 +22,7 @@ import com.rendersoncs.report.common.pdf.PDFGenerator
 import com.rendersoncs.report.common.util.*
 import com.rendersoncs.report.model.*
 import com.rendersoncs.report.repository.ReportRepository
+import com.rendersoncs.report.util.ReportConstants.PACKAGE.FILE_PROVIDER
 import com.rendersoncs.report.view.base.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -152,13 +153,17 @@ class ReportViewModel @Inject constructor(
         _uiStateScore.value = score
     }
 
-    fun getDocument(item: Report): Pair<String, Uri> {
-        val subject = String.format("Report-%s-%s", item.companyFormatter(), item.dateFormatter())
-        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
+    fun getDocument(item: Report): Pair<String?, Uri?> {
+        return try {
+            val subject = String.format("Report-%s-%s", item.companyFormatter(), item.dateFormatter())
+            val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
                 "Report/$subject.pdf")
 
-        val uri = FileProvider.getUriForFile(getApplication(), ReportConstants.PACKAGE.FILE_PROVIDER, file)
-        return Pair(subject, uri)
+            val uri = FileProvider.getUriForFile(getApplication(), FILE_PROVIDER, file)
+            return Pair(subject, uri)
+        } catch (exception: Exception) {
+            Pair(null, null)
+        }
     }
 
     fun deletePhotosDirectory(item: Report) = viewModelScope.launch {
