@@ -1,3 +1,4 @@
+import io.gitlab.arturbosch.detekt.Detekt
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -10,17 +11,39 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
+    id("io.gitlab.arturbosch.detekt").version("1.23.0")
 }
 
 val versionMajor = 1
 val versionMinor = 0
-val versionPatch = 0
+val versionPatch = 1
 
 fun computeVersionName() = "$versionMajor.$versionMinor.$versionPatch"
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+detekt {
+    toolVersion = "1.23.0" // Especifica a versão do Detekt
+    config = files("config/detekt/detekt.yml") // Caminho para o arquivo de configuração personalizado
+    buildUponDefaultConfig = true // Utiliza as regras padrão do Detekt como base
+    allRules = false // Ativa todas as regras (inclusive instáveis) se definido como true
+    parallel = true // Executa a análise em paralelo para melhorar o desempenho
+
+    reports {
+        html.required.set(true) // Gera um relatório em HTML
+        xml.required.set(true)  // Gera um relatório em XML
+        txt.required.set(false) // Desativa o relatório em TXT
+        sarif.required.set(false) // Gera relatório no formato SARIF, útil para integração com ferramentas como GitHub
+    }
+
+    //baseline = file("config/detekt/baseline.xml") // Define um arquivo de baseline para ignorar problemas conhecidos
+}
+
+tasks.withType<Detekt> {
+    jvmTarget = "1.8" // Define a versão do Java que será usada pelo Detekt
+}
 
 android {
     signingConfigs {
@@ -32,13 +55,13 @@ android {
         }
     }
     namespace = "com.rendersoncs.report"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.rendersoncs.report"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
+        targetSdk = 35
+        versionCode = 3
         versionName = computeVersionName()
         multiDexEnabled = true
         signingConfig = signingConfigs.getByName("release")
@@ -90,7 +113,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
 }
 
@@ -207,4 +230,7 @@ dependencies {
 
     // Adb mob
     implementation(libs.google.ads)
+
+    // Detekt
+    detektPlugins(libs.detekt)
 }

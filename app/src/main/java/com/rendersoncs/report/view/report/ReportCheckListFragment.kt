@@ -555,13 +555,13 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     private fun initAdMob() {
-        val config  = if (BuildConfig.BUILD_TYPE != "release") {
+        val adUnitId  = if (BuildConfig.BUILD_TYPE != "release") {
             ReportConstants.ADMOB.ADMOB_HLG
         } else {
             ReportConstants.ADMOB.ADMOB_PROD
         }
 
-        adManager = AdManager(requireActivity(), config)
+        adManager = AdManager(requireActivity(), adUnitId)
         adManager.loadAdMob()
     }
 

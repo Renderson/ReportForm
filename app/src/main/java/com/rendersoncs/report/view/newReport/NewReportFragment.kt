@@ -33,7 +33,7 @@ class NewReportFragment : BaseFragment<FragmentNewReportBinding, ReportViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        args.report.id?.let { id ->
+        args.report?.id?.let { id ->
             viewModel.getReportByID(id)
         }
         viewModel.getNameShared()
@@ -135,29 +135,31 @@ class NewReportFragment : BaseFragment<FragmentNewReportBinding, ReportViewModel
         btnNewReport.setOnClickListener {
             hideKeyboard()
             binding.addNewReport.apply {
-                if (args.report.id == null) {
+                if (args.report?.id == null) {
                     viewModel.insertReport(report = report())
                 } else {
                     viewModel.updateReport(
-                        args.report.id ?: -1,
+                        args.report?.id ?: -1,
                         report = report()
                     )
-                    viewModel.savedReport.value = args.report.id?.toLong()
+                    viewModel.savedReport.value = args.report?.id?.toLong()
                 }
             }
         }
     }
 
     private fun report(): Report = with(binding.addNewReport) {
+        val reportArgs = args.report
+
         return Report(
-            id = if (args.report.id != null) args.report.id else null,
+            id = reportArgs?.id,
             company = companyId.text.toString(),
             email = emailId.text.toString(),
             date = dateId.text.toString(),
             controller = controllerId.text.toString(),
-            score = if (args.report.id != null) args.report.score else "",
-            result = if (args.report.id != null) args.report.result else "",
-            concluded = if (args.report.id != null) args.report.concluded else false,
+            score = reportArgs?.score.orEmpty(),
+            result = reportArgs?.result.orEmpty(),
+            concluded = reportArgs?.concluded ?: false,
             userId = viewModel.userUid.value.orEmpty()
         )
     }
