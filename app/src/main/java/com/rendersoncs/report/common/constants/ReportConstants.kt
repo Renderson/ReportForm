@@ -3,9 +3,6 @@ package com.rendersoncs.report.common.constants
 import java.util.Properties
 
 class ReportConstants {
-    object PACKAGE {
-        const val FILE_PROVIDER = "com.rendersoncs.report.FileProvider"
-    }
 
     object FIREBASE {
         val URL: String by lazy {
@@ -72,9 +69,7 @@ class ReportConstants {
         const val TITLE = "title"
         const val DESCRIPTION = "description"
         const val KEY = "key"
-        const val CONFORMITY = "conformity"
         const val NOTE = "note"
-        const val PHOTO = "photo"
         const val OPT_NUM1 = 1
         const val OPT_NUM2 = 2
         const val OPT_NUM3 = 3
@@ -82,7 +77,6 @@ class ReportConstants {
 
     object PHOTO {
         const val REQUEST_CODE_GALLERY = 2006
-        const val REQUEST_CODE_CAMERA = 2000
         const val REQUEST_CAMERA_X = 1816
         const val RESULT_CAMERA_X = "result"
         const val NOT_PHOTO = "notPhoto"

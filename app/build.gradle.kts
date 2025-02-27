@@ -44,6 +44,22 @@ android {
         signingConfig = signingConfigs.getByName("release")
     }
 
+    flavorDimensions.add("version")
+    productFlavors {
+        create("free") {
+            dimension = "version"
+            applicationIdSuffix = ".free"
+            versionNameSuffix = "-free"
+            manifestPlaceholders["appName"] = "Report Free"
+        }
+        create("paid") {
+            dimension = "version"
+            applicationIdSuffix = ".paid"
+            versionNameSuffix = "-paid"
+            manifestPlaceholders["appName"] = "Report"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

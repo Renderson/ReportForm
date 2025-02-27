@@ -206,7 +206,7 @@
     <string name="label_theme">Tema</string>
 
     <!--Labels PDF-->
-    <string name="label_paragraph_pdf_audit">Auditoria Técnica - Segurança Alimentar</string>
+    <string name="label_paragraph_pdf_audit">Auditoria Técnica</string>
     <string name="label_paragraph_pdf_company">Nome da Empresa:</string>
     <string name="label_paragraph_pdf_mail_company">E-mail da empresa:</string>
     <string name="label_paragraph_pdf_audit_officer">Responsável pela auditoria:</string>
@@ -217,7 +217,7 @@
     <string name="label_paragraph_pdf_conformity">CONFORMIDADE</string>
     <string name="label_paragraph_pdf_note">OBSERVAÇÃO</string>
     <string name="label_paragraph_pdf_photo">FOTOS</string>
-    <string name="label_name_archive">Report-%s-%s.pdf</string>
+    <string name="label_name_archive">Report-%1$s-%2$s.pdf</string>
     <string name="sanitary_signature">Assinatura da Sanitarista</string>
     <string name="label_paragraph_pdf_result">Resultado:</string>
     <string name="label_paragraph_pdf_score">Nota de avaliação:</string>
