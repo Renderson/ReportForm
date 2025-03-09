@@ -72,8 +72,8 @@ android {
         create("free") {
             dimension = "version"
             applicationIdSuffix = ".free"
-            versionNameSuffix = "-free"
-            manifestPlaceholders["appName"] = "Report Free"
+            versionNameSuffix = "-lite"
+            manifestPlaceholders["appName"] = "Report Lite"
         }
         create("paid") {
             dimension = "version"
