@@ -61,7 +61,7 @@ android {
         applicationId = "com.rendersoncs.report"
         minSdk = 24
         targetSdk = 35
-        versionCode = 4
+        versionCode = 5
         versionName = computeVersionName()
         multiDexEnabled = true
         signingConfig = signingConfigs.getByName("release")
