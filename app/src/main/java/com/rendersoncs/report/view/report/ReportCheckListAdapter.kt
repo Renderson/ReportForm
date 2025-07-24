@@ -204,7 +204,7 @@ class ReportCheckListAdapter(
                 } else {
                     val filteredList: MutableList<ReportItems> = ArrayList()
                     for (row in reportItems) {
-                        if (row.title!!.toLowerCase(Locale.ROOT).contains(charString.toLowerCase(Locale.ROOT))) {
+                        if (row.title!!.lowercase(Locale.ROOT).contains(charString.lowercase(Locale.ROOT))) {
                             filteredList.add(row)
                         }
                     }

@@ -111,6 +111,7 @@
 
     <!--Facebook ID-->
     <string name="facebook_app_id">2284363461680926</string>
+    <string name="facebook_client_token">your_facebook_client_token_here</string>
 
     <string name="msg_take_image">Take a picture</string>
     <string name="msg_select_from_gallery">Select from Gallery</string>

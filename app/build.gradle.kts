@@ -11,12 +11,13 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
-    id("io.gitlab.arturbosch.detekt").version("1.23.0")
+    id("io.gitlab.arturbosch.detekt").version("1.23.8")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.2.0"
 }
 
 val versionMajor = 1
 val versionMinor = 0
-val versionPatch = 2
+val versionPatch = 3
 
 fun computeVersionName() = "$versionMajor.$versionMinor.$versionPatch"
 
@@ -55,13 +56,12 @@ android {
         }
     }
     namespace = "com.rendersoncs.report"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.rendersoncs.report"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 4
+        versionCode = 5
         versionName = computeVersionName()
         multiDexEnabled = true
         signingConfig = signingConfigs.getByName("release")
@@ -110,10 +110,6 @@ android {
         viewBinding = true
         compose = true
         buildConfig = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
     }
 }
 
