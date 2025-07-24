@@ -61,6 +61,7 @@ android {
     defaultConfig {
         applicationId = "com.rendersoncs.report"
         minSdk = 24
+        targetSdk = 36
         versionCode = 5
         versionName = computeVersionName()
         multiDexEnabled = true
