@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.google.android.gms.ads.MobileAds
 import com.rendersoncs.report.common.constants.ReportConstants
 import dagger.hilt.android.HiltAndroidApp
@@ -16,6 +18,10 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
+
+        // Initialize Facebook SDK
+        FacebookSdk.sdkInitialize(applicationContext)
+        AppEventsLogger.activateApp(this)
 
         preference = getSharedPreferences(ReportConstants.THEME.MY_PREFERENCE_THEME, Context.MODE_PRIVATE)
         val position = preference.getInt(ReportConstants.THEME.KEY_THEME, THEME_DAY)

@@ -51,13 +51,13 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         val view = binding.root
         setContentView(view)
 
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = true
 
         // FACEBOOK SIGN IN
         callbackManager = CallbackManager.Factory.create()
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-            override fun onSuccess(loginResult: LoginResult) {
-                accessFacebookLoginData(loginResult.accessToken)
+            override fun onSuccess(result: LoginResult) {
+                accessFacebookLoginData(result.accessToken)
             }
 
             override fun onCancel() {}
