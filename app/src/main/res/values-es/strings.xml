@@ -230,4 +230,40 @@
     <string name="camera_share_button_alt">compartir botón alt</string>
     <string name="camera_check_button_alt">botón de verificación alt</string>
     <string name="camera_delete_button_alt">eliminar botón alt</string>
+
+    <!-- Compose Auth (no usado por el login XML) -->
+    <string name="auth_login_subtitle">Accede a tu cuenta</string>
+    <string name="auth_recovery_title">Recuperación de contraseña</string>
+    <string name="auth_forgot_heading">¿Olvidaste tu contraseña?</string>
+    <string name="auth_forgot_body">Introduce el correo asociado a tu cuenta. Te enviaremos un enlace con instrucciones para restablecer tu contraseña de forma segura.</string>
+    <string name="auth_email_professional">Correo profesional</string>
+    <string name="auth_email_placeholder">auditor@empresa.com</string>
+    <string name="auth_send_instructions">Enviar instrucciones</string>
+    <string name="auth_back_to_login">Volver al inicio de sesión</string>
+    <string name="auth_need_help">¿Necesitas más ayuda?</string>
+    <string name="auth_contact_support">Contacta a soporte TI</string>
+    <string name="auth_recovery_sent_heading">Revisa tu correo</string>
+    <string name="auth_recovery_sent_body">Enviamos un enlace de restablecimiento a %1$s. Abre el correo para crear una nueva contraseña.</string>
+    <string name="auth_resend_email">Reenviar correo</string>
+    <string name="auth_sign_up_title">Crear cuenta</string>
+    <string name="auth_sign_up_subtitle">Completa tus datos para acceder a %1$s.</string>
+    <string name="auth_full_name">Nombre completo</string>
+    <string name="auth_full_name_placeholder">Ej: Juan Pérez</string>
+    <string name="auth_corporate_email">Correo corporativo</string>
+    <string name="auth_corporate_email_placeholder">nombre@empresa.com</string>
+    <string name="auth_role">Cargo/Función</string>
+    <string name="auth_role_placeholder">Selecciona tu cargo</string>
+    <string name="auth_role_required">Selecciona tu cargo.</string>
+    <string name="auth_confirm_password">Confirmar contraseña</string>
+    <string name="auth_password_mismatch">Las contraseñas no coinciden.</string>
+    <string name="auth_password_min_length">La contraseña debe tener al menos 6 caracteres.</string>
+    <string name="auth_already_have_account">¿Ya tienes una cuenta?</string>
+    <string-array name="auth_roles">
+        <item>Auditor</item>
+        <item>Supervisor</item>
+        <item>Coordinador</item>
+        <item>Gestor</item>
+        <item>Sanitarista</item>
+        <item>Otro</item>
+    </string-array>
 </resources>

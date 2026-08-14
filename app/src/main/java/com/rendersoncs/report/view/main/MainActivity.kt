@@ -34,7 +34,7 @@ import com.rendersoncs.report.common.extension.applyMainWindowInsets
 import com.rendersoncs.report.common.extension.spaceToNewLine
 import com.rendersoncs.report.databinding.ActivityMainBinding
 import com.rendersoncs.report.view.fragment.ChooseThemeDialogFragment.SingleChoiceListener
-import com.rendersoncs.report.view.login.LoginActivity
+import com.rendersoncs.report.ui.login.AuthActivity
 import com.rendersoncs.report.view.login.util.LibraryClass
 import com.rendersoncs.report.view.viewmodel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
     private fun checkLoggedUser() {
         authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
             if (firebaseAuth.currentUser == null) {
-                Intent(this, LoginActivity::class.java).apply {
+                Intent(this, AuthActivity::class.java).apply {
                     startActivity(this)
                     finish()
                 }

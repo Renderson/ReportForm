@@ -230,4 +230,40 @@
     <string name="camera_share_button_alt">botão compartilhar alt</string>
     <string name="camera_check_button_alt">botão de verificação alt</string>
     <string name="camera_delete_button_alt">botão delete alt</string>
+
+    <!-- Compose Auth (não usado pelo login XML) -->
+    <string name="auth_login_subtitle">Acesse sua conta</string>
+    <string name="auth_recovery_title">Recuperação de Senha</string>
+    <string name="auth_forgot_heading">Esqueceu sua senha?</string>
+    <string name="auth_forgot_body">Insira o e-mail associado à sua conta. Enviaremos um link com instruções para você redefinir sua senha com segurança.</string>
+    <string name="auth_email_professional">E-mail Profissional</string>
+    <string name="auth_email_placeholder">auditor@empresa.com.br</string>
+    <string name="auth_send_instructions">Enviar Instruções</string>
+    <string name="auth_back_to_login">Voltar para o Login</string>
+    <string name="auth_need_help">Precisa de ajuda adicional?</string>
+    <string name="auth_contact_support">Contate o Suporte TI</string>
+    <string name="auth_recovery_sent_heading">Verifique seu e-mail</string>
+    <string name="auth_recovery_sent_body">Enviamos um link de redefinição para %1$s. Abra o e-mail para criar uma nova senha.</string>
+    <string name="auth_resend_email">Reenviar e-mail</string>
+    <string name="auth_sign_up_title">Criar Conta</string>
+    <string name="auth_sign_up_subtitle">Preencha seus dados para acessar o %1$s.</string>
+    <string name="auth_full_name">Nome Completo</string>
+    <string name="auth_full_name_placeholder">Ex: João da Silva</string>
+    <string name="auth_corporate_email">E-mail Corporativo</string>
+    <string name="auth_corporate_email_placeholder">nome@empresa.com.br</string>
+    <string name="auth_role">Cargo/Função</string>
+    <string name="auth_role_placeholder">Selecione seu cargo</string>
+    <string name="auth_role_required">Selecione seu cargo.</string>
+    <string name="auth_confirm_password">Confirmar Senha</string>
+    <string name="auth_password_mismatch">As senhas não coincidem.</string>
+    <string name="auth_password_min_length">A senha deve ter pelo menos 6 caracteres.</string>
+    <string name="auth_already_have_account">Já possui uma conta?</string>
+    <string-array name="auth_roles">
+        <item>Auditor</item>
+        <item>Supervisor</item>
+        <item>Coordenador</item>
+        <item>Gestor</item>
+        <item>Sanitarista</item>
+        <item>Outro</item>
+    </string-array>
 </resources>

@@ -4,14 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.rendersoncs.report.view.login.LoginActivity
+import com.rendersoncs.report.ui.login.AuthActivity
 
 class SplashScreenActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(Intent(this, AuthActivity::class.java))
         finish()
     }
 }
