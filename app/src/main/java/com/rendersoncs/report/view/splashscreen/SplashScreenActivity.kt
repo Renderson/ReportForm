@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.rendersoncs.report.ui.ReportActivity
 import com.rendersoncs.report.ui.login.AuthActivity
+import com.rendersoncs.report.ui.onboarding.OnboardingActivity
+import com.rendersoncs.report.ui.onboarding.OnboardingPrefs
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -32,10 +34,15 @@ class SplashScreenActivity : AppCompatActivity() {
         if (navigated || isFinishing) return
         navigated = true
         removeAuthListener()
-        val destination = if (loggedIn) {
-            ReportActivity::class.java
-        } else {
-            AuthActivity::class.java
+        val destination = when {
+            loggedIn -> {
+                if (!OnboardingPrefs.isCompleted(this)) {
+                    OnboardingPrefs.markCompleted(this)
+                }
+                ReportActivity::class.java
+            }
+            !OnboardingPrefs.isCompleted(this) -> OnboardingActivity::class.java
+            else -> AuthActivity::class.java
         }
         startActivity(
             Intent(this, destination).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)

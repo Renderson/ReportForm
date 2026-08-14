@@ -320,6 +320,14 @@
     <string name="checklist_conclude">Finalizar informe</string>
     <string name="checklist_note_placeholder">Describe la observación</string>
     <string name="checklist_remove_item">Eliminar ítem</string>
+    <string name="onboarding_skip">Saltar</string>
+    <string name="onboarding_next">Siguiente</string>
+    <string name="onboarding_page1_title">Informes de inspección en tu bolsillo</string>
+    <string name="onboarding_page1_body">Crea y gestiona auditorías de principio a fin. Registra los datos del cliente, recorre el checklist y mantén cada visita organizada en un solo lugar.</string>
+    <string name="onboarding_page2_title">Checklist, fotos y notas</string>
+    <string name="onboarding_page2_body">Marca los ítems como Conforme, No aplica o No conforme. Adjunta fotos y observaciones para documentar cada hallazgo con evidencia.</string>
+    <string name="onboarding_page3_title">Finaliza, exporta y comparte</string>
+    <string name="onboarding_page3_body">Revisa el resumen, genera el PDF y comparte el informe. Sigue tus auditorías en el panel hasta completarlas.</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>

@@ -320,6 +320,14 @@
     <string name="checklist_conclude">Concluir relatório</string>
     <string name="checklist_note_placeholder">Descreva a observação</string>
     <string name="checklist_remove_item">Remover item</string>
+    <string name="onboarding_skip">Pular</string>
+    <string name="onboarding_next">Próximo</string>
+    <string name="onboarding_page1_title">Relatórios de inspeção no bolso</string>
+    <string name="onboarding_page1_body">Crie e acompanhe auditorias do início ao fim. Registre os dados do cliente, percorra o checklist e mantenha cada visita organizada em um só lugar.</string>
+    <string name="onboarding_page2_title">Checklist, fotos e observações</string>
+    <string name="onboarding_page2_body">Marque os itens como Conforme, Não se aplica ou Não conforme. Anexe fotos e notas para documentar cada apontamento com evidência.</string>
+    <string name="onboarding_page3_title">Conclua, exporte e compartilhe</string>
+    <string name="onboarding_page3_body">Revise o resumo, gere o PDF e compartilhe o relatório. Acompanhe as auditorias no painel até a conclusão.</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>

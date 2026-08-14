@@ -321,6 +321,14 @@
     <string name="checklist_conclude">Finish report</string>
     <string name="checklist_note_placeholder">Describe the observation</string>
     <string name="checklist_remove_item">Remove item</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_page1_title">Inspection reports in your pocket</string>
+    <string name="onboarding_page1_body">Create and manage audits from start to finish. Record client data, walk the checklist, and keep every visit organized in one place.</string>
+    <string name="onboarding_page2_title">Checklist, photos, and notes</string>
+    <string name="onboarding_page2_body">Mark items as Compliant, Not Applicable, or Non-compliant. Attach photos and observations so each finding is documented with evidence.</string>
+    <string name="onboarding_page3_title">Finish, export, and share</string>
+    <string name="onboarding_page3_body">Review the summary, generate a PDF, and share the report. Follow your audits on the dashboard until they are complete.</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>
