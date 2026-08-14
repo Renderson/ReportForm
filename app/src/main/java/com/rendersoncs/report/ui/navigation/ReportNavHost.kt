@@ -2,20 +2,18 @@ package com.rendersoncs.report.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.rendersoncs.report.R
+import com.rendersoncs.report.ui.checklist.ChecklistScreen
 import com.rendersoncs.report.ui.dashboard.HomeScreen
 import com.rendersoncs.report.ui.newreport.NewReportScreen
 import com.rendersoncs.report.ui.profile.AboutScreen
 import com.rendersoncs.report.ui.profile.ChangePasswordScreen
 import com.rendersoncs.report.ui.profile.DeleteAccountScreen
 import com.rendersoncs.report.ui.resume.ResumeScreen
-import com.rendersoncs.report.ui.screens.placeholder.PlaceholderScreen
 
 @Composable
 fun ReportNavHost(
@@ -60,9 +58,13 @@ fun ReportNavHost(
             route = ReportRoute.CHECKLIST,
             arguments = listOf(navArgument("reportId") { type = NavType.LongType })
         ) {
-            PlaceholderScreen(
-                title = stringResource(R.string.label_menu_new_report),
-                onBack = { navController.popBackStack() }
+            ChecklistScreen(
+                onBack = { navController.popBackStack() },
+                onConcluded = { reportId ->
+                    navController.navigate(ReportRoute.resume(reportId)) {
+                        popUpTo(ReportRoute.DASHBOARD)
+                    }
+                }
             )
         }
         composable(

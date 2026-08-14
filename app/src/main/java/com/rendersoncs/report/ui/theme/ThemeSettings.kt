@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.content.edit
 
 @Singleton
 class ThemeSettings @Inject constructor(
@@ -24,7 +25,7 @@ class ThemeSettings @Inject constructor(
 
     fun setDarkTheme(enabled: Boolean) {
         val position = if (enabled) THEME_DARK else THEME_DAY
-        prefs.edit().putInt(ReportConstants.THEME.KEY_THEME, position).apply()
+        prefs.edit { putInt(ReportConstants.THEME.KEY_THEME, position) }
         AppCompatDelegate.setDefaultNightMode(
             if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
         )

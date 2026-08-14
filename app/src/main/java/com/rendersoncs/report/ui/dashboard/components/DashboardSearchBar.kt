@@ -36,9 +36,11 @@ import com.rendersoncs.report.ui.theme.ReportShapes
 fun DashboardSearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
-    selectedFilter: AuditFilter,
-    onFilterChange: (AuditFilter) -> Unit,
-    modifier: Modifier = Modifier
+    selectedFilter: AuditFilter = AuditFilter.ALL,
+    onFilterChange: (AuditFilter) -> Unit = {},
+    modifier: Modifier = Modifier,
+    showFilter: Boolean = true,
+    placeholder: String = stringResource(R.string.dashboard_search_hint)
 ) {
     var filterExpanded by remember { mutableStateOf(false) }
 
@@ -54,7 +56,7 @@ fun DashboardSearchBar(
                 .height(56.dp),
             placeholder = {
                 Text(
-                    text = stringResource(R.string.dashboard_search_hint),
+                    text = placeholder,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
@@ -74,41 +76,43 @@ fun DashboardSearchBar(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
             )
         )
-        Spacer(modifier = Modifier.width(8.dp))
-        Box {
-            Surface(
-                shape = ReportShapes.small,
-                color = MaterialTheme.colorScheme.surface,
-                tonalElevation = 1.dp,
-                shadowElevation = 1.dp
-            ) {
-                IconButton(
-                    onClick = { filterExpanded = true },
-                    modifier = Modifier.size(56.dp)
+        if (showFilter) {
+            Spacer(modifier = Modifier.width(8.dp))
+            Box {
+                Surface(
+                    shape = ReportShapes.small,
+                    color = MaterialTheme.colorScheme.surface,
+                    tonalElevation = 1.dp,
+                    shadowElevation = 1.dp
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.FilterList,
-                        contentDescription = stringResource(R.string.dashboard_filter),
-                        tint = if (selectedFilter == AuditFilter.ALL) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.secondary
-                        }
-                    )
+                    IconButton(
+                        onClick = { filterExpanded = true },
+                        modifier = Modifier.size(56.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.FilterList,
+                            contentDescription = stringResource(R.string.dashboard_filter),
+                            tint = if (selectedFilter == AuditFilter.ALL) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.secondary
+                            }
+                        )
+                    }
                 }
-            }
-            DropdownMenu(
-                expanded = filterExpanded,
-                onDismissRequest = { filterExpanded = false }
-            ) {
-                AuditFilter.entries.forEach { filter ->
-                    DropdownMenuItem(
-                        text = { Text(filterLabel(filter)) },
-                        onClick = {
-                            onFilterChange(filter)
-                            filterExpanded = false
-                        }
-                    )
+                DropdownMenu(
+                    expanded = filterExpanded,
+                    onDismissRequest = { filterExpanded = false }
+                ) {
+                    AuditFilter.entries.forEach { filter ->
+                        DropdownMenuItem(
+                            text = { Text(filterLabel(filter)) },
+                            onClick = {
+                                onFilterChange(filter)
+                                filterExpanded = false
+                            }
+                        )
+                    }
                 }
             }
         }

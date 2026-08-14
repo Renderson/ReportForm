@@ -284,6 +284,20 @@
     <string name="resume_pdf_no_app">Nenhum aplicativo encontrado para abrir o PDF.</string>
     <string name="profile_preferences">Preferências</string>
     <string name="profile_logout_confirm">Deseja realmente sair?</string>
+    <string name="checklist_section">Seção 1</string>
+    <string name="checklist_completed">%1$d/%2$d Concluídos</string>
+    <string name="checklist_add_extra">+ Adicionar item extra</string>
+    <string name="checklist_search_hint">Buscar itens...</string>
+    <string name="checklist_offline_edit">Conecte-se à internet para editar a lista.</string>
+    <string name="checklist_no_results">Nenhum item encontrado</string>
+    <string name="checklist_no_results_hint">Tente outra busca.</string>
+    <string name="checklist_item_title">Título do item</string>
+    <string name="checklist_item_description">Descrição do item</string>
+    <string name="checklist_reset_item">Limpar item</string>
+    <string name="checklist_edit_item">Editar item</string>
+    <string name="checklist_conclude">Concluir relatório</string>
+    <string name="checklist_note_placeholder">Descreva a observação</string>
+    <string name="checklist_remove_item">Remover item</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>
