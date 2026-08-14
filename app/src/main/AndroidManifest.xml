@@ -62,6 +62,12 @@
         </activity>
 
         <activity
+            android:name="com.rendersoncs.report.ui.ReportActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Report.Compose"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name="com.rendersoncs.report.view.main.MainActivity"
             android:exported="false"
             android:launchMode="singleTop"

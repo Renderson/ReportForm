@@ -141,13 +141,19 @@ dependencies {
     implementation(libs.android.ui.cardview)
 
     // Compose
+    implementation(platform(libs.compose.bom))
     implementation(libs.compose.activity)
     implementation(libs.compose.runtime)
     implementation(libs.compose.material)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons)
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.google.fonts)
+    implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
 
     // Compose HorizontalPager
     implementation(libs.compose.horizontal.pager)
@@ -213,6 +219,7 @@ dependencies {
     // Coroutine Lifecycle Scopes
     implementation(libs.coroutine.viewmodel)
     implementation(libs.coroutine.rumtime)
+    implementation(libs.coroutine.runtime.compose)
     implementation(libs.coroutine.livedata)
 
     // Hilt

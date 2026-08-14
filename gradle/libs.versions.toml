@@ -15,7 +15,10 @@ androidUiRecyclerView = "1.4.0"
 androidUiCardView = "1.0.0"
 androidMaterial = "1.13.0"
 compose = "1.9.0"
+composeBom = "2025.08.00"
 composeActivity = "1.10.1"
+hiltNavigationCompose = "1.2.0"
+googleFonts = "1.9.0"
 composeHorizontalPager = "0.36.0"
 firebase = "34.2.0"
 firebaseCrashAnalytics = "3.0.6"
@@ -79,14 +82,20 @@ android-ui-recyclerview = { module = "androidx.recyclerview:recyclerview", versi
 android-ui-cardview = { module = "androidx.cardview:cardview", version.ref = "androidUiCardView" }
 
 # Jetpack Compose
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-activity = { module = "androidx.activity:activity-compose", version.ref = "composeActivity" }
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
-compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-runtime = { module = "androidx.compose.runtime:runtime" }
+compose-material = { module = "androidx.compose.material:material" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-material-icons = { module = "androidx.compose.material:material-icons-extended" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "googleFonts" }
 compose-horizontal-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "composeHorizontalPager" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 # Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
@@ -117,6 +126,7 @@ coroutine-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android
 coroutine-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutine" }
 coroutine-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "coroutineLifecycleScopes" }
 coroutine-rumtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "coroutineLifecycleScopes" }
+coroutine-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "coroutineLifecycleScopes" }
 coroutine-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "coroutineLifecycleScopes" }
 
 # IText PDF
