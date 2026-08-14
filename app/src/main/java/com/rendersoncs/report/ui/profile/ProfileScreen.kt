@@ -1,5 +1,12 @@
 package com.rendersoncs.report.ui.profile
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +24,7 @@ import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.LockReset
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.AlertDialog
@@ -148,6 +156,7 @@ private fun ProfileContent(
                 icon = Icons.Outlined.DarkMode,
                 label = stringResource(R.string.label_theme),
                 onClick = { onDarkThemeChange(!state.darkTheme) },
+                leadingIcon = { AnimatedThemeIcon(darkTheme = state.darkTheme) },
                 trailing = {
                     Switch(
                         checked = state.darkTheme,
@@ -265,7 +274,8 @@ private fun ProfileMenuItem(
     label: String,
     onClick: () -> Unit,
     destructive: Boolean = false,
-    trailing: @Composable (() -> Unit)? = null
+    trailing: @Composable (() -> Unit)? = null,
+    leadingIcon: (@Composable () -> Unit)? = null
 ) {
     val contentColor = if (destructive) {
         MaterialTheme.colorScheme.error
@@ -279,12 +289,16 @@ private fun ProfileMenuItem(
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = contentColor,
-            modifier = Modifier.size(22.dp)
-        )
+        if (leadingIcon != null) {
+            leadingIcon()
+        } else {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = contentColor,
+                modifier = Modifier.size(22.dp)
+            )
+        }
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = label,
@@ -293,6 +307,32 @@ private fun ProfileMenuItem(
             modifier = Modifier.weight(1f)
         )
         trailing?.invoke()
+    }
+}
+
+@Composable
+private fun AnimatedThemeIcon(darkTheme: Boolean) {
+    AnimatedContent(
+        targetState = darkTheme,
+        transitionSpec = {
+            (fadeIn(animationSpec = tween(280)) + scaleIn(
+                initialScale = 0.5f,
+                animationSpec = tween(280)
+            )).togetherWith(
+                fadeOut(animationSpec = tween(180)) + scaleOut(
+                    targetScale = 0.5f,
+                    animationSpec = tween(180)
+                )
+            )
+        },
+        label = "themeIcon"
+    ) { isDark ->
+        Icon(
+            imageVector = if (isDark) Icons.Outlined.DarkMode else Icons.Outlined.LightMode,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.size(22.dp)
+        )
     }
 }
 
