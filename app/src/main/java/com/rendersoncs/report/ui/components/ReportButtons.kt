@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -110,4 +111,27 @@ fun ReportFab(
     ) {
         Icon(imageVector = icon, contentDescription = contentDescription)
     }
+}
+
+@Composable
+fun ReportExtendedFab(
+    text: String,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    expanded: Boolean = true
+) {
+    ExtendedFloatingActionButton(
+        onClick = onClick,
+        modifier = modifier,
+        expanded = expanded,
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        icon = {
+            Icon(imageVector = icon, contentDescription = text)
+        },
+        text = {
+            Text(text = text, style = MaterialTheme.typography.labelLarge)
+        }
+    )
 }

@@ -287,7 +287,7 @@
     <string name="profile_logout_confirm">Do you really want to sign out?</string>
     <string name="checklist_section">Section 1</string>
     <string name="checklist_completed">%1$d/%2$d Completed</string>
-    <string name="checklist_add_extra">+ Add extra item</string>
+    <string name="checklist_add_extra">Add extra item</string>
     <string name="checklist_search_hint">Search items...</string>
     <string name="checklist_offline_edit">Connect to the internet to edit the checklist.</string>
     <string name="checklist_no_results">No items found</string>

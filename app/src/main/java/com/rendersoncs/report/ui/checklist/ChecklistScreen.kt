@@ -17,22 +17,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.DeleteSweep
+import androidx.compose.material.icons.outlined.Save
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -42,6 +39,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,8 +59,8 @@ import com.rendersoncs.report.ui.checklist.components.ChecklistItemCard
 import com.rendersoncs.report.ui.checklist.components.ChecklistProgressHeader
 import com.rendersoncs.report.ui.checklist.components.ChecklistSkeleton
 import com.rendersoncs.report.ui.common.UiState
+import com.rendersoncs.report.ui.components.ReportExtendedFab
 import com.rendersoncs.report.ui.dashboard.components.DashboardSearchBar
-import com.rendersoncs.report.ui.theme.ReportShapes
 import com.rendersoncs.report.view.cameraX.CameraXMainActivity
 import kotlinx.coroutines.flow.collectLatest
 import java.io.File
@@ -248,7 +246,12 @@ private fun ChecklistContent(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var menuExpanded by remember { mutableStateOf(false) }
+    val lazyListState = rememberLazyListState()
+    val fabExpanded by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex == 0
+        }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -271,39 +274,17 @@ private fun ChecklistContent(
                     }
                 },
                 actions = {
-                    Box {
-                        IconButton(onClick = { menuExpanded = true }) {
-                            Icon(
-                                imageVector = Icons.Outlined.MoreVert,
-                                contentDescription = null
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = menuExpanded,
-                            onDismissRequest = { menuExpanded = false }
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.save)) },
-                                onClick = {
-                                    menuExpanded = false
-                                    onSave()
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.leave)) },
-                                onClick = {
-                                    menuExpanded = false
-                                    onBack()
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.txt_to_clean)) },
-                                onClick = {
-                                    menuExpanded = false
-                                    onClear()
-                                }
-                            )
-                        }
+                    IconButton(onClick = onSave) {
+                        Icon(
+                            imageVector = Icons.Outlined.Save,
+                            contentDescription = stringResource(R.string.save)
+                        )
+                    }
+                    IconButton(onClick = onClear) {
+                        Icon(
+                            imageVector = Icons.Outlined.DeleteSweep,
+                            contentDescription = stringResource(R.string.txt_to_clean)
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -313,18 +294,13 @@ private fun ChecklistContent(
             )
         },
         floatingActionButton = {
-            if (state.items.isNotEmpty()) {
-                FloatingActionButton(
-                    onClick = onSave,
-                    shape = RoundedCornerShape(16.dp),
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Bolt,
-                        contentDescription = stringResource(R.string.checklist_conclude)
-                    )
-                }
+            if (state.listState !is UiState.Loading && state.listState !is UiState.Error) {
+                ReportExtendedFab(
+                    text = stringResource(R.string.checklist_add_extra),
+                    icon = Icons.Rounded.Add,
+                    onClick = onAddItem,
+                    expanded = fabExpanded
+                )
             }
         }
     ) { innerPadding ->
@@ -349,13 +325,13 @@ private fun ChecklistContent(
             }
             Spacer(modifier = Modifier.height(16.dp))
             Box(modifier = Modifier.fillMaxSize()) {
-                when (val listState = state.listState) {
+                when (val catalogState = state.listState) {
                     UiState.Loading -> ChecklistSkeleton()
                     UiState.Empty -> ChecklistEmpty(onAddItem = onAddItem)
                     is UiState.Error -> ChecklistEmpty(
                         onAddItem = onRetry,
                         title = stringResource(R.string.txt_error_save),
-                        subtitle = listState.message.ifBlank {
+                        subtitle = catalogState.message.ifBlank {
                             stringResource(R.string.label_error_update_list)
                         }
                     )
@@ -369,7 +345,8 @@ private fun ChecklistContent(
                         } else {
                             LazyColumn(
                                 modifier = Modifier.fillMaxSize(),
-                                contentPadding = PaddingValues(bottom = 96.dp),
+                                state = lazyListState,
+                                contentPadding = PaddingValues(bottom = 88.dp),
                                 verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 items(state.visibleItems, key = { it.key }) { item ->
@@ -383,21 +360,6 @@ private fun ChecklistContent(
                                         onReset = { onReset(item.key) },
                                         onRemove = { onRemove(item) }
                                     )
-                                }
-                                item(key = "add_extra") {
-                                    OutlinedButton(
-                                        onClick = onAddItem,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(52.dp),
-                                        shape = ReportShapes.small
-                                    ) {
-                                        Text(
-                                            text = stringResource(R.string.checklist_add_extra).uppercase(),
-                                            style = MaterialTheme.typography.labelLarge,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                    }
                                 }
                             }
                         }
