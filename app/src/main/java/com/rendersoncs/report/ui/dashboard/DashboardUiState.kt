@@ -1,5 +1,6 @@
 package com.rendersoncs.report.ui.dashboard
 
+import android.net.Uri
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.ui.common.UiState
 
@@ -28,6 +29,18 @@ data class DashboardUiState(
     val query: String = "",
     val filter: AuditFilter = AuditFilter.ALL
 )
+
+sealed interface DashboardEvent {
+    data class SharePdf(
+        val uri: Uri,
+        val subject: String,
+        val email: String,
+        val company: String,
+        val date: String
+    ) : DashboardEvent
+
+    data object PdfMissing : DashboardEvent
+}
 
 fun Report.auditStatus(): AuditStatus {
     if (concluded == false) return AuditStatus.PENDENTE

@@ -29,7 +29,7 @@ import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.ui.common.UiState
 import com.rendersoncs.report.ui.dashboard.components.DashboardSearchBar
 import com.rendersoncs.report.ui.dashboard.components.SearchFilterOption
-import com.rendersoncs.report.ui.dashboard.components.ReportListCard
+import com.rendersoncs.report.ui.dashboard.components.SwipeableReportCard
 
 @Composable
 fun AuditoriasScreen(
@@ -37,6 +37,8 @@ fun AuditoriasScreen(
     onQueryChange: (String) -> Unit,
     onFilterChange: (AuditFilter) -> Unit,
     onOpenReport: (Report) -> Unit,
+    onShareReport: (Report) -> Unit,
+    onDeleteReport: (Report) -> Unit,
     listState: LazyListState,
     modifier: Modifier = Modifier
 ) {
@@ -89,9 +91,11 @@ fun AuditoriasScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(state.visibleReports, key = { it.id ?: it.hashCode() }) { report ->
-                        ReportListCard(
+                        SwipeableReportCard(
                             report = report,
-                            onOpen = { onOpenReport(report) }
+                            onOpen = { onOpenReport(report) },
+                            onShare = { onShareReport(report) },
+                            onDelete = { onDeleteReport(report) }
                         )
                     }
                 }
