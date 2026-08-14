@@ -1,7 +1,6 @@
 package com.rendersoncs.report.ui.profile
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,6 +36,7 @@ import com.rendersoncs.report.BuildConfig
 import com.rendersoncs.report.R
 import com.rendersoncs.report.ui.login.components.AuthFeatureIcon
 import com.rendersoncs.report.ui.theme.ReportShapes
+import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,7 +118,7 @@ fun AboutScreen(
                     TextButton(
                         onClick = {
                             val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                data = Uri.parse("mailto:")
+                                data = "mailto:".toUri()
                                 putExtra(Intent.EXTRA_EMAIL, arrayOf(CONTACT_EMAIL))
                             }
                             runCatching { context.startActivity(intent) }

@@ -171,9 +171,6 @@ dependencies {
     // Graphic
     implementation(libs.chart)
 
-    // IText PDF
-    implementation(libs.itext)
-
     // Apache
     implementation(libs.apache.io)
     implementation(libs.apache.lang)

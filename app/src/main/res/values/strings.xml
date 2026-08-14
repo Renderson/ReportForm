@@ -222,6 +222,25 @@
     <string name="sanitary_signature">Signature of the sanitarist</string>
     <string name="label_paragraph_pdf_result">Result:</string>
     <string name="label_paragraph_pdf_score">Evaluation Note:</string>
+    <string name="pdf_subtitle">Final Technical Audit Report</string>
+    <string name="pdf_doc_id">DOC ID: %1$s</string>
+    <string name="pdf_result_badge">RESULT: %1$s</string>
+    <string name="pdf_score_line">Score: %1$s/10</string>
+    <string name="pdf_meta_company">Audited company</string>
+    <string name="pdf_meta_contact">Contact</string>
+    <string name="pdf_meta_auditor">Lead auditor</string>
+    <string name="pdf_meta_date">Inspection date</string>
+    <string name="pdf_details_title">Audit details</string>
+    <string name="pdf_notes">Observations</string>
+    <string name="pdf_notes_critical">Critical observations</string>
+    <string name="pdf_justification">Justification</string>
+    <string name="pdf_photo_evidence">Photographic evidence</string>
+    <string name="pdf_generated_at">Generated on: %1$s</string>
+    <string name="pdf_page_number">Page %1$d of</string>
+    <string name="pdf_item_id">ID: %1$s</string>
+    <string name="pdf_status_conforme">CONFORMING (C)</string>
+    <string name="pdf_status_nao_conforme">NON-CONFORMING (NC)</string>
+    <string name="pdf_status_nao_aplicavel">NOT APPLICABLE (NA)</string>
 
     <!--CameraX-->
     <string name="camera_back_button_alt">back button alt</string>

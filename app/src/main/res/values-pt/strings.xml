@@ -221,6 +221,25 @@
     <string name="sanitary_signature">Assinatura da Sanitarista</string>
     <string name="label_paragraph_pdf_result">Resultado:</string>
     <string name="label_paragraph_pdf_score">Nota de avaliação:</string>
+    <string name="pdf_subtitle">Relatório de Auditoria Técnica Final</string>
+    <string name="pdf_doc_id">DOC ID: %1$s</string>
+    <string name="pdf_result_badge">RESULTADO: %1$s</string>
+    <string name="pdf_score_line">Nota: %1$s/10</string>
+    <string name="pdf_meta_company">Empresa auditada</string>
+    <string name="pdf_meta_contact">Contato</string>
+    <string name="pdf_meta_auditor">Auditor responsável</string>
+    <string name="pdf_meta_date">Data da vistoria</string>
+    <string name="pdf_details_title">Detalhes da Auditoria</string>
+    <string name="pdf_notes">Observações</string>
+    <string name="pdf_notes_critical">Observações críticas</string>
+    <string name="pdf_justification">Justificativa</string>
+    <string name="pdf_photo_evidence">Evidências fotográficas</string>
+    <string name="pdf_generated_at">Gerado em: %1$s</string>
+    <string name="pdf_page_number">Página %1$d de</string>
+    <string name="pdf_item_id">ID: %1$s</string>
+    <string name="pdf_status_conforme">CONFORME (C)</string>
+    <string name="pdf_status_nao_conforme">NÃO CONFORME (NC)</string>
+    <string name="pdf_status_nao_aplicavel">NÃO APLICÁVEL (NA)</string>
 
     <!--CameraX-->
     <string name="camera_back_button_alt">botão voltar alt</string>

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rendersoncs.report.R
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
@@ -254,6 +255,7 @@ class ChecklistViewModel @Inject constructor(
             val saved = persist(concluded = true)
             if (saved) {
                 runCatching { reportRepository.generatePdf(reportId) }
+                    .onFailure { FirebaseCrashlytics.getInstance().recordException(it) }
                 eventsChannel.send(ChecklistEvent.Concluded(reportId.toLong()))
             } else {
                 eventsChannel.send(ChecklistEvent.Message(R.string.txt_error_save))
