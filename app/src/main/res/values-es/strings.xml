@@ -127,7 +127,7 @@
     <string name="pdf_status_nao_conforme">NO CONFORME (NC)</string>
     <string name="pdf_status_nao_aplicavel">NO APLICABLE (NA)</string>
 
-    <!--CameraX-->
+    <!--Camera-->
     <string name="camera_back_button_alt">botón de retroceso alt</string>
     <string name="camera_gallery_button_alt">botón de galería alt</string>
     <string name="camera_capture_button_alt">botón de captura alt</string>
@@ -135,6 +135,8 @@
     <string name="camera_share_button_alt">compartir botón alt</string>
     <string name="camera_check_button_alt">botón de verificación alt</string>
     <string name="camera_delete_button_alt">eliminar botón alt</string>
+    <string name="camera_use_photo">Usar foto</string>
+    <string name="camera_retake">Repetir</string>
 
     <!-- Compose Auth (no usado por el login XML) -->
     <string name="auth_login_subtitle">Accede a tu cuenta</string>

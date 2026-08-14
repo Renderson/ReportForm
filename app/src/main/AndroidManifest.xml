@@ -79,9 +79,9 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name="com.rendersoncs.report.ui.cameraX.CameraXMainActivity"
+            android:name="com.rendersoncs.report.ui.camera.CameraActivity"
             android:clearTaskOnLaunch="true"
-            android:theme="@style/CameraTheme"
+            android:theme="@style/Theme.Report.Compose"
             android:icon="@mipmap/ic_launcher"
             android:screenOrientation="fullUser"
             android:rotationAnimation="seamless"

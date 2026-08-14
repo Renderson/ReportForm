@@ -8,9 +8,4 @@
     <color name="surface">#1A191E</color>
     <color name="background">#121212</color>
     <color name="black">#FFFFFFFF</color>
-
-    <!--Color camera x-->
-    <color name="icActive">#FFFFFFFF</color>
-    <color name="icFocused">#DDFFFFFF</color>
-    <color name="icPressed">#AAFFFFFF</color>
 </resources>

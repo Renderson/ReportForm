@@ -71,7 +71,7 @@ import com.rendersoncs.report.ui.components.paddingAboveSnackbar
 import com.rendersoncs.report.ui.components.rememberSnackbarFabState
 import com.rendersoncs.report.ui.dashboard.components.DashboardSearchBar
 import com.rendersoncs.report.ui.dashboard.components.SearchFilterOption
-import com.rendersoncs.report.ui.cameraX.CameraXMainActivity
+import com.rendersoncs.report.ui.camera.CameraActivity
 import kotlinx.coroutines.flow.collectLatest
 import java.io.File
 import java.util.Locale
@@ -241,7 +241,7 @@ fun ChecklistScreen(
         onSelectConformity = viewModel::selectConformity,
         onCamera = { key ->
             viewModel.prepareMedia(key)
-            cameraLauncher.launch(Intent(context, CameraXMainActivity::class.java))
+            cameraLauncher.launch(Intent(context, CameraActivity::class.java))
         },
         onGallery = { key ->
             viewModel.prepareMedia(key)
