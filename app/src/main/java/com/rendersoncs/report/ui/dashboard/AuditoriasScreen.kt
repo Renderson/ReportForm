@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AssignmentTurnedIn
@@ -36,6 +37,7 @@ fun AuditoriasScreen(
     onQueryChange: (String) -> Unit,
     onFilterChange: (AuditFilter) -> Unit,
     onOpenReport: (Report) -> Unit,
+    listState: LazyListState,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -82,6 +84,7 @@ fun AuditoriasScreen(
             else -> {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
+                    state = listState,
                     contentPadding = PaddingValues(bottom = 88.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {

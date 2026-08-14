@@ -2,6 +2,7 @@ package com.rendersoncs.report.ui.dashboard
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Assignment
 import androidx.compose.material.icons.outlined.Person
@@ -18,8 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -31,7 +34,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rendersoncs.report.R
 import com.rendersoncs.report.model.Report
-import com.rendersoncs.report.ui.components.ReportFab
+import com.rendersoncs.report.ui.components.ReportExtendedFab
 import com.rendersoncs.report.ui.profile.ProfileScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +51,10 @@ fun HomeScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var selectedTab by rememberSaveable { mutableStateOf(HomeTab.AUDITS) }
+    val listState = rememberLazyListState()
+    val fabExpanded by remember {
+        derivedStateOf { listState.firstVisibleItemIndex == 0 }
+    }
     val lifecycleOwner = LocalLifecycleOwner.current
 
     DisposableEffect(lifecycleOwner) {
@@ -83,10 +90,11 @@ fun HomeScreen(
         },
         floatingActionButton = {
             if (selectedTab == HomeTab.AUDITS) {
-                ReportFab(
-                    onClick = onNewReport,
+                ReportExtendedFab(
+                    text = stringResource(R.string.label_menu_new_report),
                     icon = Icons.Rounded.Add,
-                    contentDescription = stringResource(R.string.label_menu_new_report)
+                    onClick = onNewReport,
+                    expanded = fabExpanded
                 )
             }
         },
@@ -137,6 +145,7 @@ fun HomeScreen(
                 onQueryChange = viewModel::onQueryChange,
                 onFilterChange = viewModel::onFilterChange,
                 onOpenReport = onOpenReport,
+                listState = listState,
                 modifier = Modifier.padding(innerPadding)
             )
             HomeTab.PROFILE -> ProfileScreen(

@@ -45,7 +45,9 @@ fun ChecklistProgressHeader(
             progress = { progress },
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.primaryContainer
+            trackColor = MaterialTheme.colorScheme.primaryContainer,
+            gapSize = 0.dp,
+            drawStopIndicator = {}
         )
     }
 }
