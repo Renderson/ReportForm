@@ -59,7 +59,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rendersoncs.report.R
 import com.rendersoncs.report.ui.login.components.AuthTextField
-import com.rendersoncs.report.ui.theme.PillShape
 import com.rendersoncs.report.ui.theme.ReportShapes
 import com.rendersoncs.report.ui.theme.ReportTheme
 import kotlinx.coroutines.flow.collectLatest
@@ -180,143 +179,143 @@ private fun NewReportContent(
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp, vertical = 8.dp)
-        ) {
-            Box(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp)
-                    .clip(ReportShapes.large)
-                    .background(MaterialTheme.colorScheme.secondaryContainer),
-                contentAlignment = Alignment.Center
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 24.dp, vertical = 8.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Apartment,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.45f),
-                    modifier = Modifier.size(56.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = ReportShapes.large,
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-            ) {
-                Column(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 24.dp)
+                        .height(140.dp)
+                        .clip(ReportShapes.large)
+                        .background(MaterialTheme.colorScheme.secondaryContainer),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = stringResource(R.string.new_report_section_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                    Icon(
+                        imageVector = Icons.Outlined.Apartment,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.45f),
+                        modifier = Modifier.size(56.dp)
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = stringResource(R.string.new_report_section_body),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    AuthTextField(
-                        value = state.company,
-                        onValueChange = onCompanyChange,
-                        label = stringResource(R.string.new_report_company),
-                        placeholder = stringResource(R.string.new_report_company_placeholder),
-                        leadingIcon = Icons.Outlined.Apartment,
-                        isError = state.companyError,
-                        errorText = stringResource(R.string.txt_enter_name_company),
-                        keyboardType = KeyboardType.Text,
-                        capitalization = KeyboardCapitalization.Words
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    AuthTextField(
-                        value = state.email,
-                        onValueChange = onEmailChange,
-                        label = stringResource(R.string.new_report_email),
-                        placeholder = stringResource(R.string.new_report_email_placeholder),
-                        leadingIcon = Icons.Outlined.Email,
-                        isError = state.emailError,
-                        errorText = stringResource(R.string.txt_email),
-                        keyboardType = KeyboardType.Email
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Box {
-                        AuthTextField(
-                            value = state.date,
-                            onValueChange = {},
-                            label = stringResource(R.string.new_report_date),
-                            placeholder = stringResource(R.string.new_report_date),
-                            leadingIcon = Icons.Outlined.CalendarMonth,
-                            keyboardType = KeyboardType.Text,
-                            readOnly = true
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = ReportShapes.large,
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp, vertical = 24.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.new_report_section_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
-                        Box(
-                            modifier = Modifier
-                                .matchParentSize()
-                                .clickable { showDatePicker = true }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = stringResource(R.string.new_report_section_body),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                        AuthTextField(
+                            value = state.company,
+                            onValueChange = onCompanyChange,
+                            label = stringResource(R.string.new_report_company),
+                            placeholder = stringResource(R.string.new_report_company_placeholder),
+                            leadingIcon = Icons.Outlined.Apartment,
+                            isError = state.companyError,
+                            errorText = stringResource(R.string.txt_enter_name_company),
+                            keyboardType = KeyboardType.Text,
+                            capitalization = KeyboardCapitalization.Words
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        AuthTextField(
+                            value = state.email,
+                            onValueChange = onEmailChange,
+                            label = stringResource(R.string.new_report_email),
+                            placeholder = stringResource(R.string.new_report_email_placeholder),
+                            leadingIcon = Icons.Outlined.Email,
+                            isError = state.emailError,
+                            errorText = stringResource(R.string.txt_email),
+                            keyboardType = KeyboardType.Email
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Box {
+                            AuthTextField(
+                                value = state.date,
+                                onValueChange = {},
+                                label = stringResource(R.string.new_report_date),
+                                placeholder = stringResource(R.string.new_report_date),
+                                leadingIcon = Icons.Outlined.CalendarMonth,
+                                keyboardType = KeyboardType.Text,
+                                readOnly = true
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .matchParentSize()
+                                    .clickable { showDatePicker = true }
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+                        AuthTextField(
+                            value = state.controller,
+                            onValueChange = onControllerChange,
+                            label = stringResource(R.string.new_report_auditor),
+                            placeholder = stringResource(R.string.new_report_auditor_placeholder),
+                            leadingIcon = Icons.Outlined.Badge,
+                            isError = state.controllerError,
+                            errorText = stringResource(R.string.txt_enter_name_controller),
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Done,
+                            capitalization = KeyboardCapitalization.Words,
+                            onImeAction = onStart
                         )
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
-                    AuthTextField(
-                        value = state.controller,
-                        onValueChange = onControllerChange,
-                        label = stringResource(R.string.new_report_auditor),
-                        placeholder = stringResource(R.string.new_report_auditor_placeholder),
-                        leadingIcon = Icons.Outlined.Badge,
-                        isError = state.controllerError,
-                        errorText = stringResource(R.string.txt_enter_name_controller),
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done,
-                        capitalization = KeyboardCapitalization.Words,
-                        onImeAction = onStart
-                    )
                 }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-            Button(
-                onClick = onStart,
-                enabled = state.isValid && !state.isLoading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp),
-                shape = PillShape,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            ) {
-                if (state.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(22.dp),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        strokeWidth = 2.dp
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    onClick = onStart,
+                    enabled = state.isValid && !state.isLoading,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = ReportShapes.small,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     )
-                } else {
-                    Text(
-                        text = stringResource(R.string.start).uppercase(Locale.getDefault()),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp)
-                    )
+                ) {
+                    if (state.isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(22.dp),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text(
+                            text = stringResource(R.string.start),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
-            Spacer(modifier = Modifier.height(16.dp))
-        }
     }
 }
 
