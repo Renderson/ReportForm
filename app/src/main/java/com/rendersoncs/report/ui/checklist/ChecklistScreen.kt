@@ -35,8 +35,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -63,6 +61,10 @@ import com.rendersoncs.report.ui.checklist.components.ChecklistProgressHeader
 import com.rendersoncs.report.ui.checklist.components.ChecklistSkeleton
 import com.rendersoncs.report.ui.common.UiState
 import com.rendersoncs.report.ui.components.ReportExtendedFab
+import com.rendersoncs.report.ui.components.SnackbarBottomOverlay
+import com.rendersoncs.report.ui.components.SnackbarFabState
+import com.rendersoncs.report.ui.components.paddingAboveSnackbar
+import com.rendersoncs.report.ui.components.rememberSnackbarFabState
 import com.rendersoncs.report.ui.dashboard.components.DashboardSearchBar
 import com.rendersoncs.report.ui.dashboard.components.SearchFilterOption
 import com.rendersoncs.report.view.cameraX.CameraXMainActivity
@@ -78,7 +80,7 @@ fun ChecklistScreen(
     viewModel: ChecklistViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarFab = rememberSnackbarFabState()
     val context = LocalContext.current
     var showCloseDialog by remember { mutableStateOf(false) }
     var showClearDialog by remember { mutableStateOf(false) }
@@ -112,10 +114,10 @@ fun ChecklistScreen(
             when (event) {
                 ChecklistEvent.Closed -> onBack()
                 is ChecklistEvent.Concluded -> onConcluded(event.reportId)
-                is ChecklistEvent.Message -> snackbarHostState.showSnackbar(context.getString(event.textRes))
+                is ChecklistEvent.Message -> snackbarFab.hostState.showSnackbar(context.getString(event.textRes))
                 is ChecklistEvent.Error -> {
                     val message = event.message.ifBlank { context.getString(R.string.txt_error_save) }
-                    snackbarHostState.showSnackbar(message)
+                    snackbarFab.hostState.showSnackbar(message)
                 }
             }
         }
@@ -206,7 +208,7 @@ fun ChecklistScreen(
 
     ChecklistContent(
         state = state,
-        snackbarHostState = snackbarHostState,
+        snackbarFab = snackbarFab,
         onBack = { showCloseDialog = true },
         onSave = viewModel::requestConclude,
         onClear = { showClearDialog = true },
@@ -235,7 +237,7 @@ fun ChecklistScreen(
 @Composable
 private fun ChecklistContent(
     state: ChecklistUiState,
-    snackbarHostState: SnackbarHostState,
+    snackbarFab: SnackbarFabState,
     onBack: () -> Unit,
     onSave: () -> Unit,
     onClear: () -> Unit,
@@ -262,7 +264,7 @@ private fun ChecklistContent(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = {},
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -305,17 +307,21 @@ private fun ChecklistContent(
                     text = stringResource(R.string.checklist_add_extra),
                     icon = Icons.Rounded.Add,
                     onClick = onAddItem,
-                    expanded = fabExpanded
+                    expanded = fabExpanded,
+                    modifier = Modifier.paddingAboveSnackbar(snackbarFab)
                 )
             }
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+        SnackbarBottomOverlay(
+            state = snackbarFab,
+            modifier = Modifier.padding(innerPadding)
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+            ) {
             DashboardSearchBar(
                 query = state.query,
                 onQueryChange = onQueryChange,
@@ -415,6 +421,7 @@ private fun ChecklistContent(
                     }
                 }
             }
+        }
         }
     }
 }

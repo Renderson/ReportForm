@@ -1,6 +1,7 @@
 package com.rendersoncs.report.ui.dashboard
 
 import android.content.Intent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -17,8 +18,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -42,6 +41,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rendersoncs.report.R
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.ui.components.ReportExtendedFab
+import com.rendersoncs.report.ui.components.SnackbarBottomOverlay
+import com.rendersoncs.report.ui.components.paddingAboveSnackbar
+import com.rendersoncs.report.ui.components.rememberSnackbarFabState
 import com.rendersoncs.report.ui.profile.ProfileScreen
 import kotlinx.coroutines.flow.collectLatest
 
@@ -65,7 +67,7 @@ fun HomeScreen(
     }
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarFab = rememberSnackbarFabState()
     var reportToDelete by remember { mutableStateOf<Report?>(null) }
     val pdfMissing = stringResource(R.string.resume_pdf_unavailable)
 
@@ -83,7 +85,7 @@ fun HomeScreen(
         viewModel.events.collectLatest { event ->
             when (event) {
                 is DashboardEvent.SharePdf -> sharePdf(context, event)
-                DashboardEvent.PdfMissing -> snackbarHostState.showSnackbar(pdfMissing)
+                DashboardEvent.PdfMissing -> snackbarFab.hostState.showSnackbar(pdfMissing)
             }
         }
     }
@@ -121,7 +123,7 @@ fun HomeScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = {},
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -146,7 +148,8 @@ fun HomeScreen(
                     text = stringResource(R.string.label_menu_new_report),
                     icon = Icons.Rounded.Add,
                     onClick = onNewReport,
-                    expanded = fabExpanded
+                    expanded = fabExpanded,
+                    modifier = Modifier.paddingAboveSnackbar(snackbarFab)
                 )
             }
         },
@@ -191,24 +194,27 @@ fun HomeScreen(
             }
         }
     ) { innerPadding ->
-        when (selectedTab) {
-            HomeTab.AUDITS -> AuditoriasScreen(
-                state = state,
-                onQueryChange = viewModel::onQueryChange,
-                onFilterChange = viewModel::onFilterChange,
-                onOpenReport = onOpenReport,
-                onShareReport = viewModel::shareReport,
-                onDeleteReport = { reportToDelete = it },
-                listState = listState,
-                modifier = Modifier.padding(innerPadding)
-            )
-            HomeTab.PROFILE -> ProfileScreen(
-                onChangePassword = onChangePassword,
-                onDeleteAccount = onDeleteAccount,
-                onAbout = onAbout,
-                onLoggedOut = onLoggedOut,
-                modifier = Modifier.padding(innerPadding)
-            )
+        SnackbarBottomOverlay(
+            state = snackbarFab,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            when (selectedTab) {
+                HomeTab.AUDITS -> AuditoriasScreen(
+                    state = state,
+                    onQueryChange = viewModel::onQueryChange,
+                    onFilterChange = viewModel::onFilterChange,
+                    onOpenReport = onOpenReport,
+                    onShareReport = viewModel::shareReport,
+                    onDeleteReport = { reportToDelete = it },
+                    listState = listState
+                )
+                HomeTab.PROFILE -> ProfileScreen(
+                    onChangePassword = onChangePassword,
+                    onDeleteAccount = onDeleteAccount,
+                    onAbout = onAbout,
+                    onLoggedOut = onLoggedOut
+                )
+            }
         }
     }
 }

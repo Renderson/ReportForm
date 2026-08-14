@@ -39,7 +39,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -75,6 +74,10 @@ import com.rendersoncs.report.R
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportResumeItems
+import com.rendersoncs.report.ui.components.SnackbarBottomOverlay
+import com.rendersoncs.report.ui.components.SnackbarFabState
+import com.rendersoncs.report.ui.components.paddingAboveSnackbar
+import com.rendersoncs.report.ui.components.rememberSnackbarFabState
 import com.rendersoncs.report.ui.resume.components.ResumeDonutChart
 import com.rendersoncs.report.ui.resume.components.ResumeItemCard
 import com.rendersoncs.report.ui.resume.components.ResumePhoto
@@ -99,7 +102,7 @@ fun ResumeScreen(
     viewModel: ResumeViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarFab = rememberSnackbarFabState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val pdfMissing = stringResource(R.string.resume_pdf_unavailable)
@@ -122,9 +125,9 @@ fun ResumeScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
             when (event) {
-                is ResumeEvent.OpenPdf -> openPdf(context, event.uri, pdfNoApp, snackbarHostState)
+                is ResumeEvent.OpenPdf -> openPdf(context, event.uri, pdfNoApp, snackbarFab.hostState)
                 is ResumeEvent.SharePdf -> sharePdf(context, event)
-                ResumeEvent.PdfMissing -> snackbarHostState.showSnackbar(pdfMissing)
+                ResumeEvent.PdfMissing -> snackbarFab.hostState.showSnackbar(pdfMissing)
                 ResumeEvent.Deleted -> onDeleted()
                 ResumeEvent.LoadFailed -> onBack()
             }
@@ -163,7 +166,7 @@ fun ResumeScreen(
 
     ResumeContent(
         state = state,
-        snackbarHostState = snackbarHostState,
+        snackbarFab = snackbarFab,
         onBack = onBack,
         onShare = viewModel::sharePdf,
         onDelete = { showDeleteDialog = true },
@@ -173,7 +176,7 @@ fun ResumeScreen(
             onEdit(id)
         },
         onPhotoClick = { item -> selectedItem = item },
-        onNoPhoto = { scope.launch { snackbarHostState.showSnackbar(noPhoto) } },
+        onNoPhoto = { scope.launch { snackbarFab.hostState.showSnackbar(noPhoto) } },
         modifier = modifier
     )
 }
@@ -182,7 +185,7 @@ fun ResumeScreen(
 @Composable
 private fun ResumeContent(
     state: ResumeUiState,
-    snackbarHostState: SnackbarHostState,
+    snackbarFab: SnackbarFabState,
     onBack: () -> Unit,
     onShare: () -> Unit,
     onDelete: () -> Unit,
@@ -197,7 +200,7 @@ private fun ResumeContent(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = {},
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -242,6 +245,7 @@ private fun ResumeContent(
             if (report != null) {
                 ExtendedFloatingActionButton(
                     onClick = onEdit,
+                    modifier = Modifier.paddingAboveSnackbar(snackbarFab),
                     icon = {
                         Icon(
                             imageVector = Icons.Outlined.Edit,
@@ -261,37 +265,35 @@ private fun ResumeContent(
             }
         }
     ) { innerPadding ->
-        when {
-            state.isLoading && report == null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
+        SnackbarBottomOverlay(
+            state = snackbarFab,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            when {
+                state.isLoading && report == null -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
                 }
-            }
-            report == null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.dashboard_no_results),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                report == null -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.dashboard_no_results),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
-            }
-            else -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 96.dp),
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 96.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     item {
@@ -340,6 +342,7 @@ private fun ResumeContent(
                     }
                 }
             }
+        }
         }
     }
 }
@@ -659,7 +662,7 @@ private fun ResumeContentPreview() {
                 notApplicableCount = 1,
                 notAccordingCount = 1
             ),
-            snackbarHostState = SnackbarHostState(),
+            snackbarFab = rememberSnackbarFabState(),
             onBack = {},
             onShare = {},
             onDelete = {},
