@@ -38,7 +38,6 @@ fun AuthNavHost(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.restoreSessionIfLogged()
         viewModel.events.collectLatest { event ->
             when (event) {
                 is AuthEvent.LoggedIn -> onAuthenticated(event.uid)

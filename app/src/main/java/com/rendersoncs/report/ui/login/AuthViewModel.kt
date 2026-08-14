@@ -181,10 +181,8 @@ class AuthViewModel @Inject constructor(
     fun restoreSessionIfLogged() {
         val uid = authRepository.currentUid ?: return
         if (_uiState.value.uid != null) return
-        viewModelScope.launch {
-            _uiState.update { it.copy(uid = uid) }
-            eventsChannel.send(AuthEvent.LoggedIn(uid))
-        }
+        _uiState.update { it.copy(uid = uid) }
+        eventsChannel.trySend(AuthEvent.LoggedIn(uid))
     }
 
     private companion object {
