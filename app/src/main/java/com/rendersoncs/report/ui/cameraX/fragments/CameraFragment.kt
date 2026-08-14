@@ -1,4 +1,4 @@
-package com.rendersoncs.report.view.cameraX.fragments
+package com.rendersoncs.report.ui.cameraX.fragments
 
 /*
  * Copyright 2020 The Android Open Source Project
@@ -52,12 +52,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.R
-import com.rendersoncs.report.view.cameraX.KEY_EVENT_ACTION
-import com.rendersoncs.report.view.cameraX.KEY_EVENT_EXTRA
-import com.rendersoncs.report.view.cameraX.utils.ANIMATION_FAST_MILLIS
-import com.rendersoncs.report.view.cameraX.utils.ANIMATION_SLOW_MILLIS
-import com.rendersoncs.report.view.cameraX.utils.getOutputDirectory
-import com.rendersoncs.report.view.cameraX.utils.simulateClick
+import com.rendersoncs.report.ui.cameraX.KEY_EVENT_ACTION
+import com.rendersoncs.report.ui.cameraX.KEY_EVENT_EXTRA
+import com.rendersoncs.report.ui.cameraX.utils.ANIMATION_FAST_MILLIS
+import com.rendersoncs.report.ui.cameraX.utils.ANIMATION_SLOW_MILLIS
+import com.rendersoncs.report.ui.cameraX.utils.getOutputDirectory
+import com.rendersoncs.report.ui.cameraX.utils.simulateClick
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File

@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.common.util.ReportFiles
-import com.rendersoncs.report.view.login.util.LibraryClass
+import com.rendersoncs.report.ui.login.util.LibraryClass
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex

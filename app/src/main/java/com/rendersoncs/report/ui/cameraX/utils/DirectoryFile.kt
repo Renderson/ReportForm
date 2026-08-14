@@ -1,4 +1,4 @@
-package com.rendersoncs.report.view.cameraX.utils
+package com.rendersoncs.report.ui.cameraX.utils
 
 import android.content.Context
 import com.rendersoncs.report.R

@@ -1,4 +1,4 @@
-package com.rendersoncs.report.view.login.util;
+package com.rendersoncs.report.ui.login.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

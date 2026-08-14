@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.rendersoncs.report.view.cameraX
+package com.rendersoncs.report.ui.cameraX
 
 import android.content.Intent
 import android.os.Bundle
@@ -23,7 +23,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.rendersoncs.report.R
-import com.rendersoncs.report.view.cameraX.utils.FLAGS_FULLSCREEN
+import com.rendersoncs.report.ui.cameraX.utils.FLAGS_FULLSCREEN
 
 const val KEY_EVENT_ACTION = "key_event_action"
 const val KEY_EVENT_EXTRA = "key_event_extra"

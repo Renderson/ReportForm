@@ -1,4 +1,4 @@
-package com.rendersoncs.report.view.cameraX.fragments
+package com.rendersoncs.report.ui.cameraX.fragments
 
 /*
  * Copyright 2020 The Android Open Source Project

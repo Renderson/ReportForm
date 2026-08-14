@@ -1,4 +1,4 @@
-package com.rendersoncs.report.view
+package com.rendersoncs.report.ui
 
 import android.app.Application
 import android.content.Context

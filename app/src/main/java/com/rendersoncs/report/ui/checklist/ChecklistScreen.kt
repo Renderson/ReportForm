@@ -71,7 +71,7 @@ import com.rendersoncs.report.ui.components.paddingAboveSnackbar
 import com.rendersoncs.report.ui.components.rememberSnackbarFabState
 import com.rendersoncs.report.ui.dashboard.components.DashboardSearchBar
 import com.rendersoncs.report.ui.dashboard.components.SearchFilterOption
-import com.rendersoncs.report.view.cameraX.CameraXMainActivity
+import com.rendersoncs.report.ui.cameraX.CameraXMainActivity
 import kotlinx.coroutines.flow.collectLatest
 import java.io.File
 import java.util.Locale

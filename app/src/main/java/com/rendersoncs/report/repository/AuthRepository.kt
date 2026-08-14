@@ -8,8 +8,8 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.User
-import com.rendersoncs.report.view.login.util.LibraryClass
-import com.rendersoncs.report.view.login.util.User as FirebaseProfile
+import com.rendersoncs.report.ui.login.util.LibraryClass
+import com.rendersoncs.report.ui.login.util.User as FirebaseProfile
 import kotlinx.coroutines.tasks.await
 
 /**

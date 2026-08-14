@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.rendersoncs.report.view.cameraX.utils
+package com.rendersoncs.report.ui.cameraX.utils
 
 import android.os.Build
 import android.view.DisplayCutout

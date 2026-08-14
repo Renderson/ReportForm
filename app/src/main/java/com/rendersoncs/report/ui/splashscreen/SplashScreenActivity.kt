@@ -1,4 +1,4 @@
-package com.rendersoncs.report.view.splashscreen
+package com.rendersoncs.report.ui.splashscreen
 
 import android.content.Intent
 import android.os.Bundle

@@ -5,7 +5,7 @@ import com.rendersoncs.report.R
 import com.rendersoncs.report.common.util.ReportFiles
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportResumeItems
-import com.rendersoncs.report.view.MyApplication
+import com.rendersoncs.report.ui.MyApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -25,4 +25,4 @@
     android:keepScreenOn="true"
     app:defaultNavHost="true"
     app:navGraph="@navigation/navigation_camera_graph"
-    tools:context=".view.cameraX.CameraXMainActivity"/>
+    tools:context=".ui.cameraX.CameraXMainActivity"/>
