@@ -290,7 +290,10 @@
     <string name="checklist_search_hint">Buscar itens...</string>
     <string name="checklist_offline_edit">Conecte-se à internet para editar a lista.</string>
     <string name="checklist_no_results">Nenhum item encontrado</string>
-    <string name="checklist_no_results_hint">Tente outra busca.</string>
+    <string name="checklist_no_results_hint">Tente outro termo ou limpe o filtro.</string>
+    <string name="checklist_no_filter_results_hint">Nenhum item marcado como %1$s. Troque o filtro para ver o restante da lista.</string>
+    <string name="checklist_empty_hint">Use o botão abaixo para adicionar um item extra.</string>
+    <string name="checklist_retry">Tentar novamente</string>
     <string name="checklist_item_title">Título do item</string>
     <string name="checklist_item_description">Descrição do item</string>
     <string name="checklist_reset_item">Limpar item</string>

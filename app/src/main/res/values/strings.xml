@@ -291,7 +291,10 @@
     <string name="checklist_search_hint">Search items...</string>
     <string name="checklist_offline_edit">Connect to the internet to edit the checklist.</string>
     <string name="checklist_no_results">No items found</string>
-    <string name="checklist_no_results_hint">Try another search.</string>
+    <string name="checklist_no_results_hint">Try another search or clear the filter.</string>
+    <string name="checklist_no_filter_results_hint">No items marked as %1$s. Change the filter to see the rest of the list.</string>
+    <string name="checklist_empty_hint">Use the button below to add an extra item.</string>
+    <string name="checklist_retry">Try again</string>
     <string name="checklist_item_title">Item title</string>
     <string name="checklist_item_description">Item description</string>
     <string name="checklist_reset_item">Reset item</string>

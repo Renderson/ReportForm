@@ -21,7 +21,10 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.DeleteSweep
+import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.outlined.FilterListOff
 import androidx.compose.material.icons.outlined.Save
+import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -349,20 +352,34 @@ private fun ChecklistContent(
             Box(modifier = Modifier.fillMaxSize()) {
                 when (val catalogState = state.listState) {
                     UiState.Loading -> ChecklistSkeleton()
-                    UiState.Empty -> ChecklistEmpty(onAddItem = onAddItem)
+                    UiState.Empty -> ChecklistEmpty()
                     is UiState.Error -> ChecklistEmpty(
-                        onAddItem = onRetry,
+                        icon = Icons.Outlined.ErrorOutline,
                         title = stringResource(R.string.txt_error_save),
                         subtitle = catalogState.message.ifBlank {
                             stringResource(R.string.label_error_update_list)
-                        }
+                        },
+                        actionLabel = stringResource(R.string.checklist_retry),
+                        onAction = onRetry
                     )
                     is UiState.Success -> {
                         if (state.visibleItems.isEmpty()) {
+                            val hasQuery = state.query.isNotBlank()
                             ChecklistEmpty(
-                                onAddItem = onAddItem,
+                                icon = if (hasQuery) {
+                                    Icons.Outlined.SearchOff
+                                } else {
+                                    Icons.Outlined.FilterListOff
+                                },
                                 title = stringResource(R.string.checklist_no_results),
-                                subtitle = stringResource(R.string.checklist_no_results_hint)
+                                subtitle = if (hasQuery) {
+                                    stringResource(R.string.checklist_no_results_hint)
+                                } else {
+                                    stringResource(
+                                        R.string.checklist_no_filter_results_hint,
+                                        filterLabel(state.filter)
+                                    )
+                                }
                             )
                         } else {
                             LazyColumn(
@@ -506,4 +523,14 @@ private fun ItemEditorDialog(
             }
         }
     )
+}
+
+@Composable
+private fun filterLabel(filter: ChecklistFilter): String {
+    return when (filter) {
+        ChecklistFilter.ALL -> stringResource(R.string.dashboard_filter_all)
+        ChecklistFilter.CONFORME -> stringResource(R.string.according)
+        ChecklistFilter.NAO_CONFORME -> stringResource(R.string.not_according)
+        ChecklistFilter.NAO_APLICAVEL -> stringResource(R.string.not_applicable)
+    }
 }

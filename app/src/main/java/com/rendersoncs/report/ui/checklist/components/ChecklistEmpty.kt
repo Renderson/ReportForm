@@ -16,6 +16,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,10 +24,12 @@ import com.rendersoncs.report.R
 
 @Composable
 fun ChecklistEmpty(
-    onAddItem: () -> Unit,
     modifier: Modifier = Modifier,
+    icon: ImageVector = Icons.Outlined.PlaylistAdd,
     title: String = stringResource(R.string.label_no_items_list),
-    subtitle: String = stringResource(R.string.label_create_list_for_start)
+    subtitle: String = stringResource(R.string.checklist_empty_hint),
+    actionLabel: String? = null,
+    onAction: (() -> Unit)? = null
 ) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
@@ -34,7 +37,7 @@ fun ChecklistEmpty(
             modifier = Modifier.padding(horizontal = 32.dp)
         ) {
             Icon(
-                imageVector = Icons.Outlined.PlaylistAdd,
+                imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier.size(72.dp),
                 tint = MaterialTheme.colorScheme.outline
@@ -53,13 +56,15 @@ fun ChecklistEmpty(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            TextButton(onClick = onAddItem) {
-                Text(
-                    text = stringResource(R.string.label_create_items),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
+            if (actionLabel != null && onAction != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+                TextButton(onClick = onAction) {
+                    Text(
+                        text = actionLabel,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
     }
