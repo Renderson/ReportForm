@@ -1,9 +1,13 @@
 package com.rendersoncs.report.repository
 
+import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.pdf.PDFGenerator
 import com.rendersoncs.report.data.local.AppDatabase
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
+import com.rendersoncs.report.model.ReportResumeItems
 import com.rendersoncs.report.model.User
+import java.io.File
 import javax.inject.Inject
 
 class ReportRepository @Inject constructor(private val db: AppDatabase) {
@@ -11,8 +15,7 @@ class ReportRepository @Inject constructor(private val db: AppDatabase) {
     // insert user
     suspend fun insertUser(user: User) = db.getReportDao().insertUser(user)
 
-    // get all report for userUid
-    suspend fun getUserWithReport(userId: String) = db.getReportDao().getUserWithReports(userId)
+    suspend fun getReportsByUser(userId: String) = db.getReportDao().getReportsByUser(userId)
 
     // get reports with checklist
     suspend fun getReportWithChecklist(id: String) = db.getReportDao().getReportWithCheckList(id)
@@ -54,4 +57,35 @@ class ReportRepository @Inject constructor(private val db: AppDatabase) {
             newConcluded = report.concluded ?: false,
             newUserId = report.userId.orEmpty()
         )
+
+    suspend fun deleteChecklistPhotos(reportId: Int) {
+        getReportWithChecklist(reportId.toString()).forEach { relation ->
+            relation.checkList.forEach { item ->
+                val path = item.photo
+                if (path.isNotBlank() && path != ReportConstants.PHOTO.NOT_PHOTO) {
+                    runCatching { File(path).delete() }
+                }
+            }
+        }
+    }
+
+    suspend fun generatePdf(reportId: Int): Boolean {
+        val report = getReportById(reportId)
+        val items = ArrayList<ReportResumeItems>()
+        getReportWithChecklist(reportId.toString()).forEach { relation ->
+            relation.checkList.forEach { resume ->
+                items.add(
+                    ReportResumeItems(
+                        key = resume.key,
+                        title = resume.title,
+                        description = resume.description,
+                        conformity = resume.conformity,
+                        note = resume.note,
+                        photo = resume.photo
+                    )
+                )
+            }
+        }
+        return PDFGenerator().generatePDF(report, items)
+    }
 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.data.local.AppDatabase
+import com.rendersoncs.report.repository.AuthRepository
 import com.rendersoncs.report.repository.ReportRepository
 import dagger.Module
 import dagger.Provides
@@ -42,5 +43,13 @@ object RepositoryModule {
     @Provides
     fun provideReportRepository(appDatabase: AppDatabase): ReportRepository {
         return ReportRepository(appDatabase)
+    }
+
+    @Provides
+    fun provideAuthRepository(
+        reportRepository: ReportRepository,
+        @ApplicationContext context: Context
+    ): AuthRepository {
+        return AuthRepository(reportRepository, context)
     }
 }
