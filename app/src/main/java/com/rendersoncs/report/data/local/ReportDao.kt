@@ -2,7 +2,6 @@ package com.rendersoncs.report.data.local
 
 import androidx.room.*
 import com.rendersoncs.report.data.local.relations.ReportWithCheckList
-import com.rendersoncs.report.data.local.relations.UserWithReport
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
 import com.rendersoncs.report.model.User
@@ -21,10 +20,6 @@ interface ReportDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCheckList(report: ReportCheckList): Long
 
-    // used to delete report
-    @Delete
-    suspend fun deleteReport(report: Report)
-
     // get single report by id
     @Query("SELECT * FROM all_reports WHERE id = :id")
     suspend fun getReportByID(id: Int): Report
@@ -35,10 +30,6 @@ interface ReportDao {
 
     @Query("DELETE FROM ReportCheckList WHERE reportId = :id")
     suspend fun deleteCheckListByID(id: Int)
-
-    @Transaction
-    @Query("SELECT * FROM all_reports WHERE userId = :userId")
-    suspend fun getUserWithReports(userId: String): List<UserWithReport>
 
     @Query("SELECT * FROM all_reports WHERE userId = :userId ORDER BY id DESC")
     suspend fun getReportsByUser(userId: String): List<Report>

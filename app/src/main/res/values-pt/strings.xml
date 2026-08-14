@@ -54,9 +54,6 @@
     <string name="label_feed_back">Me envie seu Feed Back</string>
     <string name="label_insert_email">Por favor insira o email cadastrado!</string>
 
-    <!--Facebook ID-->
-    <string name="facebook_app_id">2284363461680926</string>
-
     <string name="msg_take_image">Tirar foto</string>
     <string name="msg_select_from_gallery">Selecionar da Galeria</string>
     <string name="label_permission_camera_granted">Pedido de permissão concedido.</string>

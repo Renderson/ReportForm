@@ -28,8 +28,6 @@ class AuthRepository(
     val currentUid: String?
         get() = firebaseAuth.currentUser?.uid
 
-    fun isLoggedIn(): Boolean = firebaseAuth.currentUser != null
-
     suspend fun signInWithEmail(email: String, password: String): Result<FirebaseUser> {
         return try {
             val result = firebaseAuth

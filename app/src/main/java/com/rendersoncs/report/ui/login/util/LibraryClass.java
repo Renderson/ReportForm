@@ -11,28 +11,17 @@ public final class LibraryClass {
     private static final String PREF = "com.rendersoncs.reportform.PREF";
     private static DatabaseReference firebase;
 
-    private LibraryClass(){}
+    private LibraryClass() {}
 
-    public static DatabaseReference getFirebase(){
-        if( firebase == null ){
+    public static DatabaseReference getFirebase() {
+        if (firebase == null) {
             firebase = FirebaseDatabase.getInstance().getReference();
         }
-
-        return( firebase );
+        return firebase;
     }
 
-    static public void saveSP(Context context, String key, String value){
+    public static void saveSP(Context context, String key, String value) {
         SharedPreferences sp = context.getSharedPreferences(PREF, Context.MODE_PRIVATE);
         sp.edit().putString(key, value).apply();
-    }
-
-    static public String getSP(Context context, String key){
-        SharedPreferences sp = context.getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        return (sp.getString(key, ""));
-    }
-
-    public static DatabaseReference closeFireBase(){
-        firebase.onDisconnect();
-        return null;
     }
 }

@@ -2,39 +2,26 @@ package com.rendersoncs.report.common.util
 
 import android.content.SharedPreferences
 import com.rendersoncs.report.common.constants.ReportConstants
-import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
+import androidx.core.content.edit
 
 class SharePrefInfoUser @Inject constructor(private var sharedPreferences: SharedPreferences){
     fun savePhotoSharePref(photo: String?) {
-        val editor = sharedPreferences.edit()
-        editor.putString(ReportConstants.FIREBASE.FIRE_PHOTO, photo)
-        editor.apply()
+        sharedPreferences.edit {
+            putString(ReportConstants.FIREBASE.FIRE_PHOTO, photo)
+        }
     }
 
     fun saveUserSharePref(user: String?) {
-        val editor = sharedPreferences.edit()
-        editor.putString(ReportConstants.FIREBASE.FIRE_NAME, user)
-        editor.apply()
+        sharedPreferences.edit {
+            putString(ReportConstants.FIREBASE.FIRE_NAME, user)
+        }
     }
 
     fun saveEmailSharePref(email: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString(ReportConstants.FIREBASE.FIRE_EMAIL, email)
-        editor.apply()
-    }
-
-    fun getUserSharePref(
-        profileName: MutableStateFlow<String>,
-        profileView: MutableStateFlow<String>,
-        profileEmail: MutableStateFlow<String>
-    ) {
-        val name = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_NAME, "")
-        val photo = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_PHOTO, "")
-        val email = sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_EMAIL, "")
-        profileName.value = name.toString()
-        profileView.value = photo.toString()
-        profileEmail.value = email.toString()
+        sharedPreferences.edit {
+            putString(ReportConstants.FIREBASE.FIRE_EMAIL, email)
+        }
     }
 
     fun getUser(): String {

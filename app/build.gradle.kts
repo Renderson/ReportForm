@@ -1,23 +1,21 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 import java.io.FileInputStream
 
 plugins {
-    kotlin("android")
-    kotlin("kapt")
-    id("com.android.application")
-    id("com.google.devtools.ksp")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
-    id("androidx.navigation.safeargs.kotlin")
-    id("dagger.hilt.android.plugin")
-    id("io.gitlab.arturbosch.detekt").version("1.23.8")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.2.10"
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.detekt)
 }
 
-val versionMajor = 1
+val versionMajor = 2
 val versionMinor = 0
-val versionPatch = 4
+val versionPatch = 0
 
 fun computeVersionName() = "$versionMajor.$versionMinor.$versionPatch"
 
@@ -26,24 +24,21 @@ val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 detekt {
-    toolVersion = "1.23.0" // Especifica a versão do Detekt
-    config = files("config/detekt/detekt.yml") // Caminho para o arquivo de configuração personalizado
-    buildUponDefaultConfig = true // Utiliza as regras padrão do Detekt como base
-    allRules = false // Ativa todas as regras (inclusive instáveis) se definido como true
-    parallel = true // Executa a análise em paralelo para melhorar o desempenho
-
-    reports {
-        html.required.set(true) // Gera um relatório em HTML
-        xml.required.set(true)  // Gera um relatório em XML
-        txt.required.set(false) // Desativa o relatório em TXT
-        sarif.required.set(false) // Gera relatório no formato SARIF, útil para integração com ferramentas como GitHub
-    }
-
-    //baseline = file("config/detekt/baseline.xml") // Define um arquivo de baseline para ignorar problemas conhecidos
+    toolVersion = "1.23.8"
+    config.setFrom(files("config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
+    allRules = false
+    parallel = true
 }
 
-tasks.withType<Detekt> {
+tasks.withType<Detekt>().configureEach {
     jvmTarget = "17"
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        txt.required.set(false)
+        sarif.required.set(false)
+    }
 }
 
 android {
@@ -56,13 +51,13 @@ android {
         }
     }
     namespace = "com.rendersoncs.report"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.rendersoncs.report"
         minSdk = 24
-        targetSdk = 36
-        versionCode = 7
+        targetSdk = 37
+        versionCode = 8
         versionName = computeVersionName()
         multiDexEnabled = true
         signingConfig = signingConfigs.getByName("release")
@@ -89,10 +84,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
     packaging {
         jniLibs {
             useLegacyPackaging = false
@@ -114,129 +105,73 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         compose = true
         buildConfig = true
     }
 }
 
-repositories {
-    maven(url = "https://jitpack.io")
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
 }
 
 dependencies {
-    implementation(libs.kotlin.stdlib)
     testImplementation(libs.junit)
 
     // Android
     implementation(libs.androidx.appcompact)
-    implementation(libs.androidx.lifecycler.runtime)
-
-    // Android IU
     implementation(libs.android.ui.activity)
     implementation(libs.android.ui.material)
-    implementation(libs.android.ui.fragment)
-    implementation(libs.android.ui.constrant.layout)
-    implementation(libs.android.ui.recyclerview)
-    implementation(libs.android.ui.cardview)
 
     // Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.activity)
     implementation(libs.compose.runtime)
-    implementation(libs.compose.material)
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons)
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
-    implementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.tooling)
     implementation(libs.compose.ui.google.fonts)
     implementation(libs.navigation.compose)
     implementation(libs.hilt.navigation.compose)
 
-    // Compose HorizontalPager
-    implementation(libs.compose.horizontal.pager)
-
-    // volley http library
-    implementation(libs.volley)
-    implementation(libs.gson)
-
-    // NavHeader Circle
-    implementation(libs.hdodenhof.cicler.image)
-
     // Glide
     implementation(libs.glide)
-
-    // Graphic
-    implementation(libs.chart)
-
-    // Apache
-    implementation(libs.apache.io)
-    implementation(libs.apache.lang)
-    implementation(libs.apache.collections)
 
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.database)
     implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.database)
     implementation(libs.firebase.messaging)
-    implementation(libs.firebase.storage)
-
-    // Facebook Auth API
-    implementation(libs.facebook.auth)
-
-    // Google Auth API
-    implementation(libs.google.auth)
-
-    // About api
-    implementation(libs.about.page)
-
-    // Leak Canary - Detect memory leaks in code
-    //debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary"
-    //releaseImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$versions.leakcanary"
-
-    // Navigation library
-    implementation(libs.navigation.fragment.ktx)
-    implementation(libs.navigation.ui.ktx)
 
     // Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
-    // Coroutines
+    // Coroutines / Lifecycle
     implementation(libs.coroutine.core)
     implementation(libs.coroutine.android)
     implementation(libs.coroutine.play.services)
-
-    // Coroutine Lifecycle Scopes
-    implementation(libs.coroutine.viewmodel)
-    implementation(libs.coroutine.rumtime)
-    implementation(libs.coroutine.runtime.compose)
-    implementation(libs.coroutine.livedata)
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.runtime)
+    implementation(libs.lifecycle.runtime.compose)
 
     // Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
 
     // CameraX
     implementation(libs.camerax.core)
     implementation(libs.camerax.camera2)
     implementation(libs.camerax.lifecycle)
-    implementation(libs.camerax.view)
     implementation(libs.camerax.compose)
 
-    // Shimmer
-    implementation(libs.shimmer)
-
-    // Lottie
-    implementation(libs.lottie.compose)
-
-    // Adb mob
+    // AdMob
     implementation(libs.google.ads)
 
     // Detekt
