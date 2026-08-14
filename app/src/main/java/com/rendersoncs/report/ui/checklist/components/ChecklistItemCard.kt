@@ -55,6 +55,7 @@ import com.rendersoncs.report.ui.theme.ResumeWarningOn
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChecklistItemCard(
+    modifier: Modifier = Modifier,
     item: ChecklistItemUi,
     onSelectConformity: (Int) -> Unit,
     onCamera: () -> Unit,
@@ -62,8 +63,7 @@ fun ChecklistItemCard(
     onNote: () -> Unit,
     onEdit: () -> Unit,
     onReset: () -> Unit,
-    onRemove: () -> Unit,
-    modifier: Modifier = Modifier
+    onRemove: () -> Unit
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
 

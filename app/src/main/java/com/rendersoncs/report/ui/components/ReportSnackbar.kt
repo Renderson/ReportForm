@@ -30,9 +30,9 @@ fun rememberSnackbarFabState(
 }
 
 @Composable
-fun ReportSnackbarHost(
-    state: SnackbarFabState,
-    modifier: Modifier = Modifier
+private fun ReportSnackbarHost(
+    modifier: Modifier = Modifier,
+    state: SnackbarFabState
 ) {
     SnackbarHost(hostState = state.hostState, modifier = modifier) { data ->
         Snackbar(
@@ -44,8 +44,8 @@ fun ReportSnackbarHost(
 
 @Composable
 fun SnackbarBottomOverlay(
-    state: SnackbarFabState,
     modifier: Modifier = Modifier,
+    state: SnackbarFabState,
     content: @Composable () -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {

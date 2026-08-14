@@ -30,11 +30,11 @@ import com.rendersoncs.report.ui.theme.ReportShapes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwipeableReportCard(
+    modifier: Modifier = Modifier,
     report: Report,
     onOpen: () -> Unit,
     onShare: () -> Unit,
-    onDelete: () -> Unit,
-    modifier: Modifier = Modifier
+    onDelete: () -> Unit
 ) {
     val canShare = report.concluded == true
     val dismissState = rememberSwipeToDismissBoxState(
@@ -97,12 +97,12 @@ fun SwipeableReportCard(
 
 @Composable
 private fun SwipeActionBackground(
+    modifier: Modifier = Modifier,
     color: Color,
     icon: ImageVector?,
     iconTint: Color,
     contentDescription: String,
-    alignment: Alignment,
-    modifier: Modifier = Modifier
+    alignment: Alignment
 ) {
     Box(
         modifier = modifier

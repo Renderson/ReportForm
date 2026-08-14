@@ -96,7 +96,6 @@ class AuthViewModel @Inject constructor(
                     val message = error.message
                         ?: getApplication<Application>().getString(R.string.label_failed)
                     _uiState.update { it.copy(isLoading = false, errorMessage = message) }
-                    eventsChannel.send(AuthEvent.Error(message))
                 }
         }
     }
@@ -145,7 +144,6 @@ class AuthViewModel @Inject constructor(
                     val message = error.message
                         ?: getApplication<Application>().getString(R.string.label_failed)
                     _uiState.update { it.copy(isLoading = false, errorMessage = message) }
-                    eventsChannel.send(AuthEvent.Error(message))
                 }
         }
     }
@@ -173,7 +171,6 @@ class AuthViewModel @Inject constructor(
                     val message = error.message
                         ?: getApplication<Application>().getString(R.string.label_failed)
                     _uiState.update { it.copy(isLoading = false, errorMessage = message) }
-                    eventsChannel.send(AuthEvent.Error(message))
                 }
         }
     }

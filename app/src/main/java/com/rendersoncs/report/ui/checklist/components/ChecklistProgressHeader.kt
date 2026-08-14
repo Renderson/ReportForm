@@ -18,9 +18,9 @@ import com.rendersoncs.report.R
 
 @Composable
 fun ChecklistProgressHeader(
+    modifier: Modifier = Modifier,
     answeredCount: Int,
-    totalCount: Int,
-    modifier: Modifier = Modifier
+    totalCount: Int
 ) {
     val progress = if (totalCount == 0) 0f else answeredCount / totalCount.toFloat()
     Column(modifier = modifier.fillMaxWidth()) {

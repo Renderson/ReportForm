@@ -17,9 +17,9 @@ import com.rendersoncs.report.ui.resume.ResumeScreen
 
 @Composable
 fun ReportNavHost(
+    modifier: Modifier = Modifier,
     navController: NavHostController,
-    onLoggedOut: () -> Unit,
-    modifier: Modifier = Modifier
+    onLoggedOut: () -> Unit
 ) {
     NavHost(
         navController = navController,

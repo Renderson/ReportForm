@@ -46,9 +46,9 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeleteAccountScreen(
+    modifier: Modifier = Modifier,
     onBack: () -> Unit,
     onDeleted: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: AccountViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()

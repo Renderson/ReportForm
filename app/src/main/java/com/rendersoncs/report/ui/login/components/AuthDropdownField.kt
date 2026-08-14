@@ -27,13 +27,13 @@ import com.rendersoncs.report.ui.theme.ReportShapes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthDropdownField(
+    modifier: Modifier = Modifier,
     value: String,
     options: List<String>,
     onValueChange: (String) -> Unit,
     label: String,
     placeholder: String,
     leadingIcon: ImageVector,
-    modifier: Modifier = Modifier,
     isError: Boolean = false,
     errorText: String? = null
 ) {

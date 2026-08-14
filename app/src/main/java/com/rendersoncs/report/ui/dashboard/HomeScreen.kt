@@ -1,7 +1,6 @@
 package com.rendersoncs.report.ui.dashboard
 
 import android.content.Intent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -50,13 +49,13 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    modifier: Modifier = Modifier,
     onNewReport: () -> Unit,
     onOpenReport: (Report) -> Unit,
     onChangePassword: () -> Unit,
     onDeleteAccount: () -> Unit,
     onAbout: () -> Unit,
     onLoggedOut: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()

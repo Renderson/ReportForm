@@ -48,14 +48,14 @@ import com.rendersoncs.report.ui.theme.ReportTheme
 
 @Composable
 fun LoginScreen(
+    modifier: Modifier = Modifier,
     state: AuthUiState,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onTogglePassword: () -> Unit,
     onSignIn: () -> Unit,
     onForgotPassword: () -> Unit,
-    onSignUp: () -> Unit,
-    modifier: Modifier = Modifier
+    onSignUp: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 

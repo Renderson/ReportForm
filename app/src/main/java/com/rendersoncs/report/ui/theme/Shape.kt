@@ -13,4 +13,3 @@ val ReportShapes = Shapes(
 )
 
 val PillShape = RoundedCornerShape(50)
-val FabShape = RoundedCornerShape(50)

@@ -34,12 +34,12 @@ import com.rendersoncs.report.ui.theme.ReportTheme
 
 @Composable
 fun RecoverySentScreen(
+    modifier: Modifier = Modifier,
     email: String,
     isLoading: Boolean,
     onBackToLogin: () -> Unit,
     onResend: () -> Unit,
-    onContactSupport: () -> Unit,
-    modifier: Modifier = Modifier
+    onContactSupport: () -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),

@@ -45,9 +45,9 @@ import com.rendersoncs.report.ui.theme.ReportShapes
 
 @Composable
 fun ReportListCard  (
+    modifier: Modifier = Modifier,
     report: Report,
-    onOpen: () -> Unit,
-    modifier: Modifier = Modifier
+    onOpen: () -> Unit
 ) {
     val status = report.auditStatus()
     val stripeColor = when (status) {

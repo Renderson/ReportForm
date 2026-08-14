@@ -38,9 +38,9 @@ data class SearchFilterOption(
 
 @Composable
 fun DashboardSearchBar(
+    modifier: Modifier = Modifier,
     query: String,
     onQueryChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
     placeholder: String = stringResource(R.string.dashboard_search_hint),
     filters: List<SearchFilterOption> = emptyList(),
     selectedFilterId: String = filters.firstOrNull()?.id.orEmpty(),

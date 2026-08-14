@@ -95,10 +95,10 @@ import java.util.Locale
 
 @Composable
 fun ResumeScreen(
+    modifier: Modifier = Modifier,
     onBack: () -> Unit,
     onEdit: (Long) -> Unit,
     onDeleted: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: ResumeViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -184,6 +184,7 @@ fun ResumeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ResumeContent(
+    modifier: Modifier = Modifier,
     state: ResumeUiState,
     snackbarFab: SnackbarFabState,
     onBack: () -> Unit,
@@ -192,8 +193,7 @@ private fun ResumeContent(
     onOpenPdf: () -> Unit,
     onEdit: () -> Unit,
     onPhotoClick: (ReportResumeItems) -> Unit,
-    onNoPhoto: () -> Unit,
-    modifier: Modifier = Modifier
+    onNoPhoto: () -> Unit
 ) {
     val report = state.report
 
@@ -373,9 +373,9 @@ private fun ResumeInfoColumn(report: Report) {
 
 @Composable
 private fun InfoCard(
+    modifier: Modifier = Modifier,
     label: String,
-    value: String,
-    modifier: Modifier = Modifier
+    value: String
 ) {
     Card(
         modifier = modifier,

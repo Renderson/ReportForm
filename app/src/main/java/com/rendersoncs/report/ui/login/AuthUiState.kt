@@ -22,5 +22,4 @@ data class AuthUiState(
 sealed interface AuthEvent {
     data class LoggedIn(val uid: String) : AuthEvent
     data object RecoveryEmailSent : AuthEvent
-    data class Error(val message: String) : AuthEvent
 }

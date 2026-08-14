@@ -33,14 +33,14 @@ import com.rendersoncs.report.ui.dashboard.components.SwipeableReportCard
 
 @Composable
 fun AuditoriasScreen(
+    modifier: Modifier = Modifier,
     state: DashboardUiState,
     onQueryChange: (String) -> Unit,
     onFilterChange: (AuditFilter) -> Unit,
     onOpenReport: (Report) -> Unit,
     onShareReport: (Report) -> Unit,
     onDeleteReport: (Report) -> Unit,
-    listState: LazyListState,
-    modifier: Modifier = Modifier
+    listState: LazyListState
 ) {
     Column(
         modifier = modifier

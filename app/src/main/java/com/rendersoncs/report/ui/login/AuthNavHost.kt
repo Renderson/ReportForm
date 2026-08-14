@@ -18,9 +18,9 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun AuthNavHost(
+    modifier: Modifier = Modifier,
     onAuthenticated: (String) -> Unit,
     onContactSupport: () -> Unit,
-    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     viewModel: AuthViewModel = hiltViewModel()
 ) {
@@ -48,7 +48,6 @@ fun AuthNavHost(
                         }
                     }
                 }
-                is AuthEvent.Error -> Unit
             }
         }
     }
@@ -88,8 +87,7 @@ fun AuthNavHost(
                 state = state,
                 onEmailChange = viewModel::onEmailChange,
                 onSubmit = viewModel::sendRecoveryEmail,
-                onBackToLogin = { navController.popBackStack() },
-                onContactSupport = onContactSupport
+                onBackToLogin = { navController.popBackStack() }
             )
         }
         composable(AuthRoute.RECOVERY_SENT) {

@@ -6,7 +6,6 @@ import androidx.compose.ui.graphics.Color
 val Navy = Color(0xFF102A43)
 val Blue = Color(0xFF2196F3)
 val Brown = Color(0xFF3B2400)
-val Slate = Color(0xFF627D98)
 
 // Primary scale
 val NavyDark = Color(0xFF0A1929)
@@ -42,7 +41,6 @@ val NonConformContainer = Color(0xFFFFEBEE)
 val PendingGray = Color(0xFF607D8B)
 val PendingContainer = Color(0xFFEEEEEE)
 val NotApplicable = Color(0xFF90A4AE)
-val NotApplicableContainer = Color(0xFFEEEEEE)
 val ResumeWarningContainer = Color(0xFFF6E7EE)
 val ResumeWarningOn = Color(0xFF4A1942)
 

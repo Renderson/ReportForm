@@ -42,18 +42,16 @@ import com.rendersoncs.report.ui.login.components.AuthCard
 import com.rendersoncs.report.ui.login.components.AuthFeatureIcon
 import com.rendersoncs.report.ui.login.components.AuthScreenHeader
 import com.rendersoncs.report.ui.login.components.AuthTextField
-import com.rendersoncs.report.ui.login.components.SupportFooter
 import com.rendersoncs.report.ui.theme.ReportShapes
 import com.rendersoncs.report.ui.theme.ReportTheme
 
 @Composable
 fun ForgotPasswordScreen(
+    modifier: Modifier = Modifier,
     state: AuthUiState,
     onEmailChange: (String) -> Unit,
     onSubmit: () -> Unit,
-    onBackToLogin: () -> Unit,
-    onContactSupport: () -> Unit,
-    modifier: Modifier = Modifier
+    onBackToLogin: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -160,8 +158,6 @@ fun ForgotPasswordScreen(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(28.dp))
-            //SupportFooter(onContactSupport = onContactSupport)
         }
     }
 }
@@ -174,8 +170,7 @@ private fun ForgotPasswordScreenPreview() {
             state = AuthUiState(),
             onEmailChange = {},
             onSubmit = {},
-            onBackToLogin = {},
-            onContactSupport = {}
+            onBackToLogin = {}
         )
     }
 }

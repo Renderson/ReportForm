@@ -14,9 +14,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AuthFeatureIcon(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     contentDescription: String?,
-    modifier: Modifier = Modifier,
     filled: Boolean = false
 ) {
     Box(

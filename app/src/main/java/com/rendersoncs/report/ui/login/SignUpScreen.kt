@@ -53,6 +53,7 @@ import com.rendersoncs.report.ui.theme.ReportTheme
 
 @Composable
 fun SignUpScreen(
+    modifier: Modifier = Modifier,
     state: AuthUiState,
     onNameChange: (String) -> Unit,
     onEmailChange: (String) -> Unit,
@@ -62,8 +63,7 @@ fun SignUpScreen(
     onTogglePassword: () -> Unit,
     onToggleConfirmPassword: () -> Unit,
     onSignUp: () -> Unit,
-    onBackToLogin: () -> Unit,
-    modifier: Modifier = Modifier
+    onBackToLogin: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val roles = stringArrayResource(R.array.auth_roles).toList()

@@ -18,8 +18,8 @@ import com.rendersoncs.report.ui.theme.ReportShapes
 
 @Composable
 fun ResumePhoto(
-    path: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    path: String
 ) {
     val hasPhoto = path.isNotBlank() && path != ReportConstants.PHOTO.NOT_PHOTO
     Box(

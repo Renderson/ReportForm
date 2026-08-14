@@ -3,11 +3,9 @@ package com.rendersoncs.report.ui.components
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -21,9 +19,9 @@ import com.rendersoncs.report.ui.theme.PillShape
 
 @Composable
 fun ReportPrimaryButton(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
     Button(
@@ -45,9 +43,9 @@ fun ReportPrimaryButton(
 
 @Composable
 fun ReportSecondaryButton(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
     Button(
@@ -66,9 +64,9 @@ fun ReportSecondaryButton(
 
 @Composable
 fun ReportOutlinedButton(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
     OutlinedButton(
@@ -86,9 +84,9 @@ fun ReportOutlinedButton(
 
 @Composable
 fun ReportTextButton(
+    modifier: Modifier = Modifier,
     text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onClick: () -> Unit
 ) {
     TextButton(onClick = onClick, modifier = modifier) {
         Text(text = text, style = MaterialTheme.typography.labelLarge)
@@ -96,29 +94,11 @@ fun ReportTextButton(
 }
 
 @Composable
-fun ReportFab(
-    onClick: () -> Unit,
-    icon: ImageVector,
-    contentDescription: String,
-    modifier: Modifier = Modifier
-) {
-    FloatingActionButton(
-        onClick = onClick,
-        modifier = modifier,
-        shape = CircleShape,
-        containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary
-    ) {
-        Icon(imageVector = icon, contentDescription = contentDescription)
-    }
-}
-
-@Composable
 fun ReportExtendedFab(
+    modifier: Modifier = Modifier,
     text: String,
     icon: ImageVector,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     expanded: Boolean = true
 ) {
     ExtendedFloatingActionButton(

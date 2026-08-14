@@ -41,9 +41,9 @@ fun AuthCard(
 
 @Composable
 fun AuthScreenHeader(
+    modifier: Modifier = Modifier,
     title: String,
-    subtitle: String,
-    modifier: Modifier = Modifier
+    subtitle: String
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),

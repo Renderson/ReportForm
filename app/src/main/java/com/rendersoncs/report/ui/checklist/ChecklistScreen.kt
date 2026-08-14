@@ -74,9 +74,9 @@ import java.util.Locale
 
 @Composable
 fun ChecklistScreen(
+    modifier: Modifier = Modifier,
     onBack: () -> Unit,
     onConcluded: (Long) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: ChecklistViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -236,6 +236,7 @@ fun ChecklistScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ChecklistContent(
+    modifier: Modifier = Modifier,
     state: ChecklistUiState,
     snackbarFab: SnackbarFabState,
     onBack: () -> Unit,
@@ -251,8 +252,7 @@ private fun ChecklistContent(
     onReset: (String) -> Unit,
     onRemove: (ChecklistItemUi) -> Unit,
     onAddItem: () -> Unit,
-    onRetry: () -> Unit,
-    modifier: Modifier = Modifier
+    onRetry: () -> Unit
 ) {
     val lazyListState = rememberLazyListState()
     val fabExpanded by remember {

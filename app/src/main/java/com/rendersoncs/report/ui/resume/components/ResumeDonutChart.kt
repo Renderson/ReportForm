@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
@@ -26,11 +25,11 @@ import com.rendersoncs.report.ui.theme.NotApplicable
 
 @Composable
 fun ResumeDonutChart(
+    modifier: Modifier = Modifier,
     accordingCount: Int,
     notApplicableCount: Int,
     notAccordingCount: Int,
-    totalItems: Int,
-    modifier: Modifier = Modifier
+    totalItems: Int
 ) {
     val slices = listOf(
         accordingCount to ConformGreen,

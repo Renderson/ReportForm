@@ -66,9 +66,7 @@ class ProfileViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     name = name,
-                    email = email,
-                    photoUrl = photo,
-                    showPhoto = SHOW_PROFILE_PHOTO
+                    email = email
                 )
             }
         }
@@ -84,9 +82,5 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             eventsChannel.send(ProfileEvent.LoggedOut)
         }
-    }
-
-    private companion object {
-        const val SHOW_PROFILE_PHOTO = false
     }
 }

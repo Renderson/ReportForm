@@ -48,8 +48,8 @@ private data class OnboardingPage(
 
 @Composable
 fun OnboardingScreen(
-    onFinished: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFinished: () -> Unit
 ) {
     val pages = listOf(
         OnboardingPage(
@@ -138,8 +138,8 @@ fun OnboardingScreen(
 
 @Composable
 private fun OnboardingPageContent(
-    page: OnboardingPage,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    page: OnboardingPage
 ) {
     Column(
         modifier = modifier
@@ -183,8 +183,8 @@ private fun OnboardingPageContent(
 
 @Composable
 private fun OnboardingPageIndicator(
-    selected: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    selected: Boolean
 ) {
     val color by animateColorAsState(
         targetValue = if (selected) {

@@ -62,11 +62,11 @@ import java.util.Locale
 
 @Composable
 fun ProfileScreen(
+    modifier: Modifier = Modifier,
     onChangePassword: () -> Unit,
     onDeleteAccount: () -> Unit,
     onAbout: () -> Unit,
     onLoggedOut: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -116,13 +116,13 @@ fun ProfileScreen(
 
 @Composable
 private fun ProfileContent(
+    modifier: Modifier = Modifier,
     state: ProfileUiState,
     onChangePassword: () -> Unit,
     onDeleteAccount: () -> Unit,
     onDarkThemeChange: (Boolean) -> Unit,
     onAbout: () -> Unit,
-    onLogout: () -> Unit,
-    modifier: Modifier = Modifier
+    onLogout: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -203,10 +203,7 @@ private fun ProfileHeader(state: ProfileUiState) {
                 .padding(vertical = 28.dp, horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ProfileAvatar(
-                photoUrl = state.photoUrl,
-                enabled = state.showPhoto
-            )
+            ProfileAvatar()
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = state.name.ifBlank { stringResource(R.string.dashboard_tab_profile) },
@@ -226,18 +223,7 @@ private fun ProfileHeader(state: ProfileUiState) {
 }
 
 @Composable
-private fun ProfileAvatar(
-    photoUrl: String,
-    enabled: Boolean
-) {
-    // photoUrl is mapped from prefs/Firebase; the photo control stays off until enabled.
-    if (!enabled || photoUrl.isBlank()) {
-        AuthFeatureIcon(
-            icon = Icons.Outlined.Person,
-            contentDescription = stringResource(R.string.dashboard_tab_profile)
-        )
-        return
-    }
+private fun ProfileAvatar() {
     AuthFeatureIcon(
         icon = Icons.Outlined.Person,
         contentDescription = stringResource(R.string.dashboard_tab_profile)

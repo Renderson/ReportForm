@@ -17,8 +17,8 @@ import com.rendersoncs.report.R
 
 @Composable
 fun SupportFooter(
-    onContactSupport: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onContactSupport: () -> Unit
 ) {
     Row(
         modifier = modifier

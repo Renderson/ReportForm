@@ -27,12 +27,12 @@ import com.rendersoncs.report.ui.theme.ReportShapes
 
 @Composable
 fun AuthTextField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
     placeholder: String,
     leadingIcon: ImageVector,
-    modifier: Modifier = Modifier,
     isError: Boolean = false,
     errorText: String? = null,
     keyboardType: KeyboardType = KeyboardType.Email,

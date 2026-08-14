@@ -69,9 +69,9 @@ import java.util.TimeZone
 
 @Composable
 fun NewReportScreen(
+    modifier: Modifier = Modifier,
     onBack: () -> Unit,
     onStarted: (Int) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: NewReportViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -104,6 +104,7 @@ fun NewReportScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NewReportContent(
+    modifier: Modifier = Modifier,
     state: NewReportUiState,
     snackbarHostState: SnackbarHostState,
     onBack: () -> Unit,
@@ -111,8 +112,7 @@ private fun NewReportContent(
     onEmailChange: (String) -> Unit,
     onDateChange: (String) -> Unit,
     onControllerChange: (String) -> Unit,
-    onStart: () -> Unit,
-    modifier: Modifier = Modifier
+    onStart: () -> Unit
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
 

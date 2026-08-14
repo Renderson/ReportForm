@@ -32,9 +32,9 @@ import com.rendersoncs.report.ui.theme.ReportShapes
 
 @Composable
 fun ResumeItemCard(
+    modifier: Modifier = Modifier,
     item: ReportResumeItems,
-    onPhotoClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onPhotoClick: () -> Unit
 ) {
     val stripeColor = when (item.conformity) {
         ReportConstants.ITEM.OPT_NUM1 -> ConformGreen
