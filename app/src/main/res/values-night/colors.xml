@@ -4,35 +4,8 @@
 
     <color name="colorPrimarySplash">#1E56A0</color>
     <color name="colorCardView">#1A191E</color>
-    <color name="card_shadow_form_field">#17FFFFFF</color>
-    <color name="colorContentButton">#000000</color>
-    <color name="colorIconNote">#4F9BFF</color>
-    <color name="colorBorderShapeImage">#FFFFFF</color>
-    <color name="tertiaryContainer">#573e5c</color>
-    <color name="onTertiaryContainer">#fad8fd</color>
 
     <color name="surface">#1A191E</color>
     <color name="background">#121212</color>
-    <color name="white">#FFFFFF</color>
     <color name="black">#FFFFFFFF</color>
-    <color name="blue_disabled">#A9C4CE</color>
-
-    <color name="cod_gray_alpha_75">#BF121212</color>
-    <color name="colorResume">#9FA8DA</color>
-
-    <color name="colorRadioC">#6FCF97</color>
-    <color name="colorRadioNA">#4F9BFF</color>
-    <color name="colorRadioNC">#EB5757</color>
-
-    <color name="colorGrey">#888888</color>
-    <color name="colorWhatsAppLogo">#2BB201</color>
-    <color name="colorLinkedInLogo">#0077B5</color>
-    <color name="colorAlto">#D3D3D3</color>
-
-    <!--Color camera x-->
-    <color name="icActive">#FFFFFFFF</color>
-    <color name="icFocused">#DDFFFFFF</color>
-    <color name="icPressed">#AAFFFFFF</color>
-
-    <color name="opacity90">#EB000000</color>
 </resources>

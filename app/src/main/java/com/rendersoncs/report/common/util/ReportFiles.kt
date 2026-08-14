@@ -23,6 +23,17 @@ object ReportFiles {
         File(documentsDir(context), "$userId.json")
 
     @JvmStatic
+    fun photosDir(context: Context): File {
+        val dir = File(documentsDir(context), "photos")
+        if (!dir.exists()) dir.mkdirs()
+        return dir
+    }
+
+    @JvmStatic
+    fun newPhotoFile(context: Context): File =
+        File(photosDir(context), "photo_${System.currentTimeMillis()}.jpg")
+
+    @JvmStatic
     fun copyUriToAppFile(context: Context, uri: Uri): File? {
         return try {
             val dest = File(documentsDir(context), "photo_${System.currentTimeMillis()}.jpg")
