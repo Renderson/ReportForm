@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1E56A0</color>
+    <color name="colorPrimary">#102A43</color>
 
-    <color name="colorPrimarySplash">#1E56A0</color>
+    <color name="colorPrimarySplash">#102A43</color>
     <color name="colorCardView">#FFFFFFFF</color>
 
     <color name="surface">#FFFFFF</color>

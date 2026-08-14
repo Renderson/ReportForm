@@ -61,7 +61,10 @@ class CameraActivity : ComponentActivity() {
                     }
                 }
             }
-            ReportTheme(darkTheme = darkTheme) {
+            ReportTheme(
+                darkTheme = darkTheme,
+                adjustSystemBars = false
+            ) {
                 CameraScreen(
                     viewModel = viewModel,
                     onClose = ::finish
