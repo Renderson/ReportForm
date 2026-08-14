@@ -6,14 +6,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rendersoncs.report.ui.ReportActivity
+import com.rendersoncs.report.ui.theme.ThemeSettings
 import com.rendersoncs.report.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var themeSettings: ThemeSettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -28,7 +35,9 @@ class AuthActivity : ComponentActivity() {
         )
         super.onCreate(savedInstanceState)
         setContent {
+            val darkTheme by themeSettings.darkTheme.collectAsStateWithLifecycle()
             AuthApp(
+                darkTheme = darkTheme,
                 onAuthenticated = { openMain() },
                 onContactSupport = { }
             )

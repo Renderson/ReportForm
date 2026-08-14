@@ -1,6 +1,5 @@
 package com.rendersoncs.report.ui.dashboard
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -33,12 +32,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rendersoncs.report.R
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.ui.components.ReportFab
+import com.rendersoncs.report.ui.profile.ProfileScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onNewReport: () -> Unit,
     onOpenReport: (Report) -> Unit,
+    onChangePassword: () -> Unit,
+    onDeleteAccount: () -> Unit,
+    onAbout: () -> Unit,
+    onLoggedOut: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
@@ -63,7 +67,11 @@ fun HomeScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.title_report),
+                        text = if (selectedTab == HomeTab.PROFILE) {
+                            stringResource(R.string.dashboard_tab_profile)
+                        } else {
+                            stringResource(R.string.title_report)
+                        },
                         style = MaterialTheme.typography.titleLarge
                     )
                 },
@@ -131,7 +139,13 @@ fun HomeScreen(
                 onOpenReport = onOpenReport,
                 modifier = Modifier.padding(innerPadding)
             )
-            HomeTab.PROFILE -> Box(modifier = Modifier.padding(innerPadding).fillMaxSize())
+            HomeTab.PROFILE -> ProfileScreen(
+                onChangePassword = onChangePassword,
+                onDeleteAccount = onDeleteAccount,
+                onAbout = onAbout,
+                onLoggedOut = onLoggedOut,
+                modifier = Modifier.padding(innerPadding)
+            )
         }
     }
 }

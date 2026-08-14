@@ -1,6 +1,7 @@
 package com.rendersoncs.report.repository
 
 import android.content.Context
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -130,6 +131,65 @@ class AuthRepository(
                 .updateChildren(payload)
                 .await()
         }
+    }
+
+    suspend fun fetchCredential(): Pair<String?, String?> {
+        val uid = currentUid ?: return null to null
+        return try {
+            val snapshot = LibraryClass.getFirebase()
+                .child(ReportConstants.FIREBASE.FIRE_USERS)
+                .child(uid)
+                .child(ReportConstants.FIREBASE.FIRE_CREDENTIAL)
+                .get()
+                .await()
+            val name = snapshot.child(ReportConstants.FIREBASE.FIRE_NAME).getValue(String::class.java)
+            val photo = snapshot.child("photo").getValue(String::class.java)
+                ?: snapshot.child(ReportConstants.FIREBASE.FIRE_PHOTO).getValue(String::class.java)
+            name to photo
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            null to null
+        }
+    }
+
+    suspend fun updatePassword(currentPassword: String, newPassword: String): Result<Unit> {
+        val user = firebaseAuth.currentUser
+            ?: return Result.failure(IllegalStateException("User not found"))
+        val email = user.email
+            ?: return Result.failure(IllegalStateException("User not found"))
+        return try {
+            user.reauthenticate(EmailAuthProvider.getCredential(email, currentPassword)).await()
+            user.updatePassword(newPassword).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deleteAccount(password: String): Result<Unit> {
+        val user = firebaseAuth.currentUser
+            ?: return Result.failure(IllegalStateException("User not found"))
+        val email = user.email
+            ?: return Result.failure(IllegalStateException("User not found"))
+        val uid = user.uid
+        return try {
+            user.reauthenticate(EmailAuthProvider.getCredential(email, password)).await()
+            user.delete().await()
+            LibraryClass.getFirebase()
+                .child(ReportConstants.FIREBASE.FIRE_USERS)
+                .child(uid)
+                .setValue(null)
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Result.failure(e)
+        }
+    }
+
+    fun signOut() {
+        firebaseAuth.signOut()
     }
 
     private companion object {

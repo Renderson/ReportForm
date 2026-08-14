@@ -6,14 +6,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.firebase.auth.FirebaseAuth
 import com.rendersoncs.report.ui.login.AuthActivity
+import com.rendersoncs.report.ui.theme.ThemeSettings
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReportActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var themeSettings: ThemeSettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -33,7 +40,15 @@ class ReportActivity : ComponentActivity() {
             return
         }
         setContent {
-            ReportApp()
+            val darkTheme by themeSettings.darkTheme.collectAsStateWithLifecycle()
+            ReportApp(
+                darkTheme = darkTheme,
+                onLoggedOut = {
+                    startActivity(Intent(this, AuthActivity::class.java))
+                    finish()
+                }
+            )
         }
     }
 }
+

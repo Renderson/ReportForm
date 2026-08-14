@@ -41,6 +41,14 @@ class SharePrefInfoUser @Inject constructor(private var sharedPreferences: Share
         return sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_NAME, "").toString()
     }
 
+    fun getEmail(): String {
+        return sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_EMAIL, "").orEmpty()
+    }
+
+    fun getPhoto(): String {
+        return sharedPreferences.getString(ReportConstants.FIREBASE.FIRE_PHOTO, "").orEmpty()
+    }
+
     fun deleteSharePref() {
         val editor = sharedPreferences.edit().clear()
         editor.apply()

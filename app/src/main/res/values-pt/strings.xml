@@ -282,6 +282,8 @@
     <string name="resume_pdf_locked">Para que o botão fique liberado para visualizar o PDF, você precisa finalizar o relatório!</string>
     <string name="resume_pdf_unavailable">PDF não encontrado. Finalize o relatório para gerá-lo.</string>
     <string name="resume_pdf_no_app">Nenhum aplicativo encontrado para abrir o PDF.</string>
+    <string name="profile_preferences">Preferências</string>
+    <string name="profile_logout_confirm">Deseja realmente sair?</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>

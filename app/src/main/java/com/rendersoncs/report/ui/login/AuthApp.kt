@@ -7,10 +7,11 @@ import com.rendersoncs.report.ui.theme.ReportTheme
 
 @Composable
 fun AuthApp(
+    darkTheme: Boolean,
     onAuthenticated: (String) -> Unit,
     onContactSupport: () -> Unit
 ) {
-    ReportTheme {
+    ReportTheme(darkTheme = darkTheme) {
         AuthNavHost(
             onAuthenticated = onAuthenticated,
             onContactSupport = onContactSupport,

@@ -11,12 +11,16 @@ import androidx.navigation.navArgument
 import com.rendersoncs.report.R
 import com.rendersoncs.report.ui.dashboard.HomeScreen
 import com.rendersoncs.report.ui.newreport.NewReportScreen
+import com.rendersoncs.report.ui.profile.AboutScreen
+import com.rendersoncs.report.ui.profile.ChangePasswordScreen
+import com.rendersoncs.report.ui.profile.DeleteAccountScreen
 import com.rendersoncs.report.ui.resume.ResumeScreen
 import com.rendersoncs.report.ui.screens.placeholder.PlaceholderScreen
 
 @Composable
 fun ReportNavHost(
     navController: NavHostController,
+    onLoggedOut: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -35,7 +39,11 @@ fun ReportNavHost(
                         ReportRoute.resume(id)
                     }
                     navController.navigate(route)
-                }
+                },
+                onChangePassword = { navController.navigate(ReportRoute.CHANGE_PASSWORD) },
+                onDeleteAccount = { navController.navigate(ReportRoute.DELETE_ACCOUNT) },
+                onAbout = { navController.navigate(ReportRoute.SETTINGS) },
+                onLoggedOut = onLoggedOut
             )
         }
         composable(ReportRoute.NEW_REPORT) {
@@ -68,9 +76,15 @@ fun ReportNavHost(
             )
         }
         composable(ReportRoute.SETTINGS) {
-            PlaceholderScreen(
-                title = stringResource(R.string.label_menu_about),
-                onBack = { navController.popBackStack() }
+            AboutScreen(onBack = { navController.popBackStack() })
+        }
+        composable(ReportRoute.CHANGE_PASSWORD) {
+            ChangePasswordScreen(onBack = { navController.popBackStack() })
+        }
+        composable(ReportRoute.DELETE_ACCOUNT) {
+            DeleteAccountScreen(
+                onBack = { navController.popBackStack() },
+                onDeleted = onLoggedOut
             )
         }
     }

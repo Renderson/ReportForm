@@ -283,6 +283,8 @@
     <string name="resume_pdf_locked">To enable the PDF view button, you must finish the report!</string>
     <string name="resume_pdf_unavailable">PDF not found. Finish the report to generate it.</string>
     <string name="resume_pdf_no_app">No app found to open PDF.</string>
+    <string name="profile_preferences">Preferences</string>
+    <string name="profile_logout_confirm">Do you really want to sign out?</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>
