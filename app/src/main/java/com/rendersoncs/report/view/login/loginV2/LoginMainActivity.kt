@@ -2,6 +2,7 @@ package com.rendersoncs.report.view.login.loginV2
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -9,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.rendersoncs.report.R
+import com.rendersoncs.report.common.extension.applySystemBarInsets
 import com.rendersoncs.report.databinding.ActivityMainLoginBinding
 import com.rendersoncs.report.common.util.viewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,9 +26,11 @@ class LoginMainActivity: AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val binding = ActivityMainLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.root.applySystemBarInsets()
 
         viewModel
         initViews(binding)

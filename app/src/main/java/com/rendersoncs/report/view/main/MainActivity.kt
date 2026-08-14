@@ -1,10 +1,15 @@
 package com.rendersoncs.report.view.main
 
+import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -25,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.rendersoncs.report.R
 import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.extension.applyMainWindowInsets
 import com.rendersoncs.report.common.extension.spaceToNewLine
 import com.rendersoncs.report.databinding.ActivityMainBinding
 import com.rendersoncs.report.view.fragment.ChooseThemeDialogFragment.SingleChoiceListener
@@ -54,12 +60,22 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
 
     private val viewModel: ReportViewModel by viewModels()
 
+    private val notificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.root.applyMainWindowInsets(
+            appBar = binding.homeMain.appbar,
+            content = binding.homeMain.navHostFragment,
+            navigationView = binding.navView
+        )
 
         checkLoggedUser()
+        requestNotificationPermission()
 
         prefTheme = getSharedPreferences(ReportConstants.THEME.MY_PREFERENCE_THEME, MODE_PRIVATE)
 
@@ -210,6 +226,17 @@ class MainActivity : AppCompatActivity(), SingleChoiceListener {
     }
 
     override fun onNegativeButtonClicked() {}
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()

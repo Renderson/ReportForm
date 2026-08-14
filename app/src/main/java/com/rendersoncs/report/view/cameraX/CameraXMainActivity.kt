@@ -19,6 +19,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.FrameLayout
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.rendersoncs.report.R
@@ -36,6 +37,7 @@ class CameraXMainActivity : AppCompatActivity() {
     private lateinit var container: FrameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera_x)
         container = findViewById(R.id.fragment_container)

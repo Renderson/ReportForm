@@ -1,7 +1,5 @@
 package com.rendersoncs.report.view.login.loginV2
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
@@ -15,7 +13,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.Task
@@ -46,14 +43,6 @@ class SingUpFragment: BaseFragment<FragmentSignUpBinding, LoginViewModel>(), Dat
     private var user: User? = null
 
     private var mSelectedUri: Uri? = null
-
-    private val requestLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted)
-                openGallery.launch("image/*")
-            else
-                toast(getString(R.string.label_permission_camera_denied))
-        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -101,7 +90,7 @@ class SingUpFragment: BaseFragment<FragmentSignUpBinding, LoginViewModel>(), Dat
         }
 
         btnSelectPhoto.setOnClickListener {
-            checkPermission()
+            openGallery.launch("image/*")
         }
 
         callLogin.setOnClickListener {
@@ -198,20 +187,6 @@ class SingUpFragment: BaseFragment<FragmentSignUpBinding, LoginViewModel>(), Dat
                 .addOnFailureListener { obj: Exception -> obj.printStackTrace() }
         }
     }
-
-    private fun checkPermission() {
-        if (!isStoragePermissionGranted()) {
-            requestLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            return
-        } else {
-            openGallery.launch("image/*")
-        }
-    }
-
-    private fun isStoragePermissionGranted(): Boolean = ContextCompat.checkSelfPermission(
-        requireContext(),
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED
 
     private val openGallery = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         val bitmap: Bitmap

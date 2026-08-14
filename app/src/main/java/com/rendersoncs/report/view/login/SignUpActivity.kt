@@ -57,6 +57,7 @@ class SignUpActivity : CommonActivity(), DatabaseReference.CompletionListener, O
         binding = FragmentSignUpBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        applySystemBarInsets(view)
 
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         mAuth = FirebaseAuth.getInstance()
@@ -205,7 +206,9 @@ class SignUpActivity : CommonActivity(), DatabaseReference.CompletionListener, O
     }
 
     private fun selectPhoto() {
-        val it = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val it = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+        }
         startActivityForResult(it, ReportConstants.PHOTO.REQUEST_CODE_GALLERY)
     }
 

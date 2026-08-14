@@ -12,12 +12,12 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt").version("1.23.8")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.2.0"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.2.10"
 }
 
 val versionMajor = 1
 val versionMinor = 0
-val versionPatch = 3
+val versionPatch = 4
 
 fun computeVersionName() = "$versionMajor.$versionMinor.$versionPatch"
 
@@ -43,7 +43,7 @@ detekt {
 }
 
 tasks.withType<Detekt> {
-    jvmTarget = "1.8" // Define a versão do Java que será usada pelo Detekt
+    jvmTarget = "17"
 }
 
 android {
@@ -62,7 +62,7 @@ android {
         applicationId = "com.rendersoncs.report"
         minSdk = 24
         targetSdk = 36
-        versionCode = 6
+        versionCode = 7
         versionName = computeVersionName()
         multiDexEnabled = true
         signingConfig = signingConfigs.getByName("release")
@@ -85,12 +85,18 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
     }
 
     buildTypes {

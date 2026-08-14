@@ -3,7 +3,6 @@ package com.rendersoncs.report.common.pdf
 import android.content.Context
 import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
-import android.os.Environment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfPCell
@@ -12,6 +11,7 @@ import com.itextpdf.text.pdf.PdfWriter
 import com.itextpdf.text.pdf.draw.LineSeparator
 import com.rendersoncs.report.R
 import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.ReportFiles
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportResumeItems
 import com.rendersoncs.report.view.MyApplication
@@ -52,12 +52,7 @@ class PDFGenerator {
                 )
             )
 
-            val filePath = File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                "Report"
-            )
-            if (!filePath.exists()) filePath.mkdirs()
-            val file = File(filePath, str)
+            val file = ReportFiles.pdfFile(context, str)
             if (file.exists()) file.delete()
             file.createNewFile()
 

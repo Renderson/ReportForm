@@ -6,16 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -24,12 +15,14 @@
     <application
         android:name="com.rendersoncs.report.view.MyApplication"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"
         android:label="${appName}"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:targetApi="tiramisu">
 
         <!-- [START crash_disable_collection] -->
         <meta-data
@@ -41,7 +34,7 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        
+
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
@@ -68,12 +61,24 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.rendersoncs.report.view.main.MainActivity"
-            android:launchMode="singleTop" />
+        <activity
+            android:name="com.rendersoncs.report.view.main.MainActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize" />
         <!--<activity android:name="com.rendersoncs.report.view.login.loginV2.LoginMainActivity" />-->
-        <activity android:name="com.rendersoncs.report.view.login.LoginActivity" />
-        <activity android:name="com.rendersoncs.report.view.login.SignUpActivity" />
-        <activity android:name="com.rendersoncs.report.view.login.RecoveryLoginActivity" />
+        <activity
+            android:name="com.rendersoncs.report.view.login.LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.rendersoncs.report.view.login.SignUpActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.rendersoncs.report.view.login.RecoveryLoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name="com.rendersoncs.report.view.cameraX.CameraXMainActivity"
@@ -83,7 +88,7 @@
             android:screenOrientation="fullUser"
             android:rotationAnimation="seamless"
             tools:targetApi="O"
-            android:exported="true">
+            android:exported="false">
 
             <!-- Declare notch support -->
             <meta-data android:name="android.notch_support" android:value="true"/>
@@ -92,8 +97,7 @@
 
         <service
             android:name=".data.net.NotificationFireBase"
-            android:permission="true"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -117,9 +121,6 @@
                 android:resource="@xml/provider_paths"
                 tools:replace="android:resource" />
         </provider>
-        <!--<meta-data-->
-            <!--android:name="io.fabric.ApiKey"-->
-            <!--android:value="3dc6b3f7c9b49dc77c730868b0ee3ee4530d9966" />-->
     </application>
 
 </manifest>
