@@ -29,20 +29,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.rendersoncs.report.R
-import com.rendersoncs.report.ui.dashboard.AuditFilter
 import com.rendersoncs.report.ui.theme.ReportShapes
+
+data class SearchFilterOption(
+    val id: String,
+    val label: String
+)
 
 @Composable
 fun DashboardSearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
-    selectedFilter: AuditFilter = AuditFilter.ALL,
-    onFilterChange: (AuditFilter) -> Unit = {},
     modifier: Modifier = Modifier,
-    showFilter: Boolean = true,
-    placeholder: String = stringResource(R.string.dashboard_search_hint)
+    placeholder: String = stringResource(R.string.dashboard_search_hint),
+    filters: List<SearchFilterOption> = emptyList(),
+    selectedFilterId: String = filters.firstOrNull()?.id.orEmpty(),
+    onFilterChange: (String) -> Unit = {},
+    showFilter: Boolean = filters.isNotEmpty()
 ) {
     var filterExpanded by remember { mutableStateOf(false) }
+    val defaultFilterId = filters.firstOrNull()?.id
+    val filterActive = selectedFilterId.isNotEmpty() && selectedFilterId != defaultFilterId
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -92,10 +99,10 @@ fun DashboardSearchBar(
                         Icon(
                             imageVector = Icons.Outlined.FilterList,
                             contentDescription = stringResource(R.string.dashboard_filter),
-                            tint = if (selectedFilter == AuditFilter.ALL) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
+                            tint = if (filterActive) {
                                 MaterialTheme.colorScheme.secondary
+                            } else {
+                                MaterialTheme.colorScheme.primary
                             }
                         )
                     }
@@ -104,11 +111,11 @@ fun DashboardSearchBar(
                     expanded = filterExpanded,
                     onDismissRequest = { filterExpanded = false }
                 ) {
-                    AuditFilter.entries.forEach { filter ->
+                    filters.forEach { filter ->
                         DropdownMenuItem(
-                            text = { Text(filterLabel(filter)) },
+                            text = { Text(filter.label) },
                             onClick = {
-                                onFilterChange(filter)
+                                onFilterChange(filter.id)
                                 filterExpanded = false
                             }
                         )
@@ -116,15 +123,5 @@ fun DashboardSearchBar(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun filterLabel(filter: AuditFilter): String {
-    return when (filter) {
-        AuditFilter.ALL -> stringResource(R.string.dashboard_filter_all)
-        AuditFilter.CONFORME -> stringResource(R.string.according)
-        AuditFilter.NAO_CONFORME -> stringResource(R.string.not_according)
-        AuditFilter.PENDENTE -> stringResource(R.string.dashboard_pending)
     }
 }

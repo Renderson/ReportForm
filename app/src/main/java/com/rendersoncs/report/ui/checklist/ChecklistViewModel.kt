@@ -86,6 +86,10 @@ class ChecklistViewModel @Inject constructor(
         _uiState.update { it.copy(query = value) }
     }
 
+    fun onFilterChange(filter: ChecklistFilter) {
+        _uiState.update { it.copy(filter = filter) }
+    }
+
     fun selectConformity(key: String, conformity: Int) {
         updateItem(key) { item ->
             item.copy(

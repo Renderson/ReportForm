@@ -61,6 +61,7 @@ import com.rendersoncs.report.ui.checklist.components.ChecklistSkeleton
 import com.rendersoncs.report.ui.common.UiState
 import com.rendersoncs.report.ui.components.ReportExtendedFab
 import com.rendersoncs.report.ui.dashboard.components.DashboardSearchBar
+import com.rendersoncs.report.ui.dashboard.components.SearchFilterOption
 import com.rendersoncs.report.view.cameraX.CameraXMainActivity
 import kotlinx.coroutines.flow.collectLatest
 import java.io.File
@@ -207,6 +208,7 @@ fun ChecklistScreen(
         onSave = viewModel::requestConclude,
         onClear = { showClearDialog = true },
         onQueryChange = viewModel::onQueryChange,
+        onFilterChange = viewModel::onFilterChange,
         onSelectConformity = viewModel::selectConformity,
         onCamera = { key ->
             viewModel.prepareMedia(key)
@@ -235,6 +237,7 @@ private fun ChecklistContent(
     onSave: () -> Unit,
     onClear: () -> Unit,
     onQueryChange: (String) -> Unit,
+    onFilterChange: (ChecklistFilter) -> Unit,
     onSelectConformity: (String, Int) -> Unit,
     onCamera: (String) -> Unit,
     onGallery: (String) -> Unit,
@@ -313,8 +316,27 @@ private fun ChecklistContent(
             DashboardSearchBar(
                 query = state.query,
                 onQueryChange = onQueryChange,
-                showFilter = false,
-                placeholder = stringResource(R.string.checklist_search_hint)
+                onFilterChange = { onFilterChange(ChecklistFilter.valueOf(it)) },
+                selectedFilterId = state.filter.name,
+                placeholder = stringResource(R.string.checklist_search_hint),
+                filters = listOf(
+                    SearchFilterOption(
+                        id = ChecklistFilter.ALL.name,
+                        label = stringResource(R.string.dashboard_filter_all)
+                    ),
+                    SearchFilterOption(
+                        id = ChecklistFilter.CONFORME.name,
+                        label = stringResource(R.string.according)
+                    ),
+                    SearchFilterOption(
+                        id = ChecklistFilter.NAO_CONFORME.name,
+                        label = stringResource(R.string.not_according)
+                    ),
+                    SearchFilterOption(
+                        id = ChecklistFilter.NAO_APLICAVEL.name,
+                        label = stringResource(R.string.not_applicable)
+                    )
+                )
             )
             if (state.items.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(16.dp))

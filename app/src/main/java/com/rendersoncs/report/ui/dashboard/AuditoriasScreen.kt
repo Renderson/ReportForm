@@ -27,6 +27,7 @@ import com.rendersoncs.report.R
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.ui.common.UiState
 import com.rendersoncs.report.ui.dashboard.components.DashboardSearchBar
+import com.rendersoncs.report.ui.dashboard.components.SearchFilterOption
 import com.rendersoncs.report.ui.dashboard.components.ReportListCard
 
 @Composable
@@ -45,8 +46,26 @@ fun AuditoriasScreen(
         DashboardSearchBar(
             query = state.query,
             onQueryChange = onQueryChange,
-            selectedFilter = state.filter,
-            onFilterChange = onFilterChange
+            selectedFilterId = state.filter.name,
+            onFilterChange = { onFilterChange(AuditFilter.valueOf(it)) },
+            filters = listOf(
+                SearchFilterOption(
+                    id = AuditFilter.ALL.name,
+                    label = stringResource(R.string.dashboard_filter_all)
+                ),
+                SearchFilterOption(
+                    id = AuditFilter.CONFORME.name,
+                    label = stringResource(R.string.according)
+                ),
+                SearchFilterOption(
+                    id = AuditFilter.NAO_CONFORME.name,
+                    label = stringResource(R.string.not_according)
+                ),
+                SearchFilterOption(
+                    id = AuditFilter.PENDENTE.name,
+                    label = stringResource(R.string.dashboard_pending)
+                )
+            )
         )
         Spacer(modifier = Modifier.height(16.dp))
         when {

@@ -26,11 +26,19 @@ data class ChecklistItemUi(
     }
 }
 
+enum class ChecklistFilter {
+    ALL,
+    CONFORME,
+    NAO_CONFORME,
+    NAO_APLICAVEL
+}
+
 data class ChecklistUiState(
     val listState: UiState<List<ChecklistItemUi>> = UiState.Loading,
     val report: Report? = null,
     val items: List<ChecklistItemUi> = emptyList(),
     val query: String = "",
+    val filter: ChecklistFilter = ChecklistFilter.ALL,
     val score: Float = 10f,
     val resultLabel: String = "",
     val isSaving: Boolean = false,
@@ -40,10 +48,17 @@ data class ChecklistUiState(
     val visibleItems: List<ChecklistItemUi>
         get() {
             val needle = query.trim()
-            if (needle.isEmpty()) return items
             return items.filter { item ->
-                item.title.contains(needle, ignoreCase = true) ||
+                val matchesQuery = needle.isEmpty() ||
+                    item.title.contains(needle, ignoreCase = true) ||
                     item.description.contains(needle, ignoreCase = true)
+                val matchesFilter = when (filter) {
+                    ChecklistFilter.ALL -> true
+                    ChecklistFilter.CONFORME -> item.conformity == ChecklistItemUi.C
+                    ChecklistFilter.NAO_CONFORME -> item.conformity == ChecklistItemUi.NC
+                    ChecklistFilter.NAO_APLICAVEL -> item.conformity == ChecklistItemUi.NA
+                }
+                matchesQuery && matchesFilter
             }
         }
 
