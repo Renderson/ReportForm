@@ -1,5 +1,6 @@
 package com.rendersoncs.report.ui.newreport
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rendersoncs.report.common.util.SharePrefInfoUser
@@ -22,13 +23,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewReportViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val reportRepository: ReportRepository,
     private val authRepository: AuthRepository,
     private val sharePref: SharePrefInfoUser
 ) : ViewModel() {
 
+    private val reportId: Int = savedStateHandle.get<Long>(REPORT_ID_KEY)?.toInt() ?: -1
+    private val isEdit: Boolean = reportId > 0
+
+    private var existingScore: String = ""
+    private var existingResult: String = ""
+    private var existingConcluded: Boolean = false
+    private var existingUserId: String = ""
+
     private val _uiState = MutableStateFlow(
         NewReportUiState(
+            isEdit = isEdit,
             date = today(),
             controller = sharePref.getUser().ifBlank {
                 authRepository.currentUser?.displayName.orEmpty()
@@ -39,6 +50,10 @@ class NewReportViewModel @Inject constructor(
 
     private val eventsChannel = Channel<NewReportEvent>(Channel.BUFFERED)
     val events = eventsChannel.receiveAsFlow()
+
+    init {
+        if (isEdit) loadReport()
+    }
 
     fun onCompanyChange(value: String) {
         _uiState.update {
@@ -89,19 +104,28 @@ class NewReportViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
-                val id = reportRepository.insertReport(
-                    Report(
-                        company = state.company.trim(),
-                        email = state.email.trim(),
-                        date = state.date,
-                        controller = state.controller.trim(),
-                        score = "",
-                        result = "",
-                        concluded = false,
-                        userId = authRepository.currentUid.orEmpty()
-                    )
+                val report = Report(
+                    id = if (isEdit) reportId else null,
+                    company = state.company.trim(),
+                    email = state.email.trim(),
+                    date = state.date,
+                    controller = state.controller.trim(),
+                    score = if (isEdit) existingScore else "",
+                    result = if (isEdit) existingResult else "",
+                    concluded = if (isEdit) existingConcluded else false,
+                    userId = if (isEdit) {
+                        existingUserId.ifBlank { authRepository.currentUid.orEmpty() }
+                    } else {
+                        authRepository.currentUid.orEmpty()
+                    }
                 )
-                eventsChannel.send(NewReportEvent.Started(id.toInt()))
+                val id = if (isEdit) {
+                    reportRepository.updateReport(reportId, report)
+                    reportId
+                } else {
+                    reportRepository.insertReport(report).toInt()
+                }
+                eventsChannel.send(NewReportEvent.Started(id))
             } catch (_: Exception) {
                 eventsChannel.send(NewReportEvent.SaveFailed)
             } finally {
@@ -110,7 +134,34 @@ class NewReportViewModel @Inject constructor(
         }
     }
 
+    private fun loadReport() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                val report = reportRepository.getReportById(reportId)
+                existingScore = report.score.orEmpty()
+                existingResult = report.result.orEmpty()
+                existingConcluded = report.concluded ?: false
+                existingUserId = report.userId.orEmpty()
+                _uiState.update {
+                    it.copy(
+                        isEdit = true,
+                        company = report.company.orEmpty(),
+                        email = report.email.orEmpty(),
+                        date = report.date.orEmpty().ifBlank { today() },
+                        controller = report.controller.orEmpty().ifBlank { it.controller },
+                        isLoading = false
+                    )
+                }
+            } catch (_: Exception) {
+                _uiState.update { it.copy(isLoading = false) }
+                eventsChannel.send(NewReportEvent.LoadFailed)
+            }
+        }
+    }
+
     private companion object {
+        const val REPORT_ID_KEY = "reportId"
         const val COMPANY_MAX_LENGTH = 20
 
         fun today(): String {

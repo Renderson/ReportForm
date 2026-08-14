@@ -28,7 +28,7 @@ fun ReportNavHost(
     ) {
         composable(ReportRoute.DASHBOARD) {
             HomeScreen(
-                onNewReport = { navController.navigate(ReportRoute.NEW_REPORT) },
+                onNewReport = { navController.navigate(ReportRoute.newReport()) },
                 onOpenReport = { report ->
                     val id = report.id?.toLong() ?: return@HomeScreen
                     val route = if (report.concluded == false) {
@@ -44,7 +44,15 @@ fun ReportNavHost(
                 onLoggedOut = onLoggedOut
             )
         }
-        composable(ReportRoute.NEW_REPORT) {
+        composable(
+            route = ReportRoute.NEW_REPORT,
+            arguments = listOf(
+                navArgument("reportId") {
+                    type = NavType.LongType
+                    defaultValue = -1L
+                }
+            )
+        ) {
             NewReportScreen(
                 onBack = { navController.popBackStack() },
                 onStarted = { reportId ->
@@ -73,7 +81,11 @@ fun ReportNavHost(
         ) {
             ResumeScreen(
                 onBack = { navController.popBackStack() },
-                onEdit = { reportId -> navController.navigate(ReportRoute.checklist(reportId)) },
+                onEdit = { reportId ->
+                    navController.navigate(ReportRoute.editReport(reportId)) {
+                        popUpTo(ReportRoute.RESUME) { inclusive = true }
+                    }
+                },
                 onDeleted = { navController.popBackStack() }
             )
         }

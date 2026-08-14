@@ -1,6 +1,7 @@
 package com.rendersoncs.report.ui.newreport
 
 data class NewReportUiState(
+    val isEdit: Boolean = false,
     val company: String = "",
     val email: String = "",
     val date: String = "",
@@ -21,4 +22,5 @@ data class NewReportUiState(
 sealed interface NewReportEvent {
     data class Started(val reportId: Int) : NewReportEvent
     data object SaveFailed : NewReportEvent
+    data object LoadFailed : NewReportEvent
 }

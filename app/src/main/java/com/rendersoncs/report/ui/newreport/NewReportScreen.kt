@@ -83,6 +83,7 @@ fun NewReportScreen(
             when (event) {
                 is NewReportEvent.Started -> onStarted(event.reportId)
                 NewReportEvent.SaveFailed -> snackbarHostState.showSnackbar(saveError)
+                NewReportEvent.LoadFailed -> onBack()
             }
         }
     }
@@ -153,7 +154,13 @@ private fun NewReportContent(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.label_menu_new_report),
+                        text = stringResource(
+                            if (state.isEdit) {
+                                R.string.title_edit_report
+                            } else {
+                                R.string.label_menu_new_report
+                            }
+                        ),
                         style = MaterialTheme.typography.titleLarge
                     )
                 },
