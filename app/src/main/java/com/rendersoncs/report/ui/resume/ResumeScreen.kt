@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -33,7 +34,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +47,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -74,6 +75,7 @@ import com.rendersoncs.report.R
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportResumeItems
+import com.rendersoncs.report.ui.components.ReportExtendedFab
 import com.rendersoncs.report.ui.components.SnackbarBottomOverlay
 import com.rendersoncs.report.ui.components.SnackbarFabState
 import com.rendersoncs.report.ui.components.paddingAboveSnackbar
@@ -84,7 +86,6 @@ import com.rendersoncs.report.ui.resume.components.ResumePhoto
 import com.rendersoncs.report.ui.theme.ConformGreen
 import com.rendersoncs.report.ui.theme.NonConformRed
 import com.rendersoncs.report.ui.theme.NotApplicable
-import com.rendersoncs.report.ui.theme.PillShape
 import com.rendersoncs.report.ui.theme.ReportShapes
 import com.rendersoncs.report.ui.theme.ReportTheme
 import com.rendersoncs.report.ui.theme.ResumeWarningContainer
@@ -196,6 +197,10 @@ private fun ResumeContent(
     onNoPhoto: () -> Unit
 ) {
     val report = state.report
+    val listState = rememberLazyListState()
+    val fabExpanded by remember {
+        derivedStateOf { listState.firstVisibleItemIndex == 0 }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -243,24 +248,12 @@ private fun ResumeContent(
         },
         floatingActionButton = {
             if (report != null) {
-                ExtendedFloatingActionButton(
+                ReportExtendedFab(
+                    text = stringResource(R.string.edit),
+                    icon = Icons.Outlined.Edit,
                     onClick = onEdit,
-                    modifier = Modifier.paddingAboveSnackbar(snackbarFab),
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Edit,
-                            contentDescription = null
-                        )
-                    },
-                    text = {
-                        Text(
-                            text = stringResource(R.string.edit).uppercase(Locale.getDefault()),
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    },
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    shape = PillShape
+                    expanded = fabExpanded,
+                    modifier = Modifier.paddingAboveSnackbar(snackbarFab)
                 )
             }
         }
@@ -293,6 +286,7 @@ private fun ResumeContent(
                 else -> {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
+                        state = listState,
                         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 96.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
