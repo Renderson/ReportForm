@@ -259,6 +259,17 @@
     <string name="auth_password_mismatch">Passwords do not match.</string>
     <string name="auth_password_min_length">Password must have at least 6 characters.</string>
     <string name="auth_already_have_account">Already have an account?</string>
+    <string name="dashboard_tab_audits">Audits</string>
+    <string name="dashboard_tab_profile">Profile</string>
+    <string name="dashboard_search_hint">Search reports...</string>
+    <string name="dashboard_filter">Filter</string>
+    <string name="dashboard_filter_all">All</string>
+    <string name="dashboard_pending">Pending</string>
+    <string name="dashboard_view_details">View details</string>
+    <string name="dashboard_continue">Continue</string>
+    <string name="dashboard_no_results">No reports found</string>
+    <string name="dashboard_no_results_hint">Try another search or filter.</string>
+    <string name="dashboard_delete_confirm">Delete the report %1$s?</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>

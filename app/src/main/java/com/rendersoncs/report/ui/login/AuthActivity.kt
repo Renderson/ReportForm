@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.rendersoncs.report.ui.ReportActivity
 import com.rendersoncs.report.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,7 +36,8 @@ class AuthActivity : ComponentActivity() {
     }
 
     private fun openMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        //startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, ReportActivity::class.java))
         finish()
     }
 }

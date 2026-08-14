@@ -258,6 +258,17 @@
     <string name="auth_password_mismatch">As senhas não coincidem.</string>
     <string name="auth_password_min_length">A senha deve ter pelo menos 6 caracteres.</string>
     <string name="auth_already_have_account">Já possui uma conta?</string>
+    <string name="dashboard_tab_audits">Auditorias</string>
+    <string name="dashboard_tab_profile">Perfil</string>
+    <string name="dashboard_search_hint">Buscar relatórios...</string>
+    <string name="dashboard_filter">Filtrar</string>
+    <string name="dashboard_filter_all">Todos</string>
+    <string name="dashboard_pending">Pendente</string>
+    <string name="dashboard_view_details">Ver Detalhes</string>
+    <string name="dashboard_continue">Continuar</string>
+    <string name="dashboard_no_results">Nenhum relatório encontrado</string>
+    <string name="dashboard_no_results_hint">Tente outra busca ou filtro.</string>
+    <string name="dashboard_delete_confirm">Excluir o relatório %1$s?</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>

@@ -40,6 +40,9 @@ interface ReportDao {
     @Query("SELECT * FROM all_reports WHERE userId = :userId")
     suspend fun getUserWithReports(userId: String): List<UserWithReport>
 
+    @Query("SELECT * FROM all_reports WHERE userId = :userId ORDER BY id DESC")
+    suspend fun getReportsByUser(userId: String): List<Report>
+
     @Transaction
     @Query("SELECT * FROM all_reports WHERE id = :id")
     suspend fun getReportWithCheckList(id: String): List<ReportWithCheckList>

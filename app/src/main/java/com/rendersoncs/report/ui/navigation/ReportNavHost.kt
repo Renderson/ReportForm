@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.rendersoncs.report.R
-import com.rendersoncs.report.ui.screens.dashboard.DashboardScreen
+import com.rendersoncs.report.ui.dashboard.HomeScreen
 import com.rendersoncs.report.ui.screens.placeholder.PlaceholderScreen
 
 @Composable
@@ -23,8 +23,17 @@ fun ReportNavHost(
         modifier = modifier
     ) {
         composable(ReportRoute.DASHBOARD) {
-            DashboardScreen(
-                onNewReport = { navController.navigate(ReportRoute.NEW_REPORT) }
+            HomeScreen(
+                onNewReport = { navController.navigate(ReportRoute.NEW_REPORT) },
+                onOpenReport = { report ->
+                    val id = report.id?.toLong() ?: return@HomeScreen
+                    val route = if (report.concluded == false) {
+                        ReportRoute.checklist(id)
+                    } else {
+                        ReportRoute.resume(id)
+                    }
+                    navController.navigate(route)
+                }
             )
         }
         composable(ReportRoute.NEW_REPORT) {

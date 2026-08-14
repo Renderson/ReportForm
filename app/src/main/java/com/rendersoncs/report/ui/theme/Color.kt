@@ -35,6 +35,13 @@ val ErrorRed = Color(0xFFD32F2F)
 val OnError = Color(0xFFFFFFFF)
 val ErrorContainer = Color(0xFFFFDAD6)
 
+val ConformGreen = Color(0xFF2E7D32)
+val ConformContainer = Color(0xFFE8F5E9)
+val NonConformRed = Color(0xFFC62828)
+val NonConformContainer = Color(0xFFFFEBEE)
+val PendingGray = Color(0xFF607D8B)
+val PendingContainer = Color(0xFFEEEEEE)
+
 // Dark scheme
 val NavyLight = Color(0xFFBCCCDC)
 val BlueLight = Color(0xFF90CAF9)

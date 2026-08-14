@@ -14,6 +14,8 @@ class ReportRepository @Inject constructor(private val db: AppDatabase) {
     // get all report for userUid
     suspend fun getUserWithReport(userId: String) = db.getReportDao().getUserWithReports(userId)
 
+    suspend fun getReportsByUser(userId: String) = db.getReportDao().getReportsByUser(userId)
+
     // get reports with checklist
     suspend fun getReportWithChecklist(id: String) = db.getReportDao().getReportWithCheckList(id)
 
