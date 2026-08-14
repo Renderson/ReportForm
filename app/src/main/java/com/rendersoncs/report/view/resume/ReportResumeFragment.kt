@@ -1,15 +1,10 @@
 package com.rendersoncs.report.view.resume
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.*
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.util.component1
@@ -54,23 +49,6 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     private val listRadioNC = ArrayList<String>()
     private lateinit var report: Report
     private lateinit var reportDetail: Report
-
-    private val multiplePermissionNameList = if (Build.VERSION.SDK_INT >= 33) {
-        arrayListOf(
-            Manifest.permission.READ_MEDIA_VIDEO,
-            Manifest.permission.READ_MEDIA_IMAGES
-        )
-    } else {
-        arrayListOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-    }
-
-    private val requestLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) openPdf(reportDetail) else toast(getString(R.string.label_permission_camera_denied))
-            }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -201,10 +179,6 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
     }
 
     private fun openPdf(item: Report) {
-        if (!isStoragePermissionGranted()) {
-            requestLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            return
-        }
         val (subject, uri) = viewModel.getDocument(item)
 
         Intent(Intent.ACTION_VIEW).apply {
@@ -316,21 +290,21 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
                 getString(R.string.item_selected, maxList)
             createPieChart()
 
-            if (listRadioC.size > 0) {
+            if (listRadioC.isNotEmpty()) {
                 binding.contentResume.resumeGraph.textAccording.show()
                 binding.contentResume.resumeGraph.circleAccording.show()
                 val text = resources.getString(R.string.according)
                 binding.contentResume.resumeGraph.textAccording.text = "$text: ${listRadioC.size}"
             }
 
-            if (listRadioNA.size > 0) {
+            if (listRadioNA.isNotEmpty()) {
                 binding.contentResume.resumeGraph.textNotApplicable.show()
                 binding.contentResume.resumeGraph.circleNotApplicable.show()
                 val text = resources.getString(R.string.not_applicable)
                 binding.contentResume.resumeGraph.textNotApplicable.text = "$text: ${listRadioNA.size}"
             }
 
-            if (listRadioNC.size > 0) {
+            if (listRadioNC.isNotEmpty()) {
                 binding.contentResume.resumeGraph.textNotAccording.show()
                 binding.contentResume.resumeGraph.circleNotAccording.show()
                 val text = resources.getString(R.string.not_according)
@@ -359,27 +333,5 @@ class ReportResumeFragment : BaseFragment<FragmentReportResumeBinding, ReportVie
         findNavController().navigate(
                 R.id.action_reportResume_to_detailPhotoFragment, bundle
         )
-    }
-
-    private fun isStoragePermissionGranted(): Boolean {
-        val listPermissionNeeded = arrayListOf<String>()
-        for (permission in multiplePermissionNameList) {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                listPermissionNeeded.add(permission)
-            }
-        }
-        if (listPermissionNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                listPermissionNeeded.toTypedArray(),
-                Build.VERSION_CODES.TIRAMISU
-            )
-            return false
-        }
-        return true
     }
 }

@@ -1,11 +1,12 @@
 package com.rendersoncs.report.data.net;
 
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.rendersoncs.report.common.util.ReportFiles;
+import com.rendersoncs.report.view.MyApplication;
 import com.rendersoncs.report.view.login.util.User;
 import com.rendersoncs.report.common.constants.ReportConstants;
 
@@ -65,7 +66,7 @@ public class DownloadJsonFireBaseAsyncTask extends AsyncTask<Void, Void, String>
         super.onPostExecute(result);
         Log.d(TAG, "onPostExecute call");
 
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Report" + "/" + user.getId() + ".json");
+        File file = ReportFiles.checklistJson(MyApplication.appContext, user.getId());
 
         if (result != null) {
             FileWriter fos = null;

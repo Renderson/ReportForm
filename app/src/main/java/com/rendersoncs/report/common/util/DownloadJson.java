@@ -1,12 +1,12 @@
 package com.rendersoncs.report.common.util;
 
-import android.os.Environment;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.rendersoncs.report.model.ReportItems;
+import com.rendersoncs.report.view.MyApplication;
 import com.rendersoncs.report.view.login.util.User;
 import com.rendersoncs.report.common.constants.ReportConstants;
+import com.rendersoncs.report.common.util.ReportFiles;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,7 +54,7 @@ public class DownloadJson {
         User user = new User();
         user.setId(mAuth.getCurrentUser().getUid());
 
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + "Report" + "/" + user.getId() + ".json";
+        String path = ReportFiles.checklistJson(MyApplication.appContext, user.getId()).getAbsolutePath();
 
         InputStream inputStream = null;
         StringBuilder builder = new StringBuilder();

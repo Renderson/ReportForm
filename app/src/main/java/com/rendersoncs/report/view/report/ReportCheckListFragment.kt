@@ -1,13 +1,10 @@
 package com.rendersoncs.report.view.report
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
 import android.net.ConnectivityManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,7 +18,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.util.component1
 import androidx.core.util.component2
@@ -47,8 +43,8 @@ import com.rendersoncs.report.common.util.CommonDialog
 import com.rendersoncs.report.common.util.CommonEditDialog
 import com.rendersoncs.report.common.util.DownloadJson
 import com.rendersoncs.report.common.util.NetworkChecker
+import com.rendersoncs.report.common.util.ReportFiles
 import com.rendersoncs.report.common.util.SnackBarHelper
-import com.rendersoncs.report.common.util.getRealPathFromURI
 import com.rendersoncs.report.common.util.hide
 import com.rendersoncs.report.common.util.show
 import com.rendersoncs.report.databinding.FragmentReportCheckListBinding
@@ -115,27 +111,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
             mainHandler?.postDelayed(this, (1 * 60 * 1000))
         }
     }
-
-    private val multiplePermissionNameList = if (Build.VERSION.SDK_INT >= 33) {
-        arrayListOf(
-            Manifest.permission.READ_MEDIA_VIDEO,
-            Manifest.permission.READ_MEDIA_IMAGES
-        )
-    } else {
-        arrayListOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-    }
-
-    private val requestLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) {
-                    toast(getString(R.string.label_permission_camera_granted))
-                } else {
-                    toast(getString(R.string.label_permission_camera_denied))
-                }
-            }
 
     private val networkChecker by lazy {
         NetworkChecker(ContextCompat.getSystemService(requireContext(), ConnectivityManager::class.java))
@@ -415,10 +390,7 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
     }
 
     private fun checkPermission(request: Int) {
-        if (!isStoragePermissionGranted()) {
-            requestLauncher.launch(multiplePermissionNameList.toString())
-            return
-        } else if (request == REQUEST_SAVE) {
+        if (request == REQUEST_SAVE) {
             showScoreAndSave()
         } else {
             openGallery.launch("image/*")
@@ -734,9 +706,11 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
 
     private val openGallery = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         try {
-            val file = File(getRealPathFromURI(requireContext(), uri))
-            reportPosition.photoPath = file.path
-            radioItemChecked(reportPosition, ReportConstants.ITEM.OPT_NUM1)
+            val copied = uri?.let { ReportFiles.copyUriToAppFile(requireContext(), it) }
+            copied?.let { file ->
+                reportPosition.photoPath = file.path
+                radioItemChecked(reportPosition, ReportConstants.ITEM.OPT_NUM1)
+            }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
@@ -766,28 +740,6 @@ class ReportCheckListFragment : BaseFragment<FragmentReportCheckListBinding, Rep
                 showScore(score)
             }
         }
-    }
-
-    private fun isStoragePermissionGranted(): Boolean {
-        val listPermissionNeeded = arrayListOf<String>()
-        for (permission in multiplePermissionNameList) {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                listPermissionNeeded.add(permission)
-            }
-        }
-        if (listPermissionNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                listPermissionNeeded.toTypedArray(),
-                Build.VERSION_CODES.TIRAMISU
-            )
-            return false
-        }
-        return true
     }
 
     override fun onPause() {

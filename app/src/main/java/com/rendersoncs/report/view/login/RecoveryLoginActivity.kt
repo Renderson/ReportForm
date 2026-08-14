@@ -9,10 +9,12 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.rendersoncs.report.R
+import com.rendersoncs.report.common.extension.applySystemBarInsets
 import com.rendersoncs.report.databinding.FragmentRecoveryLoginBinding
 import com.rendersoncs.report.common.util.closeVirtualKeyBoard
 
@@ -21,11 +23,13 @@ class RecoveryLoginActivity : AppCompatActivity(), TextView.OnEditorActionListen
     private lateinit var binding: FragmentRecoveryLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         binding = FragmentRecoveryLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        view.applySystemBarInsets()
 
         firebaseAuth = FirebaseAuth.getInstance()
 

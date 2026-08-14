@@ -50,6 +50,7 @@ class LoginActivity : CommonActivity(), OnEditorActionListener {
         binding = FragmentLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        applySystemBarInsets(view)
 
         FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = true
 
