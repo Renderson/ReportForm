@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.rendersoncs.report.R
 import com.rendersoncs.report.ui.dashboard.HomeScreen
+import com.rendersoncs.report.ui.newreport.NewReportScreen
 import com.rendersoncs.report.ui.screens.placeholder.PlaceholderScreen
 
 @Composable
@@ -37,9 +38,13 @@ fun ReportNavHost(
             )
         }
         composable(ReportRoute.NEW_REPORT) {
-            PlaceholderScreen(
-                title = stringResource(R.string.label_menu_new_report),
-                onBack = { navController.popBackStack() }
+            NewReportScreen(
+                onBack = { navController.popBackStack() },
+                onStarted = { reportId ->
+                    navController.navigate(ReportRoute.checklist(reportId.toLong())) {
+                        popUpTo(ReportRoute.NEW_REPORT) { inclusive = true }
+                    }
+                }
             )
         }
         composable(

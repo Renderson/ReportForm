@@ -270,6 +270,15 @@
     <string name="dashboard_no_results">No reports found</string>
     <string name="dashboard_no_results_hint">Try another search or filter.</string>
     <string name="dashboard_delete_confirm">Delete the report %1$s?</string>
+    <string name="new_report_section_title">Audit details</string>
+    <string name="new_report_section_body">Fill in the initial information to start data collection.</string>
+    <string name="new_report_company">Company / Unit</string>
+    <string name="new_report_company_placeholder">Ex: Industry XYZ - Branch No</string>
+    <string name="new_report_email">Local contact email</string>
+    <string name="new_report_email_placeholder">contact@company.com</string>
+    <string name="new_report_date">Audit date</string>
+    <string name="new_report_auditor">Responsible auditor</string>
+    <string name="new_report_auditor_placeholder">Ex: John Smith</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>

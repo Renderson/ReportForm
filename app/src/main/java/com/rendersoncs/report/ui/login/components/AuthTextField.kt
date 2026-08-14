@@ -41,7 +41,8 @@ fun AuthTextField(
     passwordVisible: Boolean = false,
     onTogglePassword: (() -> Unit)? = null,
     onImeAction: (() -> Unit)? = null,
-    capitalization: KeyboardCapitalization = KeyboardCapitalization.None
+    capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
+    readOnly: Boolean = false
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
@@ -90,6 +91,7 @@ fun AuthTextField(
                 null
             },
             singleLine = true,
+            readOnly = readOnly,
             visualTransformation = if (isPassword && !passwordVisible) {
                 PasswordVisualTransformation()
             } else {

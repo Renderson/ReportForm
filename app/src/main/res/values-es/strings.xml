@@ -269,6 +269,15 @@
     <string name="dashboard_no_results">No se encontraron informes</string>
     <string name="dashboard_no_results_hint">Prueba otra búsqueda o filtro.</string>
     <string name="dashboard_delete_confirm">¿Eliminar el informe %1$s?</string>
+    <string name="new_report_section_title">Detalles de la auditoría</string>
+    <string name="new_report_section_body">Completa la información inicial para comenzar la recolección de datos.</string>
+    <string name="new_report_company">Empresa / Unidad</string>
+    <string name="new_report_company_placeholder">Ej: Industria XYZ - Sucursal No</string>
+    <string name="new_report_email">Correo del responsable local</string>
+    <string name="new_report_email_placeholder">contacto@empresa.com</string>
+    <string name="new_report_date">Fecha de la auditoría</string>
+    <string name="new_report_auditor">Auditor responsable</string>
+    <string name="new_report_auditor_placeholder">Ej: Juan Pérez</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>
