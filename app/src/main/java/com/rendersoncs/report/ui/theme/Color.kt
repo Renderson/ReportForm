@@ -41,6 +41,10 @@ val NonConformRed = Color(0xFFC62828)
 val NonConformContainer = Color(0xFFFFEBEE)
 val PendingGray = Color(0xFF607D8B)
 val PendingContainer = Color(0xFFEEEEEE)
+val NotApplicable = Color(0xFF90A4AE)
+val NotApplicableContainer = Color(0xFFEEEEEE)
+val ResumeWarningContainer = Color(0xFFF6E7EE)
+val ResumeWarningOn = Color(0xFF4A1942)
 
 // Dark scheme
 val NavyLight = Color(0xFFBCCCDC)

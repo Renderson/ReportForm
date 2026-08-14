@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.rendersoncs.report.R
 import com.rendersoncs.report.ui.dashboard.HomeScreen
 import com.rendersoncs.report.ui.newreport.NewReportScreen
+import com.rendersoncs.report.ui.resume.ResumeScreen
 import com.rendersoncs.report.ui.screens.placeholder.PlaceholderScreen
 
 @Composable
@@ -60,9 +61,10 @@ fun ReportNavHost(
             route = ReportRoute.RESUME,
             arguments = listOf(navArgument("reportId") { type = NavType.LongType })
         ) {
-            PlaceholderScreen(
-                title = stringResource(R.string.summary),
-                onBack = { navController.popBackStack() }
+            ResumeScreen(
+                onBack = { navController.popBackStack() },
+                onEdit = { reportId -> navController.navigate(ReportRoute.checklist(reportId)) },
+                onDeleted = { navController.popBackStack() }
             )
         }
         composable(ReportRoute.SETTINGS) {

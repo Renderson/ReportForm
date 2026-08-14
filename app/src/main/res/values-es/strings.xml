@@ -278,6 +278,10 @@
     <string name="new_report_date">Fecha de la auditoría</string>
     <string name="new_report_auditor">Auditor responsable</string>
     <string name="new_report_auditor_placeholder">Ej: Juan Pérez</string>
+    <string name="resume_view_pdf">Ver PDF</string>
+    <string name="resume_pdf_locked">Para habilitar el botón de ver PDF, debes finalizar el informe!</string>
+    <string name="resume_pdf_unavailable">PDF no encontrado. Finaliza el informe para generarlo.</string>
+    <string name="resume_pdf_no_app">No se encontró una aplicación para abrir el PDF.</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>

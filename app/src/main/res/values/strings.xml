@@ -279,6 +279,10 @@
     <string name="new_report_date">Audit date</string>
     <string name="new_report_auditor">Responsible auditor</string>
     <string name="new_report_auditor_placeholder">Ex: John Smith</string>
+    <string name="resume_view_pdf">View PDF</string>
+    <string name="resume_pdf_locked">To enable the PDF view button, you must finish the report!</string>
+    <string name="resume_pdf_unavailable">PDF not found. Finish the report to generate it.</string>
+    <string name="resume_pdf_no_app">No app found to open PDF.</string>
     <string-array name="auth_roles">
         <item>Auditor</item>
         <item>Supervisor</item>
