@@ -3,6 +3,7 @@ package com.rendersoncs.report.ui.checklist
 import android.content.Intent
 import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -44,6 +45,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +54,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rendersoncs.report.AdManager
+import com.rendersoncs.report.BuildConfig
 import com.rendersoncs.report.R
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.common.util.ReportFiles
@@ -82,6 +86,17 @@ fun ChecklistScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarFab = rememberSnackbarFabState()
     val context = LocalContext.current
+    val activity = LocalActivity.current
+    val adManager = remember(activity) {
+        activity?.let { host ->
+            val adUnitId = if (BuildConfig.BUILD_TYPE != "release") {
+                ReportConstants.ADMOB.ADMOB_HLG
+            } else {
+                ReportConstants.ADMOB.ADMOB_PROD
+            }
+            AdManager(host, adUnitId)
+        }
+    }
     var showCloseDialog by remember { mutableStateOf(false) }
     var showClearDialog by remember { mutableStateOf(false) }
     var noteItem by remember { mutableStateOf<ChecklistItemUi?>(null) }
@@ -109,11 +124,20 @@ fun ChecklistScreen(
         copied?.path?.let(viewModel::onPhotoPicked)
     }
 
+    val adManagerRef = rememberUpdatedState(adManager)
+
+    LaunchedEffect(adManager) {
+        adManager?.loadAdMob()
+    }
+
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
             when (event) {
                 ChecklistEvent.Closed -> onBack()
-                is ChecklistEvent.Concluded -> onConcluded(event.reportId)
+                is ChecklistEvent.Concluded -> {
+                    val openResume = { onConcluded(event.reportId) }
+                    adManagerRef.value?.showAdMob(openResume) ?: openResume()
+                }
                 is ChecklistEvent.Message -> snackbarFab.hostState.showSnackbar(context.getString(event.textRes))
                 is ChecklistEvent.Error -> {
                     val message = event.message.ifBlank { context.getString(R.string.txt_error_save) }
