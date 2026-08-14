@@ -1,43 +1,22 @@
 <resources>
     <string name="app_name">Report</string>
-    <string name="alert_dialog_permission">Se requiere permiso para guardar / acceder a archivos en su dispositivo.</string>
-    <string name="txt_to_allow">Permitir</string>
-    <string name="deny">Negar</string>
-    <string name="txt_permission">Permiso</string>
-    <string name="txt_report_removed">Informe eliminado con éxito!</string>
-    <string name="title_report_list">Lista de informes</string>
     <string name="title_report">Informe</string>
     <string name="title_edit_report">Editar Informe</string>
     <string name="back">Volver</string>
-    <string name="txt_report_save">Informe guardado!</string>
     <string name="txt_error_save">Error al guardar!</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
-    <string name="txt_share_report">Compartir informe</string>
-    <string name="canceled">Cancelado!</string>
     <string name="start">Empezar</string>
-    <string name="date">dd-MM-yyyy</string>
-    <string name="txt_new_report">Nuevo informe comenzado!</string>
     <string name="txt_email">Introduzca el nombre de la empresa.</string>
     <string name="txt_enter_name_company">Digite o nome da empresa.</string>
     <string name="txt_enter_name_controller">Introduzca el nombre del responsable.</string>
-    <string name="space_date">-</string>
     <string name="txt_to_clean">Aclarar</string>
     <string name="leave">Dejar</string>
     <string name="save">Guardar</string>
-    <string name="resume_date">Fecha: %1$s</string>
-    <string name="item_selected">Artículos\nseleccionados\n%1$s</string>
-    <string name="label_search">Buscar</string>
     <string name="txt_new_item_list">Nuevo artículo agregado!</string>
     <string name="txt_information_saved_automatically">Información guardada automáticamente!</string>
 
-    <string name="hello_blank_fragment">Hola fragmento en blanco</string>
-    <string name="txt_check_networking">Sin conexión a internet</string>
-
     <!-- Activity Forms -->
-    <string name="label_home_welcome">Bien venido!</string>
-    <string name="label_home_description">Crea tus informes mucho más fácil.</string>
-    <string name="access">Acceso</string>
     <string name="label_home_not_register">No registrado?</string>
     <string name="register">Registrarse</string>
     <string name="label_screen_login_hello">Hola amigo!</string>
@@ -46,50 +25,22 @@
     <string name="password">Contraseña</string>
     <string name="login">iniciar sesión</string>
     <string name="label_screen_login_forgot_password">Olvidaste tu contraseña?</string>
-    <string name="label_to_recover">recuperar</string>
-    <string name="label_screen_register">Cadastro!</string>
-    <string name="label_screen_register_create">Crea tu cuenta, ingresa tu correo electrónico y crea una contraseña!</string>
-    <string name="name">nombre</string>
-    <string name="create">crear</string>
-    <string name="label_screen_already_register">Ya registrado?</string>
-    <string name="label_screen_to_recovery">Recuperarse!</string>
-    <string name="label_screen_recovery_worry">No te preocupes, recuperaremos tu contraseña!</string>
-    <string name="label_go_to_home">Regresar a la pantalla de inicio</string>
-    <string name="label_screen_update_password">Cambiar contraseña!</string>
     <string name="label_screen_update_strong">Aquí puede cambiar su contraseña por una más segura!</string>
     <string name="hint_new_password">nueva contraseña</string>
     <string name="label_screen_update_info">Para continuar con la actualización, ingrese su contraseña actual a continuación.</string>
     <string name="hint_current_password">contraseña actual</string>
     <string name="change">cambio</string>
-    <string name="label_screen_remove_account">:( Eliminar cuenta</string>
     <string name="label_screen_remove_info">Al ingresar la contraseña, su cuenta será eliminada.</string>
     <string name="remove">eliminar</string>
     <string name="insert">Insertar</string>
-    <string name="label_recover_password">Recuperar contraseña?</string>
-    <string name="label_or">o</string>
     <string name="label_sign_insert_name">Introduzca su nombre</string>
-    <string name="label_sign_insert_photo">Insertar foto</string>
     <string name="label_insert_password">Por favor ingrese la contraseña.</string>
-    <string name="label_bottom_home">Imagen de la cámara baja</string>
 
     <!--Activity Login-->
-    <string name="label_login_facebook_failed">Error de inicio de sesión en Facebook, inténtalo de nuevo!</string>
-    <string name="label_google_failed">Error de inicio de sesión en Google, inténtalo de nuevo!</string>
-    <string name="label_login_social_failed">Inicio de sesión social fallido!</string>
-    <string name="label_please_entry_data">Por favor! Ingrese sus datos.</string>
-    <string name="label_account_create">Cuenta creada con éxito!</string>
-    <string name="label_insert_data_create_account">Por favor! Ingrese sus datos para la creación de la cuenta.</string>
-    <string name="label_account_removed">Cuenta eliminada con éxito!</string>
-    <string name="label_recover_access_send">Se inició la recuperación de acceso. Email enviado.</string>
     <string name="label_failed">Falló! Inténtalo de nuevo</string>
     <string name="label_password_update">Contraseña actualizada con éxito</string>
-    <string name="facebook">Facebook</string>
-    <string name="google">Google</string>
 
     <!--DrawerLayout-->
-    <string name="open_drawer">Abierto</string>
-    <string name="close_drawer">Cerrar</string>
-    <string name="label_menu_home">Pantalla principal</string>
     <string name="label_menu_new_report">Nuevo informe</string>
     <string name="label_menu_config">Opciones de cuenta</string>
     <string name="label_menu_update_password">Cambiar contraseña</string>
@@ -100,13 +51,7 @@
 
     <!--About Activity-->
     <string name="label_about_app">Acerca de nuestra aplicación, esperamos que obtenga más agilidad y pase menos tiempo creando sus informes diarios de calidad, ¡así que le ofrezco una aplicación sólida que lo hace por usted!</string>
-    <string name="label_entry_contact">Entre en contacto</string>
-    <string name="label_more_work">Más sobre mi trabajo</string>
-    <string name="label_calling">Llamar</string>
-    <string name="label_calling_whatsApp">Te contesto ahora</string>
     <string name="label_feed_back">Envíame tu comentario</string>
-    <string name="label_recommendation">Mis recomendaciones</string>
-    <string name="label_not_whatsApp">No encontramos WhatsApp.</string>
     <string name="label_insert_email">Por favor ingrese su dirección de correo electrónico registrada!</string>
 
     <!--Facebook ID-->
@@ -116,10 +61,7 @@
     <string name="msg_select_from_gallery">Seleccionar de la galería</string>
     <string name="label_permission_camera_granted">Permission request granted.</string>
     <string name="label_permission_camera_denied">Solicitud de permiso denegado.</string>
-    <string name="label_permission_read">Necesitamos permiso para escribir datos para guardar su informe.</string>
     <string name="label_error_update_list">Error al cambiar el elemento de la lista.</string>
-    <string name="label_error_return">Algo salió mal, inténtalo de nuevo!</string>
-    <string name="label_photo_full">Imagen completa</string>
     <string name="label_nothing_image">No hay imagen para mostrar.</string>
     <string name="label_remove_item_list">Tras la confirmación, el artículo será eliminado de la lista.</string>
 
@@ -133,94 +75,39 @@
     <string name="not_according">No conforme</string>
 
     <!--Labels Activity-->
-    <string name="image_note">nota</string>
-    <string name="image_result_photo">foto de resultado</string>
-    <string name="image_camera">cámara</string>
-    <string name="label_list_text">Texto</string>
-    <string name="label_list_title">Titulo</string>
-    <string name="image_background_check">comprobar color</string>
     <string name="label_not_observation">No hay comentarios</string>
     <string name="label_observation">Nota</string>
-    <string name="label_text_observation">Texto…</string>
     <string name="label_nothing_report">No hay informes!</string>
     <string name="label_create_new_report">Cree informes para completar su lista.</string>
     <string name="label_no_items_list">No hay elementos en la lista!</string>
-    <string name="label_create_list_for_start">Crea elementos para tu lista para comenzar a crear informes!</string>
-    <string name="label_button_create_report">CREAR INFORME</string>
-    <string name="label_image_empty">Imagen de diseño vacía</string>
     <string name="label_report">Informe firmado por: %1$s</string>
-    <string name="format_date">19/02/1984</string>
-    <string name="label_image_overflow">desbordamiento</string>
-    <string name="label_title_resume">Título</string>
-    <string name="label_description_resume">Descripción</string>
-    <string name="label_score_resume">nota</string>
-    <string name="dev_renderson">Renderson Cerqueira</string>
     <string name="label_date">Fecha</string>
-    <string name="mail_dev_renderson">renderson.cs@gmail.com</string>
     <string name="total_items">Artículos totales</string>
     <string name="label_list_selected">Artículos seleccionados</string>
-    <string name="image_for_resume">Imagen para currículum</string>
-    <string name="image_pdf">Imagen PDF</string>
     <string name="company">Empresa</string>
     <string name="share">Compartir</string>
     <string name="label_empty_list">Lista vacía!</string>
-    <string name="check">VERIFICAR</string>
     <string name="label_attach_report">Adjunto el informe de la compañía %1$s completado! Celebrada en el día</string>
-    <string name="label_report_update">Informe modificado!</string>
-    <string name="controller">Controlador</string>
-    <string name="label_bottom_sheet_detail">Details</string>
-    <string name="label_loading">Cargando…</string>
-    <string name="label_note_value">10.0</string>
-    <string name="label_note_value_scroll">Nota: %1$s</string>
-    <string name="label_note_value_scroll_xml">Nota: 10</string>
     <string name="report_directory_img">Report</string>
-    <string name="label_note_report">Nota:</string>
 
     <!--Alerts Dialogs-->
     <string name="alert_clear_list">Borrar lista?</string>
     <string name="alert_clear_list_text">De verdad quieres limpiar la sección? ¡Este proceso borrará todo tu progreso!</string>
-    <string name="alert_check_list">Lista de verificación!</string>
     <string name="alert_check_list_text">Ningún artículo compatible que no contenga foto, verifique antes de guardar! El artículo marcado como Cumple y No Aplicable no cumple con esta regla!</string>
     <string name="alert_remove_report">Eliminar informe!</string>
-    <string name="alert_remove_item_title">Remover el artículo!</string>
     <string name="alert_remove_report_text">Realmente quieres eliminar el informe?</string>
-    <string name="alert_empty_report">Informe vacío!</string>
     <string name="alert_empty_report_text">Para guardar su informe, debe tener al menos un elemento marcado.</string>
     <string name="alert_leave_the_report">Dejar informe?</string>
     <string name="alert_leave_the_report_text">De verdad quieres dejar el informe? ¡Perderás todo tu progreso!</string>
     <string name="alert_punctuation">Puntuación</string>
     <string name="alert_punctuation_label1">La empresa es %1$s, fueron seleccionados</string>
     <string name="alert_punctuation_label2">elementos que fueron añadidos juntos y tenían un valor de %1$s, cuando se hace clic CONFIRMAR se guardarán su informe y generar un PDF con toda la información!</string>
-    <string name="error">Error</string>
     <string name="edit">Editar</string>
     <string name="summary">Resumen</string>
-    <string name="version_beta">No implementado para prueba</string>
-    <string name="label_create_items">CREAR ARTÍCULOS</string>
-    <string name="label_create_items_no_caps">crear artículos</string>
-    <string name="label_wait">Espere!</string>
-    <string name="label_saving_report">Guardando informe.</string>
-    <string name="Item_List">Lista de articulos</string>
-    <string name="clear">Claro</string>
-    <string name="dark">Oscuro</string>
-    <string name="choice_theme">Elige un tema</string>
     <string name="label_theme">Tema</string>
 
     <!--Labels PDF-->
-    <string name="label_paragraph_pdf_audit">Auditoría Técnica</string>
-    <string name="label_paragraph_pdf_company">Nombre de la empresa:</string>
-    <string name="label_paragraph_pdf_mail_company">Email de la empresa:</string>
-    <string name="label_paragraph_pdf_audit_officer">Oficial de auditoria:</string>
-    <string name="label_paragraph_pdf_date">Fecha de encuesta:</string>
-    <string name="label_paragraph_pdf_report">Informe de Auditoria</string>
-    <string name="label_paragraph_pdf_installations">INSTALACIONES FÍSICAS</string>
-    <string name="label_paragraph_pdf_description">DESCRIPCION</string>
-    <string name="label_paragraph_pdf_conformity">CONFORMIDAD</string>
-    <string name="label_paragraph_pdf_note">NOTA</string>
-    <string name="label_paragraph_pdf_photo">FOTOS</string>
     <string name="label_name_archive">Report-%1$s-%2$s.pdf</string>
-    <string name="sanitary_signature">Firma del sanitario</string>
-    <string name="label_paragraph_pdf_result">Resultado:</string>
-    <string name="label_paragraph_pdf_score">Nota de evaluación:</string>
     <string name="pdf_subtitle">Informe de Auditoría Técnica Final</string>
     <string name="pdf_doc_id">DOC ID: %1$s</string>
     <string name="pdf_result_badge">RESULTADO: %1$s</string>
@@ -236,7 +123,6 @@
     <string name="pdf_photo_evidence">Evidencias fotográficas</string>
     <string name="pdf_generated_at">Generado el: %1$s</string>
     <string name="pdf_page_number">Página %1$d de</string>
-    <string name="pdf_item_id">ID: %1$s</string>
     <string name="pdf_status_conforme">CONFORME (C)</string>
     <string name="pdf_status_nao_conforme">NO CONFORME (NC)</string>
     <string name="pdf_status_nao_aplicavel">NO APLICABLE (NA)</string>
@@ -317,7 +203,6 @@
     <string name="checklist_item_description">Descripción del ítem</string>
     <string name="checklist_reset_item">Restablecer ítem</string>
     <string name="checklist_edit_item">Editar ítem</string>
-    <string name="checklist_conclude">Finalizar informe</string>
     <string name="checklist_note_placeholder">Describe la observación</string>
     <string name="checklist_remove_item">Eliminar ítem</string>
     <string name="onboarding_skip">Saltar</string>

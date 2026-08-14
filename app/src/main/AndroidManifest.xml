@@ -77,24 +77,6 @@
             android:launchMode="singleTop"
             android:theme="@style/Theme.Report.Compose"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="com.rendersoncs.report.view.main.MainActivity"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize" />
-        <!--<activity android:name="com.rendersoncs.report.view.login.loginV2.LoginMainActivity" />-->
-        <activity
-            android:name="com.rendersoncs.report.view.login.LoginActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="com.rendersoncs.report.view.login.SignUpActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="com.rendersoncs.report.view.login.RecoveryLoginActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name="com.rendersoncs.report.view.cameraX.CameraXMainActivity"

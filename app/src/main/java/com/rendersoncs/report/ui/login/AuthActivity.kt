@@ -49,7 +49,6 @@ class AuthActivity : ComponentActivity() {
     }
 
     private fun openMain() {
-        //startActivity(Intent(this, MainActivity::class.java))
         startActivity(Intent(this, ReportActivity::class.java))
         finish()
     }
