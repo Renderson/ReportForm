@@ -7,7 +7,7 @@ Há duas variantes de publicação: **Report Lite** (com anúncios) e **Report**
 | | |
 | --- | --- |
 | Pacote | `com.rendersoncs.report` |
-| Versão | `2.0.0` (`versionCode` 8) |
+| Versão | `2.0.1` (`versionCode` 9) |
 | minSdk / targetSdk / compileSdk | 24 / 37 / 37 |
 | Linguagem | Kotlin 2.4, JVM 17 |
 | UI | Jetpack Compose + Material 3 |
@@ -323,9 +323,18 @@ storePassword=...
 ```bash
 ./gradlew :app:assembleFreeDebug
 ./gradlew :app:assemblePaidDebug
-./gradlew :app:assembleFreeRelease
-./gradlew :app:assemblePaidRelease
+./gradlew :app:bundleFreeRelease
+./gradlew :app:bundlePaidRelease
 ```
+
+A Play Console recebe o **Android App Bundle** (`.aab`), não o APK. Os bundles saem em `app/build/outputs/bundle/freeRelease/` e `app/build/outputs/bundle/paidRelease/`.
+
+Release usa **R8**: ofuscação, shrinking de código e de recursos. O mapping (para o Crashlytics e para a Play Console) fica em:
+
+- `app/build/outputs/mapping/freeRelease/mapping.txt`
+- `app/build/outputs/mapping/paidRelease/mapping.txt`
+
+Guarde o `mapping.txt` de cada `versionCode`. Sem ele, stack traces ofuscados não voltam ao código original. O plugin do Crashlytics envia o mapping no build de release.
 
 Detekt:
 

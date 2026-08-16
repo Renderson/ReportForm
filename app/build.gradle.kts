@@ -15,7 +15,7 @@ plugins {
 
 val versionMajor = 2
 val versionMinor = 0
-val versionPatch = 0
+val versionPatch = 1
 
 fun computeVersionName() = "$versionMajor.$versionMinor.$versionPatch"
 
@@ -57,7 +57,7 @@ android {
         applicationId = "com.rendersoncs.report"
         minSdk = 24
         targetSdk = 37
-        versionCode = 8
+        versionCode = 9
         versionName = computeVersionName()
         multiDexEnabled = true
         signingConfig = signingConfigs.getByName("release")
@@ -92,11 +92,15 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            ndk {
+                debugSymbolLevel = "SYMBOL_TABLE"
+            }
         }
         debug {
             isDebuggable = true

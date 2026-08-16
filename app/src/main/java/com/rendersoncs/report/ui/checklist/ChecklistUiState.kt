@@ -2,6 +2,7 @@ package com.rendersoncs.report.ui.checklist
 
 import androidx.annotation.StringRes
 import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.ChecklistPhotos
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.ui.common.UiState
 
@@ -11,11 +12,12 @@ data class ChecklistItemUi(
     val description: String,
     val conformity: Int = UNANSWERED,
     val note: String = "",
-    val photoPath: String = ""
+    val photoPaths: List<String> = emptyList()
 ) {
     val isAnswered: Boolean get() = conformity == C || conformity == NA || conformity == NC
-    val hasPhoto: Boolean
-        get() = photoPath.isNotBlank() && photoPath != ReportConstants.PHOTO.NOT_PHOTO
+    val hasPhoto: Boolean get() = photoPaths.isNotEmpty()
+    val photoCount: Int get() = photoPaths.size
+    val canAddPhoto: Boolean get() = photoPaths.size < ChecklistPhotos.MAX_PER_ITEM
     val hasNote: Boolean get() = note.isNotBlank()
 
     companion object {

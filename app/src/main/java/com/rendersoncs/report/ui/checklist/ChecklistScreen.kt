@@ -7,23 +7,30 @@ import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.FilterListOff
+import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.rounded.Add
@@ -33,24 +40,34 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -72,9 +89,10 @@ import com.rendersoncs.report.ui.components.rememberSnackbarFabState
 import com.rendersoncs.report.ui.dashboard.components.DashboardSearchBar
 import com.rendersoncs.report.ui.dashboard.components.SearchFilterOption
 import com.rendersoncs.report.ui.camera.CameraActivity
+import com.rendersoncs.report.ui.resume.components.ResumePhoto
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.io.File
-import java.util.Locale
 
 @Composable
 fun ChecklistScreen(
@@ -86,6 +104,13 @@ fun ChecklistScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarFab = rememberSnackbarFabState()
     val context = LocalContext.current
+    val resources = LocalResources.current
+    val scope = rememberCoroutineScope()
+    val photosMaxMessage = stringResource(R.string.checklist_photos_max)
+    val noPhotoMessage = stringResource(R.string.label_nothing_image)
+    val errorSaveMessage = stringResource(R.string.txt_error_save)
+    val resourcesState = rememberUpdatedState(resources)
+    val errorSaveState = rememberUpdatedState(errorSaveMessage)
     val activity = LocalActivity.current
     val adManager = remember(activity) {
         activity?.let { host ->
@@ -103,6 +128,9 @@ fun ChecklistScreen(
     var editorItem by remember { mutableStateOf<ChecklistItemUi?>(null) }
     var showNewItemDialog by remember { mutableStateOf(false) }
     var itemToRemove by remember { mutableStateOf<ChecklistItemUi?>(null) }
+    var photoSourceItem by remember { mutableStateOf<ChecklistItemUi?>(null) }
+    var photoListKey by remember { mutableStateOf<String?>(null) }
+    var photoPreviewPath by remember { mutableStateOf<String?>(null) }
 
     val cameraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -138,9 +166,11 @@ fun ChecklistScreen(
                     val openResume = { onConcluded(event.reportId) }
                     adManagerRef.value?.showAdMob(openResume) ?: openResume()
                 }
-                is ChecklistEvent.Message -> snackbarFab.hostState.showSnackbar(context.getString(event.textRes))
+                is ChecklistEvent.Message -> snackbarFab.hostState.showSnackbar(
+                    resourcesState.value.getString(event.textRes)
+                )
                 is ChecklistEvent.Error -> {
-                    val message = event.message.ifBlank { context.getString(R.string.txt_error_save) }
+                    val message = event.message.ifBlank { errorSaveState.value }
                     snackbarFab.hostState.showSnackbar(message)
                 }
             }
@@ -172,7 +202,7 @@ fun ChecklistScreen(
         )
     }
     if (state.showConcludeDialog) {
-        val result = state.resultLabel.lowercase(Locale.getDefault())
+        val result = state.resultLabel.lowercase(Locale.current.platformLocale)
         ConfirmDialog(
             title = stringResource(R.string.alert_punctuation),
             text = stringResource(R.string.alert_punctuation_label1, result) +
@@ -229,6 +259,40 @@ fun ChecklistScreen(
             onDismiss = { itemToRemove = null }
         )
     }
+    photoSourceItem?.let { item ->
+        PhotoSourceSheet(
+            onTakePhoto = {
+                viewModel.prepareMedia(item.key)
+                cameraLauncher.launch(Intent(context, CameraActivity::class.java))
+                photoSourceItem = null
+            },
+            onPickGallery = {
+                viewModel.prepareMedia(item.key)
+                galleryLauncher.launch("image/*")
+                photoSourceItem = null
+            },
+            onDismiss = { photoSourceItem = null }
+        )
+    }
+    val photoListItem = photoListKey?.let { key -> state.items.find { it.key == key } }
+    LaunchedEffect(photoListKey, photoListItem?.photoCount) {
+        if (photoListKey != null && photoListItem?.hasPhoto != true) {
+            photoListKey = null
+        }
+    }
+    photoPreviewPath?.let { path ->
+        PhotoPreviewSheet(
+            path = path,
+            onDismiss = { photoPreviewPath = null }
+        )
+    } ?: photoListItem?.takeIf { it.hasPhoto }?.let { item ->
+        PhotoListSheet(
+            photos = item.photoPaths,
+            onView = { path -> photoPreviewPath = path },
+            onRemove = { path -> viewModel.removePhoto(item.key, path) },
+            onDismiss = { photoListKey = null }
+        )
+    }
 
     ChecklistContent(
         state = state,
@@ -239,13 +303,25 @@ fun ChecklistScreen(
         onQueryChange = viewModel::onQueryChange,
         onFilterChange = viewModel::onFilterChange,
         onSelectConformity = viewModel::selectConformity,
-        onCamera = { key ->
-            viewModel.prepareMedia(key)
-            cameraLauncher.launch(Intent(context, CameraActivity::class.java))
+        onAddPhoto = { item ->
+            val current = state.items.find { it.key == item.key } ?: item
+            if (current.canAddPhoto) {
+                photoSourceItem = current
+            } else {
+                scope.launch {
+                    snackbarFab.hostState.showSnackbar(photosMaxMessage)
+                }
+            }
         },
-        onGallery = { key ->
-            viewModel.prepareMedia(key)
-            galleryLauncher.launch("image/*")
+        onViewPhoto = { item ->
+            val current = state.items.find { it.key == item.key } ?: item
+            if (current.hasPhoto) {
+                photoListKey = current.key
+            } else {
+                scope.launch {
+                    snackbarFab.hostState.showSnackbar(noPhotoMessage)
+                }
+            }
         },
         onNote = { noteItem = it },
         onEdit = { editorItem = it },
@@ -269,8 +345,8 @@ private fun ChecklistContent(
     onQueryChange: (String) -> Unit,
     onFilterChange: (ChecklistFilter) -> Unit,
     onSelectConformity: (String, Int) -> Unit,
-    onCamera: (String) -> Unit,
-    onGallery: (String) -> Unit,
+    onAddPhoto: (ChecklistItemUi) -> Unit,
+    onViewPhoto: (ChecklistItemUi) -> Unit,
     onNote: (ChecklistItemUi) -> Unit,
     onEdit: (ChecklistItemUi) -> Unit,
     onReset: (String) -> Unit,
@@ -422,8 +498,8 @@ private fun ChecklistContent(
                                     ChecklistItemCard(
                                         item = item,
                                         onSelectConformity = { onSelectConformity(item.key, it) },
-                                        onCamera = { onCamera(item.key) },
-                                        onGallery = { onGallery(item.key) },
+                                        onAddPhoto = { onAddPhoto(item) },
+                                        onViewPhoto = { onViewPhoto(item) },
                                         onNote = { onNote(item) },
                                         onEdit = { onEdit(item) },
                                         onReset = { onReset(item.key) },
@@ -563,5 +639,155 @@ private fun filterLabel(filter: ChecklistFilter): String {
         ChecklistFilter.CONFORME -> stringResource(R.string.according)
         ChecklistFilter.NAO_CONFORME -> stringResource(R.string.not_according)
         ChecklistFilter.NAO_APLICAVEL -> stringResource(R.string.not_applicable)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PhotoSourceSheet(
+    onTakePhoto: () -> Unit,
+    onPickGallery: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surface
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.checklist_photo_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
+            )
+            PhotoSourceRow(
+                icon = Icons.Outlined.PhotoCamera,
+                label = stringResource(R.string.msg_take_image),
+                onClick = onTakePhoto
+            )
+            PhotoSourceRow(
+                icon = Icons.Outlined.PhotoLibrary,
+                label = stringResource(R.string.msg_select_from_gallery),
+                onClick = onPickGallery
+            )
+        }
+    }
+}
+
+@Composable
+private fun PhotoSourceRow(
+    icon: ImageVector,
+    label: String,
+    onClick: () -> Unit
+) {
+    ListItem(
+        headlineContent = {
+            Text(text = label, style = MaterialTheme.typography.bodyLarge)
+        },
+        leadingContent = {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        },
+        colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surface),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PhotoListSheet(
+    photos: List<String>,
+    onView: (String) -> Unit,
+    onRemove: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surface
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 32.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.checklist_photo_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                photos.forEach { path ->
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(112.dp)
+                    ) {
+                        ResumePhoto(
+                            path = path,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable { onView(path) }
+                        )
+                        IconButton(
+                            onClick = { onRemove(path) },
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(4.dp)
+                                .size(28.dp)
+                                .clip(CircleShape)
+                                .background(Color.Black.copy(alpha = 0.55f))
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Close,
+                                contentDescription = stringResource(R.string.checklist_remove_photo),
+                                tint = Color.White,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PhotoPreviewSheet(
+    path: String,
+    onDismiss: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surface
+    ) {
+        ResumePhoto(
+            path = path,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(320.dp)
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 32.dp)
+        )
     }
 }

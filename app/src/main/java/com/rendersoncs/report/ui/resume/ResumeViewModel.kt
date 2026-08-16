@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.ChecklistPhotos
 import com.rendersoncs.report.common.util.ReportFiles
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
@@ -135,10 +136,8 @@ class ResumeViewModel @Inject constructor(
         try {
             reportRepository.getReportWithChecklist(report.id.toString()).forEach { relation ->
                 relation.checkList.forEach { item ->
-                    val photo = item.photo
-                    if (photo.isNotBlank() && photo != ReportConstants.PHOTO.NOT_PHOTO) {
-                        File(photo).delete()
-                    }
+                    val photos = ChecklistPhotos.parse(item.photo)
+                    photos.forEach { path -> File(path).delete() }
                 }
             }
         } catch (_: Exception) {

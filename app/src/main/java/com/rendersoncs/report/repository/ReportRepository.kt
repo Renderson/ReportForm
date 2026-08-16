@@ -2,6 +2,7 @@ package com.rendersoncs.report.repository
 
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.common.pdf.PDFGenerator
+import com.rendersoncs.report.common.util.ChecklistPhotos
 import com.rendersoncs.report.data.local.AppDatabase
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
@@ -61,8 +62,7 @@ class ReportRepository @Inject constructor(private val db: AppDatabase) {
     suspend fun deleteChecklistPhotos(reportId: Int) {
         getReportWithChecklist(reportId.toString()).forEach { relation ->
             relation.checkList.forEach { item ->
-                val path = item.photo
-                if (path.isNotBlank() && path != ReportConstants.PHOTO.NOT_PHOTO) {
+                ChecklistPhotos.parse(item.photo).forEach { path ->
                     runCatching { File(path).delete() }
                 }
             }
