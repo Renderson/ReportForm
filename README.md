@@ -7,7 +7,7 @@ Há duas variantes de publicação: **Report Lite** (com anúncios) e **Report**
 | | |
 | --- | --- |
 | Pacote | `com.rendersoncs.report` |
-| Versão | `2.0.0` (`versionCode` 8) |
+| Versão | `2.0.1` (`versionCode` 9) |
 | minSdk / targetSdk / compileSdk | 24 / 37 / 37 |
 | Linguagem | Kotlin 2.4, JVM 17 |
 | UI | Jetpack Compose + Material 3 |
