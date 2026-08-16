@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.database.DatabaseReference
 import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.common.util.ReportFiles
 import com.rendersoncs.report.ui.login.util.LibraryClass
@@ -70,10 +71,11 @@ class ChecklistCatalogRepository @Inject constructor(
     suspend fun updateItem(key: String, title: String, description: String) {
         withContext(Dispatchers.IO) {
             val uid = requireUid()
-            val snapshot = listRef(uid).orderByChild(ReportConstants.ITEM.KEY).equalTo(key).get().await()
-            snapshot.children.forEach { child ->
-                child.ref.child(ReportConstants.ITEM.TITLE).setValue(title)
-                child.ref.child(ReportConstants.ITEM.DESCRIPTION).setValue(description)
+            val refs = findItemRefs(uid, key)
+            if (refs.isEmpty()) throw IllegalStateException("Item not found")
+            refs.forEach { ref ->
+                ref.child(ReportConstants.ITEM.TITLE).setValue(title).await()
+                ref.child(ReportConstants.ITEM.DESCRIPTION).setValue(description).await()
             }
             upsertCache(uid, ChecklistCatalogItem(key = key, title = title, description = description))
         }
@@ -82,8 +84,9 @@ class ChecklistCatalogRepository @Inject constructor(
     suspend fun removeItem(key: String) {
         withContext(Dispatchers.IO) {
             val uid = requireUid()
-            val snapshot = listRef(uid).orderByChild(ReportConstants.ITEM.KEY).equalTo(key).get().await()
-            snapshot.children.forEach { child -> child.ref.removeValue() }
+            val refs = findItemRefs(uid, key)
+            if (refs.isEmpty()) throw IllegalStateException("Item not found")
+            refs.forEach { ref -> ref.removeValue().await() }
             cacheMutex.withLock {
                 persistCacheUnlocked(uid, readCacheUnlocked(uid).filterNot { it.key == key })
             }
@@ -176,6 +179,16 @@ class ChecklistCatalogRepository @Inject constructor(
             FirebaseCrashlytics.getInstance().recordException(e)
             emptyList()
         }
+    }
+
+    private suspend fun findItemRefs(uid: String, key: String): List<DatabaseReference> {
+        val list = listRef(uid)
+        val byNodeKey = list.child(key).get().await()
+        if (byNodeKey.exists()) return listOf(byNodeKey.ref)
+        return list.get().await().children.filter { child ->
+            child.key == key ||
+                child.child(ReportConstants.ITEM.KEY).getValue(String::class.java) == key
+        }.map { it.ref }
     }
 
     private fun listRef(uid: String) = LibraryClass.getFirebase()

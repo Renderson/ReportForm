@@ -146,8 +146,8 @@ internal class PdfCanvasWriter(private val context: Context) {
         val note = item.note.ifBlank { context.getString(R.string.label_not_observation) }
         val descLayout = layout(description, textPaint(9f, color = MUTED), contentWidth)
         val noteLayout = layout(note, textPaint(9f, color = style.noteColor), contentWidth - 16f)
-        val photo = loadPhoto(item.photo)
-        val photoBlock = if (photo != null) 18f + PHOTO_HEIGHT else 0f
+        val photos = item.photoPaths.mapNotNull { path -> loadPhoto(path) }
+        val photoBlock = if (photos.isNotEmpty()) 18f + PHOTO_HEIGHT else 0f
         val height = 18f + 22f + descLayout.height + 12f + 18f + noteLayout.height + photoBlock + 20f
         ensureSpace(height)
 
@@ -187,22 +187,25 @@ internal class PdfCanvasWriter(private val context: Context) {
         drawLayout(noteLayout, contentLeft + 8f, inner + 16f)
         inner = noteBox.bottom + 8f
 
-        if (photo != null) {
+        if (photos.isNotEmpty()) {
             canvas.drawText(
                 context.getString(R.string.pdf_photo_evidence).uppercase(Locale.getDefault()),
                 contentLeft,
                 inner + 10f,
                 textPaint(7f, true, MUTED)
             )
-            val dest = RectF(
-                contentLeft,
-                inner + 16f,
-                contentLeft + PHOTO_WIDTH,
-                inner + 16f + PHOTO_HEIGHT
-            )
-            canvas.drawBitmap(photo, null, dest, Paint(Paint.ANTI_ALIAS_FLAG))
-            canvas.drawRoundRect(dest, 4f, 4f, stroke(BORDER, 0.5f))
-            photo.recycle()
+            photos.forEachIndexed { index, photo ->
+                val left = contentLeft + index * (PHOTO_WIDTH + PHOTO_GAP)
+                val dest = RectF(
+                    left,
+                    inner + 16f,
+                    left + PHOTO_WIDTH,
+                    inner + 16f + PHOTO_HEIGHT
+                )
+                canvas.drawBitmap(photo, null, dest, Paint(Paint.ANTI_ALIAS_FLAG))
+                canvas.drawRoundRect(dest, 4f, 4f, stroke(BORDER, 0.5f))
+                photo.recycle()
+            }
         }
         cursor = card.bottom + 10f
     }
@@ -358,6 +361,7 @@ internal class PdfCanvasWriter(private val context: Context) {
         const val BOTTOM = 794f
         const val PHOTO_WIDTH = 120f
         const val PHOTO_HEIGHT = 84f
+        const val PHOTO_GAP = 6f
         const val WHITE = 0xFFFFFFFF.toInt()
         const val INK = 0xFF111111.toInt()
         const val MUTED = 0xFF6B7280.toInt()

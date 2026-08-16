@@ -64,8 +64,14 @@ fun AuthNavHost(
                 onPasswordChange = viewModel::onPasswordChange,
                 onTogglePassword = viewModel::togglePasswordVisibility,
                 onSignIn = viewModel::signIn,
-                onForgotPassword = { navController.navigate(AuthRoute.FORGOT_PASSWORD) },
-                onSignUp = { navController.navigate(AuthRoute.SIGN_UP) }
+                onForgotPassword = {
+                    viewModel.consumeError()
+                    navController.navigate(AuthRoute.FORGOT_PASSWORD)
+                },
+                onSignUp = {
+                    viewModel.consumeError()
+                    navController.navigate(AuthRoute.SIGN_UP)
+                }
             )
         }
         composable(AuthRoute.SIGN_UP) {
@@ -79,7 +85,10 @@ fun AuthNavHost(
                 onTogglePassword = viewModel::togglePasswordVisibility,
                 onToggleConfirmPassword = viewModel::toggleConfirmPasswordVisibility,
                 onSignUp = viewModel::signUp,
-                onBackToLogin = { navController.popBackStack() }
+                onBackToLogin = {
+                    viewModel.consumeError()
+                    navController.popBackStack()
+                }
             )
         }
         composable(AuthRoute.FORGOT_PASSWORD) {
@@ -87,7 +96,10 @@ fun AuthNavHost(
                 state = state,
                 onEmailChange = viewModel::onEmailChange,
                 onSubmit = viewModel::sendRecoveryEmail,
-                onBackToLogin = { navController.popBackStack() }
+                onBackToLogin = {
+                    viewModel.consumeError()
+                    navController.popBackStack()
+                }
             )
         }
         composable(AuthRoute.RECOVERY_SENT) {
@@ -95,6 +107,7 @@ fun AuthNavHost(
                 email = state.recoveryEmail.ifBlank { state.email },
                 isLoading = state.isLoading,
                 onBackToLogin = {
+                    viewModel.consumeError()
                     navController.navigate(AuthRoute.LOGIN) {
                         popUpTo(AuthRoute.LOGIN) { inclusive = true }
                     }

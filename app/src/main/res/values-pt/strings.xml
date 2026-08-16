@@ -165,6 +165,7 @@
     <string name="dashboard_tab_audits">Auditorias</string>
     <string name="dashboard_tab_profile">Perfil</string>
     <string name="dashboard_search_hint">Buscar relatórios...</string>
+    <string name="search_clear">Limpar busca</string>
     <string name="dashboard_filter">Filtrar</string>
     <string name="dashboard_filter_all">Todos</string>
     <string name="dashboard_pending">Pendente</string>
@@ -204,6 +205,11 @@
     <string name="checklist_edit_item">Editar item</string>
     <string name="checklist_note_placeholder">Descreva a observação</string>
     <string name="checklist_remove_item">Remover item</string>
+    <string name="checklist_add_photo">Adicionar foto</string>
+    <string name="checklist_view_photo">Ver foto</string>
+    <string name="checklist_photo_title">Evidência fotográfica</string>
+    <string name="checklist_photos_max">Você pode adicionar até 3 fotos por item.</string>
+    <string name="checklist_remove_photo">Remover foto</string>
     <string name="onboarding_skip">Pular</string>
     <string name="onboarding_next">Próximo</string>
     <string name="onboarding_page1_title">Relatórios de inspeção no bolso</string>

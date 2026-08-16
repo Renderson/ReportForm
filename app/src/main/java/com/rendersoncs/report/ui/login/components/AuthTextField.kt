@@ -16,7 +16,16 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -44,6 +53,25 @@ fun AuthTextField(
     capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
     readOnly: Boolean = false
 ) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val performImeAction: () -> Unit = {
+        when (imeAction) {
+            ImeAction.Next -> {
+                if (onImeAction != null) {
+                    onImeAction()
+                } else {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
+            }
+            ImeAction.Previous -> focusManager.moveFocus(FocusDirection.Up)
+            else -> {
+                keyboardController?.hide()
+                onImeAction?.invoke()
+            }
+        }
+    }
+
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = label,
@@ -54,7 +82,17 @@ fun AuthTextField(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusProperties { canFocus = !readOnly }
+                .onPreviewKeyEvent { event ->
+                    if (event.type != KeyEventType.KeyUp) return@onPreviewKeyEvent false
+                    if (event.key != Key.Enter && event.key != Key.NumPadEnter) {
+                        return@onPreviewKeyEvent false
+                    }
+                    performImeAction()
+                    true
+                },
             placeholder = {
                 Text(
                     text = placeholder,
@@ -70,7 +108,10 @@ fun AuthTextField(
             },
             trailingIcon = if (isPassword) {
                 {
-                    IconButton(onClick = { onTogglePassword?.invoke() }) {
+                    IconButton(
+                        onClick = { onTogglePassword?.invoke() },
+                        modifier = Modifier.focusProperties { canFocus = false }
+                    ) {
                         Icon(
                             imageVector = if (passwordVisible) {
                                 Icons.Outlined.VisibilityOff
@@ -98,13 +139,21 @@ fun AuthTextField(
                 VisualTransformation.None
             },
             keyboardOptions = KeyboardOptions(
-                capitalization = capitalization,
+                capitalization = if (isPassword) KeyboardCapitalization.None else capitalization,
+                autoCorrectEnabled = !isPassword,
                 keyboardType = keyboardType,
                 imeAction = imeAction
             ),
             keyboardActions = KeyboardActions(
-                onDone = { onImeAction?.invoke() },
-                onNext = { onImeAction?.invoke() }
+                onAny = {
+                    when (imeAction) {
+                        ImeAction.Next, ImeAction.Previous -> performImeAction()
+                        else -> {
+                            defaultKeyboardAction(ImeAction.Done)
+                            onImeAction?.invoke()
+                        }
+                    }
+                }
             ),
             shape = ReportShapes.small,
             colors = OutlinedTextFieldDefaults.colors(

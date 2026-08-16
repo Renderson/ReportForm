@@ -2,6 +2,7 @@ package com.rendersoncs.report.ui.resume.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -18,12 +19,15 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import com.rendersoncs.report.R
 import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.ChecklistPhotos
 import com.rendersoncs.report.model.ReportResumeItems
 import com.rendersoncs.report.ui.theme.ConformGreen
 import com.rendersoncs.report.ui.theme.NonConformRed
@@ -66,13 +70,27 @@ fun ResumeItemCard(
                     .weight(1f)
                     .padding(16.dp)
             ) {
-                Row {
-                    ResumePhoto(
-                        path = item.photo,
-                        modifier = Modifier
-                            .size(48.dp)
-                            .clickable(onClick = onPhotoClick)
-                    )
+                Row(verticalAlignment = Alignment.Top) {
+                    val photos = item.photoPaths
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        if (photos.isEmpty()) {
+                            ResumePhoto(
+                                path = "",
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clickable(onClick = onPhotoClick)
+                            )
+                        } else {
+                            photos.take(ChecklistPhotos.MAX_PER_ITEM).forEach { path ->
+                                ResumePhoto(
+                                    path = path,
+                                    modifier = Modifier
+                                        .size(48.dp)
+                                        .clickable(onClick = onPhotoClick)
+                                )
+                            }
+                        }
+                    }
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
                         text = item.title,
@@ -95,7 +113,7 @@ fun ResumeItemCard(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = statusLabel.uppercase(),
+                    text = statusLabel.uppercase(Locale.current.platformLocale),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
                     color = stripeColor
                 )
