@@ -49,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -236,7 +237,8 @@ private fun NewReportContent(
                             isError = state.companyError,
                             errorText = stringResource(R.string.txt_enter_name_company),
                             keyboardType = KeyboardType.Text,
-                            capitalization = KeyboardCapitalization.Words
+                            capitalization = KeyboardCapitalization.Words,
+                            imeAction = ImeAction.Next
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         AuthTextField(
@@ -247,7 +249,8 @@ private fun NewReportContent(
                             leadingIcon = Icons.Outlined.Email,
                             isError = state.emailError,
                             errorText = stringResource(R.string.txt_email),
-                            keyboardType = KeyboardType.Email
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Box {
@@ -263,6 +266,7 @@ private fun NewReportContent(
                             Box(
                                 modifier = Modifier
                                     .matchParentSize()
+                                    .focusProperties { canFocus = false }
                                     .clickable { showDatePicker = true }
                             )
                         }

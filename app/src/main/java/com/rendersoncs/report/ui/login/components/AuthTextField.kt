@@ -16,7 +16,10 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -44,6 +47,7 @@ fun AuthTextField(
     capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
     readOnly: Boolean = false
 ) {
+    val focusManager = LocalFocusManager.current
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = label,
@@ -54,7 +58,9 @@ fun AuthTextField(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusProperties { canFocus = !readOnly },
             placeholder = {
                 Text(
                     text = placeholder,
@@ -103,8 +109,20 @@ fun AuthTextField(
                 imeAction = imeAction
             ),
             keyboardActions = KeyboardActions(
-                onDone = { onImeAction?.invoke() },
-                onNext = { onImeAction?.invoke() }
+                onNext = {
+                    if (onImeAction != null) {
+                        onImeAction()
+                    } else {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }
+                },
+                onDone = {
+                    if (onImeAction != null) {
+                        onImeAction()
+                    } else {
+                        focusManager.clearFocus()
+                    }
+                }
             ),
             shape = ReportShapes.small,
             colors = OutlinedTextFieldDefaults.colors(
