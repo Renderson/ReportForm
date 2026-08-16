@@ -67,6 +67,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun signIn() {
+        if (_uiState.value.isLoading) return
         val state = _uiState.value
         val email = state.email.trim()
         val password = state.password
@@ -172,6 +173,12 @@ class AuthViewModel @Inject constructor(
                         ?: getApplication<Application>().getString(R.string.label_failed)
                     _uiState.update { it.copy(isLoading = false, errorMessage = message) }
                 }
+        }
+    }
+
+    fun consumeError() {
+        if (_uiState.value.errorMessage != null) {
+            _uiState.update { it.copy(errorMessage = null) }
         }
     }
 

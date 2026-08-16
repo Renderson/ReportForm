@@ -29,7 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -55,7 +55,7 @@ fun DashboardSearchBar(
     var filterExpanded by remember { mutableStateOf(false) }
     val defaultFilterId = filters.firstOrNull()?.id
     val filterActive = selectedFilterId.isNotEmpty() && selectedFilterId != defaultFilterId
-    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -95,7 +95,7 @@ fun DashboardSearchBar(
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(
-                onSearch = { focusManager.clearFocus() }
+                onSearch = { keyboardController?.hide() }
             ),
             singleLine = true,
             shape = ReportShapes.small,
