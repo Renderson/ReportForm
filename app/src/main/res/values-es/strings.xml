@@ -165,6 +165,7 @@
     <string name="dashboard_tab_audits">Auditorías</string>
     <string name="dashboard_tab_profile">Perfil</string>
     <string name="dashboard_search_hint">Buscar informes...</string>
+    <string name="search_clear">Borrar búsqueda</string>
     <string name="dashboard_filter">Filtrar</string>
     <string name="dashboard_filter_all">Todos</string>
     <string name="dashboard_pending">Pendiente</string>

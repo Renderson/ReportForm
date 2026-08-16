@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.DropdownMenu
@@ -26,7 +29,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.rendersoncs.report.R
 import com.rendersoncs.report.ui.theme.ReportShapes
@@ -50,6 +55,7 @@ fun DashboardSearchBar(
     var filterExpanded by remember { mutableStateOf(false) }
     val defaultFilterId = filters.firstOrNull()?.id
     val filterActive = selectedFilterId.isNotEmpty() && selectedFilterId != defaultFilterId
+    val focusManager = LocalFocusManager.current
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -74,6 +80,23 @@ fun DashboardSearchBar(
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
+            trailingIcon = if (query.isNotEmpty()) {
+                {
+                    IconButton(onClick = { onQueryChange("") }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Close,
+                            contentDescription = stringResource(R.string.search_clear),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            } else {
+                null
+            },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = { focusManager.clearFocus() }
+            ),
             singleLine = true,
             shape = ReportShapes.small,
             colors = OutlinedTextFieldDefaults.colors(
