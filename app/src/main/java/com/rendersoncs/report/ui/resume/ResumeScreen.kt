@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -52,16 +54,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -72,7 +77,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rendersoncs.report.R
-import com.rendersoncs.report.common.constants.ReportConstants
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportResumeItems
 import com.rendersoncs.report.ui.components.ReportExtendedFab
@@ -92,7 +96,6 @@ import com.rendersoncs.report.ui.theme.ResumeWarningContainer
 import com.rendersoncs.report.ui.theme.ResumeWarningOn
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @Composable
 fun ResumeScreen(
@@ -105,10 +108,14 @@ fun ResumeScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarFab = rememberSnackbarFabState()
     val context = LocalContext.current
+    val resources = LocalResources.current
     val scope = rememberCoroutineScope()
     val pdfMissing = stringResource(R.string.resume_pdf_unavailable)
     val pdfNoApp = stringResource(R.string.resume_pdf_no_app)
     val noPhoto = stringResource(R.string.label_nothing_image)
+    val shareTitle = stringResource(R.string.share)
+    val resourcesState = rememberUpdatedState(resources)
+    val shareTitleState = rememberUpdatedState(shareTitle)
     val lifecycleOwner = LocalLifecycleOwner.current
     var selectedItem by remember { mutableStateOf<ReportResumeItems?>(null) }
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -127,7 +134,15 @@ fun ResumeScreen(
         viewModel.events.collectLatest { event ->
             when (event) {
                 is ResumeEvent.OpenPdf -> openPdf(context, event.uri, pdfNoApp, snackbarFab.hostState)
-                is ResumeEvent.SharePdf -> sharePdf(context, event)
+                is ResumeEvent.SharePdf -> sharePdf(
+                    context = context,
+                    event = event,
+                    body = resourcesState.value.getString(
+                        R.string.label_attach_report,
+                        event.company
+                    ) + " " + event.date,
+                    chooserTitle = shareTitleState.value
+                )
                 ResumeEvent.PdfMissing -> snackbarFab.hostState.showSnackbar(pdfMissing)
                 ResumeEvent.Deleted -> onDeleted()
                 ResumeEvent.LoadFailed -> onBack()
@@ -328,9 +343,11 @@ private fun ResumeContent(
                         ResumeItemCard(
                             item = item,
                             onPhotoClick = {
-                                val hasPhoto = item.photo.isNotBlank() &&
-                                    item.photo != ReportConstants.PHOTO.NOT_PHOTO
-                                if (hasPhoto) onPhotoClick(item) else onNoPhoto()
+                                if (item.photoPaths.isNotEmpty()) {
+                                    onPhotoClick(item)
+                                } else {
+                                    onNoPhoto()
+                                }
                             }
                         )
                     }
@@ -379,7 +396,7 @@ private fun InfoCard(
     ) {
         Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 14.dp)) {
             Text(
-                text = label.uppercase(Locale.getDefault()),
+                text = label.uppercase(Locale.current.platformLocale),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -431,7 +448,7 @@ private fun PdfButton(
         )
     ) {
         Text(
-            text = stringResource(R.string.resume_view_pdf).uppercase(Locale.getDefault()),
+            text = stringResource(R.string.resume_view_pdf).uppercase(Locale.current.platformLocale),
             style = MaterialTheme.typography.labelLarge
         )
     }
@@ -565,28 +582,29 @@ private fun ResumePhotoSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp, vertical = 8.dp)
-                .padding(bottom = 32.dp)
+                .padding(bottom = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            ResumePhoto(
-                path = item.photo,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(220.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            item.photoPaths.forEach { path ->
+                ResumePhoto(
+                    path = path,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                )
+            }
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = item.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = item.note.ifBlank { stringResource(R.string.label_not_observation) },
                 style = MaterialTheme.typography.bodySmall,
@@ -614,8 +632,12 @@ private suspend fun openPdf(
     }
 }
 
-private fun sharePdf(context: android.content.Context, event: ResumeEvent.SharePdf) {
-    val body = context.getString(R.string.label_attach_report, event.company) + " " + event.date
+private fun sharePdf(
+    context: android.content.Context,
+    event: ResumeEvent.SharePdf,
+    body: String,
+    chooserTitle: String
+) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         putExtra(Intent.EXTRA_STREAM, event.uri)
         type = "application/pdf"
@@ -624,7 +646,7 @@ private fun sharePdf(context: android.content.Context, event: ResumeEvent.ShareP
         putExtra(Intent.EXTRA_TEXT, body)
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
-    context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+    context.startActivity(Intent.createChooser(intent, chooserTitle))
 }
 
 @Preview(showBackground = true, widthDp = 390, heightDp = 844)

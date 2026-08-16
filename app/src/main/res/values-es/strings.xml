@@ -205,6 +205,11 @@
     <string name="checklist_edit_item">Editar ítem</string>
     <string name="checklist_note_placeholder">Describe la observación</string>
     <string name="checklist_remove_item">Eliminar ítem</string>
+    <string name="checklist_add_photo">Añadir foto</string>
+    <string name="checklist_view_photo">Ver foto</string>
+    <string name="checklist_photo_title">Evidencia fotográfica</string>
+    <string name="checklist_photos_max">Puedes añadir hasta 3 fotos por ítem.</string>
+    <string name="checklist_remove_photo">Eliminar foto</string>
     <string name="onboarding_skip">Saltar</string>
     <string name="onboarding_next">Siguiente</string>
     <string name="onboarding_page1_title">Informes de inspección en tu bolsillo</string>

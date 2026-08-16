@@ -205,6 +205,11 @@
     <string name="checklist_edit_item">Edit item</string>
     <string name="checklist_note_placeholder">Describe the observation</string>
     <string name="checklist_remove_item">Remove item</string>
+    <string name="checklist_add_photo">Add photo</string>
+    <string name="checklist_view_photo">View photo</string>
+    <string name="checklist_photo_title">Photo evidence</string>
+    <string name="checklist_photos_max">You can add up to 3 photos per item.</string>
+    <string name="checklist_remove_photo">Remove photo</string>
     <string name="onboarding_skip">Skip</string>
     <string name="onboarding_next">Next</string>
     <string name="onboarding_page1_title">Inspection reports in your pocket</string>

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rendersoncs.report.R
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.rendersoncs.report.common.constants.ReportConstants
+import com.rendersoncs.report.common.util.ChecklistPhotos
 import com.rendersoncs.report.model.Report
 import com.rendersoncs.report.model.ReportCheckList
 import com.rendersoncs.report.repository.AuthRepository
@@ -114,9 +114,16 @@ class ChecklistViewModel @Inject constructor(
 
     fun onPhotoPicked(path: String) {
         val key = _uiState.value.pendingMediaKey ?: return
+        val current = _uiState.value.items.find { it.key == key }
+        if (current == null || !current.canAddPhoto) {
+            runCatching { File(path).delete() }
+            _uiState.update { it.copy(pendingMediaKey = null) }
+            eventsChannel.sendEvent(ChecklistEvent.Message(R.string.checklist_photos_max))
+            return
+        }
         updateItem(key) {
             it.copy(
-                photoPath = path,
+                photoPaths = it.photoPaths + path,
                 conformity = if (it.conformity == ChecklistItemUi.UNANSWERED) {
                     ChecklistItemUi.C
                 } else {
@@ -128,13 +135,24 @@ class ChecklistViewModel @Inject constructor(
         refreshScore()
     }
 
+    fun removePhoto(key: String, path: String) {
+        updateItem(key) { it.copy(photoPaths = it.photoPaths.filterNot { photo -> photo == path }) }
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching { File(path).delete() }
+        }
+    }
+
     fun resetItem(key: String) {
+        val paths = _uiState.value.items.find { it.key == key }?.photoPaths.orEmpty()
         updateItem(key) {
             it.copy(
                 conformity = ChecklistItemUi.UNANSWERED,
                 note = "",
-                photoPath = ""
+                photoPaths = emptyList()
             )
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            paths.forEach { path -> runCatching { File(path).delete() } }
         }
         refreshScore()
     }
@@ -204,7 +222,7 @@ class ChecklistViewModel @Inject constructor(
         _uiState.update { state ->
             state.copy(
                 items = state.items.map {
-                    it.copy(conformity = ChecklistItemUi.UNANSWERED, note = "", photoPath = "")
+                    it.copy(conformity = ChecklistItemUi.UNANSWERED, note = "", photoPaths = emptyList())
                 }
             )
         }
@@ -307,7 +325,7 @@ class ChecklistViewModel @Inject constructor(
                         title = item.title,
                         description = item.description,
                         note = item.note,
-                        photo = item.photoPath.ifBlank { ReportConstants.PHOTO.NOT_PHOTO },
+                        photo = ChecklistPhotos.encode(item.photoPaths),
                         conformity = item.conformity
                     )
                 )
@@ -322,7 +340,9 @@ class ChecklistViewModel @Inject constructor(
     private suspend fun deleteOrphanPhotos(items: List<ChecklistItemUi>) {
         withContext(Dispatchers.IO) {
             items.filter { it.hasPhoto }.forEach { item ->
-                runCatching { File(item.photoPath).delete() }
+                item.photoPaths.forEach { path ->
+                    runCatching { File(path).delete() }
+                }
             }
         }
     }
@@ -337,9 +357,7 @@ class ChecklistViewModel @Inject constructor(
                 conformity = saved?.conformity?.takeIf { it in ChecklistItemUi.C..ChecklistItemUi.NC }
                     ?: ChecklistItemUi.UNANSWERED,
                 note = saved?.note.orEmpty(),
-                photoPath = saved?.photo
-                    ?.takeIf { it.isNotBlank() && it != ReportConstants.PHOTO.NOT_PHOTO }
-                    .orEmpty()
+                photoPaths = ChecklistPhotos.parse(saved?.photo)
             )
         }
         val extraSaved = savedByKey.values
@@ -352,9 +370,7 @@ class ChecklistViewModel @Inject constructor(
                     conformity = saved.conformity.takeIf { it in ChecklistItemUi.C..ChecklistItemUi.NC }
                         ?: ChecklistItemUi.UNANSWERED,
                     note = saved.note,
-                    photoPath = saved.photo
-                        .takeIf { it.isNotBlank() && it != ReportConstants.PHOTO.NOT_PHOTO }
-                        .orEmpty()
+                    photoPaths = ChecklistPhotos.parse(saved.photo)
                 )
             }
         return fromCatalog + extraSaved

@@ -58,8 +58,8 @@ fun ChecklistItemCard(
     modifier: Modifier = Modifier,
     item: ChecklistItemUi,
     onSelectConformity: (Int) -> Unit,
-    onCamera: () -> Unit,
-    onGallery: () -> Unit,
+    onAddPhoto: () -> Unit,
+    onViewPhoto: () -> Unit,
     onNote: () -> Unit,
     onEdit: () -> Unit,
     onReset: () -> Unit,
@@ -93,22 +93,22 @@ fun ChecklistItemCard(
                 MediaIcon(
                     icon = Icons.Outlined.PhotoCamera,
                     selected = false,
-                    contentDescription = stringResource(R.string.msg_take_image),
-                    onClick = onCamera
+                    contentDescription = stringResource(R.string.checklist_add_photo),
+                    onClick = onAddPhoto
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 BadgedBox(
                     badge = {
                         if (item.hasPhoto) {
-                            Badge { Text("1") }
+                            Badge { Text("${item.photoCount}") }
                         }
                     }
                 ) {
                     MediaIcon(
                         icon = Icons.Outlined.PhotoLibrary,
                         selected = item.hasPhoto,
-                        contentDescription = stringResource(R.string.msg_select_from_gallery),
-                        onClick = onGallery
+                        contentDescription = stringResource(R.string.checklist_view_photo),
+                        onClick = onViewPhoto
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
